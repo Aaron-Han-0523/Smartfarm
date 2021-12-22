@@ -25,8 +25,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // data는 각페이지에서 불러온다.
-  //
   @override
   void initState() {
     login.draftList = [];

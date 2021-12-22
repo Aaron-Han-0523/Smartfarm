@@ -173,30 +173,29 @@ class _LoginPageState extends State<LoginPage> {
           primary: Color(0xff304D5B),
         ),
         onPressed: () async {
-          Get.toNamed('/sensor');
-          // var url = Uri.parse('$api/summury/login');
-          // var response = await http.post(url, body: {
-          //   'userID': _idTextEditController.text,
-          //   'password': _pwTextEditController.text,
-          // });
+          var url = Uri.parse('$api/summury/login');
+          var response = await http.post(url, body: {
+            'userID': _idTextEditController.text,
+            'password': _pwTextEditController.text,
+          });
 
-          // Map<String, dynamic> jsonData = jsonDecode(response.body);
+          Map<String, dynamic> jsonData = jsonDecode(response.body);
 
-          // if (jsonData['userID'] == _idTextEditController.text) {
-          //   login.authority.add(jsonData['authority']);
-          //   login.userID.add(jsonData['userID']);
-          //   login.password.add(_pwTextEditController.text);
-          //   login.userName.add(jsonData['userName']);
-          //   login.email.add(jsonData['email']);
-          //   login.company.add(jsonData['company']);
-          //   login.personalID.add(
-          //       jsonData['personalID'] == null ? ' ' : jsonData['personalID']);
-          //   login.department.add(
-          //       jsonData['department'] == null ? ' ' : jsonData['department']);
-          //   Get.toNamed('/sensor');
-          // } else {
-          //   _showDialog();
-          // }
+          if (jsonData['userID'] == _idTextEditController.text) {
+            login.authority.add(jsonData['authority']);
+            login.userID.add(jsonData['userID']);
+            login.password.add(_pwTextEditController.text);
+            login.userName.add(jsonData['userName']);
+            login.email.add(jsonData['email']);
+            login.company.add(jsonData['company']);
+            login.personalID.add(
+                jsonData['personalID'] == null ? ' ' : jsonData['personalID']);
+            login.department.add(
+                jsonData['department'] == null ? ' ' : jsonData['department']);
+            Get.toNamed('/home');
+          } else {
+            _showDialog();
+          }
         },
         child: Text(
           AppLocalizations.of(context)!.signIn,
