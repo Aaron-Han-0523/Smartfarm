@@ -173,21 +173,22 @@ class _LoginPageState extends State<LoginPage> {
           primary: Color(0xff304D5B),
         ),
         onPressed: () async {
-          var url = Uri.parse('$api/api/login');
-          var response = await http.post(url, body: {
-            'uid': _idTextEditController.text,
-            'password': _pwTextEditController.text,
-          });
+          Get.toNamed('/sensor');
+          // var url = Uri.parse('$api/api/login');
+          // var response = await http.post(url, body: {
+          //   'uid': _idTextEditController.text,
+          //   'password': _pwTextEditController.text,
+          // });
 
-          Map<String, dynamic> jsonData = jsonDecode(response.body);
-          print(jsonData['results']['uid']);
-          print(jsonData['result']);
-          if (jsonData['results']['uid'] == _idTextEditController.text &&
-              jsonData['result'] == true) {
-            Get.toNamed('/sensor');
-          } else {
-            _showDialog();
-          }
+          // Map<String, dynamic> jsonData = jsonDecode(response.body);
+          // print(jsonData['results']['uid']);
+          // print(jsonData['result']);
+          // if (jsonData['results']['uid'] == _idTextEditController.text &&
+          //     jsonData['result'] == true) {
+          //   Get.toNamed('/sensor');
+          // } else {
+          //   _showDialog();
+          // }
         },
         child: Text(
           AppLocalizations.of(context)!.signIn,

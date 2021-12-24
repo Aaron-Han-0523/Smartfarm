@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:plms_start/punch_main/cctv_page.dart';
 import '../globals/login.dart' as login;
 import '../globals/issue.dart' as issue;
 import '../globals/photos.dart' as photos;
@@ -53,6 +54,11 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       'Index 1: Business',
       style: optionStyle,
     ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+    CCTVPage(),
     SoilControlPage(),
     Text(
       'Index 3: School2',
@@ -73,9 +79,14 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         leading: Icon(Icons.menu),
         title: const Text('BottomNavigationBar Sample'),
         actions: [
-          CircleAvatar(
-            backgroundColor: Colors.red,
-            backgroundImage: AssetImage('assets/images/gallery_button.png'),
+          InkWell(
+            child: CircleAvatar(
+              backgroundColor: Colors.red,
+              backgroundImage: AssetImage('assets/images/gallery_button.png'),
+            ),
+            onTap: () {
+              Get.toNamed('/setting');
+            },
           )
         ],
       ),

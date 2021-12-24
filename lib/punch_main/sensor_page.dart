@@ -56,9 +56,18 @@ class _MyAccordianState extends State<MyAccordian> {
           initiallyExpanded: true,
           title: Text('외부환경'),
           children: <Widget>[
-            Row(children: [_cards('외부온도', '12.5'), _cards('외부습도', '12.5')]),
-            Row(children: [_cards('강우', '12.5'), _cards('풍향', '12.5')]),
-            Row(children: [_cards('풍속', '12.5'), _cards('일사량', '12.5')])
+            Row(children: [
+              _cards('외부온도', '12.5', true),
+              _cards('외부습도', '12.5', true)
+            ]),
+            Row(children: [
+              _cards('강우', '12.5', false),
+              _cards('풍향', '12.5', true)
+            ]),
+            Row(children: [
+              _cards('풍속', '12.5', true),
+              _cards('일사량', '12.5', true)
+            ])
           ],
         ),
       ],
@@ -81,9 +90,15 @@ class _MyAccordian2State extends State<MyAccordian2> {
         ExpansionTile(
           title: Text('내부환경'),
           children: <Widget>[
-            Row(children: [_cards('내부온도', '12.5'), _cards('내부습도', '12.5')]),
-            Row(children: [_cards('토양온도', '12.5'), _cards('토양온도', '12.5')]),
-            Row(children: [_cards('토양건조도', '12.5')])
+            Row(children: [
+              _cards('내부온도', '12.5', true),
+              _cards('내부습도', '12.5', true)
+            ]),
+            Row(children: [
+              _cards('토양온도', '12.5', true),
+              _cards('토양온도', '12.5', true)
+            ]),
+            Row(children: [_cards('토양건조도', '12.5', false)])
           ],
         ),
       ],
@@ -91,18 +106,21 @@ class _MyAccordian2State extends State<MyAccordian2> {
   }
 }
 
-Widget _cards(var title, var subtitle) {
-  return Container(
-      height: 70,
-      width: 90,
-      decoration: BoxDecoration(color: Colors.white),
-      child: Row(
-        children: [
-          Column(children: [
-            Text(title),
-            Text(subtitle),
-          ]),
-          Icon(Icons.wb_sunny)
-        ],
-      ));
+Widget _cards(var title, var subtitle, bool visibles) {
+  return Visibility(
+    visible: visibles,
+    child: Container(
+        height: 70,
+        width: 90,
+        decoration: BoxDecoration(color: Colors.white),
+        child: Row(
+          children: [
+            Column(children: [
+              Text(title),
+              Text(subtitle),
+            ]),
+            Icon(Icons.wb_sunny)
+          ],
+        )),
+  );
 }
