@@ -29,7 +29,7 @@
 19    <application
 19-->C:\Users\mosad\Desktop\github\smartfarm\android\app\src\main\AndroidManifest.xml:8:4-49:19
 20        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-20-->[androidx.core:core:1.1.0] C:\Users\mosad\.gradle\caches\transforms-2\files-2.1\2e94107f30f39be366a17347c2bf100b\core-1.1.0\AndroidManifest.xml:24:18-86
+20-->[androidx.core:core:1.6.0] C:\Users\mosad\.gradle\caches\transforms-2\files-2.1\5f663b08eec19eef9a9d1af662d9025e\core-1.6.0\AndroidManifest.xml:24:18-86
 21        android:debuggable="true"
 22        android:icon="@mipmap/ic_launcher"
 22-->C:\Users\mosad\Desktop\github\smartfarm\android\app\src\main\AndroidManifest.xml:12:9-43

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:plms_start/ontap_other/list_ontap_other.dart';
-import 'package:plms_start/pages/components/list_components.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../globals/login.dart' as login;
+
 /*
 * name : ListOpen Page
 * description : open data page
@@ -37,57 +33,76 @@ class _SensorPageState extends State<SensorPage> {
         child: ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
-            HeaderTile(),
-            PersonTile(new Person(150, "name", true)),
+            MyAccordian(),
+            MyAccordian2(),
           ],
         ));
   }
 }
 
-class HeaderTile extends StatelessWidget {
+class MyAccordian extends StatefulWidget {
+  const MyAccordian({Key? key}) : super(key: key);
+
+  @override
+  State<MyAccordian> createState() => _MyAccordianState();
+}
+
+class _MyAccordianState extends State<MyAccordian> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Image.network(
-          "https://t1.daumcdn.net/thumb/R720x0/?fname=https://t1.daumcdn.net/brunch/service/user/1YN0/image/ak-gRe29XA2HXzvSBowU7Tl7LFE.png"),
+    return Column(
+      children: <Widget>[
+        ExpansionTile(
+          initiallyExpanded: true,
+          title: Text('외부환경'),
+          children: <Widget>[
+            Row(children: [_cards('외부온도', '12.5'), _cards('외부습도', '12.5')]),
+            Row(children: [_cards('강우', '12.5'), _cards('풍향', '12.5')]),
+            Row(children: [_cards('풍속', '12.5'), _cards('일사량', '12.5')])
+          ],
+        ),
+      ],
     );
   }
 }
 
-class PersonTile extends StatelessWidget {
-  PersonTile(this._person);
-
-  final Person _person;
+class MyAccordian2 extends StatefulWidget {
+  const MyAccordian2({Key? key}) : super(key: key);
 
   @override
+  State<MyAccordian2> createState() => _MyAccordian2State();
+}
+
+class _MyAccordian2State extends State<MyAccordian2> {
+  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.person),
-      title: Text(_person.name),
-      subtitle: Text("${_person.age}세"),
-      trailing: PersonHandIcon(_person.isLeftHand),
+    return Column(
+      children: <Widget>[
+        ExpansionTile(
+          title: Text('내부환경'),
+          children: <Widget>[
+            Row(children: [_cards('내부온도', '12.5'), _cards('내부습도', '12.5')]),
+            Row(children: [_cards('토양온도', '12.5'), _cards('토양온도', '12.5')]),
+            Row(children: [_cards('토양건조도', '12.5')])
+          ],
+        ),
+      ],
     );
   }
 }
 
-class PersonHandIcon extends StatelessWidget {
-  PersonHandIcon(this._isLeftHand);
-
-  final bool _isLeftHand;
-
-  @override
-  Widget build(BuildContext context) {
-    if (_isLeftHand)
-      return Icon(Icons.arrow_left);
-    else
-      return Icon(Icons.arrow_right);
-  }
-}
-
-class Person {
-  int age;
-  String name;
-  bool isLeftHand;
-
-  Person(this.age, this.name, this.isLeftHand);
+Widget _cards(var title, var subtitle) {
+  return Container(
+      height: 70,
+      width: 90,
+      decoration: BoxDecoration(color: Colors.white),
+      child: Row(
+        children: [
+          Column(children: [
+            Text(title),
+            Text(subtitle),
+          ]),
+          Icon(Icons.wb_sunny)
+        ],
+      ));
 }

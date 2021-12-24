@@ -105,6 +105,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
     );
