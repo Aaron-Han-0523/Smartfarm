@@ -27,7 +27,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            MyAccordian(), // 날씨
+            MyAccordian(), // 날씨, 관수 펌프 제어, 밸브 제어
             MyGraph(), // 그래프
           ],
         ));
@@ -59,83 +59,76 @@ class _MyAccordianState extends State<MyAccordian> {
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Card(
+          child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _weatherIcon(),
+                  _temperature(),
+                  Text("토양 전도도"),
+                  Text("7860 cm/μs")
+                ],
+              )),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
             Card(
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _weatherIcon(),
-                      _temperature(),
-                      Text("토양 전도도"),
-                      Text("7860 cm/μs")
+                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
+                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
                     ],
                   )),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Card(
-                  child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _monitoring(
-                              Icons.device_thermostat, "내부 온도", "23.8°C"),
-                          _monitoring(
-                              Icons.invert_colors_on, "내부 습도", "69.2%"),
-                        ],
-                      )),
-                ),
-                Card(
-                  child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _monitoring(
-                              Icons.device_thermostat, "내부 온도", "23.8°C"),
-                          _monitoring(
-                              Icons.invert_colors_on, "내부 습도", "69.2%"),
-                        ],
-                      )),
-                ),
-              ],
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
+                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
+                    ],
+                  )),
             ),
-            // 관수 펌프 제어
-            ExpansionTile(
-              title: Text('관수 펌프 제어'),
-              children: <Widget>[
-                Visibility(
-                    visible: _visibility1,
-                    child: _cards('펌프 (#1)', _visibility1, status1)
-                ),
-                Visibility(
-                    visible: _visibility2,
-                    child: _cards('펌프 (#2)', _visibility2, status2)
-                ),
-              ],
-            ),
-            // 밸브 제어
-            ExpansionTile(
-              title: Text('밸브 제어'),
-              children: <Widget>[
-                Visibility(
-                    visible: _visibility3,
-                    child: _cards('밸브 (#1)', _visibility3, status3)
-                ),
-                Visibility(
-                    visible: _visibility4,
-                    child: _cards('밸브 (#2)', _visibility4, status4)
-                ),
-              ],
-            ),
+          ],
+        ),
+        // 관수 펌프 제어
+        ExpansionTile(
+          title: Text('관수 펌프 제어'),
+          children: <Widget>[
+            Visibility(
+                visible: _visibility1,
+                child: _cards('펌프 (#1)', _visibility1, status1)),
+            Visibility(
+                visible: _visibility2,
+                child: _cards('펌프 (#2)', _visibility2, status2)),
+          ],
+        ),
+        // 밸브 제어
+        ExpansionTile(
+          title: Text('밸브 제어'),
+          children: <Widget>[
+            Visibility(
+                visible: _visibility3,
+                child: _cards('밸브 (#1)', _visibility3, status3)),
+            Visibility(
+                visible: _visibility4,
+                child: _cards('밸브 (#2)', _visibility4, status4)),
+          ],
+        ),
       ]),
     );
   }
-  Widget _cards(var title, bool visibles, bool status){
-    return  Visibility(
+
+  Widget _cards(var title, bool visibles, bool status) {
+    return Visibility(
       visible: visibles,
       child: Card(
         child: Padding(
