@@ -11,6 +11,7 @@ import '../globals/photos.dart' as photos;
 import 'package:plms_start/punch_main/punch_main.dart';
 
 import 'sensor_page.dart';
+import 'soilControl_page.dart';
 
 /*
 * name : Home
@@ -52,10 +53,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       'Index 1: Business',
       style: optionStyle,
     ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    SoilControlPage(),
     Text(
       'Index 3: School2',
       style: optionStyle,
