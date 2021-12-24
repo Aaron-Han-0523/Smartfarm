@@ -27,173 +27,111 @@ class _SoilControlPageState extends State<SoilControlPage> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            MyAccordian1(), // 날씨
-            MyAccordian2(), // 관수 펌프 제어
-            MyAccordian3(), // 밸브 제어
-            MyAccordian4(), // 그래프
+            MyAccordian(), // 날씨
+            MyGraph(), // 그래프
           ],
         ));
   }
 }
 
-// 날씨
-class MyAccordian1 extends StatefulWidget {
-  const MyAccordian1({Key? key}) : super(key: key);
+// 날씨, 관수 펌프 제어, 밸브 제어
+class MyAccordian extends StatefulWidget {
+  const MyAccordian({Key? key}) : super(key: key);
 
   @override
-  State<MyAccordian1> createState() => _MyAccordian1State();
+  State<MyAccordian> createState() => _MyAccordianState();
 }
 
-class _MyAccordian1State extends State<MyAccordian1> {
+class _MyAccordianState extends State<MyAccordian> {
+  // switch on off
+  bool status1 = false;
+  bool status2 = false;
+  bool status3 = false;
+  bool status4 = false;
+  // visibiliby
+  bool _visibility1 = true;
+  bool _visibility2 = true;
+  bool _visibility3 = true;
+  bool _visibility4 = true;
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        Card(
-          child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _weatherIcon(),
-                  _temperature(),
-                  Text("토양 전도도"),
-                  Text("7860 cm/μs")
-                ],
-              )),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
             Card(
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(
-                          Icons.device_thermostat, "내부온도", "23.8°C"),
-                      _monitoring(
-                          Icons.invert_colors_on, "내부 습도", "69.2%"),
+                      _weatherIcon(),
+                      _temperature(),
+                      Text("토양 전도도"),
+                      Text("7860 cm/μs")
                     ],
                   )),
             ),
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _monitoring(
-                          Icons.device_thermostat, "내부 온도", "23.8°C"),
-                      _monitoring(
-                          Icons.invert_colors_on, "내부 습도", "69.2%"),
-                    ],
-                  )),
-            ),
-          ],
-        )
-      ]),
-    );
-  }
-}
-
-// 관수 펌프 제어
-class MyAccordian2 extends StatefulWidget {
-  const MyAccordian2({Key? key}) : super(key: key);
-
-  @override
-  State<MyAccordian2> createState() => _MyAccordian2State();
-}
-
-class _MyAccordian2State extends State<MyAccordian2> {
-  bool status1 = false;
-  bool status2 = false;
-  bool _visibility1 = true;
-  bool _visibility2 = true;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ExpansionTile(
-          title: Text('관수 펌프 제어'),
-          children: <Widget>[
-            Visibility(
-                visible: _visibility1,
-                child: _cards('펌프 (#1)', _visibility1, status1)
-            ),
-            Visibility(
-                visible: _visibility2,
-                child: _cards('펌프 (#2)', _visibility2, status2)
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-  Widget _cards(var title, bool visibles, bool status){
-    return  Visibility(
-      visible: visibles,
-      child: Card(
-        child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(title),
-                FlutterSwitch(
-                  activeColor: Colors.green,
-                  inactiveColor: Colors.orange,
-                  activeTextColor: Colors.white,
-                  inactiveTextColor: Colors.white,
-                  value: status,
-                  showOnOff: true,
-                  onToggle: (val) {
-                    setState(() {
-                      status = val;
-                    });
-                  },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Card(
+                  child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _monitoring(
+                              Icons.device_thermostat, "내부 온도", "23.8°C"),
+                          _monitoring(
+                              Icons.invert_colors_on, "내부 습도", "69.2%"),
+                        ],
+                      )),
+                ),
+                Card(
+                  child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _monitoring(
+                              Icons.device_thermostat, "내부 온도", "23.8°C"),
+                          _monitoring(
+                              Icons.invert_colors_on, "내부 습도", "69.2%"),
+                        ],
+                      )),
                 ),
               ],
-            )),
-      ),
-    );
-  }
-}
-
-// 밸브 제어
-class MyAccordian3 extends StatefulWidget {
-  const MyAccordian3({Key? key}) : super(key: key);
-
-  @override
-  State<MyAccordian3> createState() => _MyAccordian3State();
-}
-
-class _MyAccordian3State extends State<MyAccordian3> {
-  bool status3 = false;
-  bool status4 = false;
-  bool _visibility3 = true;
-  bool _visibility4 = true;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ExpansionTile(
-          title: Text('밸브 제어'),
-          children: <Widget>[
-            Visibility(
-                visible: _visibility3,
-                child: _cards('밸브 (#1)', _visibility3, status3)
             ),
-            Visibility(
-              visible: _visibility4,
-              child: _cards('밸브 (#2)', _visibility4, status4)
+            // 관수 펌프 제어
+            ExpansionTile(
+              title: Text('관수 펌프 제어'),
+              children: <Widget>[
+                Visibility(
+                    visible: _visibility1,
+                    child: _cards('펌프 (#1)', _visibility1, status1)
+                ),
+                Visibility(
+                    visible: _visibility2,
+                    child: _cards('펌프 (#2)', _visibility2, status2)
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
+            // 밸브 제어
+            ExpansionTile(
+              title: Text('밸브 제어'),
+              children: <Widget>[
+                Visibility(
+                    visible: _visibility3,
+                    child: _cards('밸브 (#1)', _visibility3, status3)
+                ),
+                Visibility(
+                    visible: _visibility4,
+                    child: _cards('밸브 (#2)', _visibility4, status4)
+                ),
+              ],
+            ),
+      ]),
     );
   }
   Widget _cards(var title, bool visibles, bool status){
@@ -227,14 +165,14 @@ class _MyAccordian3State extends State<MyAccordian3> {
 }
 
 // 그래프
-class MyAccordian4 extends StatefulWidget {
-  const MyAccordian4({Key? key}) : super(key: key);
+class MyGraph extends StatefulWidget {
+  const MyGraph({Key? key}) : super(key: key);
 
   @override
-  State<MyAccordian4> createState() => _MyAccordian4State();
+  State<MyGraph> createState() => _MyGraphState();
 }
 
-class _MyAccordian4State extends State<MyAccordian4> {
+class _MyGraphState extends State<MyGraph> {
   late List<_ChartData> data;
   late TooltipBehavior _tooltip;
 
@@ -291,20 +229,6 @@ Widget _weatherIcon() {
 
 Widget _temperature() {
   return Text("맑음/12.5°C");
-}
-
-Widget _sun(dynamic icon, String text) {
-  return Row(
-    children: [
-      Icon(
-        icon,
-        size: 30,
-      ),
-      Text(
-        text,
-      )
-    ],
-  );
 }
 
 Widget _monitoring(dynamic icon, String text, String temperText) {
