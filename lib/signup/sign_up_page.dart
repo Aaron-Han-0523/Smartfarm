@@ -34,7 +34,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void initState() {
-    test();
     readFile();
 
     super.initState();
@@ -56,28 +55,6 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   // get data
-  Future<dynamic> test() async {
-    var uriResponse = await http.get(
-      Uri.parse(
-        '$api/summury/department/',
-      ),
-    );
-
-    var json = jsonDecode(uriResponse.body);
-    // print(json.runtimeType);
-    print(json[0]['department']);
-    depList.add(json[0]['department']);
-    // _items += json;
-    int len = json.length;
-    // dispose();
-    if (mounted)
-      this.setState(() {
-        for (int i = 0; i < len; i++) {
-          deptName += [json[i]['deptName']];
-          department += [json[i]['department']];
-        }
-      });
-  }
 
   bool isSwitched = false;
   bool isSwitched2 = false;
@@ -162,109 +139,28 @@ class _SignUpPageState extends State<SignUpPage> {
                 child:
                     new Text(AppLocalizations.of(context)!.signUpbottomButton2),
                 onPressed: () async {
-                  if ((isSwitched & isSwitched2 == true)) {
-                    formKey.currentState!.validate();
-                    print(AppLocalizations.of(context)!.signUpbottomButton2);
-                  } else {
-                    return Get.defaultDialog(
-                      textCancel: "cancel",
-                      cancelTextColor: Colors.black,
-                      title: 'Error',
-                      titleStyle: TextStyle(color: Colors.red),
-                      middleText: 'Check I agree',
-                      buttonColor: Colors.white,
-                    );
-                  }
+                  var url = Uri.parse('$api/api/register');
+                  var response = await http.post(url, body: {
+                    'uid': _idTextEditController.text,
+                    'password': _pwTextEditController.text,
+                  });
 
-                  if (((formKey.currentState!.validate() == true))) {
-                    // print(formKey.currentState!.validate());
-                    // var url = Uri.parse('http://10.0.2.2:5000/api/register');
-                    var url = Uri.parse('$api/api/register');
-                    // if (jsonData['result'] == false) {
-                    //   // _showDialog();
-                    //   // }
-                    // }
-
-                    if (isManager == true) {
-                      var response = await http.post(url, body: {
-                        'userID': _idTextEditController.text,
-                        'password': _pwTextEditController.text,
-                        'userName': _nameTextEditController.text,
-                        'email': _emailTextEditController.text,
-                        'company': _comTextEditController.text,
-                        'authority': authorityList[authorityList.length - 1],
-                        'personalID': _personalTextEditController.text,
-                        'department': depList[depList.length - 1],
-                        'active': '1',
-                      });
-                      print(response.body);
-                      Map<String, dynamic> jsonData = jsonDecode(response.body);
-                      if (jsonData['result'] == false) {
-                        Get.defaultDialog(
-                          textCancel: "cancel",
-                          cancelTextColor: Colors.black,
-                          title: 'Error',
-                          titleStyle: TextStyle(color: Colors.red),
-                          middleText: "Can't use your User ID",
-                          buttonColor: Colors.white,
-                        );
-                      } else if (jsonData['result'] == false) {
-                        Get.defaultDialog(
-                          textCancel: "cancel",
-                          cancelTextColor: Colors.black,
-                          title: 'Error',
-                          titleStyle: TextStyle(color: Colors.red),
-                          middleText: "Check your User Register",
-                          buttonColor: Colors.white,
-                        );
-                      } else {
-                        Get.back();
-                      }
-                    } else if (isManager == false) {
-                      var response = await http.post(url, body: {
-                        'userID': _idTextEditController.text,
-                        'password': _pwTextEditController.text,
-                        'userName': _nameTextEditController.text,
-                        'email': _emailTextEditController.text,
-                        'company': _comTextEditController.text,
-                        'authority': authorityList[authorityList.length - 1],
-                        // 'personalID': _personalTextEditController.text,
-                        // 'department': depList[depList.length - 1],
-                        'active': '1',
-                      });
-                      Map<String, dynamic> jsonData = jsonDecode(response.body);
-                      if (jsonData['result'] == false) {
-                        Get.defaultDialog(
-                          textCancel: "cancel",
-                          cancelTextColor: Colors.black,
-                          title: 'Error',
-                          titleStyle: TextStyle(color: Colors.red),
-                          middleText: "Can't use your User ID",
-                          buttonColor: Colors.white,
-                        );
-                      } else {
-                        Get.back();
-                      }
-                    } else {
-                      Get.defaultDialog(
-                        textCancel: "cancel",
-                        cancelTextColor: Colors.black,
-                        title: 'Error',
-                        titleStyle: TextStyle(color: Colors.red),
-                        middleText: 'Check your User Register',
-                        buttonColor: Colors.white,
-                      );
-                    }
-                  } else {
-                    Get.defaultDialog(
-                      textCancel: "cancel",
-                      cancelTextColor: Colors.black,
-                      title: 'Error',
-                      titleStyle: TextStyle(color: Colors.red),
-                      middleText: 'Check your User Register',
-                      buttonColor: Colors.white,
-                    );
-                  }
+                  // Get.defaultDialog(
+                  //   textCancel: "cancel",
+                  //   cancelTextColor: Colors.black,
+                  //   title: 'Error',
+                  //   titleStyle: TextStyle(color: Colors.red),
+                  //   middleText: 'Check your User Register',
+                  //   buttonColor: Colors.white,
+                  // );
+                  // Get.defaultDialog(
+                  //   textCancel: "cancel",
+                  //   cancelTextColor: Colors.black,
+                  //   title: 'Error',
+                  //   titleStyle: TextStyle(color: Colors.red),
+                  //   middleText: 'Check I agree',
+                  //   buttonColor: Colors.white,
+                  // );
                 },
               ),
             ),
