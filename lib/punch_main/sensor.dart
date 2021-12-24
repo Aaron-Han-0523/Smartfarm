@@ -12,6 +12,7 @@ import '../globals/photos.dart' as photos;
 import 'package:plms_start/punch_main/punch_main.dart';
 
 import 'sensor_page.dart';
+import 'soilControl_page.dart';
 
 /*
 * name : Home
@@ -58,6 +59,11 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       style: optionStyle,
     ),
     CCTVPage(),
+    SoilControlPage(),
+    Text(
+      'Index 3: School2',
+      style: optionStyle,
+    ),
   ];
 
   void _onItemTapped(int index) {
