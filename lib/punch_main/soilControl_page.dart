@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -80,6 +81,7 @@ class _MyAccordian2State extends State<MyAccordian2> {
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('펌프 (#1)'),
                       FlutterSwitch(
@@ -102,6 +104,7 @@ class _MyAccordian2State extends State<MyAccordian2> {
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('펌프 (#2)'),
                       FlutterSwitch(
@@ -149,6 +152,7 @@ class _MyAccordian3State extends State<MyAccordian3> {
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('밸브 (#1)'),
                       FlutterSwitch(
@@ -171,6 +175,7 @@ class _MyAccordian3State extends State<MyAccordian3> {
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('밸브 (#2)'),
                       FlutterSwitch(
@@ -228,10 +233,10 @@ class _MyAccordian4State extends State<MyAccordian4> {
       ExpansionTile(
         title: Text('그래프'),
         children: <Widget>[
-          Column(
-            children: [
-              //Initialize the chart widget
-              SfCartesianChart(
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis:
                       NumericAxis(minimum: 0, maximum: 40, interval: 10),
@@ -244,7 +249,7 @@ class _MyAccordian4State extends State<MyAccordian4> {
                         name: '내부 온도',
                         color: Color.fromRGBO(8, 142, 255, 1))
                   ]),
-            ],
+            ),
           ),
         ],
       ),
@@ -265,24 +270,9 @@ Widget _cards(var title, var subtitle) {
         ],
       ));
 }
-//
-// Widget _items(var title, var subtitle) {
-//   return Container(
-//       decoration: BoxDecoration(color: Colors.white),
-//       child: Row(
-//         children: [
-//           Column(children: [
-//             Text(title),
-//             Text(subtitle),
-//           ]),
-//           Button(Icons.wb_sunny)
-//         ],
-//       ));
-// }
 
 class _ChartData {
   _ChartData(this.x, this.y);
-
   final String x;
   final double y;
 }
