@@ -11,6 +11,10 @@ export 'package:plms_start/main.dart';
 import 'package:plms_start/main.dart' as entrypoint;
 import 'dart:io'; // flutter_ignore: dart_io_import.
 import 'package:path_provider_linux/path_provider_linux.dart';
+<<<<<<< HEAD
+=======
+import 'package:path_provider_macos/path_provider_macos.dart';
+>>>>>>> 321efae09e83fffc1e271b309673729ca6072bf4
 import 'package:path_provider_windows/path_provider_windows.dart';
 
 @pragma('vm:entry-point')
@@ -32,6 +36,19 @@ class _PluginRegistrant {
       }
 
     } else if (Platform.isMacOS) {
+<<<<<<< HEAD
+=======
+      try {
+        PathProviderMacOS.registerWith();
+      } catch (err) {
+        print(
+          '`path_provider_macos` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+        rethrow;
+      }
+
+>>>>>>> 321efae09e83fffc1e271b309673729ca6072bf4
     } else if (Platform.isWindows) {
       try {
         PathProviderWindows.registerWith();

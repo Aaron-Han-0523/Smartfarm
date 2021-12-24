@@ -9,7 +9,7 @@ MERGED from [:image_picker] C:\Users\mosad\Desktop\github\smartfarm\build\image_
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\mosad\Desktop\github\smartfarm\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:open_file] C:\Users\mosad\Desktop\github\smartfarm\build\open_file\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-24:12
 MERGED from [:flutter_keyboard_visibility] C:\Users\mosad\Desktop\github\smartfarm\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
-MERGED from [:path_provider] C:\Users\mosad\Desktop\github\smartfarm\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:path_provider_android] C:\Users\mosad\Desktop\github\smartfarm\build\path_provider_android\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:permission_handler] C:\Users\mosad\Desktop\github\smartfarm\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.exifinterface:exifinterface:1.3.0] C:\Users\mosad\.gradle\caches\transforms-2\files-2.1\699f67f2d72ad9902250b3e1c41f0647\exifinterface-1.3.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\mosad\.gradle\caches\transforms-2\files-2.1\2d1ee8b369a3512a36e6061d2ed872cf\legacy-support-v4-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -150,8 +150,8 @@ MERGED from [:open_file] C:\Users\mosad\Desktop\github\smartfarm\build\open_file
 MERGED from [:open_file] C:\Users\mosad\Desktop\github\smartfarm\build\open_file\intermediates\library_manifest\debug\AndroidManifest.xml:6:5-44
 MERGED from [:flutter_keyboard_visibility] C:\Users\mosad\Desktop\github\smartfarm\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_keyboard_visibility] C:\Users\mosad\Desktop\github\smartfarm\build\flutter_keyboard_visibility\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:path_provider] C:\Users\mosad\Desktop\github\smartfarm\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:path_provider] C:\Users\mosad\Desktop\github\smartfarm\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_android] C:\Users\mosad\Desktop\github\smartfarm\build\path_provider_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_android] C:\Users\mosad\Desktop\github\smartfarm\build\path_provider_android\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:permission_handler] C:\Users\mosad\Desktop\github\smartfarm\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:permission_handler] C:\Users\mosad\Desktop\github\smartfarm\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [androidx.exifinterface:exifinterface:1.3.0] C:\Users\mosad\.gradle\caches\transforms-2\files-2.1\699f67f2d72ad9902250b3e1c41f0647\exifinterface-1.3.0\AndroidManifest.xml:20:5-22:41
