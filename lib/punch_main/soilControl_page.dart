@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 /*
 * name : Soil Control Page
@@ -17,7 +18,6 @@ class SoilControlPage extends StatefulWidget {
 }
 
 class _SoilControlPageState extends State<SoilControlPage> {
-
   @override
   Widget build(BuildContext context) {
     // FutureBuilder listview
@@ -52,8 +52,7 @@ class _MyAccordian1State extends State<MyAccordian1> {
         Row(children: <Widget>[
           Column(children: [_cards('내부 온도', '23.8'), _cards('내부 습도', '69.2%')]),
           Column(children: [_cards('토양 온도', '15.3'), _cards('토양 습도', '78.6%')])
-        ]
-        )
+        ])
       ],
     );
   }
@@ -68,16 +67,59 @@ class MyAccordian2 extends StatefulWidget {
 }
 
 class _MyAccordian2State extends State<MyAccordian2> {
+  bool status1 = false;
+  bool status2 = false;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         ExpansionTile(
-          initiallyExpanded: true,
           title: Text('관수 펌프 제어'),
           children: <Widget>[
-            Row(children: [_cards('외부온도', '12.5'), _cards('외부습도', '12.5')]),
-            Row(children: [_cards('강우', '12.5'), _cards('풍향', '12.5')])
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text('펌프 (#1)'),
+                      FlutterSwitch(
+                        activeColor: Colors.green,
+                        inactiveColor: Colors.orange,
+                        activeTextColor: Colors.white,
+                        inactiveTextColor: Colors.white,
+                        value: status1,
+                        showOnOff: true,
+                        onToggle: (val) {
+                          setState(() {
+                            status1 = val;
+                          });
+                        },
+                      ),
+                    ],
+                  )),
+            ),
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text('펌프 (#2)'),
+                      FlutterSwitch(
+                        activeColor: Colors.green,
+                        inactiveColor: Colors.orange,
+                        activeTextColor: Colors.white,
+                        inactiveTextColor: Colors.white,
+                        value: status2,
+                        showOnOff: true,
+                        onToggle: (val) {
+                          setState(() {
+                            status2 = val;
+                          });
+                        },
+                      ),
+                    ],
+                  )),
+            ),
           ],
         ),
       ],
@@ -94,6 +136,8 @@ class MyAccordian3 extends StatefulWidget {
 }
 
 class _MyAccordian3State extends State<MyAccordian3> {
+  bool status3 = false;
+  bool status4 = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -101,8 +145,50 @@ class _MyAccordian3State extends State<MyAccordian3> {
         ExpansionTile(
           title: Text('밸브 제어'),
           children: <Widget>[
-            Row(children: [_cards('내부온도', '12.5'), _cards('내부습도', '12.5')]),
-            Row(children: [_cards('토양온도', '12.5'), _cards('토양온도', '12.5')])
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text('밸브 (#1)'),
+                      FlutterSwitch(
+                        activeColor: Colors.green,
+                        inactiveColor: Colors.orange,
+                        activeTextColor: Colors.white,
+                        inactiveTextColor: Colors.white,
+                        value: status3,
+                        showOnOff: true,
+                        onToggle: (val) {
+                          setState(() {
+                            status3 = val;
+                          });
+                        },
+                      ),
+                    ],
+                  )),
+            ),
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text('밸브 (#2)'),
+                      FlutterSwitch(
+                        activeColor: Colors.green,
+                        inactiveColor: Colors.orange,
+                        activeTextColor: Colors.white,
+                        inactiveTextColor: Colors.white,
+                        value: status4,
+                        showOnOff: true,
+                        onToggle: (val) {
+                          setState(() {
+                            status4 = val;
+                          });
+                        },
+                      ),
+                    ],
+                  )),
+            ),
           ],
         ),
       ],
@@ -138,38 +224,36 @@ class _MyAccordian4State extends State<MyAccordian4> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Column(children: <Widget>[
+      ExpansionTile(
+        title: Text('그래프'),
         children: <Widget>[
-          ExpansionTile(
-            title: Text('그래프'),
-            children: <Widget>[
-              Column(children: [
-                //Initialize the chart widget
-                SfCartesianChart(
-                    primaryXAxis: CategoryAxis(),
-                    primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
-                    tooltipBehavior: _tooltip,
-                    series: <ChartSeries<_ChartData, String>>[
-                      BarSeries<_ChartData, String>(
-                          dataSource: data,
-                          xValueMapper: (_ChartData data, _) => data.x,
-                          yValueMapper: (_ChartData data, _) => data.y,
-                          name: '내부 온도',
-                          color: Color.fromRGBO(8, 142, 255, 1))
-                    ]),
-              ],
-              ),
+          Column(
+            children: [
+              //Initialize the chart widget
+              SfCartesianChart(
+                  primaryXAxis: CategoryAxis(),
+                  primaryYAxis:
+                      NumericAxis(minimum: 0, maximum: 40, interval: 10),
+                  tooltipBehavior: _tooltip,
+                  series: <ChartSeries<_ChartData, String>>[
+                    BarSeries<_ChartData, String>(
+                        dataSource: data,
+                        xValueMapper: (_ChartData data, _) => data.x,
+                        yValueMapper: (_ChartData data, _) => data.y,
+                        name: '내부 온도',
+                        color: Color.fromRGBO(8, 142, 255, 1))
+                  ]),
             ],
           ),
-        ]
-    );
+        ],
+      ),
+    ]);
   }
 }
 
 Widget _cards(var title, var subtitle) {
   return Container(
-      height: 70,
-      width: 90,
       decoration: BoxDecoration(color: Colors.white),
       child: Row(
         children: [
@@ -181,6 +265,20 @@ Widget _cards(var title, var subtitle) {
         ],
       ));
 }
+//
+// Widget _items(var title, var subtitle) {
+//   return Container(
+//       decoration: BoxDecoration(color: Colors.white),
+//       child: Row(
+//         children: [
+//           Column(children: [
+//             Text(title),
+//             Text(subtitle),
+//           ]),
+//           Button(Icons.wb_sunny)
+//         ],
+//       ));
+// }
 
 class _ChartData {
   _ChartData(this.x, this.y);
