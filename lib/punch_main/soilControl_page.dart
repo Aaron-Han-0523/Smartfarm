@@ -79,7 +79,7 @@ class _MyAccordian1State extends State<MyAccordian1> {
                 children: [
                   _monitoring(
                       Icons.device_thermostat, "내부온도", "23.8°C"), //아이콘 변경해주기
-                  _monitoring(Icons.water_damage, "내부 습도", "69.2%"), //아이콘 변경해주기
+                  _monitoring(Icons.opacity, "내부 습도", "69.2%"), //아이콘 변경해주기
                 ],
               ),
             ),
@@ -92,7 +92,7 @@ class _MyAccordian1State extends State<MyAccordian1> {
                 children: [
                   _monitoring(
                       Icons.device_thermostat, "내부 온도", "23.8°C"), //아이콘 변경해주기
-                  _monitoring(Icons.water_damage, "내부 습도", "69.2%"), //아이콘 변경해주기
+                  _monitoring(Icons.opacity, "내부 습도", "69.2%"), //아이콘 변경해주기
                 ],
               ),
             ),
