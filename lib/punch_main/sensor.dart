@@ -52,12 +52,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   List<Widget> _widgetOptions = <Widget>[
     SensorPage(),
     EnvironmentPage(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    CCTVPage(),
     SoilControlPage(),
+    CCTVPage(),
     Text(
       'Index 3: School2',
       style: optionStyle,
