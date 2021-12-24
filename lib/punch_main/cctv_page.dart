@@ -8,7 +8,7 @@ class CCTVPage extends StatefulWidget {
 
 class _CCTVPageState extends State<CCTVPage> {
   VideoPlayerController? _controller;
-
+// const  _controller=VideoPlayerController;
   @override
   void initState() {
     super.initState();
