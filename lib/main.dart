@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 // import 'package:plms_start/punch_main/punch_photo.dart';
 import 'package:plms_start/punch_main/home.dart';
+import 'package:plms_start/punch_main/setting_page.dart';
 // import 'package:plms_start/modify/punch_modify.dart';
 import 'package:plms_start/signup/sign_up_page.dart';
 // import 'package:plms_start/punch_issue/loading.dart';
@@ -95,11 +96,11 @@ class _MyAppState extends State<MyApp> {
                   name: '/sensor',
                   page: () => Sensor(),
                 ),
-                // GetPage(
-                //     name: '/popup',
-                //     page: () => PopUpPage(),
-                //     // transition: Transition.upToDown,
-                //     opaque: false),
+                GetPage(
+                    name: '/setting',
+                    page: () => SettingPage(),
+                    // transition: Transition.upToDown,
+                    opaque: false),
                 // GetPage(
                 //   name: '/modify',
                 //   page: () => ModifyPage(),
