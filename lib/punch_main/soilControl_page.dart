@@ -52,49 +52,47 @@ class _MyAccordian1State extends State<MyAccordian1> {
       height: 200, //mediaquery로 변경하기
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        Container(
-          alignment: Alignment.center,
-          color: Colors.white,
-          height: 60,
-          width: 350,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _weatherIcon(),
-              _temperature(),
-              Text("토양 전도도"),
-              Text("7860 cm/μs")
-            ],
-          ),
+        Card(
+          child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _weatherIcon(),
+                  _temperature(),
+                  Text("토양 전도도"),
+                  Text("7860 cm/μs")
+                ],
+              )),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              height: 70,
-              width: 160,
-              color: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _monitoring(
-                      Icons.device_thermostat, "내부온도", "23.8°C"), //아이콘 변경해주기
-                  _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"), //아이콘 변경해주기
-                ],
-              ),
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _monitoring(
+                          Icons.device_thermostat, "내부온도", "23.8°C"),
+                      _monitoring(
+                          Icons.invert_colors_on, "내부 습도", "69.2%"),
+                    ],
+                  )),
             ),
-            Container(
-              height: 70,
-              width: 160,
-              color: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _monitoring(
-                      Icons.device_thermostat, "내부 온도", "23.8°C"), //아이콘 변경해주기
-                  _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"), //아이콘 변경해주기
-                ],
-              ),
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _monitoring(
+                          Icons.device_thermostat, "내부 온도", "23.8°C"),
+                      _monitoring(
+                          Icons.invert_colors_on, "내부 습도", "69.2%"),
+                    ],
+                  )),
             ),
           ],
         )
@@ -123,62 +121,52 @@ class _MyAccordian2State extends State<MyAccordian2> {
         ExpansionTile(
           title: Text('관수 펌프 제어'),
           children: <Widget>[
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('펌프 (#1)'),
-                      FlutterSwitch(
-                        activeColor: Colors.green,
-                        inactiveColor: Colors.orange,
-                        activeTextColor: Colors.white,
-                        inactiveTextColor: Colors.white,
-                        value: status1,
-                        showOnOff: true,
-                        onToggle: (val) {
-                          setState(() {
-                            status1 = val;
-                          });
-                        },
-                      ),
-                    ],
-                  )),
+            Visibility(
+                visible: _visibility1,
+                child: _cards('펌프 (#1)', _visibility1, status1)
             ),
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('펌프 (#2)'),
-                      FlutterSwitch(
-                        activeColor: Colors.green,
-                        inactiveColor: Colors.orange,
-                        activeTextColor: Colors.white,
-                        inactiveTextColor: Colors.white,
-                        value: status2,
-                        showOnOff: true,
-                        onToggle: (val) {
-                          setState(() {
-                            status2 = val;
-                          });
-                        },
-                      ),
-                    ],
-                  )),
+            Visibility(
+                visible: _visibility2,
+                child: _cards('펌프 (#2)', _visibility2, status2)
             ),
           ],
         ),
       ],
     );
   }
+  Widget _cards(var title, bool visibles, bool status){
+    return  Visibility(
+      visible: visibles,
+      child: Card(
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(title),
+                FlutterSwitch(
+                  activeColor: Colors.green,
+                  inactiveColor: Colors.orange,
+                  activeTextColor: Colors.white,
+                  inactiveTextColor: Colors.white,
+                  value: status,
+                  showOnOff: true,
+                  onToggle: (val) {
+                    setState(() {
+                      status = val;
+                    });
+                  },
+                ),
+              ],
+            )),
+      ),
+    );
+  }
 }
 
 // 밸브 제어
 class MyAccordian3 extends StatefulWidget {
-  // const MyAccordian3({Key? key}) : super(key: key);
+  const MyAccordian3({Key? key}) : super(key: key);
 
   @override
   State<MyAccordian3> createState() => _MyAccordian3State();
@@ -196,55 +184,45 @@ class _MyAccordian3State extends State<MyAccordian3> {
         ExpansionTile(
           title: Text('밸브 제어'),
           children: <Widget>[
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('밸브 (#1)'),
-                      FlutterSwitch(
-                        activeColor: Colors.green,
-                        inactiveColor: Colors.orange,
-                        activeTextColor: Colors.white,
-                        inactiveTextColor: Colors.white,
-                        value: status3,
-                        showOnOff: true,
-                        onToggle: (val) {
-                          setState(() {
-                            status3 = val;
-                          });
-                        },
-                      ),
-                    ],
-                  )),
+            Visibility(
+                visible: _visibility3,
+                child: _cards('밸브 (#1)', _visibility3, status3)
             ),
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('밸브 (#2)'),
-                      FlutterSwitch(
-                        activeColor: Colors.green,
-                        inactiveColor: Colors.orange,
-                        activeTextColor: Colors.white,
-                        inactiveTextColor: Colors.white,
-                        value: status4,
-                        showOnOff: true,
-                        onToggle: (val) {
-                          setState(() {
-                            status4 = val;
-                          });
-                        },
-                      ),
-                    ],
-                  )),
+            Visibility(
+              visible: _visibility4,
+              child: _cards('밸브 (#2)', _visibility4, status4)
             ),
           ],
         ),
       ],
+    );
+  }
+  Widget _cards(var title, bool visibles, bool status){
+    return  Visibility(
+      visible: visibles,
+      child: Card(
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(title),
+                FlutterSwitch(
+                  activeColor: Colors.green,
+                  inactiveColor: Colors.orange,
+                  activeTextColor: Colors.white,
+                  inactiveTextColor: Colors.white,
+                  value: status,
+                  showOnOff: true,
+                  onToggle: (val) {
+                    setState(() {
+                      status = val;
+                    });
+                  },
+                ),
+              ],
+            )),
+      ),
     );
   }
 }
@@ -334,18 +312,11 @@ Widget _monitoring(dynamic icon, String text, String temperText) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
-      Icon(
-        icon,
-        size: 20
-      ),
+      Icon(icon, size: 20),
       SizedBox(width: 10),
-      Text(
-        text
-      ),
+      Text(text),
       SizedBox(width: 20),
-      Text(
-        temperText
-      )
+      Text(temperText)
     ],
   );
 }
