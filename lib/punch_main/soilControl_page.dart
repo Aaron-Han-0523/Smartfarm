@@ -25,12 +25,12 @@ class _SoilControlPageState extends State<SoilControlPage> {
     return Container(
         color: Color(0xFFE6E6E6),
         child: ListView(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            MyAccordian1(),
-            MyAccordian2(),
-            MyAccordian3(),
-            MyAccordian4(),
+            MyAccordian1(), // 날씨
+            MyAccordian2(), // 관수 펌프 제어
+            MyAccordian3(), // 밸브 제어
+            MyAccordian4(), // 그래프
           ],
         ));
   }
@@ -47,14 +47,58 @@ class MyAccordian1 extends StatefulWidget {
 class _MyAccordian1State extends State<MyAccordian1> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(children: [_cards('햇님', '햇님'), _cards('토양 전도도', '7860 cm/us')]),
-        Row(children: <Widget>[
-          Column(children: [_cards('내부 온도', '23.8'), _cards('내부 습도', '69.2%')]),
-          Column(children: [_cards('토양 온도', '15.3'), _cards('토양 습도', '78.6%')])
-        ])
-      ],
+    return Container(
+      alignment: Alignment.center,
+      height: 200, //mediaquery로 변경하기
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Container(
+          alignment: Alignment.center,
+          color: Colors.white,
+          height: 60,
+          width: 350,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _weatherIcon(),
+              _temperature(),
+              Text("토양 전도도"),
+              Text("7860 cm/μs")
+            ],
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              height: 70,
+              width: 160,
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _monitoring(
+                      Icons.device_thermostat, "내부온도", "23.8°C"), //아이콘 변경해주기
+                  _monitoring(Icons.water_damage, "내부 습도", "69.2%"), //아이콘 변경해주기
+                ],
+              ),
+            ),
+            Container(
+              height: 70,
+              width: 160,
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _monitoring(
+                      Icons.device_thermostat, "내부 온도", "23.8°C"), //아이콘 변경해주기
+                  _monitoring(Icons.water_damage, "내부 습도", "69.2%"), //아이콘 변경해주기
+                ],
+              ),
+            ),
+          ],
+        )
+      ]),
     );
   }
 }
@@ -70,6 +114,8 @@ class MyAccordian2 extends StatefulWidget {
 class _MyAccordian2State extends State<MyAccordian2> {
   bool status1 = false;
   bool status2 = false;
+  bool _visibility1 = true;
+  bool _visibility2 = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -141,6 +187,8 @@ class MyAccordian3 extends StatefulWidget {
 class _MyAccordian3State extends State<MyAccordian3> {
   bool status3 = false;
   bool status4 = false;
+  bool _visibility3 = true;
+  bool _visibility4 = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -257,18 +305,49 @@ class _MyAccordian4State extends State<MyAccordian4> {
   }
 }
 
-Widget _cards(var title, var subtitle) {
-  return Container(
-      decoration: BoxDecoration(color: Colors.white),
-      child: Row(
-        children: [
-          Column(children: [
-            Text(title),
-            Text(subtitle),
-          ]),
-          Icon(Icons.wb_sunny)
-        ],
-      ));
+Widget _weatherIcon() {
+  return Icon(
+    Icons.wb_sunny_rounded,
+    size: 40,
+  );
+}
+
+Widget _temperature() {
+  return Text("맑음/12.5°C");
+}
+
+Widget _sun(dynamic icon, String text) {
+  return Row(
+    children: [
+      Icon(
+        icon,
+        size: 30,
+      ),
+      Text(
+        text,
+      )
+    ],
+  );
+}
+
+Widget _monitoring(dynamic icon, String text, String temperText) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      Icon(
+        icon,
+        size: 20
+      ),
+      SizedBox(width: 10),
+      Text(
+        text
+      ),
+      SizedBox(width: 20),
+      Text(
+        temperText
+      )
+    ],
+  );
 }
 
 class _ChartData {
