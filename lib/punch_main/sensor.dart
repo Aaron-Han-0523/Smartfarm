@@ -54,10 +54,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     EnvironmentPage(),
     SoilControlPage(),
     CCTVPage(),
-    Text(
-      'Index 3: School2',
-      style: optionStyle,
-    ),
   ];
 
   void _onItemTapped(int index) {
