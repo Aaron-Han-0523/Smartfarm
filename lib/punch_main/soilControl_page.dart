@@ -127,7 +127,8 @@ class _MyAccordianState extends State<MyAccordian> {
     );
   }
 
-  Widget _cards(var title, bool visibles, bool status) {
+  Widget _cards(var title, bool visibles, bool statuss) {
+    bool status = statuss;
     return Visibility(
       visible: visibles,
       child: Card(
@@ -146,6 +147,10 @@ class _MyAccordianState extends State<MyAccordian> {
                   showOnOff: true,
                   onToggle: (val) {
                     setState(() {
+                      print('hi2222');
+                      print(statuss);
+                      print(status);
+                      print(val);
                       status = val;
                     });
                   },
