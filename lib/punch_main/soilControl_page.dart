@@ -49,7 +49,6 @@ class _MyAccordian1State extends State<MyAccordian1> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      height: 200, //mediaquery로 변경하기
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Card(
