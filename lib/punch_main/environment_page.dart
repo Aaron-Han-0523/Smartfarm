@@ -12,12 +12,10 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-      ),
       backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Column(children: [
@@ -32,10 +30,10 @@ class _EnvironmentState extends State<EnvironmentPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _subMonitoring(context, Icons.add_circle_sharp, "내부 온도",
-                          "23.8°C", Icons.add_circle_sharp, "내부 습도", "69.2%"),
-                      _subMonitoring(context, Icons.add_circle_sharp, "풍향",
-                          "남동향", Icons.add_circle_sharp, "풍속", "1.2m/s"),
+                      _subMonitoring(context, Icons.device_thermostat, "내부 온도",
+                          "23.8°C", Icons.invert_colors_on, "내부 습도", "69.2%"),
+                      _subMonitoring(context, Icons.speed_sharp, "풍향",
+                          "남동향", Icons.speed_sharp, "풍속", "1.2m/s"),
                     ],
                   )
                 ]),
@@ -46,61 +44,62 @@ class _EnvironmentState extends State<EnvironmentPage> {
             color: Colors.grey[350],
             child: ExpansionTile(
               backgroundColor: Colors.grey[350],
-              title: Text('측창 개폐기 제어'),
+              title: Text('측창 개폐기 제어',
+                  style: _textStyle(Colors.black, FontWeight.w500, 20)),
               children: <Widget>[
                 Column(
                   children: [
-                    _card('측장 (전체)'),
-                    _toggleSwitch('츨장 (전)'),
-                    _toggleSwitch('측장 (후)'),
-                    _toggleSwitch('측장 (좌)'),
-                    _toggleSwitch('측장 (우)'),
+                    _card(context, '측장 (전체)'),
+                    _toggleSwitch(context, '츨장 (전)'),
+                    _toggleSwitch(context, '측장 (후)'),
+                    _toggleSwitch(context, '측장 (좌)'),
+                    _toggleSwitch(context, '측장 (우)'),
                   ],
                 )
               ],
             ),
           ),
-          SizedBox(height: 10),
           Container(
+            margin: EdgeInsets.only(top: 10),
             color: Colors.grey[350],
             child: ExpansionTile(
               backgroundColor: Colors.grey[350],
-              title: Text('천창 개폐기 제어'),
+              title: Text('천창 개폐기 제어', style: _textStyle(Colors.black, FontWeight.w500, 20)),
               children: <Widget>[
                 Column(
                   children: [
-                    _card('측장 (전체)'),
-                    _toggleSwitch('츨장 (#1)'),
-                    _toggleSwitch('측장 (#2)'),
-                    _toggleSwitch('측장 (#3)'),
+                    _card(context, '측장 (전체)'),
+                    _toggleSwitch(context, '츨장 (#1)'),
+                    _toggleSwitch(context, '측장 (#2)'),
+                    _toggleSwitch(context, '측장 (#3)'),
                   ],
                 )
               ],
             ),
           ),
-          SizedBox(height: 10),
           Container(
+            margin: EdgeInsets.only(top: 10),
             color: Colors.grey[350],
             child: ExpansionTile(
               backgroundColor: Colors.grey[350],
-              title: Text('기타제어'),
+              title: Text('기타제어', style: _textStyle(Colors.black, FontWeight.w500, 20)),
               children: <Widget>[
                 Column(
                   children: [
-                    _toggleSwitch2('환풍기 (#1)'),
-                    _toggleSwitch2('환풍기 (#2)'),
-                    _toggleSwitch2('외부 제어 (#1)'),
+                    _toggleSwitch2(context, '환풍기 (#1)'),
+                    _toggleSwitch2(context, '환풍기 (#2)'),
+                    _toggleSwitch2(context, '외부 제어 (#1)'),
                   ],
                 )
               ],
             ),
           ),
-          SizedBox(height: 10),
           Container(
+            margin: EdgeInsets.only(top: 10),
             color: Colors.grey[350],
             child: ExpansionTile(
               backgroundColor: Colors.grey[350],
-              title: Text('그래프'),
+              title: Text('그래프', style: _textStyle(Colors.black, FontWeight.w500, 20)),
               children: <Widget>[_lineChart()],
             ),
           ),
@@ -113,32 +112,23 @@ class _EnvironmentState extends State<EnvironmentPage> {
 // 현재 상태 모니터링
 Widget _mainMonitoring(BuildContext context) {
   return Container(
-    alignment: Alignment.center,
-    height: MediaQuery.of(context).size.height * 0.08,
-    width: MediaQuery.of(context).size.width * 0.9,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Icon(Icons.wb_sunny, color: Colors.black54, size: 40),
-        SizedBox(width: 5),
-        Text("맑음/12.5°C", style: _textStyle()),
-        SizedBox(width: 10),
-        Icon(Icons.arrow_upward_sharp, color: Colors.black54, size: 25),
-        Text("07:32", style: _textStyle()),
-        Icon(Icons.arrow_downward_sharp, color: Colors.black54, size: 25),
-        Text("18:08", style: _textStyle()),
-      ],
-    ),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          blurRadius: 2,
-          offset: Offset(3, 5), // changes position of shadow
-        ),
-      ],
-    ),
+      alignment: Alignment.center,
+      height: MediaQuery.of(context).size.height * 0.08,
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Icon(Icons.wb_sunny, color: Colors.black54, size: 40),
+          SizedBox(width: 5),
+          Text("맑음/12.5°C", style: _textStyle(Colors.grey, FontWeight.w600, 16)),
+          SizedBox(width: 10),
+          Icon(Icons.arrow_upward_sharp, color: Colors.black54, size: 25),
+          Text("07:32", style: _textStyle(Colors.grey, FontWeight.w600, 16)),
+          Icon(Icons.arrow_downward_sharp, color: Colors.black54, size: 25),
+          Text("18:08", style: _textStyle(Colors.grey, FontWeight.w600, 16)),
+        ],
+      ),
+      decoration: _decoration()
   );
 }
 
@@ -146,137 +136,167 @@ Widget _mainMonitoring(BuildContext context) {
 Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
     String _mainText, dynamic _icon, String subText, String _subText) {
   return Container(
-    height: MediaQuery.of(context).size.height * 0.1,
-    width: MediaQuery.of(context).size.width * 0.425,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 5, right: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(icon, color: Colors.black54),
-                  SizedBox(width: 10),
-                  Text(mainText, style: _textStyle()),
-                ],
-              ),
-              Text(_mainText, style: _textStyle()),
-            ],
+      height: MediaQuery.of(context).size.height * 0.1,
+      width: MediaQuery.of(context).size.width * 0.425,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(icon, color: Colors.black54),
+                    SizedBox(width: 10),
+                    Text(mainText, style: _textStyle(Colors.grey, FontWeight.w600, 16)),
+                  ],
+                ),
+                Text(_mainText, style: _textStyle(Colors.grey, FontWeight.w600, 16)),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 5, right: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(_icon, color: Colors.black54),
-                  SizedBox(width: 10),
-                  Text(subText, style: _textStyle()),
-                ],
-              ),
-              Text(_subText, style: _textStyle()), //"23.8°C"
-            ],
+          Padding(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(_icon, color: Colors.black54),
+                    SizedBox(width: 10),
+                    Text(subText, style: _textStyle(Colors.grey, FontWeight.w600, 16)),
+                  ],
+                ),
+                Text(_subText, style: _textStyle(Colors.grey, FontWeight.w600, 16)), //"23.8°C"
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          blurRadius: 2,
-          offset: Offset(3, 5), // changes position of shadow
-        ),
-      ],
-    ),
+        ],
+      ),
+      decoration: _decoration()
   );
 }
 
-TextStyle _textStyle() {
+TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
   return TextStyle(
-      color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 15);
+      color: _color, fontWeight: _weight, fontSize: _size);
 }
 
-Widget _card(String text) {
-  return Card(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text(text),
-        Row(
-          children: [
-            _raisedButoon(Colors.green, '전체열림'),
-            _raisedButoon(Colors.orangeAccent, '전체정지'),
-            _raisedButoon(Colors.black54, '전체닫힘')
-          ],
-        )
-      ],
-    ),
+
+BoxDecoration _decoration() {
+  return BoxDecoration(
+    color: Colors.white,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 2,
+        offset: Offset(3, 5), // changes position of shadow
+      ),
+    ],
   );
 }
 
-Widget _toggleSwitch(String text) {
-  return Card(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(text),
-        ToggleSwitch(
-          minWidth: 50.0,
-          cornerRadius: 50.0,
-          activeBgColors: [
-            [Colors.green],
-            [Colors.orangeAccent],
-            [Colors.black54]
-          ],
-          activeFgColor: Colors.white,
-          inactiveBgColor: Colors.grey[400],
-          inactiveFgColor: Colors.white,
-          initialLabelIndex: 1,
-          totalSwitches: 3,
-          labels: ['열림', '정지', '닫힘'],
-          radiusStyle: true,
-          onToggle: (index) {
-            print('switched to: $index');
-          },
-        )
-      ],
-    ),
+Widget _card(BuildContext context, String text) {
+  return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: MediaQuery.of(context).size.width*0.15,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(text, style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+          Padding(
+            padding: EdgeInsets.only(right: 5),
+            child: Row(
+              children: [
+                _raisedButoon(context, Colors.green, '전체열림'),
+                _raisedButoon(context, Colors.orangeAccent, '전체정지'),
+                _raisedButoon(context, Colors.black54, '전체닫힘')
+              ],
+            ),
+          )
+        ],
+      ),
+      decoration: _decoration()
   );
 }
 
-Widget _toggleSwitch2(String text) {
-  return Card(
+Widget _toggleSwitch(BuildContext context, String text) {
+  return Container(
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+    height: MediaQuery.of(context).size.width*0.15,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(text),
-        ToggleSwitch(
-          minWidth: 50.0,
-          cornerRadius: 50.0,
-          activeBgColors: [
-            [Colors.green],
-            [Colors.orangeAccent]
-          ],
-          activeFgColor: Colors.white,
-          inactiveBgColor: Colors.grey[400],
-          inactiveFgColor: Colors.white,
-          initialLabelIndex: 1,
-          totalSwitches: 2,
-          labels: ['ON', 'OFF'],
-          radiusStyle: true,
-          onToggle: (index) {
-            print('switched to: $index');
-          },
+        Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(text, style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: ToggleSwitch(
+            minWidth: 50.0,
+            cornerRadius: 50.0,
+            activeBgColors: [
+              [Colors.green],
+              [Colors.orangeAccent],
+              [Colors.black54]
+            ],
+            activeFgColor: Colors.white,
+            inactiveBgColor: Colors.grey[400],
+            inactiveFgColor: Colors.white,
+            initialLabelIndex: 1,
+            totalSwitches: 3,
+            labels: ['열림', '정지', '닫힘'],
+            radiusStyle: true,
+            onToggle: (value) {
+              print('switched to: $value');
+            },
+          ),
         )
       ],
     ),
+    decoration: _decoration(),
+  );
+}
+
+@override
+Widget _toggleSwitch2(BuildContext context, String text) {
+  return Container(
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+    height: MediaQuery.of(context).size.width*0.15,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(text, style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: ToggleSwitch(
+            minWidth: 50.0,
+            cornerRadius: 50.0,
+            activeBgColors: [
+              [Colors.green],
+              [Colors.orangeAccent]
+            ],
+            activeFgColor: Colors.white,
+            inactiveBgColor: Colors.grey[400],
+            inactiveFgColor: Colors.white,
+            initialLabelIndex: 1,
+            totalSwitches: 2,
+            labels: ['ON', 'OFF'],
+            radiusStyle: true,
+            onToggle: (index) {
+              print('switched to: $index');
+            },
+          ),
+        )
+      ],
+    ),
+    decoration: _decoration(),
   );
 }
 
@@ -299,12 +319,6 @@ Widget _lineChart() {
 
   return SfCartesianChart(
       primaryXAxis: CategoryAxis(),
-      // Chart title
-      // title: ChartTitle(text: 'Half yearly sales analysis'),
-      // Enable legend
-      legend: Legend(isVisible: true),
-      // Enable tooltip
-      tooltipBehavior: TooltipBehavior(enable: true),
       series: <ChartSeries<_SalesData, String>>[
         LineSeries<_SalesData, String>(
             dataSource: data,
@@ -324,14 +338,20 @@ Widget _lineChart() {
 }
 
 //RaisedButton Widget
-Widget _raisedButoon(dynamic color, String text) {
-  return RaisedButton(
-    onPressed: () {},
-    color: color,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
+Widget _raisedButoon(BuildContext context, dynamic color, String text) {
+  return Container(
+    child: RaisedButton(
+      onPressed: () {},
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(text, style: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w500,
+        fontSize: 15,
+      ),),
     ),
-    child: Text(text),
   );
 }
 
