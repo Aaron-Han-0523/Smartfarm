@@ -53,6 +53,27 @@ class _MyAccordianState extends State<MyAccordian> {
   bool _visibility2 = true;
   bool _visibility3 = true;
   bool _visibility4 = true;
+  // switch value
+  onChangeFunction1(bool newValue1) {
+    setState(() {
+      status1 = newValue1;
+    });
+  }
+  onChangeFunction2(bool newValue2) {
+    setState(() {
+      status2 = newValue2;
+    });
+  }
+  onChangeFunction3(bool newValue3) {
+    setState(() {
+      status3 = newValue3;
+    });
+  }
+  onChangeFunction4(bool newValue4) {
+    setState(() {
+      status4 = newValue4;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,10 +126,10 @@ class _MyAccordianState extends State<MyAccordian> {
           children: <Widget>[
             Visibility(
                 visible: _visibility1,
-                child: _cards('펌프 (#1)', _visibility1, status1)),
+                child: _cards('펌프 (#1)', _visibility1, status1, onChangeFunction1)),
             Visibility(
                 visible: _visibility2,
-                child: _cards('펌프 (#2)', _visibility2, status2)),
+                child: _cards('펌프 (#2)', _visibility2, status2, onChangeFunction2)),
           ],
         ),
         // 밸브 제어
@@ -117,18 +138,17 @@ class _MyAccordianState extends State<MyAccordian> {
           children: <Widget>[
             Visibility(
                 visible: _visibility3,
-                child: _cards('밸브 (#1)', _visibility3, status3)),
+                child: _cards('밸브 (#1)', _visibility3, status3, onChangeFunction3)),
             Visibility(
                 visible: _visibility4,
-                child: _cards('밸브 (#2)', _visibility4, status4)),
+                child: _cards('밸브 (#2)', _visibility4, status4, onChangeFunction4)),
           ],
         ),
       ]),
     );
   }
 
-  Widget _cards(var title, bool visibles, bool statuss) {
-    bool status = statuss;
+  Widget _cards(String title, bool visibles, bool val, Function onChangeMethod) {
     return Visibility(
       visible: visibles,
       child: Card(
@@ -138,22 +158,17 @@ class _MyAccordianState extends State<MyAccordian> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(title),
+                Spacer(),
                 FlutterSwitch(
                   activeColor: Colors.green,
                   inactiveColor: Colors.orange,
                   activeTextColor: Colors.white,
                   inactiveTextColor: Colors.white,
-                  value: status,
+                  value: val,
                   showOnOff: true,
-                  onToggle: (val) {
-                    setState(() {
-                      print('hi2222');
-                      print(statuss);
-                      print(status);
-                      print(val);
-                      status = val;
-                    });
-                  },
+                  onToggle: (newValue) {
+                    onChangeMethod(newValue);
+                  }
                 ),
               ],
             )),
