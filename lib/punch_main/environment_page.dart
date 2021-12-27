@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class EnvironmentPage extends StatefulWidget {
@@ -11,220 +12,195 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+      ),
       backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
-        child: Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height * 0.3, //mediaquery로 변경하기
-                color: Colors.grey[350], //색상변경 필요
-                child: Column(
+        child: Column(children: [
+          Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height * 0.3,
+            color: Colors.grey[350], //색상변경 필요
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _mainMonitoring(context),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // 모니터링
-                      _mainMonitoring(context),
-                      _subMonitoring(context)
-                    ]),
-              ),
-              SizedBox(height: 10),
-              // 측창 개폐기 제어
-              Container(
-                color: Colors.grey[350],
-                child: ExpansionTile(
-                  backgroundColor: Colors.grey[350],
-                  title: Text('측창 개폐기 제어'),
-                  children: <Widget>[
-                    Column(
-                      children: [
-                        _card('측장 (전체)'),
-                        _toggleSwitch('츨장 (전)'),
-                        _toggleSwitch('측장 (후)'),
-                        _toggleSwitch('측장 (좌)'),
-                        _toggleSwitch('측장 (우)'),
-                      ],
-                    )
+                      _subMonitoring(context, Icons.add_circle_sharp, "내부 온도",
+                          "23.8°C", Icons.add_circle_sharp, "내부 습도", "69.2%"),
+                      _subMonitoring(context, Icons.add_circle_sharp, "풍향",
+                          "남동향", Icons.add_circle_sharp, "풍속", "1.2m/s"),
+                    ],
+                  )
+                ]),
+          ),
+          // 측창 개폐기 제어
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            color: Colors.grey[350],
+            child: ExpansionTile(
+              backgroundColor: Colors.grey[350],
+              title: Text('측창 개폐기 제어'),
+              children: <Widget>[
+                Column(
+                  children: [
+                    _card('측장 (전체)'),
+                    _toggleSwitch('츨장 (전)'),
+                    _toggleSwitch('측장 (후)'),
+                    _toggleSwitch('측장 (좌)'),
+                    _toggleSwitch('측장 (우)'),
                   ],
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                color: Colors.grey[350],
-                child: ExpansionTile(
-                  backgroundColor: Colors.grey[350],
-                  title: Text('천창 개폐기 제어'),
-                  children: <Widget>[
-                    Column(
-                      children: [
-                        _card('측장 (전체)'),
-                        _toggleSwitch('츨장 (#1)'),
-                        _toggleSwitch('측장 (#2)'),
-                        _toggleSwitch('측장 (#3)'),
-                      ],
-                    )
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            color: Colors.grey[350],
+            child: ExpansionTile(
+              backgroundColor: Colors.grey[350],
+              title: Text('천창 개폐기 제어'),
+              children: <Widget>[
+                Column(
+                  children: [
+                    _card('측장 (전체)'),
+                    _toggleSwitch('츨장 (#1)'),
+                    _toggleSwitch('측장 (#2)'),
+                    _toggleSwitch('측장 (#3)'),
                   ],
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                color: Colors.grey[350],
-                child: ExpansionTile(
-                  backgroundColor: Colors.grey[350],
-                  title: Text('기타제어'),
-                  children: <Widget>[
-                    Column(
-                      children: [
-                        _toggleSwitch2('환풍기 (#1)'),
-                        _toggleSwitch2('환풍기 (#2)'),
-                        _toggleSwitch2('외부 제어 (#1)'),
-                      ],
-                    )
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            color: Colors.grey[350],
+            child: ExpansionTile(
+              backgroundColor: Colors.grey[350],
+              title: Text('기타제어'),
+              children: <Widget>[
+                Column(
+                  children: [
+                    _toggleSwitch2('환풍기 (#1)'),
+                    _toggleSwitch2('환풍기 (#2)'),
+                    _toggleSwitch2('외부 제어 (#1)'),
                   ],
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                color: Colors.grey[350],
-                child: ExpansionTile(
-                  backgroundColor: Colors.grey[350],
-                  title: Text('그래프'),
-                  children: <Widget>[
-                    _lineChart()
-                  ],
-                ),
-              ),
-
-            ]),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            color: Colors.grey[350],
+            child: ExpansionTile(
+              backgroundColor: Colors.grey[350],
+              title: Text('그래프'),
+              children: <Widget>[_lineChart()],
+            ),
+          ),
+        ]),
       ),
     );
   }
 }
 
+// 현재 상태 모니터링
 Widget _mainMonitoring(BuildContext context) {
   return Container(
     alignment: Alignment.center,
-    color: Colors.white,
     height: MediaQuery.of(context).size.height * 0.08,
     width: MediaQuery.of(context).size.width * 0.9,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _icon(Icons.wb_sunny, 40),
-        _text('맑음/12.5°C', 16),
+        Icon(Icons.wb_sunny, color: Colors.black54, size: 40),
+        SizedBox(width: 5),
+        Text("맑음/12.5°C", style: _textStyle()),
         SizedBox(width: 10),
-        _icon(Icons.arrow_upward_sharp, 25),
-        _text("07:32", 16),
-        _icon(Icons.arrow_downward_sharp, 25),
-        _text("18:08", 16),
+        Icon(Icons.arrow_upward_sharp, color: Colors.black54, size: 25),
+        Text("07:32", style: _textStyle()),
+        Icon(Icons.arrow_downward_sharp, color: Colors.black54, size: 25),
+        Text("18:08", style: _textStyle()),
+      ],
+    ),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          blurRadius: 2,
+          offset: Offset(3, 5), // changes position of shadow
+        ),
       ],
     ),
   );
 }
 
-Widget _subMonitoring(BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      Container(
-        height: MediaQuery.of(context).size.height * 0.1,
-        width: MediaQuery.of(context).size.width * 0.4,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _iconText(Icons.add_circle_sharp, 25, "내부 온도", 15),
-                _text("23.8°C", 15),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _iconText(Icons.add_circle_sharp, 25, "내부 습도", 15),
-                _text("69.2%", 15),
-              ],
-            ),
-          ],
-        ),
-      ),
-      Container(
-        height: MediaQuery.of(context).size.height * 0.1,
-        width: MediaQuery.of(context).size.width * 0.4,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _iconText(Icons.compass_calibration_sharp, 25, "풍향", 15),
-                _text("남동향", 15),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _iconText(Icons.window_sharp, 25, "풍속", 15),
-                _text("1.2m/s", 15),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
-
-
-
-// 아이콘 위젯
-Widget _icon(dynamic icon, double _size) {
-  return Icon(
-    icon,
-    color: Colors.grey,
-    size: _size,
-  );
-}
-
-Widget _text(String text, double fontSize){
-  return Text(
-    text,
-    style: TextStyle(
-        color: Colors.grey,
-        fontSize: fontSize,
-        fontWeight: FontWeight.w600
-    ),
-  );
-}
-
-Widget _iconText(dynamic icon, double _size, String text, double fontSize) {
-  return Padding(
-    padding: EdgeInsets.only(left: 10),
-    child: Row(
+// 내/외부 모니터링
+Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
+    String _mainText, dynamic _icon, String subText, String _subText) {
+  return Container(
+    height: MediaQuery.of(context).size.height * 0.1,
+    width: MediaQuery.of(context).size.width * 0.425,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Icon(
-          icon,
-          color: Colors.grey,
-          size: _size,
-        ),
-        Text(
-          text,
-          style: TextStyle(
-              color: Colors.grey,
-              fontSize: fontSize,
-              fontWeight: FontWeight.w600
+        Padding(
+          padding: EdgeInsets.only(left: 5, right: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, color: Colors.black54),
+                  SizedBox(width: 10),
+                  Text(mainText, style: _textStyle()),
+                ],
+              ),
+              Text(_mainText, style: _textStyle()),
+            ],
           ),
-        )
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 5, right: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(_icon, color: Colors.black54),
+                  SizedBox(width: 10),
+                  Text(subText, style: _textStyle()),
+                ],
+              ),
+              Text(_subText, style: _textStyle()), //"23.8°C"
+            ],
+          ),
+        ),
+      ],
+    ),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          blurRadius: 2,
+          offset: Offset(3, 5), // changes position of shadow
+        ),
       ],
     ),
   );
+}
+
+TextStyle _textStyle() {
+  return TextStyle(
+      color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 15);
 }
 
 Widget _card(String text) {
@@ -254,7 +230,11 @@ Widget _toggleSwitch(String text) {
         ToggleSwitch(
           minWidth: 50.0,
           cornerRadius: 50.0,
-          activeBgColors: [[Colors.green], [Colors.orangeAccent], [Colors.black54]],
+          activeBgColors: [
+            [Colors.green],
+            [Colors.orangeAccent],
+            [Colors.black54]
+          ],
           activeFgColor: Colors.white,
           inactiveBgColor: Colors.grey[400],
           inactiveFgColor: Colors.white,
@@ -280,7 +260,10 @@ Widget _toggleSwitch2(String text) {
         ToggleSwitch(
           minWidth: 50.0,
           cornerRadius: 50.0,
-          activeBgColors: [[Colors.green], [Colors.orangeAccent]],
+          activeBgColors: [
+            [Colors.green],
+            [Colors.orangeAccent]
+          ],
           activeFgColor: Colors.white,
           inactiveBgColor: Colors.grey[400],
           inactiveFgColor: Colors.white,
@@ -298,7 +281,6 @@ Widget _toggleSwitch2(String text) {
 }
 
 Widget _lineChart() {
-
   List<_SalesData> data = [
     _SalesData('Jan', 35),
     _SalesData('Feb', 28),
@@ -338,11 +320,8 @@ Widget _lineChart() {
             name: 'Sales',
             // Enable data label
             dataLabelSettings: DataLabelSettings(isVisible: false))
-      ]
-  );
+      ]);
 }
-
-
 
 //RaisedButton Widget
 Widget _raisedButoon(dynamic color, String text) {
@@ -362,10 +341,3 @@ class _SalesData {
   final String year;
   final double sales;
 }
-
-
-
-
-
-
-
