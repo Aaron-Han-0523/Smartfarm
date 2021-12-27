@@ -8,7 +8,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24
-* last update : 2021-12-24
+* last update : 2021-12-27
 * */
 
 class SoilControlPage extends StatefulWidget {
