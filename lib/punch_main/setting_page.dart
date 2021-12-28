@@ -81,6 +81,7 @@ class _SettingPageState extends State<SettingPage> {
           onToggle: (val) {
             setState(() {
               status = val;
+              print('$name : $val');
             });
           },
         ),
@@ -101,6 +102,7 @@ class _SettingPageState extends State<SettingPage> {
             controller: controller,
             onChanged: (text) {
               setState(() {});
+              print('$title : $text');
             },
           ),
         ),
@@ -126,6 +128,7 @@ class _SettingPageState extends State<SettingPage> {
           onChanged: (String? newValue) {
             setState(() {
               dropdownValue = newValue!;
+              print('$name : $newValue');
             });
           },
           items: <String>[

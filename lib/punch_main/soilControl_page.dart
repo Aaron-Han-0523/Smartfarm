@@ -168,6 +168,7 @@ class _MyAccordianState extends State<MyAccordian> {
                   showOnOff: true,
                   onToggle: (newValue) {
                     onChangeMethod(newValue);
+                    print('$title : $newValue');
                   }
                 ),
               ],
