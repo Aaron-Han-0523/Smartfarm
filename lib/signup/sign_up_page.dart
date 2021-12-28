@@ -129,6 +129,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
               ),
             ),
+            // registration 버튼
             Container(
               width: Get.width * 2.2 / 7,
               child: new ElevatedButton(
@@ -138,29 +139,46 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 child:
                     new Text(AppLocalizations.of(context)!.signUpbottomButton2),
-                onPressed: () async {
-                  var url = Uri.parse('$api/api/register');
-                  var response = await http.post(url, body: {
-                    'uid': _idTextEditController.text,
-                    'password': _pwTextEditController.text,
-                  });
+                onPressed: (){
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    print('time to pose email and passworld to my API');
 
-                  // Get.defaultDialog(
-                  //   textCancel: "cancel",
-                  //   cancelTextColor: Colors.black,
-                  //   title: 'Error',
-                  //   titleStyle: TextStyle(color: Colors.red),
-                  //   middleText: 'Check your User Register',
-                  //   buttonColor: Colors.white,
-                  // );
-                  // Get.defaultDialog(
-                  //   textCancel: "cancel",
-                  //   cancelTextColor: Colors.black,
-                  //   title: 'Error',
-                  //   titleStyle: TextStyle(color: Colors.red),
-                  //   middleText: 'Check I agree',
-                  //   buttonColor: Colors.white,
-                  // );
+                      var url = Uri.parse('$api/api/register');
+                      var response =  http.post(url, body: {
+                        'uid': _idTextEditController.text,
+                        'password': _pwTextEditController.text,
+                      }
+                      );
+                }
+                // onPressed: () async {
+                //   var url = Uri.parse('$api/api/register');
+                //   var response = await http.post(url, body: {
+                //     'uid': _idTextEditController.text,
+                //     'password': _pwTextEditController.text,
+                //   }
+                //   );
+                //   if (formKey.currentState!.validate()) {
+                //     formKey.currentState!.save();
+                //     print('time to pose email and passworld to my API');
+                //   }
+                //
+                //   // Get.defaultDialog(
+                //   //   textCancel: "cancel",
+                //   //   cancelTextColor: Colors.black,
+                //   //   title: 'Error',
+                //   //   titleStyle: TextStyle(color: Colors.red),
+                //   //   middleText: 'Check your User Register',
+                //   //   buttonColor: Colors.white,
+                //   // );
+                //   // Get.defaultDialog(
+                //   //   textCancel: "cancel",
+                //   //   cancelTextColor: Colors.black,
+                //   //   title: 'Error',
+                //   //   titleStyle: TextStyle(color: Colors.red),
+                //   //   middleText: 'Check I agree',
+                //   //   buttonColor: Colors.white,
+                //   // );
                 },
               ),
             ),
