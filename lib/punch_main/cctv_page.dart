@@ -2,6 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
+/*
+* name : CCTV Page
+* description : CCTV Page
+* writer : sherry
+* create date : 2021-12-28
+* last update : 2021-12-28
+* */
+
+// TODO : 전체화면 전환
+
 class CCTVPage extends StatefulWidget {
   @override
   _CCTVPageState createState() => _CCTVPageState();
@@ -15,6 +25,7 @@ class _CCTVPageState extends State<CCTVPage> {
   ];
 
   bool showPlayerControls = true;
+  double _aspectRatio = 16 / 9;
 
   @override
   void initState() {
@@ -71,7 +82,7 @@ class _CCTVPageState extends State<CCTVPage> {
                   ),
                   VlcPlayer(
                     controller: playerControllers[index],
-                    aspectRatio: 16 / 9,
+                    aspectRatio: _aspectRatio,
                   ),
                 ]),
           );
