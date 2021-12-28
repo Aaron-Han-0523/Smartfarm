@@ -142,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 onPressed: (){
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
-                    print('time to pose email and passworld to my API');
+                    print('회원가입 완료');
 
                       var url = Uri.parse('$api/api/register');
                       var response =  http.post(url, body: {
