@@ -122,6 +122,7 @@ class _MyAccordianState extends State<MyAccordian> {
         ),
         // 관수 펌프 제어
         ExpansionTile(
+          initiallyExpanded: true,
           title: Text('관수 펌프 제어'),
           children: <Widget>[
             Visibility(
