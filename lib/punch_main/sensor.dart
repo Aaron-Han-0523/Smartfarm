@@ -71,8 +71,9 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         actions: [
           InkWell(
             child: CircleAvatar(
-              backgroundColor: Colors.red,
-              backgroundImage: AssetImage('assets/images/gallery_button.png'),
+              backgroundColor: Colors.white,
+              // backgroundImage: AssetImage('assets/images/gallery_button.png'),
+              child: Icon(Icons.person),
             ),
             onTap: () {
               Get.toNamed('/setting');
@@ -86,19 +87,19 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.thermostat),
             label: '센서',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.settings_remote_outlined),
             label: '환경제어',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.settings_input_antenna),
             label: '토양제어',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.videocam),
             label: 'CCTV',
           ),
         ],
