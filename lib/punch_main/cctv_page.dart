@@ -45,7 +45,7 @@ class _CCTVPageState extends State<CCTVPage> {
         padding: EdgeInsets.all(8.0),
         itemCount: playerControllers.length,
         separatorBuilder: (_, index) {
-          return Divider(height: 30, thickness: 5);
+          return Divider(height: 50, thickness: 5);
         },
         itemBuilder: (_, index) {
           return Container(
@@ -61,7 +61,6 @@ class _CCTVPageState extends State<CCTVPage> {
                       IconButton(
                           onPressed: () {
                             setState(() {
-                              // autoPlay : False 일 때 전체화면 버튼을 플레이/일시정지로 컨트롤 했었음
                               playerControllers[index].value.isPlaying
                                   ? playerControllers[index].pause()
                                   : playerControllers[index].play();
