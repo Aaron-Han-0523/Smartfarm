@@ -35,6 +35,12 @@ if (keystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 30
 
+    packagingOptions {
+        // Fixes duplicate libraries build issue,
+        // when your project uses more than one plugin that depend on C++ libs.
+        pickFirst 'lib/**/libc++_shared.so'
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }

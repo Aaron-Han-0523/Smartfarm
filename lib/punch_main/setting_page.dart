@@ -38,15 +38,15 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Title'),
+        title: const Text('Farm in Earth'),
       ),
       body: Container(
         child: Column(
           children: [
             Text('경보 설정'),
             _swichWidget('경보 활성화'),
-            _tempFormField('고온 경보', _highTextEditController),
-            _tempFormField('저온 경보', _lowTextEditController),
+            _tempFormField('고온 경보 (°C)', _highTextEditController),
+            _tempFormField('저온 경보 (°C)', _lowTextEditController),
             const Divider(
               height: 20,
               thickness: 5,
