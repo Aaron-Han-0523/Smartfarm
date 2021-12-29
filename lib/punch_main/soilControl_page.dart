@@ -8,7 +8,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24
-* last update : 2021-12-27
+* last update : 2021-12-29
 * */
 
 class SoilControlPage extends StatefulWidget {
@@ -22,19 +22,90 @@ class _SoilControlPageState extends State<SoilControlPage> {
   @override
   Widget build(BuildContext context) {
     // FutureBuilder listview
-    return Container(
-        color: Color(0xFFE6E6E6),
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: <Widget>[
-            MyAccordian(), // 날씨, 관수 펌프 제어, 밸브 제어
-            MyGraph(), // 그래프
-          ],
-        ));
+    return Scaffold(
+      backgroundColor: Color(0xFFE6E6E6),
+      body: Column(
+        children: [
+          MyWeather(), // 날씨
+          Flexible(
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: <Widget>[
+                MyAccordian(), // 관수 펌프 제어, 밸브 제어
+                MyGraph(), // 그래프
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-// 날씨, 관수 펌프 제어, 밸브 제어
+// 날씨
+class MyWeather extends StatefulWidget {
+  const MyWeather({Key? key}) : super(key: key);
+
+  @override
+  State<MyWeather> createState() => _MyWeatherState();
+}
+
+class _MyWeatherState extends State<MyWeather> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child:
+      Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Container(
+          padding: const EdgeInsets.only(left:10, right: 10),
+          child: Card(
+            child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _weatherIcon(),
+                    _temperature(),
+                    Text("토양 전도도"),
+                    Text("7860 cm/μs")
+                  ],
+                )),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
+                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
+                    ],
+                  )),
+            ),
+            Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
+                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
+                    ],
+                  )),
+            ),
+          ],
+        ),
+      ]),
+    );
+  }
+}
+
+// 관수 펌프 제어, 밸브 제어
 class MyAccordian extends StatefulWidget {
   const MyAccordian({Key? key}) : super(key: key);
 
@@ -80,46 +151,6 @@ class _MyAccordianState extends State<MyAccordian> {
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        Card(
-          child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _weatherIcon(),
-                  _temperature(),
-                  Text("토양 전도도"),
-                  Text("7860 cm/μs")
-                ],
-              )),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
-                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
-                    ],
-                  )),
-            ),
-            Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
-                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
-                    ],
-                  )),
-            ),
-          ],
-        ),
         // 관수 펌프 제어
         ExpansionTile(
           initiallyExpanded: true,
