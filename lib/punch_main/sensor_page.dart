@@ -18,6 +18,47 @@ var innerHumid = ''; // 내부습도
 var extHumid = ''; // 외부습도
 var soilHumid = ''; // 토양습도
 
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// FlutterLocalNotificationsPlugin();
+//
+// class ReceivedNotification {
+//   ReceivedNotification({
+//     required this.id,
+//     required this.title,
+//     required this.body,
+//     required this.payload,
+//   });
+//
+//   final int id;
+//   final String? title;
+//   final String? body;
+//   final String? payload;
+// }
+//
+// String? selectedNotificationPayload;
+//
+// // Push Notification 초기화 설정
+// void _initNotiSetting() async {
+//   final initSettingsAndroid = AndroidInitializationSettings(
+//       '@mipmap/ic_launcher');
+//   final initSettingsIOS = IOSInitializationSettings(
+//     requestSoundPermission: false,
+//     requestBadgePermission: false,
+//     requestAlertPermission: false,
+//   );
+//   final initSettings = InitializationSettings(
+//     android: initSettingsAndroid,
+//     iOS: initSettingsIOS,
+//   );
+//   await flutterLocalNotificationsPlugin.initialize(initSettings,
+//       onSelectNotification: (String? payload) async {
+//         if (payload != null) {
+//           debugPrint('notification payload: $payload');
+//         }
+//         selectedNotificationPayload = payload;
+//       });
+// }
+
 class SensorPage extends StatefulWidget {
   SensorPage({Key? key}) : super(key: key);
 
@@ -26,68 +67,49 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  // Push Notification 초기화 설정
-  void _initNotiSetting() async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    final initSettingsAndroid = AndroidInitializationSettings(
-        '@mipmap/ic_launcher');
-    final initSettingsIOS = IOSInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
-    );
-    final initSettings = InitializationSettings(
-      android: initSettingsAndroid,
-      iOS: initSettingsIOS,
-    );
-    await flutterLocalNotificationsPlugin.initialize(initSettings);
-  }
 
   void initState() {
-    _initNotiSetting();
-    _sendNotification();
+    // _initNotiSetting();
     super.initState();
     setState(() {});
   }
 
-  Future _showNotification() async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'Channel id', 'Notification name',
-        importance: Importance.defaultImportance,
-        priority: Priority.defaultPriority);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Notification Alert 🔔',
-      'Message - There is a new notification on your account, kindly check it out',
-      platformChannelSpecifics,
-      payload:
-      'Message - There is a new notification on your account, kindly check it out',
-    );
-  }
-
-  // 온도값을 문자열에서 숫자로 바꾸기
-  StringToInt(val) {
-    var stringToInt = int.parse(val);
-    print(stringToInt == val);
-  }
-
-  // 내부 온도 경보
-  // 40과 18은 나중에 setting_page 변수값으로 변경
-  Future _sendNotification() async {
-    if (40 < StringToInt(innerTemp)) {
-      _showNotification();
-    }
-
-    if (18 > StringToInt(innerTemp)) {
-      _showNotification();
-    }
-  }
+  // Future _showNotification() async {
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //       'Channel id', 'Notification name',
+  //       importance: Importance.defaultImportance,
+  //       priority: Priority.defaultPriority);
+  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  //   var platformChannelSpecifics = NotificationDetails(
+  //       android: androidPlatformChannelSpecifics,
+  //       iOS: iOSPlatformChannelSpecifics);
+  //   await flutterLocalNotificationsPlugin.show(
+  //     0,
+  //     'Notification Alert 🔔',
+  //     'Message - There is a new notification on your account, kindly check it out',
+  //     platformChannelSpecifics,
+  //     payload:
+  //     'Message - There is a new notification on your account, kindly check it out',
+  //   );
+  // }
+  //
+  // // 온도값을 문자열에서 숫자로 바꾸기
+  // StringToIntFunc(val) {
+  //   var stringToInt = int.parse(val);
+  //   print(stringToInt);
+  // }
+  //
+  // // 내부 온도 경보
+  // // 40과 18은 나중에 setting_page 변수값으로 변경
+  // Future _sendNotification() async {
+  //   if (40 < StringToIntFunc(innerTemp)) {
+  //     _showNotification();
+  //   }
+  //
+  //   if (18 > StringToIntFunc(innerTemp)) {
+  //     _showNotification();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
