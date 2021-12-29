@@ -37,6 +37,8 @@ dependencies:
   flutter_vlc_player: ^6.0.5
   video_player: ^2.2.10
   flutter_local_notifications: ^9.1.5
+  url_launcher: ^6.0.17
+
 
 dev_dependencies:
   flutter_test:
