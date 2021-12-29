@@ -41,6 +41,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
   bool status10 = true;
   bool status11 = true;
 
+  //graph visibility
+  bool _graph = true;
+
   // onChange(bool _visibles){
   //   setState(() {
   //     _visibles = !_visibles;
@@ -173,7 +176,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     backgroundColor: Colors.grey[350],
                     title: Text('그래프',
                         style: _textStyle(Colors.black, FontWeight.w500, 20)),
-                    children: <Widget>[_lineChart()],
+                    children: <Widget>[_lineChart(_graph)],
                   ),
                 ),
               ],
@@ -385,7 +388,7 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
   );
 }
 
-Widget _lineChart() {
+Widget _lineChart(bool _visibles) {
   List<_SalesData> data = [
     _SalesData('Jan', 35),
     _SalesData('Feb', 28),
@@ -402,24 +405,27 @@ Widget _lineChart() {
     _SalesData('May', 28)
   ];
 
-  return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      series: <ChartSeries<_SalesData, String>>[
-        LineSeries<_SalesData, String>(
-            dataSource: data,
-            xValueMapper: (_SalesData sales, _) => sales.year,
-            yValueMapper: (_SalesData sales, _) => sales.sales,
-            name: 'Sales',
-            // Enable data label
-            dataLabelSettings: DataLabelSettings(isVisible: false)),
-        LineSeries<_SalesData, String>(
-            dataSource: subData,
-            xValueMapper: (_SalesData sales, _) => sales.year,
-            yValueMapper: (_SalesData sales, _) => sales.sales,
-            name: 'Sales',
-            // Enable data label
-            dataLabelSettings: DataLabelSettings(isVisible: false))
-      ]);
+  return Visibility(
+    visible: _visibles,
+    child: SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        series: <ChartSeries<_SalesData, String>>[
+          LineSeries<_SalesData, String>(
+              dataSource: data,
+              xValueMapper: (_SalesData sales, _) => sales.year,
+              yValueMapper: (_SalesData sales, _) => sales.sales,
+              name: 'Sales',
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: false)),
+          LineSeries<_SalesData, String>(
+              dataSource: subData,
+              xValueMapper: (_SalesData sales, _) => sales.year,
+              yValueMapper: (_SalesData sales, _) => sales.sales,
+              name: 'Sales',
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: false))
+        ]),
+  );
 }
 
 //RaisedButton Widget
