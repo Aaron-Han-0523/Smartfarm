@@ -1,7 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plms_start/ontap_draft/confirm_page_ontap.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../globals/stream.dart' as stream;
+
+/*
+* name : Environment Page
+* description : Environment Control Page
+* writer : mark
+* create date : 2021-12-24
+* last update : 2021-12-29
+* */
 
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
@@ -12,12 +21,35 @@ class EnvironmentPage extends StatefulWidget {
 
 class _EnvironmentState extends State<EnvironmentPage> {
   // globalKey
-  var innerTemp = stream.temp_1; // 내부온도
-  var extTemp = stream.exttemp_1; // 외부온도
-  var soilTemp = stream.soiltemp_1; // 토양온도
-  var innerHumid = stream.humid_1; // 내부습도
-  var extHumid = stream.humid_1; // 외부습도
-  var soilHumid = stream.soilhumid_1; // 토양습도
+  var innerTemp = '';
+  var extTemp = '';
+  var soilTemp = '';
+  var innerHumid = '';
+  var extHumid = '';
+  var soilHumid = '';
+
+  // visibility
+  bool status1 = true;
+  bool status2 = true;
+  bool status3 = false;
+  bool status4 = false;
+  bool status5 = false;
+  bool status6 = false;
+  bool status7 = false;
+  bool status8 = true;
+  bool status9 = true;
+  bool status10 = true;
+  bool status11 = true;
+
+  //graph visibility
+  bool _graph = true;
+
+  // onChange(bool _visibles){
+  //   setState(() {
+  //     _visibles = !_visibles;
+  //   });
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +71,10 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           context,
                           Icons.device_thermostat,
                           "내부 온도",
-                          '$innerTemp',
+                          '$innerTemp°C',
                           Icons.invert_colors_on,
                           "내부 습도",
-                          innerHumid),
+                          '$innerHumid%'),
                       _subMonitoring(context, Icons.speed_sharp, "풍향", "남동향",
                           Icons.speed_sharp, "풍속", "1.2m/s"),
                     ],
@@ -63,10 +95,26 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       Column(
                         children: [
                           _card(context, '측장 (전체)'),
-                          _toggleSwitch(context, '츨장 (전)'),
-                          _toggleSwitch(context, '측장 (후)'),
-                          _toggleSwitch(context, '측장 (좌)'),
-                          _toggleSwitch(context, '측장 (우)'),
+                          _toggleSwitch(
+                            context,
+                            '츨장 (전)',
+                            status1,
+                          ),
+                          _toggleSwitch(
+                            context,
+                            '측장 (후)',
+                            status2,
+                          ),
+                          _toggleSwitch(
+                            context,
+                            '측장 (좌)',
+                            status3,
+                          ),
+                          _toggleSwitch(
+                            context,
+                            '측장 (우)',
+                            status4,
+                          ),
                         ],
                       )
                     ],
@@ -83,9 +131,21 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       Column(
                         children: [
                           _card(context, '측장 (전체)'),
-                          _toggleSwitch(context, '츨장 (#1)'),
-                          _toggleSwitch(context, '측장 (#2)'),
-                          _toggleSwitch(context, '측장 (#3)'),
+                          _toggleSwitch(
+                            context,
+                            '츨장 (#1)',
+                            status5,
+                          ),
+                          _toggleSwitch(
+                            context,
+                            '측장 (#2)',
+                            status6,
+                          ),
+                          _toggleSwitch(
+                            context,
+                            '측장 (#3)',
+                            status7,
+                          ),
                         ],
                       )
                     ],
@@ -101,9 +161,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     children: <Widget>[
                       Column(
                         children: [
-                          _toggleSwitch2(context, '환풍기 (#1)'),
-                          _toggleSwitch2(context, '환풍기 (#2)'),
-                          _toggleSwitch2(context, '외부 제어 (#1)'),
+                          _toggleSwitch2(context, '환풍기 (#1)', status8),
+                          _toggleSwitch2(context, '환풍기 (#2)', status9),
+                          _toggleSwitch2(context, '외부 제어 (#1)', status10),
                         ],
                       )
                     ],
@@ -116,7 +176,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     backgroundColor: Colors.grey[350],
                     title: Text('그래프',
                         style: _textStyle(Colors.black, FontWeight.w500, 20)),
-                    children: <Widget>[_lineChart()],
+                    children: <Widget>[_lineChart(_graph)],
                   ),
                 ),
               ],
@@ -243,85 +303,92 @@ Widget _card(BuildContext context, String text) {
       decoration: _decoration());
 }
 
-Widget _toggleSwitch(BuildContext context, String text) {
-  return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-    height: MediaQuery.of(context).size.width * 0.15,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Text(text,
-                style: _textStyle(Colors.grey, FontWeight.w600, 16))),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: ToggleSwitch(
-            minWidth: 50.0,
-            cornerRadius: 50.0,
-            activeBgColors: [
-              [Colors.green],
-              [Colors.orangeAccent],
-              [Colors.black54]
-            ],
-            activeFgColor: Colors.white,
-            inactiveBgColor: Colors.grey[400],
-            inactiveFgColor: Colors.white,
-            initialLabelIndex: 1,
-            totalSwitches: 3,
-            labels: ['열림', '정지', '닫힘'],
-            radiusStyle: true,
-            onToggle: (value) {
-              print('switched to: $value');
-            },
-          ),
-        )
-      ],
+Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
+  return Visibility(
+    visible: visibles,
+    child: Container(
+      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: MediaQuery.of(context).size.width * 0.15,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(text,
+                  style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              minWidth: 50.0,
+              cornerRadius: 50.0,
+              activeBgColors: [
+                [Colors.green],
+                [Colors.orangeAccent],
+                [Colors.black54]
+              ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey[400],
+              inactiveFgColor: Colors.white,
+              initialLabelIndex: 1,
+              totalSwitches: 3,
+              labels: ['열림', '정지', '닫힘'],
+              radiusStyle: true,
+              onToggle: (value) {
+                // visibles = !visibles;
+                print('switched to: $value');
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decoration(),
     ),
-    decoration: _decoration(),
   );
 }
 
 @override
-Widget _toggleSwitch2(BuildContext context, String text) {
-  return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-    height: MediaQuery.of(context).size.width * 0.15,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Text(text,
-                style: _textStyle(Colors.grey, FontWeight.w600, 16))),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: ToggleSwitch(
-            minWidth: 50.0,
-            cornerRadius: 50.0,
-            activeBgColors: [
-              [Colors.green],
-              [Colors.orangeAccent]
-            ],
-            activeFgColor: Colors.white,
-            inactiveBgColor: Colors.grey[400],
-            inactiveFgColor: Colors.white,
-            initialLabelIndex: 1,
-            totalSwitches: 2,
-            labels: ['ON', 'OFF'],
-            radiusStyle: true,
-            onToggle: (index) {
-              print('switched to: $index');
-            },
-          ),
-        )
-      ],
+Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
+  return Visibility(
+    visible: visibles,
+    child: Container(
+      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: MediaQuery.of(context).size.width * 0.15,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(text,
+                  style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              minWidth: 50.0,
+              cornerRadius: 50.0,
+              activeBgColors: [
+                [Colors.green],
+                [Colors.orangeAccent]
+              ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey[400],
+              inactiveFgColor: Colors.white,
+              initialLabelIndex: 1,
+              totalSwitches: 2,
+              labels: ['ON', 'OFF'],
+              radiusStyle: true,
+              onToggle: (index) {
+                print('switched to: $index');
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decoration(),
     ),
-    decoration: _decoration(),
   );
 }
 
-Widget _lineChart() {
+Widget _lineChart(bool _visibles) {
   List<_SalesData> data = [
     _SalesData('Jan', 35),
     _SalesData('Feb', 28),
@@ -338,24 +405,27 @@ Widget _lineChart() {
     _SalesData('May', 28)
   ];
 
-  return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      series: <ChartSeries<_SalesData, String>>[
-        LineSeries<_SalesData, String>(
-            dataSource: data,
-            xValueMapper: (_SalesData sales, _) => sales.year,
-            yValueMapper: (_SalesData sales, _) => sales.sales,
-            name: 'Sales',
-            // Enable data label
-            dataLabelSettings: DataLabelSettings(isVisible: false)),
-        LineSeries<_SalesData, String>(
-            dataSource: subData,
-            xValueMapper: (_SalesData sales, _) => sales.year,
-            yValueMapper: (_SalesData sales, _) => sales.sales,
-            name: 'Sales',
-            // Enable data label
-            dataLabelSettings: DataLabelSettings(isVisible: false))
-      ]);
+  return Visibility(
+    visible: _visibles,
+    child: SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        series: <ChartSeries<_SalesData, String>>[
+          LineSeries<_SalesData, String>(
+              dataSource: data,
+              xValueMapper: (_SalesData sales, _) => sales.year,
+              yValueMapper: (_SalesData sales, _) => sales.sales,
+              name: 'Sales',
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: false)),
+          LineSeries<_SalesData, String>(
+              dataSource: subData,
+              xValueMapper: (_SalesData sales, _) => sales.year,
+              yValueMapper: (_SalesData sales, _) => sales.sales,
+              name: 'Sales',
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: false))
+        ]),
+  );
 }
 
 //RaisedButton Widget
