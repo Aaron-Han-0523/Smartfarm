@@ -12,6 +12,14 @@ class EnvironmentPage extends StatefulWidget {
 
 class _EnvironmentState extends State<EnvironmentPage> {
 
+  // globalKey
+  var innerTemp = '';
+  var extTemp = '';
+  var soilTemp = '';
+  var innerHumid = '';
+  var extHumid = '';
+  var soilHumid = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +37,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _subMonitoring(context, Icons.device_thermostat, "내부 온도",
-                        "23.8°C", Icons.invert_colors_on, "내부 습도", "69.2%"),
+                        innerTemp, Icons.invert_colors_on, "내부 습도", innerHumid),
                     _subMonitoring(context, Icons.speed_sharp, "풍향",
                         "남동향", Icons.speed_sharp, "풍속", "1.2m/s"),
                   ],
