@@ -55,7 +55,16 @@ class _SettingPageState extends State<SettingPage> {
               color: Colors.black,
             ),
             Text('관수 타이머 설정'),
-            _dropDownButtons('타이머 시간')
+            _dropDownButtons('타이머 시간'),
+            InkWell(
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.logout),
+              ),
+              onTap: () {
+                Get.toNamed('/sensor'); // logout 되지는 않음
+              },
+            )
           ],
         ),
       ),

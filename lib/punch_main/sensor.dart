@@ -66,8 +66,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu),
-        title: const Text('BottomNavigationBar Sample'),
+        leading: Icon(Icons.message_outlined), // 카카오 채널 연결
+        title: const Text('Farm in Earth'), // 타이틀
         actions: [
           InkWell(
             child: CircleAvatar(
@@ -103,6 +103,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             label: 'CCTV',
           ),
         ],
+        type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         unselectedItemColor: Colors.grey,
