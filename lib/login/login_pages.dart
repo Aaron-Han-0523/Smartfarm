@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../globals/login.dart' as login;
 
@@ -71,6 +72,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
+      // 카카오 채널 고객센터/문의
+      floatingActionButton: FloatingActionButton(
+        onPressed: _launchURL,
+        backgroundColor: Colors.transparent,
+        child: Image.asset('assets/images/kakao_channel.png')
+      ),
         // resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
       child: Stack(
@@ -230,6 +237,16 @@ class _LoginPageState extends State<LoginPage> {
           AppLocalizations.of(context)!.signUp,
           style: TextStyle(color: Colors.black, fontSize: 12),
         ));
+  }
+
+  //카카오 채널 url launcher
+  _launchURL() async {
+    const url = 'http://pf.kakao.com/_TAxfdb';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
 // 로그인 에러 다이얼로그

@@ -11,6 +11,14 @@ import 'package:flutter_switch/flutter_switch.dart';
 * last update : 2021-12-29
 * */
 
+// globalKey
+var innerTemp = ''; // 내부온도
+var extTemp = ''; // 외부온도
+var soilTemp = ''; // 토양온도
+var innerHumid = ''; // 내부습도
+var extHumid = ''; // 외부습도
+var soilHumid = ''; // 토양습도
+
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);
 
@@ -82,8 +90,8 @@ class _MyWeatherState extends State<MyWeather> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
-                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
+                      _monitoring(Icons.device_thermostat, "내부 온도", "$innerTemp°C"),
+                      _monitoring(Icons.invert_colors_on, "내부 습도", "$innerHumid%"),
                     ],
                   )),
             ),
@@ -93,8 +101,8 @@ class _MyWeatherState extends State<MyWeather> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(Icons.device_thermostat, "내부 온도", "23.8°C"),
-                      _monitoring(Icons.invert_colors_on, "내부 습도", "69.2%"),
+                      _monitoring(Icons.device_thermostat, "토양 온도", "$soilTemp°C"),
+                      _monitoring(Icons.invert_colors_on, "토양 습도", "$soilHumid%"),
                     ],
                   )),
             ),

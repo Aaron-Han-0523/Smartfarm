@@ -63,7 +63,9 @@ class _MyAppState extends State<MyApp> {
         future: Future.delayed(Duration(seconds: 3)),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return MaterialApp(home: Splash());
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+                home: Splash());
           } else {
             return GetMaterialApp(
               debugShowCheckedModeBanner: false,

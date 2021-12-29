@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /*
 * name : ListOpen Page
@@ -9,6 +10,55 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 * last update : 2021-09-30
 * */
 
+// globalKey
+var innerTemp = ''; // 내부온도
+var extTemp = ''; // 외부온도
+var soilTemp = ''; // 토양온도
+var innerHumid = ''; // 내부습도
+var extHumid = ''; // 외부습도
+var soilHumid = ''; // 토양습도
+
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// FlutterLocalNotificationsPlugin();
+//
+// class ReceivedNotification {
+//   ReceivedNotification({
+//     required this.id,
+//     required this.title,
+//     required this.body,
+//     required this.payload,
+//   });
+//
+//   final int id;
+//   final String? title;
+//   final String? body;
+//   final String? payload;
+// }
+//
+// String? selectedNotificationPayload;
+//
+// // Push Notification 초기화 설정
+// void _initNotiSetting() async {
+//   final initSettingsAndroid = AndroidInitializationSettings(
+//       '@mipmap/ic_launcher');
+//   final initSettingsIOS = IOSInitializationSettings(
+//     requestSoundPermission: false,
+//     requestBadgePermission: false,
+//     requestAlertPermission: false,
+//   );
+//   final initSettings = InitializationSettings(
+//     android: initSettingsAndroid,
+//     iOS: initSettingsIOS,
+//   );
+//   await flutterLocalNotificationsPlugin.initialize(initSettings,
+//       onSelectNotification: (String? payload) async {
+//         if (payload != null) {
+//           debugPrint('notification payload: $payload');
+//         }
+//         selectedNotificationPayload = payload;
+//       });
+// }
+
 class SensorPage extends StatefulWidget {
   SensorPage({Key? key}) : super(key: key);
 
@@ -17,20 +67,49 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-  // final List data = login.openList;
 
-  // String id = Get.arguments[4];
-  // String password = Get.arguments[5];
-  // String userName = Get.arguments[6];
-  // String email = Get.arguments[7];
-  // String company = Get.arguments[8];
-  // String authority = Get.arguments[9];
-
-  void initState(){
+  void initState() {
+    // _initNotiSetting();
     super.initState();
-    setState(() {
-    });
+    setState(() {});
   }
+
+  // Future _showNotification() async {
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //       'Channel id', 'Notification name',
+  //       importance: Importance.defaultImportance,
+  //       priority: Priority.defaultPriority);
+  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  //   var platformChannelSpecifics = NotificationDetails(
+  //       android: androidPlatformChannelSpecifics,
+  //       iOS: iOSPlatformChannelSpecifics);
+  //   await flutterLocalNotificationsPlugin.show(
+  //     0,
+  //     'Notification Alert 🔔',
+  //     'Message - There is a new notification on your account, kindly check it out',
+  //     platformChannelSpecifics,
+  //     payload:
+  //     'Message - There is a new notification on your account, kindly check it out',
+  //   );
+  // }
+  //
+  // // 온도값을 문자열에서 숫자로 바꾸기
+  // StringToIntFunc(val) {
+  //   var stringToInt = int.parse(val);
+  //   print(stringToInt);
+  // }
+  //
+  // // 내부 온도 경보
+  // // 40과 18은 나중에 setting_page 변수값으로 변경
+  // Future _sendNotification() async {
+  //   if (40 < StringToIntFunc(innerTemp)) {
+  //     _showNotification();
+  //   }
+  //
+  //   if (18 > StringToIntFunc(innerTemp)) {
+  //     _showNotification();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +150,8 @@ class _MyAccordianState extends State<MyAccordian> {
             title: Text('외부환경'),
             children: <Widget>[
               Row(children: [
-                _cards('외부온도', '12.5', true, Icons.wb_sunny),
-                _cards('외부습도', '12.5', true, Icons.invert_colors)
+                _cards('외부온도', '$extTemp', true, Icons.wb_sunny),
+                _cards('외부습도', '$extHumid', true, Icons.invert_colors)
               ]),
               Row(children: [
                 _cards('강우', '12.5', true, Icons.wb_sunny),
@@ -110,12 +189,12 @@ class _MyAccordian2State extends State<MyAccordian2> {
             title: Text('내부환경'),
             children: <Widget>[
               Row(children: [
-                _cards('내부온도', '12.5', true, Icons.wb_sunny),
-                _cards('내부습도', '12.5', true, Icons.wb_sunny)
+                _cards('내부온도', '$innerTemp', true, Icons.wb_sunny),
+                _cards('내부습도', '$innerHumid', true, Icons.wb_sunny)
               ]),
               Row(children: [
-                _cards('토양온도', '12.5', true, Icons.wb_sunny),
-                _cards('토양습도', '12.5', true, Icons.wb_sunny)
+                _cards('토양온도', '$soilTemp', true, Icons.wb_sunny),
+                _cards('토양습도', '$soilHumid', true, Icons.wb_sunny)
               ]),
               Row(children: [
                 _cards('토양건조도', '12.5', true, Icons.wb_sunny),
@@ -237,7 +316,6 @@ BoxDecoration _decoration() {
     ],
   );
 }
-
 
 
 
