@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class EnvironmentPage extends StatefulWidget {
@@ -17,94 +16,99 @@ class _EnvironmentState extends State<EnvironmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Container(
-            alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height * 0.3,
-            color: Colors.grey[350], //색상변경 필요
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _mainMonitoring(context),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _subMonitoring(context, Icons.device_thermostat, "내부 온도",
-                          "23.8°C", Icons.invert_colors_on, "내부 습도", "69.2%"),
-                      _subMonitoring(context, Icons.speed_sharp, "풍향",
-                          "남동향", Icons.speed_sharp, "풍속", "1.2m/s"),
-                    ],
-                  )
-                ]),
-          ),
-          // 측창 개폐기 제어
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            color: Colors.grey[350],
-            child: ExpansionTile(
-              backgroundColor: Colors.grey[350],
-              title: Text('측창 개폐기 제어',
-                  style: _textStyle(Colors.black, FontWeight.w500, 20)),
-              children: <Widget>[
-                Column(
+      body: Column(children: [
+        Container(
+          alignment: Alignment.center,
+          height: MediaQuery.of(context).size.height * 0.3,
+          color: Colors.grey[350], //색상변경 필요
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _mainMonitoring(context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _card(context, '측장 (전체)'),
-                    _toggleSwitch(context, '츨장 (전)'),
-                    _toggleSwitch(context, '측장 (후)'),
-                    _toggleSwitch(context, '측장 (좌)'),
-                    _toggleSwitch(context, '측장 (우)'),
+                    _subMonitoring(context, Icons.device_thermostat, "내부 온도",
+                        "23.8°C", Icons.invert_colors_on, "내부 습도", "69.2%"),
+                    _subMonitoring(context, Icons.speed_sharp, "풍향",
+                        "남동향", Icons.speed_sharp, "풍속", "1.2m/s"),
                   ],
                 )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            color: Colors.grey[350],
-            child: ExpansionTile(
-              backgroundColor: Colors.grey[350],
-              title: Text('천창 개폐기 제어', style: _textStyle(Colors.black, FontWeight.w500, 20)),
-              children: <Widget>[
-                Column(
-                  children: [
-                    _card(context, '측장 (전체)'),
-                    _toggleSwitch(context, '츨장 (#1)'),
-                    _toggleSwitch(context, '측장 (#2)'),
-                    _toggleSwitch(context, '측장 (#3)'),
+              ]),
+        ),
+        Flexible(
+          child: ListView(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                color: Colors.grey[350],
+                child: ExpansionTile(
+                  backgroundColor: Colors.grey[350],
+                  title: Text('측창 개폐기 제어',
+                      style: _textStyle(Colors.black, FontWeight.w500, 20)),
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        _card(context, '측장 (전체)'),
+                        _toggleSwitch(context, '츨장 (전)'),
+                        _toggleSwitch(context, '측장 (후)'),
+                        _toggleSwitch(context, '측장 (좌)'),
+                        _toggleSwitch(context, '측장 (우)'),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            color: Colors.grey[350],
-            child: ExpansionTile(
-              backgroundColor: Colors.grey[350],
-              title: Text('기타제어', style: _textStyle(Colors.black, FontWeight.w500, 20)),
-              children: <Widget>[
-                Column(
-                  children: [
-                    _toggleSwitch2(context, '환풍기 (#1)'),
-                    _toggleSwitch2(context, '환풍기 (#2)'),
-                    _toggleSwitch2(context, '외부 제어 (#1)'),
+                ),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                color: Colors.grey[350],
+                child: ExpansionTile(
+                  backgroundColor: Colors.grey[350],
+                  title: Text('천창 개폐기 제어', style: _textStyle(Colors.black, FontWeight.w500, 20)),
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        _card(context, '측장 (전체)'),
+                        _toggleSwitch(context, '츨장 (#1)'),
+                        _toggleSwitch(context, '측장 (#2)'),
+                        _toggleSwitch(context, '측장 (#3)'),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                color: Colors.grey[350],
+                child: ExpansionTile(
+                  backgroundColor: Colors.grey[350],
+                  title: Text('기타제어', style: _textStyle(Colors.black, FontWeight.w500, 20)),
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        _toggleSwitch2(context, '환풍기 (#1)'),
+                        _toggleSwitch2(context, '환풍기 (#2)'),
+                        _toggleSwitch2(context, '외부 제어 (#1)'),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                color: Colors.grey[350],
+                child: ExpansionTile(
+                  backgroundColor: Colors.grey[350],
+                  title: Text('그래프', style: _textStyle(Colors.black, FontWeight.w500, 20)),
+                  children: <Widget>[_lineChart()],
+                ),
+              ),
+
+            ],
           ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            color: Colors.grey[350],
-            child: ExpansionTile(
-              backgroundColor: Colors.grey[350],
-              title: Text('그래프', style: _textStyle(Colors.black, FontWeight.w500, 20)),
-              children: <Widget>[_lineChart()],
-            ),
-          ),
-        ]),
-      ),
+        ),
+      ])
     );
   }
 }
