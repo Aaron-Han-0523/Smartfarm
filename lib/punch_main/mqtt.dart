@@ -10,6 +10,7 @@ import "package:ndialog/ndialog.dart";
 
 //https://github.com/0015/ThatProject/blob/master/ESP32_MQTT/2_Flutter_MQTT_Client_App/mqtt_esp32cam_viewer_full_version/lib/main.dart
 //https://www.youtube.com/watch?v=aY7i0xnQW54
+//https://www.emqx.com/en/blog/using-mqtt-in-flutter
 
 class MQTTPage extends StatefulWidget {
   const MQTTPage({Key? key}) : super(key: key);
