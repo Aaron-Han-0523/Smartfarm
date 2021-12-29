@@ -37,6 +37,8 @@ dependencies:
   flutter_vlc_player: ^6.0.5
 
   video_player: ^2.2.10
+  mqtt_client: ^9.6.3
+  ndialog: ^4.1.0
 
 dev_dependencies:
   flutter_test:
