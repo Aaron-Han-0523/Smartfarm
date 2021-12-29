@@ -36,17 +36,10 @@ class _EnvironmentState extends State<EnvironmentPage> {
   bool status5 = false;
   bool status6 = false;
   bool status7 = false;
-  bool status8 = false;
-
-  // on/off
-  int? _value;
-  int _value1 = 0;
-  int _value2 = 1;
-  int _value3 = 2;
-  int? visibility4;
-  int? visibility5;
-  int? visibility6;
-  int? visibility8;
+  bool status8 = true;
+  bool status9 = true;
+  bool status10 = true;
+  bool status11 = true;
 
   // onChange(bool _visibles){
   //   setState(() {
@@ -54,31 +47,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
   //   });
   // }
 
-  onChange1(_value) {
-    if (_value == _value3) {
-      setState(() {
-        _value3 = _value;
-      });
-    }
-  }
-
-  onChange2(_value) {
-    setState(() {
-      _value2 = _value;
-    });
-  }
-
-  onChange3(_value) {
-    setState(() {
-      _value3 = _value;
-    });
-  }
-
-  onChange4(_value) {
-    setState(() {
-      _value = !_value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,17 +131,17 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           _toggleSwitch(
                             context,
                             '츨장 (#1)',
-                            status1,
+                            status5,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (#2)',
-                            status1,
+                            status6,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (#3)',
-                            status1,
+                            status7,
                           ),
                         ],
                       )
@@ -190,9 +158,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     children: <Widget>[
                       Column(
                         children: [
-                          _toggleSwitch2(context, '환풍기 (#1)'),
-                          _toggleSwitch2(context, '환풍기 (#2)'),
-                          _toggleSwitch2(context, '외부 제어 (#1)'),
+                          _toggleSwitch2(context, '환풍기 (#1)', status8),
+                          _toggleSwitch2(context, '환풍기 (#2)', status9),
+                          _toggleSwitch2(context, '외부 제어 (#1)', status10),
                         ],
                       )
                     ],
@@ -376,41 +344,44 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
 }
 
 @override
-Widget _toggleSwitch2(BuildContext context, String text) {
-  return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-    height: MediaQuery.of(context).size.width * 0.15,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Text(text,
-                style: _textStyle(Colors.grey, FontWeight.w600, 16))),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: ToggleSwitch(
-            minWidth: 50.0,
-            cornerRadius: 50.0,
-            activeBgColors: [
-              [Colors.green],
-              [Colors.orangeAccent]
-            ],
-            activeFgColor: Colors.white,
-            inactiveBgColor: Colors.grey[400],
-            inactiveFgColor: Colors.white,
-            initialLabelIndex: 1,
-            totalSwitches: 2,
-            labels: ['ON', 'OFF'],
-            radiusStyle: true,
-            onToggle: (index) {
-              print('switched to: $index');
-            },
-          ),
-        )
-      ],
+Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
+  return Visibility(
+    visible: visibles,
+    child: Container(
+      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: MediaQuery.of(context).size.width * 0.15,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(text,
+                  style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              minWidth: 50.0,
+              cornerRadius: 50.0,
+              activeBgColors: [
+                [Colors.green],
+                [Colors.orangeAccent]
+              ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey[400],
+              inactiveFgColor: Colors.white,
+              initialLabelIndex: 1,
+              totalSwitches: 2,
+              labels: ['ON', 'OFF'],
+              radiusStyle: true,
+              onToggle: (index) {
+                print('switched to: $index');
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decoration(),
     ),
-    decoration: _decoration(),
   );
 }
 
