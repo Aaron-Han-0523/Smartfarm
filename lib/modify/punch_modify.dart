@@ -559,7 +559,7 @@ class _ModifyPageState extends State<ModifyPage> {
             focusNode: _newpasswordFocus,
             obscureText: true,
             validator: (value) =>
-                CheckValidate().validatePassword(_passwordFocus, value!),
+                CheckValidate().validatePassword(_passwordFocus, value!, _emailFocus),
             controller: controller,
             decoration: _textFormDecoration(),
             onChanged: (text) {
