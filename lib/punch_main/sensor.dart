@@ -5,16 +5,15 @@ import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:plms_start/punch_main/cctv_page.dart';
-<<<<<<< HEAD
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import "package:ndialog/ndialog.dart";
-=======
+
 import 'package:url_launcher/url_launcher.dart';
 import '../globals/login.dart' as login;
 import '../globals/issue.dart' as issue;
 import '../globals/photos.dart' as photos;
->>>>>>> e350faa11b372d3bf20c308c43302ad551e2b6eb
 
 import '../globals/stream.dart' as stream;
 
@@ -90,7 +89,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         leading: Icon(Icons.message_outlined),
         title: const Text('Farm in Earth'), // 타이틀
         actions: [
-          IconButton(onPressed: _launchURL,
+          IconButton(
+              onPressed: _launchURL,
               icon: Image.asset('assets/images/kakao_channel.png')),
           InkWell(
             child: CircleAvatar(
@@ -133,7 +133,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     );
   }
 
-<<<<<<< HEAD
   Widget bodySteam() {
     return Container(
       color: Colors.black,
@@ -239,8 +238,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
 
   void pong() {
     print('Ping response client callback invoked');
-=======
-  //카카오 채널 url launcher
+  }
+
   _launchURL() async {
     const url = 'http://pf.kakao.com/_TAxfdb';
     if (await canLaunch(url)) {
@@ -248,7 +247,5 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     } else {
       throw 'Could not launch $url';
     }
->>>>>>> e350faa11b372d3bf20c308c43302ad551e2b6eb
   }
 }
-
