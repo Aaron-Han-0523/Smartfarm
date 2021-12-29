@@ -82,6 +82,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     });
   }
 
+  var trap = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +143,9 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Center(
-              child: _widgetOptions.elementAt(_selectedIndex),
+              child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
             );
           else {
             final mqttReceivedMessages =
@@ -161,21 +165,24 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             print('img width = ${streamDatas}');
             // print('img width = ${streamData.runtimeType}');
             print('temp_1 = ${streamDatas['temp_1'].runtimeType}');
-            stream.temp_1 = streamDatas['temp_1'].toString();
-            stream.humid_1 = streamDatas['humid_1'].toString();
-            stream.exttemp_1 = streamDatas['exttemp_1'].toString();
-            stream.soiltemp_1 = streamDatas['soiltemp_1'].toString();
-            stream.soiltemp_2 = streamDatas['soiltemp_2'].toString();
-            stream.soilhumid_1 = streamDatas['soilhumid_1'].toString();
-            stream.soilhumid_2 = streamDatas['soilhumid_2'].toString();
-            stream.pump_1 = streamDatas['pump_1'].toString();
-            stream.pump_2 = streamDatas['pump_2'].toString();
-            stream.motor_1 = streamDatas['motor_1'].toString();
-            stream.motor_2 = streamDatas['motor_2'].toString();
-            stream.motor_3 = streamDatas['motor_3'].toString();
-            stream.motor_4 = streamDatas['motor_4'].toString();
-            stream.motor_5 = streamDatas['motor_5'].toString();
-            stream.motor_6 = streamDatas['motor_6'].toString();
+            if (trap == 0) {
+              stream.temp_1 = streamDatas['temp_1'].toString();
+              stream.humid_1 = streamDatas['humid_1'].toString();
+              stream.exttemp_1 = streamDatas['exttemp_1'].toString();
+              stream.soiltemp_1 = streamDatas['soiltemp_1'].toString();
+              stream.soiltemp_2 = streamDatas['soiltemp_2'].toString();
+              stream.soilhumid_1 = streamDatas['soilhumid_1'].toString();
+              stream.soilhumid_2 = streamDatas['soilhumid_2'].toString();
+              stream.pump_1 = streamDatas['pump_1'].toString();
+              stream.pump_2 = streamDatas['pump_2'].toString();
+              stream.motor_1 = streamDatas['motor_1'].toString();
+              stream.motor_2 = streamDatas['motor_2'].toString();
+              stream.motor_3 = streamDatas['motor_3'].toString();
+              stream.motor_4 = streamDatas['motor_4'].toString();
+              stream.motor_5 = streamDatas['motor_5'].toString();
+              stream.motor_6 = streamDatas['motor_6'].toString();
+              trap = 1;
+            }
             print('stream.temp_1 = ${stream.temp_1}');
             return Center(
               child: _widgetOptions.elementAt(_selectedIndex),

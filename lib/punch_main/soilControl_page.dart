@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-
+import '../globals/stream.dart' as stream;
 /*
 * name : Soil Control Page
 * description : Soil Control Page
@@ -12,12 +12,12 @@ import 'package:flutter_switch/flutter_switch.dart';
 * */
 
 // globalKey
-var innerTemp = ''; // 내부온도
-var extTemp = ''; // 외부온도
-var soilTemp = ''; // 토양온도
-var innerHumid = ''; // 내부습도
-var extHumid = ''; // 외부습도
-var soilHumid = ''; // 토양습도
+var innerTemp = stream.temp_1; // 내부온도
+var extTemp = stream.exttemp_1; // 외부온도
+var soilTemp = stream.soiltemp_1; // 토양온도
+var innerHumid = stream.humid_1; // 내부습도
+var extHumid = stream.humid_1; // 외부습도
+var soilHumid = stream.soilhumid_1; // 토양습도
 
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);
@@ -60,13 +60,27 @@ class MyWeather extends StatefulWidget {
 
 class _MyWeatherState extends State<MyWeather> {
   @override
+  void initState() {
+    var innerTemp = stream.temp_1; // 내부온도
+    var extTemp = stream.exttemp_1; // 외부온도
+    var soilTemp = stream.soiltemp_1; // 토양온도
+    var innerHumid = stream.humid_1; // 내부습도
+    var extHumid = stream.humid_1; // 외부습도
+    var soilHumid = stream.soilhumid_1; // 토양습도
+    print("innerTemp");
+    print(innerTemp);
+    print(stream.temp_1);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       child:
-      Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Container(
-          padding: const EdgeInsets.only(left:10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: Card(
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -90,8 +104,10 @@ class _MyWeatherState extends State<MyWeather> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(Icons.device_thermostat, "내부 온도", "$innerTemp°C"),
-                      _monitoring(Icons.invert_colors_on, "내부 습도", "$innerHumid%"),
+                      _monitoring(Icons.device_thermostat, "내부 온도",
+                          "$innerTemp" + "°C"),
+                      _monitoring(
+                          Icons.invert_colors_on, "내부 습도", "$innerHumid" + "%"),
                     ],
                   )),
             ),
@@ -101,8 +117,10 @@ class _MyWeatherState extends State<MyWeather> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(Icons.device_thermostat, "토양 온도", "$soilTemp°C"),
-                      _monitoring(Icons.invert_colors_on, "토양 습도", "$soilHumid%"),
+                      _monitoring(
+                          Icons.device_thermostat, "토양 온도", "$soilTemp°C"),
+                      _monitoring(
+                          Icons.invert_colors_on, "토양 습도", "$soilHumid%"),
                     ],
                   )),
             ),
@@ -138,21 +156,25 @@ class _MyAccordianState extends State<MyAccordian> {
       status1 = newValue1;
     });
   }
+
   onChangeFunction2(bool newValue2) {
     setState(() {
       status2 = newValue2;
     });
   }
+
   onChangeFunction3(bool newValue3) {
     setState(() {
       status3 = newValue3;
     });
   }
+
   onChangeFunction4(bool newValue4) {
     setState(() {
       status4 = newValue4;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -166,10 +188,12 @@ class _MyAccordianState extends State<MyAccordian> {
           children: <Widget>[
             Visibility(
                 visible: _visibility1,
-                child: _cards('펌프 (#1)', _visibility1, status1, onChangeFunction1)),
+                child: _cards(
+                    '펌프 (#1)', _visibility1, status1, onChangeFunction1)),
             Visibility(
                 visible: _visibility2,
-                child: _cards('펌프 (#2)', _visibility2, status2, onChangeFunction2)),
+                child: _cards(
+                    '펌프 (#2)', _visibility2, status2, onChangeFunction2)),
           ],
         ),
         // 밸브 제어
@@ -178,17 +202,20 @@ class _MyAccordianState extends State<MyAccordian> {
           children: <Widget>[
             Visibility(
                 visible: _visibility3,
-                child: _cards('밸브 (#1)', _visibility3, status3, onChangeFunction3)),
+                child: _cards(
+                    '밸브 (#1)', _visibility3, status3, onChangeFunction3)),
             Visibility(
                 visible: _visibility4,
-                child: _cards('밸브 (#2)', _visibility4, status4, onChangeFunction4)),
+                child: _cards(
+                    '밸브 (#2)', _visibility4, status4, onChangeFunction4)),
           ],
         ),
       ]),
     );
   }
 
-  Widget _cards(String title, bool visibles, bool val, Function onChangeMethod) {
+  Widget _cards(
+      String title, bool visibles, bool val, Function onChangeMethod) {
     return Visibility(
       visible: visibles,
       child: Card(
@@ -200,17 +227,16 @@ class _MyAccordianState extends State<MyAccordian> {
                 Text(title),
                 Spacer(),
                 FlutterSwitch(
-                  activeColor: Colors.green,
-                  inactiveColor: Colors.orange,
-                  activeTextColor: Colors.white,
-                  inactiveTextColor: Colors.white,
-                  value: val,
-                  showOnOff: true,
-                  onToggle: (newValue) {
-                    onChangeMethod(newValue);
-                    print('$title : $newValue');
-                  }
-                ),
+                    activeColor: Colors.green,
+                    inactiveColor: Colors.orange,
+                    activeTextColor: Colors.white,
+                    inactiveTextColor: Colors.white,
+                    value: val,
+                    showOnOff: true,
+                    onToggle: (newValue) {
+                      onChangeMethod(newValue);
+                      print('$title : $newValue');
+                    }),
               ],
             )),
       ),
