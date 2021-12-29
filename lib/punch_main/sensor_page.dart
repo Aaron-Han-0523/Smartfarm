@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import '../globals/stream.dart' as stream;
 /*
 * name : ListOpen Page
 * description : open data page
@@ -11,12 +11,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 * */
 
 // globalKey
-var innerTemp = ''; // 내부온도
-var extTemp = ''; // 외부온도
-var soilTemp = ''; // 토양온도
-var innerHumid = ''; // 내부습도
-var extHumid = ''; // 외부습도
-var soilHumid = ''; // 토양습도
+var innerTemp = stream.temp_1; // 내부온도
+var extTemp = stream.exttemp_1; // 외부온도
+var soilTemp = stream.soiltemp_1; // 토양온도
+var innerHumid = stream.humid_1; // 내부습도
+var extHumid = stream.humid_1; // 외부습도
+var soilHumid = stream.soilhumid_1; // 토양습도
 
 // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 // FlutterLocalNotificationsPlugin();
@@ -67,7 +67,6 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-
   void initState() {
     // _initNotiSetting();
     super.initState();
@@ -119,11 +118,7 @@ class _SensorPageState extends State<SensorPage> {
           color: Color(0xFFE6E6E6),
           child: ListView(
             padding: const EdgeInsets.all(8),
-            children: <Widget>[
-              MyAccordian(),
-              MyAccordian2(),
-              MyGraph()
-            ],
+            children: <Widget>[MyAccordian(), MyAccordian2(), MyGraph()],
           )),
     );
   }
@@ -150,8 +145,8 @@ class _MyAccordianState extends State<MyAccordian> {
             title: Text('외부환경'),
             children: <Widget>[
               Row(children: [
-                _cards('외부온도', '$extTemp', true, Icons.wb_sunny),
-                _cards('외부습도', '$extHumid', true, Icons.invert_colors)
+                _cards('외부온도', extTemp, true, Icons.wb_sunny),
+                _cards('외부습도', extHumid, true, Icons.invert_colors)
               ]),
               Row(children: [
                 _cards('강우', '12.5', true, Icons.wb_sunny),
@@ -189,12 +184,12 @@ class _MyAccordian2State extends State<MyAccordian2> {
             title: Text('내부환경'),
             children: <Widget>[
               Row(children: [
-                _cards('내부온도', '$innerTemp', true, Icons.wb_sunny),
-                _cards('내부습도', '$innerHumid', true, Icons.wb_sunny)
+                _cards('내부온도', innerTemp, true, Icons.wb_sunny),
+                _cards('내부습도', innerHumid, true, Icons.wb_sunny)
               ]),
               Row(children: [
-                _cards('토양온도', '$soilTemp', true, Icons.wb_sunny),
-                _cards('토양습도', '$soilHumid', true, Icons.wb_sunny)
+                _cards('토양온도', soilTemp, true, Icons.wb_sunny),
+                _cards('토양습도', soilHumid, true, Icons.wb_sunny)
               ]),
               Row(children: [
                 _cards('토양건조도', '12.5', true, Icons.wb_sunny),
@@ -218,16 +213,14 @@ class _MyGraphState extends State<MyGraph> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget> [
+      children: <Widget>[
         Container(
           margin: EdgeInsets.only(bottom: 10),
           color: Colors.grey[350],
           child: ExpansionTile(
             backgroundColor: Colors.grey[350],
             title: Text("그래프"),
-            children: [
-              _lineChart()
-            ],
+            children: [_lineChart()],
           ),
         ),
       ],
@@ -291,12 +284,18 @@ Widget _cards(var title, var subtitle, bool visibles, dynamic icon) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(title, style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w600)),
-                Text(subtitle, style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w600)),
-              ]),
+          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Text(title,
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600)),
+            Text(subtitle,
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600)),
+          ]),
           Icon(icon, size: 60, color: Colors.black54)
         ],
       ),
@@ -316,6 +315,3 @@ BoxDecoration _decoration() {
     ],
   );
 }
-
-
-

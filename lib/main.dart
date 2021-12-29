@@ -16,6 +16,7 @@ import 'package:plms_start/signup/sign_up_page.dart';
 // import 'punch_main/punch_complete.dart';
 // import 'punch_success/confirm_page.dart';
 import 'login/login_pages.dart';
+import 'punch_main/mqtt.dart';
 import 'punch_main/sensor.dart';
 // import 'punch_issue/punch_issue.dart';
 // import 'punch_success/success_page.dart';
@@ -62,7 +63,9 @@ class _MyAppState extends State<MyApp> {
         future: Future.delayed(Duration(seconds: 3)),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return MaterialApp(home: Splash());
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+                home: Splash());
           } else {
             return GetMaterialApp(
               debugShowCheckedModeBanner: false,
@@ -101,10 +104,10 @@ class _MyAppState extends State<MyApp> {
                     page: () => SettingPage(),
                     // transition: Transition.upToDown,
                     opaque: false),
-                // GetPage(
-                //   name: '/modify',
-                //   page: () => ModifyPage(),
-                // ),
+                GetPage(
+                  name: '/mqtt',
+                  page: () => MQTTPage(),
+                ),
                 // GetPage(
                 //   name: '/photoList',
                 //   page: () => PhotoList(),
