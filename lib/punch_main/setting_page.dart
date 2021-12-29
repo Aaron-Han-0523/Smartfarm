@@ -62,7 +62,7 @@ class _SettingPageState extends State<SettingPage> {
                 child: Icon(Icons.logout),
               ),
               onTap: () {
-                Get.offAllNamed('/'); // logout 되지는 않음
+                Get.offAllNamed('/'); // 로그아웃 연결 필요함
               },
             )
           ],
