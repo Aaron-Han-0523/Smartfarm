@@ -50,7 +50,6 @@ class _SensorPageState extends State<SensorPage> {
   }
 }
 
-
 class MyAccordian extends StatefulWidget {
   const MyAccordian({Key? key}) : super(key: key);
 
