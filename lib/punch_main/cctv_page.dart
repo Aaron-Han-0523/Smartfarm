@@ -7,7 +7,7 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2021-12-28
+* last update : 2021-12-29
 * */
 
 // TODO : 전체화면 전환
@@ -26,6 +26,9 @@ class _CCTVPageState extends State<CCTVPage> {
 
   bool showPlayerControls = true;
   double _aspectRatio = 16 / 9;
+
+  // visibiliby
+  List<bool> visibility_value = [true, true];
 
   @override
   void initState() {
@@ -62,29 +65,32 @@ class _CCTVPageState extends State<CCTVPage> {
           return Container(
             padding: EdgeInsets.only(left: 10, right: 10),
             alignment: Alignment.center,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("CCTV #${index + 1}"),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              playerControllers[index].value.isPlaying
-                                  ? playerControllers[index].pause()
-                                  : playerControllers[index].play();
-                            });
-                          },
-                          icon: Icon(Icons.control_camera)),
-                    ],
-                  ),
-                  VlcPlayer(
-                    controller: playerControllers[index],
-                    aspectRatio: _aspectRatio,
-                  ),
-                ]),
+            child: Visibility(
+              visible: visibility_value[index],
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("CCTV #${index + 1}"),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                playerControllers[index].value.isPlaying
+                                    ? playerControllers[index].pause()
+                                    : playerControllers[index].play();
+                              });
+                            },
+                            icon: Icon(Icons.control_camera)),
+                      ],
+                    ),
+                    VlcPlayer(
+                      controller: playerControllers[index],
+                      aspectRatio: _aspectRatio,
+                    ),
+                  ]),
+            ),
           );
         },
       ),
