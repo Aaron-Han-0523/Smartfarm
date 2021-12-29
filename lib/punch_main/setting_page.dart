@@ -12,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 * description : punch issue three page
 * writer : walter
 * create date : 2021-09-30
-* last update : 2021-09-30
+* last update : 2021-12-29
 * */
 
 class SettingPage extends StatefulWidget {
@@ -62,7 +62,7 @@ class _SettingPageState extends State<SettingPage> {
                 child: Icon(Icons.logout),
               ),
               onTap: () {
-                Get.toNamed('/sensor'); // logout 되지는 않음
+                Get.offAllNamed('/'); // logout 되지는 않음
               },
             )
           ],
