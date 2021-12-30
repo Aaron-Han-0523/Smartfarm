@@ -59,66 +59,69 @@ class _CCTVPageState extends State<CCTVPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Visibility(
-              visible: _visibility1,
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("CCTV #1"),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                            _chewieController1.enterFullScreen();
-                          });
-                        },
-                        icon: Icon(Icons.control_camera)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Chewie(
-                        controller: _chewieController1,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Visibility(
+                visible: _visibility1,
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("CCTV #1"),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              // 카메라를 움직이는 버튼이나 일단 풀스크린전환
+                              _chewieController1.enterFullScreen();
+                            });
+                          },
+                          icon: Icon(Icons.control_camera)),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Chewie(
+                          controller: _chewieController1,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ]),
-            ),
-            Visibility(
-              visible: _visibility2,
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("CCTV #2"),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                            _chewieController2.enterFullScreen();
-                          });
-                        },
-                        icon: Icon(Icons.control_camera)),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Chewie(
-                        controller: _chewieController2,
-                      )
-                    ),
-                  ],
-                ),
-              ]),
-            ),
-          ],
+                    ],
+                  ),
+                ]),
+              ),
+              Visibility(
+                visible: _visibility2,
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("CCTV #2"),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              // 카메라를 움직이는 버튼이나 일단 풀스크린전환
+                              _chewieController2.enterFullScreen();
+                            });
+                          },
+                          icon: Icon(Icons.control_camera)),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Chewie(
+                          controller: _chewieController2,
+                        )
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
+            ],
+          ),
         ),
       ),
     );
