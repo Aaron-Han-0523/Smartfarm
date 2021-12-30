@@ -84,8 +84,12 @@ class _CCTVPageState extends State<CCTVPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child: Chewie(
-                          controller: _chewieController1,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height*0.3,
+                          width: MediaQuery.of(context).size.width,
+                          child: Chewie(
+                            controller: _chewieController1,
+                          ),
                         ),
                       ),
                     ],
@@ -112,8 +116,12 @@ class _CCTVPageState extends State<CCTVPage> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: Chewie(
-                          controller: _chewieController2,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height*0.3,
+                          width: MediaQuery.of(context).size.width,
+                          child: Chewie(
+                            controller: _chewieController2,
+                          ),
                         )
                       ),
                     ],
