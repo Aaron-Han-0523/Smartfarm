@@ -11,10 +11,8 @@ import 'package:video_player/video_player.dart';
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2021-12-29
+* last update : 2021-12-30
 * */
-
-// TODO : 전체화면 전환
 
 class CCTVPage extends StatefulWidget {
   @override
@@ -28,17 +26,27 @@ class _CCTVPageState extends State<CCTVPage> {
     'https://media.w3.org/2010/05/sintel/trailer.mp4',
   ];
 
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
+  late VideoPlayerController _videoPlayerController1;
+  late ChewieController _chewieController1;
+  late VideoPlayerController _videoPlayerController2;
+  late ChewieController _chewieController2;
   double _aspectRatio = 16 / 9;
 
   @override
   initState() {
     super.initState();
-    _videoPlayerController = VideoPlayerController.network(urls[0]);
-    _chewieController = ChewieController(
+    _videoPlayerController1 = VideoPlayerController.network(urls[0]);
+    _videoPlayerController2 = VideoPlayerController.network(urls[1]);
+    _chewieController1 = ChewieController(
       allowFullScreen: true,
-      videoPlayerController: _videoPlayerController,
+      videoPlayerController: _videoPlayerController1,
+      aspectRatio: _aspectRatio,
+      autoInitialize: true,
+      autoPlay: true,
+    );
+    _chewieController2 = ChewieController(
+      allowFullScreen: true,
+      videoPlayerController: _videoPlayerController2,
       aspectRatio: _aspectRatio,
       autoInitialize: true,
       autoPlay: true,
@@ -57,7 +65,8 @@ class _CCTVPageState extends State<CCTVPage> {
               IconButton(
                   onPressed: () {
                     setState(() {
-                      _chewieController.enterFullScreen();
+                      // 카메라를 움직이는 버튼이나 일단 풀스크린전환
+                      _chewieController1.enterFullScreen();
                     });
                   },
                   icon: Icon(Icons.control_camera)),
@@ -65,7 +74,7 @@ class _CCTVPageState extends State<CCTVPage> {
           ),
           Container(
             child: Chewie(
-              controller: _chewieController,
+              controller: _chewieController1,
             ),
           ),
           Row(
@@ -75,7 +84,7 @@ class _CCTVPageState extends State<CCTVPage> {
               IconButton(
                   onPressed: () {
                     setState(() {
-                      _chewieController.enterFullScreen();
+                      _chewieController2.enterFullScreen();
                     });
                   },
                   icon: Icon(Icons.control_camera)),
@@ -83,7 +92,7 @@ class _CCTVPageState extends State<CCTVPage> {
           ),
           Container(
             child: Chewie(
-              controller: _chewieController,
+              controller: _chewieController2,
             ),
           ),
         ]),
@@ -91,58 +100,12 @@ class _CCTVPageState extends State<CCTVPage> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Container(
-  //     child: ListView.separated(
-  //       padding: EdgeInsets.all(8.0),
-  //       itemCount: playerControllers.length,
-  //       separatorBuilder: (_, index) {
-  //         return Divider(height: 50, thickness: 5);
-  //       },
-  //       itemBuilder: (_, index) {
-  //         return Container(
-  //           padding: EdgeInsets.only(left: 10, right: 10),
-  //           alignment: Alignment.center,
-  //           child: Visibility(
-  //             visible: visibility_value[index],
-  //             child: Column(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                 children: [
-  //                   Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     children: [
-  //                       Text("CCTV #${index + 1}"),
-  //                       IconButton(
-  //                           onPressed: () {
-  //                             setState(() {
-  //                               playerControllers[index].value.isPlaying
-  //                                   ? playerControllers[index].pause()
-  //                                   : playerControllers[index].play();
-  //                             });
-  //                           },
-  //                           icon: Icon(Icons.control_camera)),
-  //                     ],
-  //                   ),
-  //                   VlcPlayer(
-  //                     controller: playerControllers[index],
-  //                     aspectRatio: _aspectRatio,
-  //                   ),
-  //                 ]),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
   @override
   void dispose() async {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
+    _videoPlayerController1.dispose();
+    _chewieController1.dispose();
+    _videoPlayerController2.dispose();
+    _chewieController2.dispose();
     super.dispose();
-    // for (final controller in playerControllers) {
-    //   await controller.dispose();
-    // }
   }
 }
