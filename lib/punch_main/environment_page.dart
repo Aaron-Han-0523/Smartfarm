@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:plms_start/ontap_draft/confirm_page_ontap.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import '../globals/stream.dart' as stream;
 
 /*
 * name : Environment Page
@@ -20,13 +21,13 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
-  // globalKey
-  var innerTemp = '';
-  var extTemp = '';
-  var soilTemp = '';
-  var innerHumid = '';
-  var extHumid = '';
-  var soilHumid = '';
+// globalKey
+  var innerTemp = stream.temp_1; // 내부온도
+  var extTemp = stream.exttemp_1; // 외부온도
+  var soilTemp = stream.soiltemp_1; // 토양온도
+  var innerHumid = stream.humid_1; // 내부습도
+  var extHumid = stream.humid_1; // 외부습도
+  var soilHumid = stream.soilhumid_1; // 토양습도
 
   // visibility
   bool status1 = true;
@@ -49,7 +50,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
   //     _visibles = !_visibles;
   //   });
   // }
-
 
   @override
   Widget build(BuildContext context) {
