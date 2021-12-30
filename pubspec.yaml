@@ -42,6 +42,7 @@ dependencies:
   ndialog: ^4.1.0
 
   flutter_local_notifications: ^9.1.5
+  firebase_messaging: ^11.2.4
   url_launcher: ^6.0.17
 
 

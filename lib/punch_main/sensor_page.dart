@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../globals/stream.dart' as stream;
 /*
 * name : ListOpen Page
