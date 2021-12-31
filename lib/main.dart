@@ -37,26 +37,6 @@ import 'punch_main/sensor.dart';
 * create date : 2021-09-30
 * last update : 2021-09-30
 * */
-Future<void> main() async {
-  await dotenv.load(fileName: 'assets/config/.env');
-  print('flutter test run app!!!!!!!!!!!!!');
-  runApp(MyApp());
-  print('flutter Main end!!!!!!!!!!!!!');
-}
-
-class Splash extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Icon(
-          Icons.apartment_outlined,
-          size: MediaQuery.of(context).size.width * 0.785,
-        ),
-      ),
-    );
-  }
-}
 
 // 푸시알림 백그라운드 설정
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -80,6 +60,27 @@ class PushNotification {
   String? body;
 }
 
+Future<void> main() async {
+  await dotenv.load(fileName: 'assets/config/.env');
+  print('flutter test run app!!!!!!!!!!!!!');
+  runApp(MyApp());
+  print('flutter Main end!!!!!!!!!!!!!');
+}
+
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Icon(
+          Icons.apartment_outlined,
+          size: MediaQuery.of(context).size.width * 0.785,
+        ),
+      ),
+    );
+  }
+}
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -89,17 +90,15 @@ class _MyAppState extends State<MyApp> {
 
   // 푸시알림 토큰 firebase token = fcmtoken
   var fcmtoken = '';
-
-  void _incrementToken(var item) {
-    setState() {
-      fcmtoken = item;
-    }
-  }
-
+  late int _totalNotifications;
+  // late final FirebaseMessaging _messaging;
   PushNotification? _notificationInfo;
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
 
   // 푸시알림 관련 앱 최초 실행 아닐 때 쓰는 코드 ; 매번 앱 실행 시 실행되어야 함
   void activateNotification() async {
+
     print('##### activateNotification');
 
     final FirebaseMessaging _messaging;
@@ -109,7 +108,6 @@ class _MyAppState extends State<MyApp> {
     _messaging = FirebaseMessaging.instance;
     _messaging.getToken().then((fcmtoken) async {
       print('##### First Get fcmtoken: $fcmtoken');
-      _incrementToken(fcmtoken);
     });
 
     // 푸시알림 앱 실행 시
@@ -147,6 +145,7 @@ class _MyAppState extends State<MyApp> {
         );
 
         setState(() {
+          _totalNotifications++;
           _notificationInfo = notification;
           print(_notificationInfo);
         });
@@ -185,7 +184,6 @@ class _MyAppState extends State<MyApp> {
 
       _messaging.getToken().then((fcmtoken) async {
         print('##### not first Get fcmtoken: $fcmtoken');
-        _incrementToken(fcmtoken);
       });
 
       // notification channel을 디바이스에 생성
@@ -240,6 +238,7 @@ class _MyAppState extends State<MyApp> {
 
   // 앱 비활성화 시 푸시알림 수신 - 잘됨
   checkForInitialMessage() async {
+
     await Firebase.initializeApp();
     RemoteMessage? initialMessage =
     await FirebaseMessaging.instance.getInitialMessage();
@@ -251,6 +250,7 @@ class _MyAppState extends State<MyApp> {
       );
 
       setState(() {
+        _totalNotifications++;
         _notificationInfo = notification;
       });
     }
@@ -260,9 +260,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
 
     // 푸시알림
+    _totalNotifications = 0;
+    registerNotification();
     activateNotification();
     checkForInitialMessage();
-    print("############## 최초최초최초 ");
 
     // 푸시알림 - 앱이 백그라운드 모드일 때
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -272,6 +273,7 @@ class _MyAppState extends State<MyApp> {
       );
       setState(() {
         _notificationInfo = notification;
+        _totalNotifications++;
       });
     });
 
