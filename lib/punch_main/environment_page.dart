@@ -1,8 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:plms_start/ontap_draft/confirm_page_ontap.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:dio/dio.dart';
+
 import '../globals/stream.dart' as stream;
 
 /*
@@ -32,11 +37,11 @@ class _EnvironmentState extends State<EnvironmentPage> {
   // visibility
   bool status1 = true;
   bool status2 = true;
-  bool status3 = false;
-  bool status4 = false;
-  bool status5 = false;
-  bool status6 = false;
-  bool status7 = false;
+  bool status3 = true;
+  bool status4 = true;
+  bool status5 = true;
+  bool status6 = true;
+  bool status7 = true;
   bool status8 = true;
   bool status9 = true;
   bool status10 = true;
@@ -94,25 +99,41 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     children: <Widget>[
                       Column(
                         children: [
-                          _card(context, '측장 (전체)'),
+                          _card('측장 (전체)'),
                           _toggleSwitch(
                             context,
                             '츨장 (전)',
+                            'side',
+                            'test',
+                            'sid',
+                            'a',
                             status1,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (후)',
+                            'side',
+                            'test',
+                            'sid',
+                            'd',
                             status2,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (좌)',
+                            'side',
+                            'test2',
+                            'sid2',
+                            'e',
                             status3,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (우)',
+                            'side',
+                            'test2',
+                            'sid2',
+                            'g',
                             status4,
                           ),
                         ],
@@ -130,20 +151,32 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     children: <Widget>[
                       Column(
                         children: [
-                          _card(context, '측장 (전체)'),
+                          _card('천창 (전체)'),
                           _toggleSwitch(
                             context,
-                            '츨장 (#1)',
+                            '천창 (#1)',
+                            'top',
+                            'test',
+                            'sid',
+                            'b',
                             status5,
                           ),
                           _toggleSwitch(
                             context,
-                            '측장 (#2)',
+                            '천창 (#2)',
+                            'top',
+                            'test2',
+                            'sid2',
+                            'f',
                             status6,
                           ),
                           _toggleSwitch(
                             context,
-                            '측장 (#3)',
+                            '천창 (#3)',
+                            'top',
+                            'test3',
+                            'sid3',
+                            'h',
                             status7,
                           ),
                         ],
@@ -277,10 +310,10 @@ BoxDecoration _decoration() {
   );
 }
 
-Widget _card(BuildContext context, String text) {
+Widget _card(String text) {
   return Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-      height: MediaQuery.of(context).size.width * 0.15,
+      height: Get.width * 0.15,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -292,9 +325,9 @@ Widget _card(BuildContext context, String text) {
             padding: EdgeInsets.only(right: 5),
             child: Row(
               children: [
-                _raisedButoon(context, Colors.green, '전체열림'),
-                _raisedButoon(context, Colors.orangeAccent, '전체정지'),
-                _raisedButoon(context, Colors.black54, '전체닫힘')
+                _raisedButoon(Colors.green, '전체열림'),
+                _raisedButoon(Colors.orangeAccent, '전체정지'),
+                _raisedButoon(Colors.black54, '전체닫힘')
               ],
             ),
           )
@@ -303,7 +336,16 @@ Widget _card(BuildContext context, String text) {
       decoration: _decoration());
 }
 
-Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
+var api = dotenv.env['PHONE_IP'];
+var uris = '$api/farm';
+
+var dio = Dio();
+Widget _toggleSwitch(BuildContext context, String text, var positions,
+    var userIds, var siteIds, var motorIds, bool visibles) {
+  var position = positions;
+  var userId = userIds;
+  var siteId = siteIds;
+  var motorId = motorIds;
   return Visibility(
     visible: visibles,
     child: Container(
@@ -333,9 +375,16 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
               totalSwitches: 3,
               labels: ['열림', '정지', '닫힘'],
               radiusStyle: true,
-              onToggle: (value) {
+              onToggle: (value) async {
                 // visibles = !visibles;
                 print('switched to: $value');
+                var response = await dio.put(
+                    '$uris/$userId/site/$siteId/controls/$position/motors/$motorId',
+                    data: {'motor_name': '$value test'});
+                // .get('https://github.com/flutterchina/dio/tree/master/example');
+                var datas = jsonDecode(response.toString());
+                print(datas);
+                // print(datas['data'][0]);
               },
             ),
           )
@@ -429,10 +478,13 @@ Widget _lineChart(bool _visibles) {
 }
 
 //RaisedButton Widget
-Widget _raisedButoon(BuildContext context, dynamic color, String text) {
+
+Widget _raisedButoon(dynamic color, String text) {
   return Container(
     child: RaisedButton(
-      onPressed: () {},
+      onPressed: () async {
+        print('hi111111111111');
+      },
       color: color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

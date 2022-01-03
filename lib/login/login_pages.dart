@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
 
-  LoginTest _loginTest = LoginTest();
+  // LoginTest _loginTest = LoginTest();
 
   late double headerTopZone;
 
@@ -76,43 +76,42 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
-      // 카카오 채널 고객센터/문의
-      floatingActionButton: FloatingActionButton(
-        onPressed: _launchURL,
-        backgroundColor: Colors.transparent,
-        child: Image.asset('assets/images/kakao_channel.png')
-      ),
+        // 카카오 채널 고객센터/문의
+        floatingActionButton: FloatingActionButton(
+            onPressed: _launchURL,
+            backgroundColor: Colors.transparent,
+            child: Image.asset('assets/images/kakao_channel.png')),
         // resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
-      child: Stack(
-        children: [
-          _background(),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: Get.height * 4.5 / 8,
-            bottom: 10,
-            child: Column(
-              children: [
-                _textForm(),
-                SizedBox(
-                  height: 30,
+          child: Stack(
+            children: [
+              _background(),
+              Positioned(
+                left: 0,
+                right: 0,
+                top: Get.height * 4.5 / 8,
+                bottom: 10,
+                child: Column(
+                  children: [
+                    _textForm(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    _button(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    _signupText(),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    _textButton(),
+                  ],
                 ),
-                _button(),
-                SizedBox(
-                  height: 30,
-                ),
-                _signupText(),
-                SizedBox(
-                  height: 5,
-                ),
-                _textButton(),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 
   // 배경화면
@@ -186,8 +185,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
-
-          _loginTest.loginTest(uid, pw);
+          // _loginTest.loginTest(uid, pw);
 
           // var url = Uri.parse('$api/api/login');
           // var response = await http.post(url, body: {
@@ -200,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
           // print(jsonData['result']);
           // if (jsonData['results']['uid'] == _idTextEditController.text &&
           //     jsonData['result'] == true) {
-          //   Get.toNamed('/sensor');
+          Get.toNamed('/sensor');
           // } else {
           //   _showDialog();
           // }
