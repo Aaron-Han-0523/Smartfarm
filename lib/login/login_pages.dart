@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:plms_start/dio/login_dio.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../globals/login.dart' as login;
@@ -29,6 +31,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
+
+  LoginTest _loginTest = LoginTest();
 
   late double headerTopZone;
 
@@ -180,7 +184,11 @@ class _LoginPageState extends State<LoginPage> {
           primary: Color(0xff304D5B),
         ),
         onPressed: () async {
-          Get.toNamed('/sensor');
+          var uid = _idTextEditController.text;
+          var pw = _pwTextEditController.text;
+
+          _loginTest.loginTest(uid, pw);
+
           // var url = Uri.parse('$api/api/login');
           // var response = await http.post(url, body: {
           //   'uid': _idTextEditController.text,
