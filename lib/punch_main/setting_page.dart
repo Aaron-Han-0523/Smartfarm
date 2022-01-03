@@ -38,33 +38,40 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          InkWell(
+            child: CircleAvatar(
+              child: Icon(Icons.logout),
+            ),
+            onTap: () {
+              Get.offAllNamed('/'); // 로그아웃 연결 필요함
+            },
+          )
+        ],
         title: const Text('Farm in Earth'),
       ),
       body: Container(
+        padding: EdgeInsets.only(left: 10, bottom: 15, top: 10),
         child: Column(
           children: [
-            Text('경보 설정'),
+            Align(
+              alignment: Alignment.topLeft,
+                child: Text('경보 설정', style: TextStyle(fontSize: 15, color: Colors.black54))),
             _swichWidget('경보 활성화'),
             _tempFormField('고온 경보 (°C)', _highTextEditController),
             _tempFormField('저온 경보 (°C)', _lowTextEditController),
             const Divider(
-              height: 20,
-              thickness: 5,
-              indent: 20,
+              height: 10,
+              thickness: 2,
+              indent: 0,
               endIndent: 0,
-              color: Colors.black,
+              color: Colors.grey,
             ),
-            Text('관수 타이머 설정'),
+            Align(
+              alignment: Alignment.topLeft,
+                child: Text('관수 타이머 설정', style: TextStyle(fontSize: 15, color: Colors.black54),)),
             _dropDownButtons('타이머 시간'),
-            InkWell(
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(Icons.logout),
-              ),
-              onTap: () {
-                Get.offAllNamed('/'); // 로그아웃 연결 필요함
-              },
-            )
+            _dropDownButtons('사이트 설정'),
           ],
         ),
       ),
@@ -76,13 +83,13 @@ class _SettingPageState extends State<SettingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(name),
+        Text(name, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54),),
         FlutterSwitch(
           activeColor: Colors.green,
-          width: 40.0,
-          height: 20.0,
-          valueFontSize: 10.0,
-          toggleSize: 10.0,
+          width: 70.0,
+          height: 40.0,
+          valueFontSize: 20.0,
+          toggleSize: 20.0,
           value: status,
           borderRadius: 30.0,
           // padding: 3.0,
@@ -102,12 +109,11 @@ class _SettingPageState extends State<SettingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(width: Get.width * 1 / 3.9, child: Text(title)),
+        SizedBox(width: Get.width * 1 / 3.9, child: Text(title, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54))),
         SizedBox(
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
           child: TextFormField(
-            style: TextStyle(fontSize: 17),
             controller: controller,
             onChanged: (text) {
               setState(() {});
@@ -124,7 +130,7 @@ class _SettingPageState extends State<SettingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(name),
+        Text(name, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54)),
         DropdownButton<String>(
           value: dropdownValue,
           icon: const Icon(Icons.arrow_downward),
