@@ -99,14 +99,14 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     children: <Widget>[
                       Column(
                         children: [
-                          _card('측장 (전체)'),
+                          _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
                           _toggleSwitch(
                             context,
                             '츨장 (전)',
                             'side',
                             'test',
                             'sid',
-                            'a',
+                            'a_side',
                             status1,
                           ),
                           _toggleSwitch(
@@ -115,7 +115,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             'side',
                             'test',
                             'sid',
-                            'd',
+                            'd_side',
                             status2,
                           ),
                           _toggleSwitch(
@@ -124,7 +124,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             'side',
                             'test2',
                             'sid2',
-                            'e',
+                            'e_side',
                             status3,
                           ),
                           _toggleSwitch(
@@ -133,7 +133,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             'side',
                             'test2',
                             'sid2',
-                            'g',
+                            'g_side',
                             status4,
                           ),
                         ],
@@ -151,14 +151,14 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     children: <Widget>[
                       Column(
                         children: [
-                          _card('천창 (전체)'),
+                          _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
                           _toggleSwitch(
                             context,
                             '천창 (#1)',
                             'top',
                             'test',
                             'sid',
-                            'b',
+                            'b_top',
                             status5,
                           ),
                           _toggleSwitch(
@@ -167,16 +167,16 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             'top',
                             'test2',
                             'sid2',
-                            'f',
+                            'f_top',
                             status6,
                           ),
                           _toggleSwitch(
                             context,
                             '천창 (#3)',
                             'top',
-                            'test3',
-                            'sid3',
-                            'h',
+                            'test2',
+                            'sid2',
+                            'h_top',
                             status7,
                           ),
                         ],
@@ -310,8 +310,36 @@ BoxDecoration _decoration() {
   );
 }
 
-Widget _card(String text) {
-  return Container(
+// Widget _card(String text) {
+//   return Container(
+//       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+//       height: Get.width * 0.15,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Padding(
+//               padding: EdgeInsets.only(left: 15),
+//               child: Text(text,
+//                   style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+//           Padding(
+//               padding: EdgeInsets.only(right: 5),
+//               child: _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'))
+//         ],
+//       ),
+//       decoration: _decoration());
+// }
+
+var api = dotenv.env['PHONE_IP'];
+var uris = '$api/farm';
+
+var dio = Dio();
+Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
+  var position = positions;
+  var userId = userIds;
+  var siteId = siteIds;
+  return Visibility(
+    visible: true,
+    child: Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
       height: Get.width * 0.15,
       child: Row(
@@ -322,24 +350,42 @@ Widget _card(String text) {
               child: Text(text,
                   style: _textStyle(Colors.grey, FontWeight.w600, 16))),
           Padding(
-            padding: EdgeInsets.only(right: 5),
-            child: Row(
-              children: [
-                _raisedButoon(Colors.green, '전체열림'),
-                _raisedButoon(Colors.orangeAccent, '전체정지'),
-                _raisedButoon(Colors.black54, '전체닫힘')
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              minWidth: 50.0,
+              cornerRadius: 50.0,
+              activeBgColors: [
+                [Colors.green],
+                [Colors.orangeAccent],
+                [Colors.black54]
               ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey[400],
+              inactiveFgColor: Colors.white,
+              initialLabelIndex: 1,
+              totalSwitches: 3,
+              labels: ['전체열림', '전체정지', '전체닫힘'],
+              radiusStyle: true,
+              onToggle: (value) async {
+                // visibles = !visibles;
+                print('switched to: $value');
+                var response = await dio.put(
+                    '$uris/$userId/site/$siteId/controls/$position/motors',
+                    data: {'motor_name': '$value'});
+                // .get('https://github.com/flutterchina/dio/tree/master/example');
+                var datas = jsonDecode(response.toString());
+                print(datas);
+                // print(datas['data'][0]);
+              },
             ),
           )
         ],
       ),
-      decoration: _decoration());
+      decoration: _decoration(),
+    ),
+  );
 }
 
-var api = dotenv.env['PHONE_IP'];
-var uris = '$api/farm';
-
-var dio = Dio();
 Widget _toggleSwitch(BuildContext context, String text, var positions,
     var userIds, var siteIds, var motorIds, bool visibles) {
   var position = positions;
@@ -380,7 +426,7 @@ Widget _toggleSwitch(BuildContext context, String text, var positions,
                 print('switched to: $value');
                 var response = await dio.put(
                     '$uris/$userId/site/$siteId/controls/$position/motors/$motorId',
-                    data: {'motor_name': '$value test'});
+                    data: {'motor_name': '$value'});
                 // .get('https://github.com/flutterchina/dio/tree/master/example');
                 var datas = jsonDecode(response.toString());
                 print(datas);
