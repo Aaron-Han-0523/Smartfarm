@@ -8,7 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 /*
-* name : login API
+* name : login API/ change password
 * description : login api
 * writer : mark
 * create date : 2022-01-03
