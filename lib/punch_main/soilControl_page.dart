@@ -1,14 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
+
 /*
 * name : Soil Control Page
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24
-* last update : 2021-12-29
+* last update : 2022-01-03
 * */
 
 // globalKey
@@ -18,6 +25,27 @@ var soilTemp = stream.soiltemp_1; // 토양온도
 var innerHumid = stream.humid_1; // 내부습도
 var extHumid = stream.humid_1; // 외부습도
 var soilHumid = stream.soilhumid_1; // 토양습도
+
+// APIs
+var api = dotenv.env['PHONE_IP'];
+var url = '$api/farm';
+
+// dio APIs
+var options = BaseOptions(
+  baseUrl: '$url',
+  connectTimeout: 5000,
+  receiveTimeout: 3000,
+);
+Dio dio = Dio(options);
+
+// Must be top-level function
+_parseAndDecode(String response) {
+  return jsonDecode(response);
+}
+
+parseJson(String text) {
+  return compute(_parseAndDecode, text);
+}
 
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);
@@ -70,7 +98,22 @@ class _MyWeatherState extends State<MyWeather> {
     print("innerTemp");
     print(innerTemp);
     print(stream.temp_1);
+
+    _getData();
+
     super.initState();
+  }
+
+  void _getData() async {
+    final response = await dio.get('$url/test/site/sid/controls/pumps');
+    print('GET Pumps LIST: ${response.data}');
+    var pump1 = response.data[0];
+    var pump2 = response.data[1];
+
+    final response1 = await dio.get('$url/test/site/sid/controls/valves');
+    print('GET Valves LIST: ${response.data}');
+    var valve1 = response.data[0];
+    var valve2 = response.data[1];
   }
 
   @override
@@ -140,11 +183,13 @@ class MyAccordian extends StatefulWidget {
 }
 
 class _MyAccordianState extends State<MyAccordian> {
+  // title
+  List<String> title = ['펌프 (#1)', '펌프 (#2)', '밸브 (#1)', '밸브 (#2)'];
   // switch on off
-  bool status1 = false;
-  bool status2 = false;
-  bool status3 = false;
-  bool status4 = false;
+  bool status1 = true;
+  bool status2 = true;
+  bool status3 = true;
+  bool status4 = true;
   // visibiliby
   bool _visibility1 = true;
   bool _visibility2 = true;
@@ -188,12 +233,12 @@ class _MyAccordianState extends State<MyAccordian> {
           children: <Widget>[
             Visibility(
                 visible: _visibility1,
-                child: _cards(
-                    '펌프 (#1)', _visibility1, status1, onChangeFunction1)),
+                child:
+                    _cards(title[0], _visibility1, status1, onChangeFunction1)),
             Visibility(
                 visible: _visibility2,
-                child: _cards(
-                    '펌프 (#2)', _visibility2, status2, onChangeFunction2)),
+                child:
+                    _cards(title[1], _visibility2, status2, onChangeFunction2)),
           ],
         ),
         // 밸브 제어
@@ -202,12 +247,12 @@ class _MyAccordianState extends State<MyAccordian> {
           children: <Widget>[
             Visibility(
                 visible: _visibility3,
-                child: _cards(
-                    '밸브 (#1)', _visibility3, status3, onChangeFunction3)),
+                child:
+                    _cards(title[2], _visibility3, status3, onChangeFunction3)),
             Visibility(
                 visible: _visibility4,
-                child: _cards(
-                    '밸브 (#2)', _visibility4, status4, onChangeFunction4)),
+                child:
+                    _cards(title[3], _visibility4, status4, onChangeFunction4)),
           ],
         ),
       ]),
@@ -233,9 +278,84 @@ class _MyAccordianState extends State<MyAccordian> {
                     inactiveTextColor: Colors.white,
                     value: val,
                     showOnOff: true,
-                    onToggle: (newValue) {
-                      onChangeMethod(newValue);
-                      print('$title : $newValue');
+                    onToggle: (newValue) async {
+                      if (title == title[0]) {
+                        final response =
+                            await dio.get('$url/test/site/sid/controls/pumps');
+                        print('$title : ${response.data[0]}');
+
+                        var pumpId = response.data[0]['pump_id'];
+                        print(pumpId);
+                        var pumpType = newValue; // on/off 바뀐 값
+                        var pumpName = title;
+                        final response1 = await dio.put(
+                            '$url/test/site/sid/controls/pumps/$pumpId',
+                            data: {
+                              'pump_type': pumpType,
+                              'pump_name': pumpName,
+                            });
+                        print('$title : $response1');
+                        onChangeMethod(newValue);
+                        print('##### 바뀜 $title : $newValue');
+                        print('##### 바뀜 $title : $response1');
+                      }
+                      if (title == title[1]) {
+                        final response =
+                            await dio.get('$url/test/site/sid/controls/pumps');
+                        print('$title : ${response.data[1]}');
+
+                        var pumpId = response.data[1]['pump_id'];
+                        print(pumpId);
+                        var pumpType = newValue; // on/off 바뀐 값
+                        var pumpName = title;
+                        final response1 = await dio.put(
+                            '$url/test/site/sid/controls/pumps/$pumpId',
+                            data: {
+                              'pump_type': pumpType,
+                              'pump_name': pumpName,
+                            });
+                        print('$title : $response1');
+                        onChangeMethod(newValue);
+                        print('##### 바뀜 $title : $newValue');
+                        print('##### 바뀜 $title : $response1');
+                      }
+                      if (title == title[2]) {
+                        final response =
+                            await dio.get('$url/test/site/sid/controls/valves');
+                        print('$title : ${response.data}');
+
+                        var valve_id = response.data[0]['valve_id'];
+                        var valve_type = newValue; // on/off 바뀐 값
+                        var valve_name = title;
+                        final response1 = await dio.put(
+                            '$url/test/site/sid/controls/valves/$valve_id',
+                            data: {
+                              'valve_type': valve_type,
+                              'valve_name': valve_name,
+                            });
+                        print('$title : $response1');
+                        onChangeMethod(newValue);
+                        print('##### 바뀜 $title : $newValue');
+                        print('##### 바뀜 $title : $response1');
+                      } else {
+                        final response =
+                            await dio.get('$url/test/site/sid/controls/valves');
+                        print('$title : ${response.data}');
+
+                        var valve_id = response.data[1].valve_id;
+                        var valve_type = newValue; // on/off 바뀐 값
+                        var valve_name = title;
+                        final response1 = await dio.put(
+                            '$url/test/site/sid/controls/valves/$valve_id',
+                            data: {
+                              'valve_type': valve_type,
+                              'valve_name': valve_name,
+                            });
+                        print('$title : $response1');
+                        onChangeMethod(newValue);
+                        print('##### 바뀜 $title : $newValue');
+                        print('##### 바뀜 $title : $response1');
+                      }
                     }),
               ],
             )),
