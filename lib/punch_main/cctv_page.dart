@@ -1,6 +1,6 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:chewie/chewie.dart';
@@ -49,7 +49,6 @@ class _CCTVPageState extends State<CCTVPage> {
 
   @override
   initState() {
-    // _getData();
     super.initState();
     VideoPlayerControllers = [];
     ChewieControllers = [];
@@ -65,8 +64,6 @@ class _CCTVPageState extends State<CCTVPage> {
       );
       ChewieControllers.add(chewieController);
     }
-    print('VideoPlayerControllers: $VideoPlayerControllers');
-    print('ChewieControllers: $ChewieControllers');
   }
 
   @override
@@ -86,8 +83,7 @@ class _CCTVPageState extends State<CCTVPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("CCTV #" +
-                                "${index + 1}"), // "CCTV #$index"로 변경할 것
+                            Text("CCTV #" + "${index + 1}"),
                             IconButton(
                                 onPressed: () {
                                   setState(() {
