@@ -55,18 +55,41 @@ var options = BaseOptions(
 );
 Dio dio = Dio(options);
 
-// getCCTVData()
-void _getCCTVData() async {
-  final response = await dio.get('$url/$userId/site/$siteId/cctvs');
-  stream.cctvs = response.data;
-  print('##### GET CCTV List from stream: ${stream.cctvs}');
-  print('##### GET CCTV List length: ${stream.cctvs.length}');
+// getData()
+void _getData() async {
+  // cctvs
+  final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
+  stream.cctvs = getCctvs.data;
+  print('##### mainPage GET CCTV List from stream: ${stream.cctvs}');
+  print('##### mainPage GET CCTV List length: ${stream.cctvs.length}');
   stream.cctv_url = [];
   for (var i = 0; i < stream.cctvs.length; i++) {
     var cctvUrl = stream.cctvs[i]['cctv_url'];
     stream.cctv_url.add(cctvUrl);
   }
-  print('##### GET CCTV Url List: ${stream.cctv_url}');
+  print('##### mainPage GET CCTV Url List: ${stream.cctv_url}');
+
+  // pumps
+  final getPumps = await dio.get('$url/$userId/site/$siteId/controls/pumps');
+  stream.pumps = getPumps.data;
+  print('##### mainPage GET Pumps LIST: ${stream.pumps}');
+  print('##### mainPage Pumps LIST length: ${stream.pumps.length}');
+  stream.pump_name = [];
+  for (var i = 0; i < stream.pumps.length; i++) {
+    var pumpName = stream.pumps[i]['pump_name'];
+    stream.pump_name.add(pumpName);
+  }
+
+  // valves
+  final getValves = await dio.get('$url/$userId/site/$siteId/controls/valves');
+  stream.valves = getValves.data;
+  print('##### mainPage GET Valves LIST: ${stream.valves}');
+  print('##### mainPage GET Valves LIST length: ${stream.valves.length}');
+  stream.valve_name = [];
+  for (var i = 0; i < stream.valves.length; i++) {
+    var valveName = stream.valves[i]['cctv_url'];
+    stream.valve_name.add(valveName);
+  }
 }
 
 // 푸시알림 백그라운드 설정
@@ -302,8 +325,8 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
-    // getCCTVData
-    _getCCTVData();
+    // getData
+    _getData();
 
     super.initState();
   }

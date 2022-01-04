@@ -15,7 +15,7 @@ import '../globals/stream.dart' as stream;
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24
-* last update : 2022-01-03
+* last update : 2022-01-04
 * */
 
 // globalKey
@@ -26,9 +26,16 @@ var innerHumid = stream.humid_1; // 내부습도
 var extHumid = stream.humid_1; // 외부습도
 var soilHumid = stream.soilhumid_1; // 토양습도
 
+List pumps = stream.pumps;
+List pump_name = stream.pump_name;
+List valves = stream.valves;
+List valve_name = stream.valve_name;
+
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
+var userId = 'test';
+var siteId = 'sid';
 
 // dio APIs
 var options = BaseOptions(
@@ -38,13 +45,31 @@ var options = BaseOptions(
 );
 Dio dio = Dio(options);
 
-// Must be top-level function
-_parseAndDecode(String response) {
-  return jsonDecode(response);
+// getData()
+void _getPumpData() async {
+  // pumps
+  final getPumps = await dio.get('$url/$userId/site/$siteId/controls/pumps');
+  stream.pumps = getPumps.data;
+  print('##### soilPage GET Pumps LIST: ${stream.pumps}');
+  print('##### soilPage GET Pumps LIST length: ${stream.pumps.length}');
+  stream.pump_name = [];
+  for (var i = 0; i < stream.pumps.length; i++) {
+    var pumpName = stream.pumps[i]['pump_name'];
+    stream.pump_name.add(pumpName);
+  }
 }
 
-parseJson(String text) {
-  return compute(_parseAndDecode, text);
+void _getValveData() async {
+  // valves
+  final getValves = await dio.get('$url/$userId/site/$siteId/controls/valves');
+  stream.valves = getValves.data;
+  print('##### soilPage GET Valves LIST: ${stream.valves}');
+  print('##### soilPage GET Valves LIST length: ${stream.valves.length}');
+  stream.valve_name = [];
+  for (var i = 0; i < stream.valves.length; i++) {
+    var valveName = stream.valves[i]['valve_name'];
+    stream.valve_name.add(valveName);
+  }
 }
 
 class SoilControlPage extends StatefulWidget {
@@ -62,12 +87,13 @@ class _SoilControlPageState extends State<SoilControlPage> {
       backgroundColor: Color(0xFFE6E6E6),
       body: Column(
         children: [
-          MyWeather(), // 날씨
+          MyWeather(), // 날씨, 고정
           Flexible(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: <Widget>[
-                MyAccordian(), // 관수 펌프 제어, 밸브 제어
+                MyPumps(), // 관수 펌프 제어
+                MyValves(), // 밸브 제어
                 MyGraph(), // 그래프
               ],
             ),
@@ -98,22 +124,7 @@ class _MyWeatherState extends State<MyWeather> {
     print("innerTemp");
     print(innerTemp);
     print(stream.temp_1);
-
-    _getData();
-
     super.initState();
-  }
-
-  void _getData() async {
-    final response = await dio.get('$url/test/site/sid/controls/pumps');
-    print('GET Pumps LIST: ${response.data}');
-    var pump1 = response.data[0];
-    var pump2 = response.data[1];
-
-    final response1 = await dio.get('$url/test/site/sid/controls/valves');
-    print('GET Valves LIST: ${response.data}');
-    var valve1 = response.data[0];
-    var valve2 = response.data[1];
   }
 
   @override
@@ -174,50 +185,22 @@ class _MyWeatherState extends State<MyWeather> {
   }
 }
 
-// 관수 펌프 제어, 밸브 제어
-class MyAccordian extends StatefulWidget {
-  const MyAccordian({Key? key}) : super(key: key);
+// 관수 펌프 제어
+class MyPumps extends StatefulWidget {
+  const MyPumps({Key? key}) : super(key: key);
 
   @override
-  State<MyAccordian> createState() => _MyAccordianState();
+  State<MyPumps> createState() => _MyPumpsState();
 }
 
-class _MyAccordianState extends State<MyAccordian> {
-  // title
-  List<String> title = ['펌프 (#1)', '펌프 (#2)', '밸브 (#1)', '밸브 (#2)'];
-  // switch on off
-  bool status1 = true;
-  bool status2 = true;
-  bool status3 = true;
-  bool status4 = true;
-  // visibiliby
-  bool _visibility1 = true;
-  bool _visibility2 = true;
-  bool _visibility3 = true;
-  bool _visibility4 = true;
-  // switch value
-  onChangeFunction1(bool newValue1) {
-    setState(() {
-      status1 = newValue1;
-    });
-  }
+class _MyPumpsState extends State<MyPumps> {
+  List<bool> status = [true, true];
+  List<bool> visibility = [true, true];
 
-  onChangeFunction2(bool newValue2) {
-    setState(() {
-      status2 = newValue2;
-    });
-  }
-
-  onChangeFunction3(bool newValue3) {
-    setState(() {
-      status3 = newValue3;
-    });
-  }
-
-  onChangeFunction4(bool newValue4) {
-    setState(() {
-      status4 = newValue4;
-    });
+  @override
+  void initState() {
+    _getPumpData();
+    super.initState();
   }
 
   @override
@@ -226,140 +209,148 @@ class _MyAccordianState extends State<MyAccordian> {
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        // 관수 펌프 제어
         ExpansionTile(
           initiallyExpanded: true,
           title: Text('관수 펌프 제어'),
           children: <Widget>[
-            Visibility(
-                visible: _visibility1,
-                child:
-                    _cards(title[0], _visibility1, status1, onChangeFunction1)),
-            Visibility(
-                visible: _visibility2,
-                child:
-                    _cards(title[1], _visibility2, status2, onChangeFunction2)),
-          ],
-        ),
-        // 밸브 제어
-        ExpansionTile(
-          title: Text('밸브 제어'),
-          children: <Widget>[
-            Visibility(
-                visible: _visibility3,
-                child:
-                    _cards(title[2], _visibility3, status3, onChangeFunction3)),
-            Visibility(
-                visible: _visibility4,
-                child:
-                    _cards(title[3], _visibility4, status4, onChangeFunction4)),
+            Container(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: pumps.length,
+                  itemBuilder: (BuildContext context, var index) {
+                    return Container(
+                      child: Visibility(
+                        visible: visibility[index],
+                        child: Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text("펌프 (#" + "${index + 1}" + ")"),
+                                  Spacer(),
+                                  FlutterSwitch(
+                                      activeColor: Colors.green,
+                                      inactiveColor: Colors.orange,
+                                      activeTextColor: Colors.white,
+                                      inactiveTextColor: Colors.white,
+                                      value: status[index],
+                                      showOnOff: true,
+                                      onToggle: (newValue) async {
+                                        var pumpId = pumps[index]['pump_id'];
+                                        var pumpType = newValue; // on/off 바뀐 값
+                                        var pumpName = pump_name[index];
+                                        final pumpReset = await dio.put(
+                                            '$url/$userId/site/$siteId/controls/pumps/$pumpId',
+                                            data: {
+                                              'pump_type': pumpType,
+                                              'pump_name': pumpName,
+                                            });
+                                        print('$pumpName : $pumpName');
+                                        setState(() {
+                                          status[index] = newValue;
+                                        });
+                                        print('##### 바뀜 $pumpName : $newValue');
+                                        print(
+                                            '##### 바뀜 $pumpName : $pumpReset');
+                                      }),
+                                ],
+                              )),
+                        ),
+                      ),
+                    );
+                  }),
+            )
           ],
         ),
       ]),
     );
   }
+}
 
-  Widget _cards(
-      String title, bool visibles, bool val, Function onChangeMethod) {
-    return Visibility(
-      visible: visibles,
-      child: Card(
-        child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(title),
-                Spacer(),
-                FlutterSwitch(
-                    activeColor: Colors.green,
-                    inactiveColor: Colors.orange,
-                    activeTextColor: Colors.white,
-                    inactiveTextColor: Colors.white,
-                    value: val,
-                    showOnOff: true,
-                    onToggle: (newValue) async {
-                      if (title == title[0]) {
-                        final response =
-                            await dio.get('$url/test/site/sid/controls/pumps');
-                        print('$title : ${response.data[0]}');
+// 밸브 제어
+class MyValves extends StatefulWidget {
+  const MyValves({Key? key}) : super(key: key);
 
-                        var pumpId = response.data[0]['pump_id'];
-                        print(pumpId);
-                        var pumpType = newValue; // on/off 바뀐 값
-                        var pumpName = title;
-                        final response1 = await dio.put(
-                            '$url/test/site/sid/controls/pumps/$pumpId',
-                            data: {
-                              'pump_type': pumpType,
-                              'pump_name': pumpName,
-                            });
-                        print('$title : $response1');
-                        onChangeMethod(newValue);
-                        print('##### 바뀜 $title : $newValue');
-                        print('##### 바뀜 $title : $response1');
-                      }
-                      if (title == title[1]) {
-                        final response =
-                            await dio.get('$url/test/site/sid/controls/pumps');
-                        print('$title : ${response.data[1]}');
+  @override
+  State<MyValves> createState() => _MyValvesState();
+}
 
-                        var pumpId = response.data[1]['pump_id'];
-                        print(pumpId);
-                        var pumpType = newValue; // on/off 바뀐 값
-                        var pumpName = title;
-                        final response1 = await dio.put(
-                            '$url/test/site/sid/controls/pumps/$pumpId',
-                            data: {
-                              'pump_type': pumpType,
-                              'pump_name': pumpName,
-                            });
-                        print('$title : $response1');
-                        onChangeMethod(newValue);
-                        print('##### 바뀜 $title : $newValue');
-                        print('##### 바뀜 $title : $response1');
-                      }
-                      if (title == title[2]) {
-                        final response =
-                            await dio.get('$url/test/site/sid/controls/valves');
-                        print('$title : ${response.data}');
+class _MyValvesState extends State<MyValves> {
+  List<bool> status = [true, true];
+  List<bool> visibility = [true, true];
 
-                        var valve_id = response.data[0]['valve_id'];
-                        var valve_type = newValue; // on/off 바뀐 값
-                        var valve_name = title;
-                        final response1 = await dio.put(
-                            '$url/test/site/sid/controls/valves/$valve_id',
-                            data: {
-                              'valve_type': valve_type,
-                              'valve_name': valve_name,
-                            });
-                        print('$title : $response1');
-                        onChangeMethod(newValue);
-                        print('##### 바뀜 $title : $newValue');
-                        print('##### 바뀜 $title : $response1');
-                      } else {
-                        final response =
-                            await dio.get('$url/test/site/sid/controls/valves');
-                        print('$title : ${response.data}');
+  @override
+  void initState() {
+    _getValveData();
+    super.initState();
+  }
 
-                        var valve_id = response.data[1].valve_id;
-                        var valve_type = newValue; // on/off 바뀐 값
-                        var valve_name = title;
-                        final response1 = await dio.put(
-                            '$url/test/site/sid/controls/valves/$valve_id',
-                            data: {
-                              'valve_type': valve_type,
-                              'valve_name': valve_name,
-                            });
-                        print('$title : $response1');
-                        onChangeMethod(newValue);
-                        print('##### 바뀜 $title : $newValue');
-                        print('##### 바뀜 $title : $response1');
-                      }
-                    }),
-              ],
-            )),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        ExpansionTile(
+          title: Text('밸브 제어'),
+          children: <Widget>[
+            Container(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: valves.length,
+                  itemBuilder: (BuildContext context, var index) {
+                    return Container(
+                      child: Visibility(
+                        visible: visibility[index],
+                        child: Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text("밸브 (#" + "${index + 1}" + ")"),
+                                  Spacer(),
+                                  FlutterSwitch(
+                                      activeColor: Colors.green,
+                                      inactiveColor: Colors.orange,
+                                      activeTextColor: Colors.white,
+                                      inactiveTextColor: Colors.white,
+                                      value: status[index],
+                                      showOnOff: true,
+                                      onToggle: (newValue) async {
+                                        var valveId = valves[index]['valve_id'];
+                                        var valveType = newValue; // on/off 바뀐 값
+                                        var valveName = valve_name[index];
+                                        final valveReset = await dio.put(
+                                            '$url/$userId/site/$siteId/controls/valves/$valveId',
+                                            data: {
+                                              'valve_type': valveType,
+                                              'valve_name': valveName,
+                                            });
+                                        print('$valveName : $valveName');
+                                        setState(() {
+                                          status[index] = newValue;
+                                        });
+                                        print(
+                                            '##### 바뀜 $valveName : $newValue');
+                                        print(
+                                            '##### 바뀜 $valveName : $valveReset');
+                                      }),
+                                ],
+                              )),
+                        ),
+                      ),
+                    );
+                  }),
+            )
+          ],
+        ),
+      ]),
     );
   }
 }

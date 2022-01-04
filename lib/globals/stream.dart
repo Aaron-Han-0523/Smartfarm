@@ -29,3 +29,9 @@ var motor_6 = '';
 // cctv page
 List cctvs = [];
 List cctv_url = [];
+
+// soilControl page
+List pumps = [];
+List pump_name = [];
+List valves = [];
+List valve_name = [];

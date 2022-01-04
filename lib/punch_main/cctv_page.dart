@@ -1,6 +1,3 @@
-// import 'dart:ffi';
-
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:chewie/chewie.dart';
@@ -34,6 +31,21 @@ var options = BaseOptions(
 );
 Dio dio = Dio(options);
 
+// getData()
+void _getData() async {
+  // cctvs
+  final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
+  stream.cctvs = getCctvs.data;
+  print('##### cctvPage GET CCTV List from stream: ${stream.cctvs}');
+  print('##### cctvPage GET CCTV List length: ${stream.cctvs.length}');
+  stream.cctv_url = [];
+  for (var i = 0; i < stream.cctvs.length; i++) {
+    var cctvUrl = stream.cctvs[i]['cctv_url'];
+    stream.cctv_url.add(cctvUrl);
+  }
+  print('##### cctvPage GET CCTV Url List: ${stream.cctv_url}');
+}
+
 class CCTVPage extends StatefulWidget {
   @override
   _CCTVPageState createState() => _CCTVPageState();
@@ -49,6 +61,7 @@ class _CCTVPageState extends State<CCTVPage> {
 
   @override
   initState() {
+    _getData();
     super.initState();
     VideoPlayerControllers = [];
     ChewieControllers = [];
@@ -121,12 +134,12 @@ class _CCTVPageState extends State<CCTVPage> {
 
   @override
   void dispose() async {
+    super.dispose();
     for (final videoPlayerController in VideoPlayerControllers) {
       await videoPlayerController.dispose();
     }
     for (final chewieController in ChewieControllers) {
       chewieController.dispose();
     }
-    super.dispose();
   }
 }
