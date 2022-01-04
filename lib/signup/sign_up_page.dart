@@ -6,12 +6,13 @@ import 'package:get/get.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:plms_start/ontap_draft/confirm_page_ontap.dart';
 import 'package:plms_start/pages/components/registrations/validate.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../pages/utils/header_issue.dart';
-
+import 'package:plms_start/globals/checkUser.dart' as plms_start;
 import 'dart:convert';
 
 /*
@@ -29,13 +30,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  var api = dotenv.env['PHONE_IP'];
-  // var api = dotenv.env['EMUL_IP'];
+  // var api = dotenv.env['PHONE_IP'];
 
   @override
   void initState() {
     readFile();
-
     super.initState();
   }
 
@@ -73,6 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
   // TextEditingController _controller = TextEditingController();
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
+  final _currentPwTextEditController = TextEditingController();
   final _repwTextEditController = TextEditingController();
   final _emailTextEditController = TextEditingController();
   final _comTextEditController = TextEditingController();
@@ -82,6 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
   FocusNode _emailFocus = new FocusNode();
   FocusNode _passwordFocus = new FocusNode();
   FocusNode _repasswordFocus = new FocusNode();
+  FocusNode  _currentPwFocus  = new FocusNode();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -124,7 +125,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   primary: Color(0xff71838D),
                 ),
                 child:
-                    new Text(AppLocalizations.of(context)!.signUpbottomButton1),
+                new Text(AppLocalizations.of(context)!.signUpbottomButton1),
                 onPressed: () {
                   Get.back();
                 },
@@ -139,47 +140,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   // onPrimary: Colors.white, // foreground
                 ),
                 child:
-                    new Text(AppLocalizations.of(context)!.signUpbottomButton2),
+                new Text(AppLocalizations.of(context)!.signUpbottomButton2),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     print('회원가입 완료');
-                    Get.back();
-
-                    var url = Uri.parse('$api/api/register');
-                    var response = http.post(url, body: {
-                      'uid': _idTextEditController.text,
-                      'password': _pwTextEditController.text,
-                    }).then((value) => Get.back());
                   }
-                  // onPressed: () async {
-                  //   var url = Uri.parse('$api/api/register');
-                  //   var response = await http.post(url, body: {
-                  //     'uid': _idTextEditController.text,
-                  //     'password': _pwTextEditController.text,
-                  //   }
-                  //   );
-                  //   if (formKey.currentState!.validate()) {
-                  //     formKey.currentState!.save();
-                  //     print('time to pose email and passworld to my API');
-                  //   }
-                  //
-                  //   // Get.defaultDialog(
-                  //   //   textCancel: "cancel",
-                  //   //   cancelTextColor: Colors.black,
-                  //   //   title: 'Error',
-                  //   //   titleStyle: TextStyle(color: Colors.red),
-                  //   //   middleText: 'Check your User Register',
-                  //   //   buttonColor: Colors.white,
-                  //   // );
-                  //   // Get.defaultDialog(
-                  //   //   textCancel: "cancel",
-                  //   //   cancelTextColor: Colors.black,
-                  //   //   title: 'Error',
-                  //   //   titleStyle: TextStyle(color: Colors.red),
-                  //   //   middleText: 'Check I agree',
-                  //   //   buttonColor: Colors.white,
-                  //   // );
                 },
               ),
             ),
@@ -212,7 +178,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: BoxDecoration(
                   color: Color(0xffB7C5B9),
                   borderRadius:
-                      BorderRadius.only(topLeft: radius, bottomLeft: radius),
+                  BorderRadius.only(topLeft: radius, bottomLeft: radius),
                 ),
                 height: MediaQuery.of(context).size.height * 7.5 / 9,
                 width: Get.width * 1 / 50,
@@ -223,7 +189,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius:
-                      BorderRadius.only(topRight: radius, bottomRight: radius),
+                  BorderRadius.only(topRight: radius, bottomRight: radius),
                   boxShadow: [
                     BoxShadow(
                       color: Color(0xffB7C5B9),
@@ -238,7 +204,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       Container(
                         width: Get.width,
                         decoration:
-                            BoxDecoration(border: Border.all(width: 0.3)),
+                        BoxDecoration(border: Border.all(width: 0.3)),
                       ),
                       SizedBox(
                         height: 20,
@@ -247,16 +213,20 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.only(left: 8),
                         child: Column(
                           children: [
-                            _textField(AppLocalizations.of(context)!.signUpID,
-                                _idTextEditController, ),
+                            _textField(
+                                '아이디',
+                                // AppLocalizations.of(context)!.signUpID,
+                                _idTextEditController),
+                            _size15(),
+                            _currentPwField('현재 비밀번호', _currentPwTextEditController),
                             _size15(),
                             _pwFormField(
-                              AppLocalizations.of(context)!.signUpPW,
-                              _pwTextEditController,
+                              '새 비밀번호', _pwTextEditController,
                             ),
                             _size15(),
                             _repwtextField(
-                              AppLocalizations.of(context)!.signUprepw,
+                              '비밀번호 확인',
+                              // AppLocalizations.of(context)!.signUprepw,
                               _repwTextEditController,
                             ),
                           ],
@@ -275,7 +245,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // dropdown button
 
-  // text field
+  // 사용자 이메일 필드
   Widget _textField(String title, var controller) {
     return Row(
       children: [
@@ -294,12 +264,7 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.visiblePassword,
             decoration: _textDecoration(),
             validator: (value)
-              => CheckValidate().validateEmail(_emailFocus, value!),
-              // if (value!.isEmpty) {
-              //   Get.snackbar('error', '$text 입력하세요',
-              //       backgroundColor: Colors.white);
-              //   return '$text 입력하세요';
-              // }
+            => CheckValidate().validateEmail(_emailFocus, value!),
             onChanged: (text) {
               setState(() {});
             },
@@ -309,7 +274,34 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // text field use enables
+  // 현재 비밀번호확인 필드
+  Widget _currentPwField(String title, var controller) {
+    return Row(
+      children: [
+        SizedBox(
+          width: Get.width * 1 / 3.9,
+          child: Text(title),
+        ),
+        SizedBox(
+          width: Get.width * 2.8 / 5,
+          height: Get.height * 2.1 / 25,
+          child: TextFormField(
+            style: TextStyle(fontSize: 17),
+            controller: controller,
+            focusNode: _currentPwFocus,
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
+            decoration: _textDecoration(),
+            validator: (value)
+            => CheckValidate().validatePassword(_currentPwFocus, value!, _idTextEditController),
+            onChanged: (text) {
+              setState(() {});
+            },
+          ),
+        ),
+      ],
+    );
+  }
 
   // text decoration
   InputDecoration _textDecoration() {
@@ -330,25 +322,25 @@ class _SignUpPageState extends State<SignUpPage> {
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
           child: TextFormField(
-              maxLength: 10,
-              style: TextStyle(fontSize: 17),
-              keyboardType: TextInputType.visiblePassword,
-              obscureText: true,
-              validator: (value)
-                  => CheckValidate().validaterePassword(
-                      _repasswordFocus, value!, _pwTextEditController),
-                  controller: controller,
-                  decoration: _textFormDecoration(),
-                  onChanged: (text) {
-                    setState(() {});
-                  },
-),
+            maxLength: 10,
+            style: TextStyle(fontSize: 17),
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
+            validator: (value)
+            => CheckValidate().validaterePassword(
+                _repasswordFocus, value!, _pwTextEditController),
+            controller: controller,
+            decoration: _textFormDecoration(),
+            onChanged: (text) {
+              setState(() {});
+            },
+          ),
         ),
       ],
     );
   }
 
-  // password
+  // 새 비밀번호
   Widget _pwFormField(String title, var controller) {
     return Row(
       children: [
@@ -357,25 +349,25 @@ class _SignUpPageState extends State<SignUpPage> {
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
           child: TextFormField(
-              maxLength: 10,
-              style: TextStyle(fontSize: 17),
-              keyboardType: TextInputType.visiblePassword,
-              focusNode: _passwordFocus,
-              obscureText: true,
-              validator: (value)
-                  => CheckValidate().validatePassword(_passwordFocus, value!, _idTextEditController),
-                  controller: controller,
-                  decoration: _textFormDecoration(),
-                  onChanged: (text) {
-                    setState(() {});
-                  },
+            maxLength: 10,
+            style: TextStyle(fontSize: 17),
+            keyboardType: TextInputType.visiblePassword,
+            focusNode: _passwordFocus,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            obscureText: true,
+            decoration: _textFormDecoration(),
+            controller: controller,
+            validator: (value)
+            => CheckValidate().validatePassword(_passwordFocus, value!, _currentPwTextEditController),
+            onChanged: (text) {
+              setState(() {});
+            },
           ),
         ),
       ],
     );
   }
 
-  // email
 
   // textform decoration
   InputDecoration _textFormDecoration() {
@@ -387,7 +379,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // radio button
+// radio button
 
-  // agreement page one
+// agreement page one
 }
