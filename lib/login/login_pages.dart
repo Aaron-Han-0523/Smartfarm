@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
 
-  // LoginTest _loginTest = LoginTest();
+  LoginTest _loginTest = LoginTest();
 
   late double headerTopZone;
 
@@ -76,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
+        backgroundColor: Color(0xFF009688),
         // 카카오 채널 고객센터/문의
         floatingActionButton: FloatingActionButton(
             onPressed: _launchURL,
@@ -94,6 +95,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     _textForm(),
+                    SizedBox(height: 10),
+                    _textButton(),
                     SizedBox(
                       height: 30,
                     ),
@@ -101,11 +104,9 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 30,
                     ),
-                    _signupText(),
                     SizedBox(
                       height: 5,
                     ),
-                    _textButton(),
                   ],
                 ),
               ),
@@ -120,13 +121,26 @@ class _LoginPageState extends State<LoginPage> {
       child: Container(
         width: Get.width,
         height: Get.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage(
-              "assets/images/login_page3.png",
+        child: Padding(
+          padding: EdgeInsets.only(top: 150),
+          child: Column(children: [
+            Text(
+              'Farm in Earth',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 35,
+                  fontWeight: FontWeight.w500),
             ),
-          ),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                    padding: EdgeInsets.only(right: 80, top: 10),
+                    child: Text('EDGE WORKS',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500)))),
+          ]),
         ),
       ),
     );
@@ -138,11 +152,14 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           Container(
-            height: Get.height * 1 / 30,
+            color: Colors.white,
+            // height: Get.height * 1 / 30,
+            height: Get.height * 0.07,
             width: Get.width * 4.5 / 7,
             child: TextFormField(
               controller: _idTextEditController,
               decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.person),
                   hintText: AppLocalizations.of(context)!.loginID,
                   hintStyle: TextStyle(color: Colors.grey)),
               onChanged: (text) {
@@ -154,12 +171,15 @@ class _LoginPageState extends State<LoginPage> {
             height: Get.height * 1 / 30,
           ),
           Container(
-            height: Get.height * 1 / 30,
+            color: Colors.white,
+            // height: Get.height * 1 / 30,
+            height: Get.height * 0.07,
             width: Get.width * 4.5 / 7,
             child: TextFormField(
               controller: _pwTextEditController,
               obscureText: true,
               decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.vpn_key),
                   hintText: AppLocalizations.of(context)!.loginPW,
                   hintStyle: TextStyle(color: Colors.grey)
                   // labelText: AppLocalizations.of(context)!.loginPW,
@@ -177,7 +197,8 @@ class _LoginPageState extends State<LoginPage> {
   // 로그인 버튼
   Widget _button() {
     return Container(
-      width: Get.width * 3 / 7,
+      height: Get.height * 0.06,
+      width: Get.width * 0.65,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Color(0xff304D5B),
@@ -185,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
-          // _loginTest.loginTest(uid, pw);
+          _loginTest.loginTest(uid, pw);
 
           // var url = Uri.parse('$api/api/login');
           // var response = await http.post(url, body: {
@@ -198,16 +219,15 @@ class _LoginPageState extends State<LoginPage> {
           // print(jsonData['result']);
           // if (jsonData['results']['uid'] == _idTextEditController.text &&
           //     jsonData['result'] == true) {
-          Get.toNamed('/sensor');
+          // Get.toNamed('/sensor');
           // } else {
           //   _showDialog();
           // }
         },
         child: Text(
-          AppLocalizations.of(context)!.signIn,
-          style: TextStyle(
-            fontSize: 15,
-          ),
+          '로그인',
+          // AppLocalizations.of(context)!.signIn,
+          style: TextStyle(fontSize: 15, color: Colors.white),
         ),
       ),
     );
@@ -240,8 +260,9 @@ class _LoginPageState extends State<LoginPage> {
           Get.toNamed("/signup");
         },
         child: Text(
-          AppLocalizations.of(context)!.signUp,
-          style: TextStyle(color: Colors.black, fontSize: 12),
+          '비밀번호 변경',
+          // AppLocalizations.of(context)!.signUp,
+          style: TextStyle(color: Colors.white, fontSize: 15),
         ));
   }
 
