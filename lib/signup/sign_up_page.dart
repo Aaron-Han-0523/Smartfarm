@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:plms_start/dio/login_dio.dart';
 import 'package:plms_start/ontap_draft/confirm_page_ontap.dart';
 import 'package:plms_start/pages/components/registrations/validate.dart';
 
@@ -31,6 +32,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   // var api = dotenv.env['PHONE_IP'];
+  LoginTest _loginTest = LoginTest();
 
   @override
   void initState() {
@@ -82,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
   FocusNode _emailFocus = new FocusNode();
   FocusNode _passwordFocus = new FocusNode();
   FocusNode _repasswordFocus = new FocusNode();
-  FocusNode  _currentPwFocus  = new FocusNode();
+  FocusNode _currentPwFocus = new FocusNode();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -125,7 +127,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   primary: Color(0xff71838D),
                 ),
                 child:
-                new Text(AppLocalizations.of(context)!.signUpbottomButton1),
+                    new Text(AppLocalizations.of(context)!.signUpbottomButton1),
                 onPressed: () {
                   Get.back();
                 },
@@ -140,9 +142,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   // onPrimary: Colors.white, // foreground
                 ),
                 child:
-                new Text(AppLocalizations.of(context)!.signUpbottomButton2),
+                    new Text(AppLocalizations.of(context)!.signUpbottomButton2),
                 onPressed: () {
-                  if (formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate() == true) {
+                    // _loginTest.updatePW(_idTextEditController.text, _repwTextEditController.text);
                     formKey.currentState!.save();
                     print('회원가입 완료');
                   }
@@ -178,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: BoxDecoration(
                   color: Color(0xffB7C5B9),
                   borderRadius:
-                  BorderRadius.only(topLeft: radius, bottomLeft: radius),
+                      BorderRadius.only(topLeft: radius, bottomLeft: radius),
                 ),
                 height: MediaQuery.of(context).size.height * 7.5 / 9,
                 width: Get.width * 1 / 50,
@@ -189,7 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius:
-                  BorderRadius.only(topRight: radius, bottomRight: radius),
+                      BorderRadius.only(topRight: radius, bottomRight: radius),
                   boxShadow: [
                     BoxShadow(
                       color: Color(0xffB7C5B9),
@@ -204,7 +207,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       Container(
                         width: Get.width,
                         decoration:
-                        BoxDecoration(border: Border.all(width: 0.3)),
+                            BoxDecoration(border: Border.all(width: 0.3)),
                       ),
                       SizedBox(
                         height: 20,
@@ -218,10 +221,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                 // AppLocalizations.of(context)!.signUpID,
                                 _idTextEditController),
                             _size15(),
-                            _currentPwField('현재 비밀번호', _currentPwTextEditController),
+                            _currentPwField(
+                                '현재 비밀번호', _currentPwTextEditController),
                             _size15(),
                             _pwFormField(
-                              '새 비밀번호', _pwTextEditController,
+                              '새 비밀번호',
+                              _pwTextEditController,
                             ),
                             _size15(),
                             _repwtextField(
@@ -263,8 +268,8 @@ class _SignUpPageState extends State<SignUpPage> {
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
             decoration: _textDecoration(),
-            validator: (value)
-            => CheckValidate().validateEmail(_emailFocus, value!),
+            validator: (value) =>
+                CheckValidate().validateEmail(_emailFocus, value!),
             onChanged: (text) {
               setState(() {});
             },
@@ -286,18 +291,36 @@ class _SignUpPageState extends State<SignUpPage> {
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
           child: TextFormField(
-            style: TextStyle(fontSize: 17),
-            controller: controller,
-            focusNode: _currentPwFocus,
-            obscureText: true,
-            keyboardType: TextInputType.visiblePassword,
-            decoration: _textDecoration(),
-            validator: (value)
-            => CheckValidate().validatePassword(_currentPwFocus, value!, _idTextEditController),
-            onChanged: (text) {
-              setState(() {});
-            },
-          ),
+              style: TextStyle(fontSize: 17),
+              controller: controller,
+              focusNode: _currentPwFocus,
+              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+              decoration: _textDecoration(),
+              validator: (value) {
+                _loginTest
+                    .checkUser(_idTextEditController.text, value!)
+                    .then((value) => {
+                          if (plms_start.checkUserKey != 'true' &&
+                              _idTextEditController.text.isNotEmpty)
+                            {
+                              // print('### checkUserKey 확인 ${plms_start.checkUserKey}')
+                              Get.defaultDialog(
+                                  backgroundColor: Colors.white,
+                                  title: '오류',
+                                  middleText: '비밀번호를 확인해주세요',
+                                  textCancel: 'Cancel')
+                            }
+                        });
+                if (value.isEmpty) {
+                  return '';
+                }
+              }
+              // => CheckValidate().currentPassword(_currentPwFocus, value!, _idTextEditController),
+              // onChanged: (text) {
+              //   setState(() {});
+              // },
+              ),
         ),
       ],
     );
@@ -309,7 +332,6 @@ class _SignUpPageState extends State<SignUpPage> {
       contentPadding: EdgeInsets.fromLTRB(10, 16, 0, 0),
       border: OutlineInputBorder(),
       helperText: '',
-      // helperText: helperText,
     );
   }
 
@@ -326,9 +348,8 @@ class _SignUpPageState extends State<SignUpPage> {
             style: TextStyle(fontSize: 17),
             keyboardType: TextInputType.visiblePassword,
             obscureText: true,
-            validator: (value)
-            => CheckValidate().validaterePassword(
-                _repasswordFocus, value!, _pwTextEditController),
+            validator: (_repwTextEditController) => CheckValidate().validaterePassword(
+                _repasswordFocus, _repwTextEditController!, _pwTextEditController),
             controller: controller,
             decoration: _textFormDecoration(),
             onChanged: (text) {
@@ -357,8 +378,10 @@ class _SignUpPageState extends State<SignUpPage> {
             obscureText: true,
             decoration: _textFormDecoration(),
             controller: controller,
-            validator: (value)
-            => CheckValidate().validatePassword(_passwordFocus, value!, _currentPwTextEditController),
+            validator: (value) => CheckValidate().validatePassword(
+                _passwordFocus,
+                value!,
+                _currentPwTextEditController),
             onChanged: (text) {
               setState(() {});
             },
@@ -367,7 +390,6 @@ class _SignUpPageState extends State<SignUpPage> {
       ],
     );
   }
-
 
   // textform decoration
   InputDecoration _textFormDecoration() {

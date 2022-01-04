@@ -43,7 +43,7 @@ dependencies:
   flutter_local_notifications: ^9.1.5
   firebase_messaging: ^11.2.4
   url_launcher: ^6.0.17
-
+  shared_preferences: ^2.0.11
 
 
 dev_dependencies:

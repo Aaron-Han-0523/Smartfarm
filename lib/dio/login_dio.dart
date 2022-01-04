@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:plms_start/globals/checkUser.dart' as plms_start;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,7 +18,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class LoginTest {
 
-  var api = dotenv.env['EMUL_IP'];
+  var api = dotenv.env['PHONE_IP'];
   Dio dio = new Dio();
   // FlutterSecureStorage storage = new FlutterSecureStorage();
 
@@ -40,12 +41,41 @@ class LoginTest {
       } else {
         Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: 'ID/PW를 확인해주세요', textCancel: 'Cancel');
       }
-    } else {
-      print('error');
     }
   }
 
-  Future<dynamic> changePW(String uid, String pw) async {
+  // id/pw 조회
+  Future<dynamic> checkUser(String uid, String pw) async {
+
+    var params = {
+      'uid': uid,
+      'password': pw,
+    };
+
+    var response = await dio.post(
+        '$api/farm/login', data: params);
+
+    Map jsonBody = response.data;
+
+    if (response.statusCode == 200) {
+
+      if (jsonBody['result'] == true) {
+        print('jsonBody는: $jsonBody');
+        plms_start.checkUserKey = jsonBody['result'].toString();
+        // _checkValidate.validatePassword;
+        // return true;
+
+      }
+      // else if (jsonBody['result'] == false) {
+      //   Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: '비밀번호를 다시 입력하세요', textCancel: 'Cancel');
+      //   return false;
+      // }
+    }
+  }
+
+
+  // 비밀번호 update api 연동
+  Future<dynamic> updatePW(String uid, String pw) async {
     var params = {
       'password': pw,
     };
@@ -56,32 +86,18 @@ class LoginTest {
     Map jsonBody = response.data;
 
     if (response.statusCode == 200) {
-      if (jsonBody['results'] == uid &&
-          jsonBody['result'] == true) {
-        Get.toNamed('/sensor');
-        print('jsonBody는: $jsonBody');
+      print('new pw는 ${jsonBody['result'][0]==1}');
+      if (jsonBody['result'][0] == 1) {
+        Get.defaultDialog(backgroundColor: Colors.white, title: '성공', middleText: '비밀번호가 변경되었습니다.', textCancel: 'Cancel').then((value) => Get.back());
+        return true;
+      } else if (jsonBody['result'][0] == 0) {
+        Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: 'ID/PW를 확인해주세요', textCancel: 'Cancel');
+        return false;
       }
     } else {
-      Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: 'ID/PW를 확인해주세요');
+      print('error');
     }
   }
 
-  //id 조회
-  Future<dynamic> checkId(String uid) async {
-
-    var response = await dio.get(
-        '$api/farm/account');
-
-    var jsonBody = json.decode(response.data);
-    List<String> strings = List<String>.from(jsonBody);
-    var results = Map();
-    results['results'] = strings;
-
-
-    if (response.statusCode == 200){
-      print(results);
-
-    }
-  }
 
 }

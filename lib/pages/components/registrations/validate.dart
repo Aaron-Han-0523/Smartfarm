@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:plms_start/dio/login_dio.dart';
+import 'package:plms_start/globals/checkUser.dart' as plms_start;
+
 
 /*
 * name : CheckValidate Page
 * description : Validate page
-* writer : walter
+* writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-12-29
+* last update : 2022-01-04
 * */
 
+
 class CheckValidate {
+
+  LoginTest _loginTest = LoginTest();
+
+
   // 이메일 체크
   String? validateEmail(FocusNode focusNode, String value) {
     if (value.isEmpty) {
       focusNode.requestFocus();
-      Get.snackbar('error', '아이디를 확인하세요', backgroundColor: Colors.white);
+      Get.snackbar('error', '아이디를 입력하세요', backgroundColor: Colors.white);
       return '이메일을 입력하세요.';
+    } else {
     }
   }
 
-  // 비밀번호 체크 // 수정
-  // String? validatePassword(FocusNode focusNode, String value, var controller) {
-  //   if (value.isEmpty && value != controller.text) {
-  //     focusNode.requestFocus();
-  //     return '비밀번호를 입력하세요.';
-  //   } else {
-  //     String pattern =
-  //         r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,10}$';
-  //     RegExp regExp = new RegExp(pattern);
-  //     if (!regExp.hasMatch(value)) {
-  //       focusNode.requestFocus();
-  //       return '특수문자,영문,숫자 포함 8~10자 ';
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // }
+  String? currentPassword(String value, var controller) {
+    if (value.isEmpty && value != controller.text) {
+      Get.snackbar('error', '비밀번호를 입력하세요', backgroundColor: Colors.white);
+      return '비밀번호를 입력하세요';
+    } else if (value.isNotEmpty) {
+      _loginTest.checkUser(controller.text, value); //비밀번호 입력이 되어 있으면 -> api 연동
+    }
+  }
 
+  // 새 비밀번호
   String? validatePassword(FocusNode focusNode, String value, var controller) {
     if (value.isEmpty && value != controller.text) {
       focusNode.requestFocus();
