@@ -30,6 +30,9 @@ import 'punch_main/sensor.dart';
 // import 'modify/popup_page.dart';
 // import 'punch_issue/draft_screen.dart';
 
+import 'package:dio/dio.dart';
+import '../globals/stream.dart' as stream;
+
 /*
 * name : main
 * description : This is a start page.
@@ -37,6 +40,34 @@ import 'punch_main/sensor.dart';
 * create date : 2021-09-30
 * last update : 2021-09-30
 * */
+
+// APIs
+var api = dotenv.env['PHONE_IP'];
+var url = '$api/farm';
+var userId = 'test';
+var siteId = 'sid';
+
+// dio APIs
+var options = BaseOptions(
+  baseUrl: '$url',
+  connectTimeout: 5000,
+  receiveTimeout: 3000,
+);
+Dio dio = Dio(options);
+
+// getCCTVData()
+void _getCCTVData() async {
+  final response = await dio.get('$url/$userId/site/$siteId/cctvs');
+  stream.cctvs = response.data;
+  print('##### GET CCTV List from stream: ${stream.cctvs}');
+  print('##### GET CCTV List length: ${stream.cctvs.length}');
+  stream.cctv_url = [];
+  for (var i = 0; i < stream.cctvs.length; i++) {
+    var cctvUrl = stream.cctvs[i]['cctv_url'];
+    stream.cctv_url.add(cctvUrl);
+  }
+  print('##### GET CCTV Url List: ${stream.cctv_url}');
+}
 
 // 푸시알림 백그라운드 설정
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -48,7 +79,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 late AndroidNotificationChannel channel;
 
 // Initialize the [FlutterLocalNotificationsPlugin] package.
-late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 // 안드로이드 푸시알림 메세지 구성 설정
 class PushNotification {
@@ -87,7 +119,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   // 푸시알림 토큰 firebase token = fcmtoken
   var fcmtoken = '';
   late int _totalNotifications;
@@ -95,10 +126,8 @@ class _MyAppState extends State<MyApp> {
   PushNotification? _notificationInfo;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-
   // 푸시알림 관련 앱 최초 실행 아닐 때 쓰는 코드 ; 매번 앱 실행 시 실행되어야 함
   void activateNotification() async {
-
     print('##### activateNotification');
 
     final FirebaseMessaging _messaging;
@@ -130,14 +159,12 @@ class _MyAppState extends State<MyApp> {
       ));
 
       print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');// message.data는 이미지 url을 뜻합니다.
+      print('Message data: ${message.data}'); // message.data는 이미지 url을 뜻합니다.
 
-      if (message.notification != null && android != null ) {
+      if (message.notification != null && android != null) {
         print('Message also contained a notification: ${message.notification}');
-        print( // 타이틀: 메시지 제목; 바디: 메시지 내용; 데이터: 이미지 url
-            'Message title: ${message.notification?.title}, body: ${message
-                .notification?.body}, data: ${message.data}'
-        );
+        print(// 타이틀: 메시지 제목; 바디: 메시지 내용; 데이터: 이미지 url
+            'Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
 
         PushNotification notification = PushNotification(
           title: message.notification?.title,
@@ -168,9 +195,9 @@ class _MyAppState extends State<MyApp> {
 
     // 권한 설정 여부
     NotificationSettings settings = await
-    // Android에서는 별도의 확인 없이 리턴되지만, requestPermission을 호출하지 않으면 수신 안됨
-    // 그래서 사용자에게 권한 요청을 해야함
-    _messaging.requestPermission(
+        // Android에서는 별도의 확인 없이 리턴되지만, requestPermission을 호출하지 않으면 수신 안됨
+        // 그래서 사용자에게 권한 요청을 해야함
+        _messaging.requestPermission(
       alert: true, // 장치에서 알림 표시 여부
       announcement: false, // 아이폰의 경우 활성화 시 장치가 연결될 때 내용 읽음
       badge: true, // 읽지 않은 알림 있을 때 앱 아이콘 옆에 표시할 알림 여부 설정
@@ -187,8 +214,8 @@ class _MyAppState extends State<MyApp> {
       });
 
       // notification channel을 디바이스에 생성
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin
-      = FlutterLocalNotificationsPlugin();
+      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+          FlutterLocalNotificationsPlugin();
 
       // 출력된 푸쉬 알림을 탭했을 때 동작 처리를 위해 콜백을 등록해준다
       flutterLocalNotificationsPlugin.initialize(
@@ -201,8 +228,7 @@ class _MyAppState extends State<MyApp> {
 
       if (Platform.isAndroid) {
         // 안드로이드용 새 알림 채널
-        const AndroidNotificationChannel channel =
-        AndroidNotificationChannel(
+        const AndroidNotificationChannel channel = AndroidNotificationChannel(
           'NOTIFICATION_CHANNEL', // 임의의 id
           'Push Notification', // 설정에 보일 채널 명 title
           importance: Importance.max,
@@ -211,22 +237,23 @@ class _MyAppState extends State<MyApp> {
         // notification channel을 디바이스에 생성 완료
         await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        // 위에서 생성한 채널을 로컬 푸시 메세지에 등록해서 푸쉬 메세지 띄운다
-        // create~()에 채널을 인자로 넘겨줘서 생성을 완료한다
+                AndroidFlutterLocalNotificationsPlugin>()
+            // 위에서 생성한 채널을 로컬 푸시 메세지에 등록해서 푸쉬 메세지 띄운다
+            // create~()에 채널을 인자로 넘겨줘서 생성을 완료한다
             ?.createNotificationChannel(channel);
       }
 
       if (Platform.isIOS) {
         await FirebaseMessaging.instance
-        // 아이폰에서 이하 옵션 함수를 호출하면 필요한 옵션을 지정할 수 있다
+            // 아이폰에서 이하 옵션 함수를 호출하면 필요한 옵션을 지정할 수 있다
             .setForegroundNotificationPresentationOptions(
           alert: true,
           badge: true,
           sound: true,
         );
       }
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
       print('User granted provisional permission');
     } else {
       print('User declined or has not accepted permission');
@@ -238,10 +265,9 @@ class _MyAppState extends State<MyApp> {
 
   // 앱 비활성화 시 푸시알림 수신 - 잘됨
   checkForInitialMessage() async {
-
     await Firebase.initializeApp();
     RemoteMessage? initialMessage =
-    await FirebaseMessaging.instance.getInitialMessage();
+        await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
       PushNotification notification = PushNotification(
@@ -258,7 +284,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-
     // 푸시알림
     _totalNotifications = 0;
     registerNotification();
@@ -277,9 +302,11 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
+    // getCCTVData
+    _getCCTVData();
+
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -288,8 +315,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: Splash());
+                debugShowCheckedModeBanner: false, home: Splash());
           } else {
             return GetMaterialApp(
               debugShowCheckedModeBanner: false,

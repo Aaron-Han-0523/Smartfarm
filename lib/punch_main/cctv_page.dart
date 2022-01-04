@@ -1,15 +1,38 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
+import 'package:dio/dio.dart';
+import '../globals/stream.dart' as stream;
 
 /*
 * name : CCTV Page
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2021-12-30
+* last update : 2022-01-04
 * */
+
+// global
+List cctvs = stream.cctvs;
+List cctv_url = stream.cctv_url;
+
+// APIs
+var api = dotenv.env['PHONE_IP'];
+var url = '$api/farm';
+var userId = 'test';
+var siteId = 'sid';
+
+// dio APIs
+var options = BaseOptions(
+  baseUrl: '$url',
+  connectTimeout: 5000,
+  receiveTimeout: 3000,
+);
+Dio dio = Dio(options);
 
 class CCTVPage extends StatefulWidget {
   @override
@@ -17,130 +40,97 @@ class CCTVPage extends StatefulWidget {
 }
 
 class _CCTVPageState extends State<CCTVPage> {
-  List<String> urls = [
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    // 'https://media.w3.org/2010/05/sintel/trailer.mp4',
-    "https://assets.mixkit.co/videos/preview/mixkit-daytime-city-traffic-aerial-view-56-large.mp4",
-    // "https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4"
-  ];
-
-  late VideoPlayerController _videoPlayerController1;
-  late ChewieController _chewieController1;
-  late VideoPlayerController _videoPlayerController2;
-  late ChewieController _chewieController2;
+  late List<VideoPlayerController> VideoPlayerControllers;
+  late List<ChewieController> ChewieControllers;
   double _aspectRatio = 16 / 9;
 
   // visibiliby
-  bool _visibility1 = true;
-  bool _visibility2 = true;
+  List<bool> _visibility = [true, true];
 
   @override
   initState() {
+    // _getData();
     super.initState();
-    _videoPlayerController1 = VideoPlayerController.network(urls[0]);
-    _videoPlayerController2 = VideoPlayerController.network(urls[1]);
-    _chewieController1 = ChewieController(
-      allowFullScreen: true,
-      videoPlayerController: _videoPlayerController1,
-      aspectRatio: _aspectRatio,
-      autoInitialize: true,
-      autoPlay: true,
-    );
-    _chewieController2 = ChewieController(
-      allowFullScreen: true,
-      videoPlayerController: _videoPlayerController2,
-      aspectRatio: _aspectRatio,
-      autoInitialize: true,
-      autoPlay: true,
-    );
+    VideoPlayerControllers = [];
+    ChewieControllers = [];
+    for (var i = 0; i < cctv_url.length; i++) {
+      var videoPlayerController = VideoPlayerController.network(cctv_url[i]);
+      VideoPlayerControllers.add(videoPlayerController);
+      var chewieController = ChewieController(
+        allowFullScreen: true,
+        videoPlayerController: VideoPlayerControllers[i],
+        aspectRatio: _aspectRatio,
+        autoInitialize: true,
+        autoPlay: true,
+      );
+      ChewieControllers.add(chewieController);
+    }
+    print('VideoPlayerControllers: $VideoPlayerControllers');
+    print('ChewieControllers: $ChewieControllers');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Visibility(
-                visible: _visibility1,
-                child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("CCTV #1"),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                              _chewieController1.enterFullScreen();
-                            });
-                          },
-                          icon: Icon(Icons.control_camera)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          height: MediaQuery.of(context).size.height*0.3,
-                          width: MediaQuery.of(context).size.width,
-                          child: Chewie(
-                            controller: _chewieController1,
-                          ),
+      body: ListView.builder(
+          itemCount: cctvs.length,
+          itemBuilder: (BuildContext context, var index) {
+            return Container(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Visibility(
+                      visible: _visibility[index],
+                      child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("CCTV #" +
+                                "${index + 1}"), // "CCTV #$index"로 변경할 것
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    // 카메라를 움직이는 버튼이나 일단 풀스크린전환
+                                    ChewieControllers[index].enterFullScreen();
+                                  });
+                                },
+                                icon: Icon(Icons.control_camera)),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.3,
+                                width: MediaQuery.of(context).size.width,
+                                child: Chewie(
+                                  controller: ChewieControllers[index],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ]),
+                    ),
+                  ],
+                ),
               ),
-              Visibility(
-                visible: _visibility2,
-                child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("CCTV #2"),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                              _chewieController2.enterFullScreen();
-                            });
-                          },
-                          icon: Icon(Icons.control_camera)),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          height: MediaQuery.of(context).size.height*0.3,
-                          width: MediaQuery.of(context).size.width,
-                          child: Chewie(
-                            controller: _chewieController2,
-                          ),
-                        )
-                      ),
-                    ],
-                  ),
-                ]),
-              ),
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 
   @override
   void dispose() async {
-    _videoPlayerController1.dispose();
-    _chewieController1.dispose();
-    _videoPlayerController2.dispose();
-    _chewieController2.dispose();
+    for (final videoPlayerController in VideoPlayerControllers) {
+      await videoPlayerController.dispose();
+    }
+    for (final chewieController in ChewieControllers) {
+      chewieController.dispose();
+    }
     super.dispose();
   }
 }
