@@ -89,7 +89,19 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.message_outlined),
-        title: const Text('Farm in Earth'), // 타이틀
+        title: Align(
+          alignment: Alignment.topLeft,
+          child: Column(children: [
+            Text(
+              'Farm in Earth',
+              style: TextStyle(color: Colors.white, fontSize: 25),
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: Text(stream.sitesDropdownValue,
+                    style: TextStyle(color: Colors.black, fontSize: 18))),
+          ]),
+        ), // 타이틀
         actions: [
           IconButton(
               onPressed: _launchURL,

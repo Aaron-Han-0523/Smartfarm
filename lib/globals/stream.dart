@@ -26,6 +26,9 @@ var motor_4 = '';
 var motor_5 = '';
 var motor_6 = '';
 
+// setting page dropdownButton
+var sitesDropdownValue = '';
+
 // cctv page
 List cctvs = [];
 List cctv_url = [];
