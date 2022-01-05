@@ -88,6 +88,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.teal,
         leading: Icon(Icons.message_outlined),
         title: Align(
           alignment: Alignment.topLeft,
@@ -111,6 +112,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
               backgroundColor: Colors.white,
               // backgroundImage: AssetImage('assets/images/gallery_button.png'),
               child: Icon(Icons.person),
+              foregroundColor: Colors.teal,
             ),
             onTap: () {
               Get.toNamed('/setting');

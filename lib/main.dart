@@ -343,7 +343,7 @@ class _MyAppState extends State<MyApp> {
             return GetMaterialApp(
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
-                primarySwatch: Colors.blue,
+                primarySwatch: Colors.teal,
                 fontFamily: 'Nanum',
               ),
               localizationsDelegates: [
