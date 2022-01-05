@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,11 +18,11 @@ import 'package:plms_start/globals/checkUser.dart' as plms_start;
 import 'dart:convert';
 
 /*
-* name : SignUpPage
-* description : join page
-* writer : john
-* create date : 2021-09-30
-* last update : 2021-09-30
+* name : change password
+* description : change password
+* writer : mark
+* create date : 2021-01-03
+* last update : 2021-01-05
 * */
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -33,6 +34,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   // var api = dotenv.env['PHONE_IP'];
   LoginTest _loginTest = LoginTest();
+  var api = dotenv.env['PHONE_IP'];
+  Dio dio = new Dio();
 
   @override
   void initState() {
@@ -91,6 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
   void dispose() {
     _idTextEditController.dispose();
     _pwTextEditController.dispose();
+    _currentPwTextEditController.dispose();
     _repwTextEditController.dispose();
     _emailTextEditController.dispose();
     _comTextEditController.dispose();
@@ -143,11 +147,29 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 child:
                     new Text(AppLocalizations.of(context)!.signUpbottomButton2),
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState!.validate() == true) {
-                    // _loginTest.updatePW(_idTextEditController.text, _repwTextEditController.text);
-                    formKey.currentState!.save();
-                    print('회원가입 완료');
+                    var response = await dio.post(
+                        '$api/farm/login/${_idTextEditController.text}/checkpw', data: {
+                        'password': _currentPwTextEditController.text,
+                    });
+                    print('비밀번호는 : ${_currentPwTextEditController.text}');
+                    print('ID는 : ${_idTextEditController.text}');
+
+                    Map jsonBody = response.data;
+                    var jsonData = jsonBody['result'].toString();
+                    if (jsonData == 'true' ) {
+                      print('result는 성공: $jsonData');
+                      _loginTest.updatePW(_idTextEditController.text, _repwTextEditController.text)
+                          .then((value) => formKey.currentState!.save());
+                      print('result는 성공2: $jsonData');
+
+                    } else {
+                      print('result는 실패');
+                      Get.defaultDialog(backgroundColor: Colors.white, title: '실패', middleText: 'ID/PW를 확인해주세요', textCancel: 'Cancel');
+                    }
+                  }else{
+                    print('새비밀번호 확인');
                   }
                 },
               ),
@@ -265,7 +287,6 @@ class _SignUpPageState extends State<SignUpPage> {
             style: TextStyle(fontSize: 17),
             controller: controller,
             focusNode: _emailFocus,
-            obscureText: true,
             keyboardType: TextInputType.visiblePassword,
             decoration: _textDecoration(),
             validator: (value) =>
@@ -297,29 +318,11 @@ class _SignUpPageState extends State<SignUpPage> {
               obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               decoration: _textDecoration(),
-              validator: (value) {
-                _loginTest
-                    .checkUser(_idTextEditController.text, value!)
-                    .then((value) => {
-                          if (plms_start.checkUserKey != 'true' &&
-                              _idTextEditController.text.isNotEmpty)
-                            {
-                              // print('### checkUserKey 확인 ${plms_start.checkUserKey}')
-                              Get.defaultDialog(
-                                  backgroundColor: Colors.white,
-                                  title: '오류',
-                                  middleText: '비밀번호를 확인해주세요',
-                                  textCancel: 'Cancel')
-                            }
-                        });
-                if (value.isEmpty) {
-                  return '';
-                }
-              }
-              // => CheckValidate().currentPassword(_currentPwFocus, value!, _idTextEditController),
-              // onChanged: (text) {
-              //   setState(() {});
-              // },
+              validator: (value)
+              => CheckValidate().currentPassword(_currentPwFocus, value!, _idTextEditController),
+              onChanged: (text) {
+                setState(() {});
+              },
               ),
         ),
       ],
