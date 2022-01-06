@@ -14,8 +14,8 @@ import '../globals/stream.dart' as stream;
 * name : Soil Control Page
 * description : Soil Control Page
 * writer : sherry
-* create date : 2021-12-24
-* last update : 2022-01-04
+* create date : 2021-12-24    
+* last update : 2022-01-05
 * */
 
 // globalKey
