@@ -83,7 +83,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   }
 
   var trap = 0;
-
+  var siteDropdown =
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +100,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             ),
             Padding(
                 padding: EdgeInsets.only(left: 30),
-                child: Text(stream.sitesDropdownValue,
+                child: Text(siteDropdown,
                     style: TextStyle(color: Colors.black, fontSize: 18))),
           ]),
         ), // 타이틀
