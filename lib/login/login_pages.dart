@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
-        backgroundColor: Color(0xFF009688),
+        backgroundColor: Color(0xff1abc9c),
         // 카카오 채널 고객센터/문의
         floatingActionButton: FloatingActionButton(
             onPressed: _launchURL,
@@ -95,7 +95,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     _textForm(),
-                    SizedBox(height: 10),
+                    SizedBox(
+                      height: Get.height * 0.0001,
+                    ),
                     _textButton(),
                     SizedBox(
                       height: 30,
@@ -156,37 +158,63 @@ class _LoginPageState extends State<LoginPage> {
             // height: Get.height * 1 / 30,
             height: Get.height * 0.07,
             width: Get.width * 4.5 / 7,
-            child: TextFormField(
-              controller: _idTextEditController,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person),
-                  hintText: AppLocalizations.of(context)!.loginID,
-                  hintStyle: TextStyle(color: Colors.grey)),
-              onChanged: (text) {
-                setState(() {});
-              },
+            child: Row(
+              children: [
+                Container(
+                  height: Get.height * 0.07,
+                  width: Get.width * 0.13,
+                  color: Colors.black12,
+                  child: Icon(Icons.person, color: Colors.grey, size: 35),
+                ),
+                SizedBox(width: Get.width * 0.03),
+                Expanded(
+                  child: TextFormField(
+                  controller: _idTextEditController,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Username',
+                      hintStyle: TextStyle(color: Colors.black38)),
+                  onChanged: (text) {
+                    setState(() {});
+                  },
+              ),
+                ),
+              ]
             ),
           ),
           SizedBox(
-            height: Get.height * 1 / 30,
+            height: Get.height * 0.01,
           ),
           Container(
             color: Colors.white,
             // height: Get.height * 1 / 30,
             height: Get.height * 0.07,
             width: Get.width * 4.5 / 7,
-            child: TextFormField(
-              controller: _pwTextEditController,
-              obscureText: true,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.vpn_key),
-                  hintText: AppLocalizations.of(context)!.loginPW,
-                  hintStyle: TextStyle(color: Colors.grey)
-                  // labelText: AppLocalizations.of(context)!.loginPW,
-                  ),
-              onChanged: (text) {
-                setState(() {});
-              },
+            child: Row(
+              children:[
+                Container(
+                  height: Get.height * 0.07,
+                  width: Get.width * 0.13,
+                  color: Colors.black12,
+                  child: Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 35),
+                ),
+                SizedBox(width: Get.width * 0.03),
+                Expanded(
+                  child: TextFormField(
+                  controller: _pwTextEditController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: AppLocalizations.of(context)!.loginPW,
+                      hintStyle: TextStyle(color: Colors.black38)
+                      // labelText: AppLocalizations.of(context)!.loginPW,
+                      ),
+                  onChanged: (text) {
+                    setState(() {});
+                  },
+              ),
+                ),
+            ]
             ),
           ),
         ],
@@ -197,37 +225,20 @@ class _LoginPageState extends State<LoginPage> {
   // 로그인 버튼
   Widget _button() {
     return Container(
-      height: Get.height * 0.06,
+      height: Get.height * 0.07,
       width: Get.width * 0.65,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Color(0xff304D5B),
+          primary: Color(0xff0a4b3e),
         ),
         onPressed: () async {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
           _loginTest.loginTest(uid, pw);
-
-          // var url = Uri.parse('$api/api/login');
-          // var response = await http.post(url, body: {
-          //   'uid': _idTextEditController.text,
-          //   'password': _pwTextEditController.text,
-          // });
-
-          // Map<String, dynamic> jsonData = jsonDecode(response.body);
-          // print(jsonData['results']['uid']);
-          // print(jsonData['result']);
-          // if (jsonData['results']['uid'] == _idTextEditController.text &&
-          //     jsonData['result'] == true) {
-          // Get.toNamed('/sensor');
-          // } else {
-          //   _showDialog();
-          // }
         },
         child: Text(
           '로그인',
-          // AppLocalizations.of(context)!.signIn,
-          style: TextStyle(fontSize: 15, color: Colors.white),
+          style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
     );
@@ -255,15 +266,21 @@ class _LoginPageState extends State<LoginPage> {
 
 // 회원가입 버튼
   Widget _textButton() {
-    return TextButton(
-        onPressed: () {
-          Get.toNamed("/signup");
-        },
-        child: Text(
-          '비밀번호 변경',
-          // AppLocalizations.of(context)!.signUp,
-          style: TextStyle(color: Colors.white, fontSize: 15),
-        ));
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        height: Get.height * 0.045,
+        width: Get.width * 4 / 7,
+        child: TextButton(
+            onPressed: () {
+              Get.toNamed("/signup");
+            },
+            child: Text(
+              '비밀번호 변경',
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )),
+      ),
+    );
   }
 
   //카카오 채널 url launcher
