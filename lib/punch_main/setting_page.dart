@@ -196,7 +196,8 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  String sitesDropdownValue = 'EdgeWorks';
+  String sitesDropdownValue =
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
   Widget _sitesDropDownButtons(var name) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
