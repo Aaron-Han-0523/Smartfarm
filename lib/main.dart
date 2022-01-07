@@ -341,10 +341,11 @@ class _MyAppState extends State<MyApp> {
                   name: '/mqtt',
                   page: () => MQTTPage(),
                 ),
-                // GetPage(
-                //   name: '/photoList',
-                //   page: () => PhotoList(),
-                // ),
+                GetPage(
+                  // getdata cctv, soilpage, etc
+                  name: '/home',
+                  page: () => Home(),
+                ),
                 // GetPage(
                 //   name: '/complete',
                 //   page: () => PunchComplete(),

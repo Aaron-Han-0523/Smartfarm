@@ -158,17 +158,16 @@ class _LoginPageState extends State<LoginPage> {
             // height: Get.height * 1 / 30,
             height: Get.height * 0.07,
             width: Get.width * 4.5 / 7,
-            child: Row(
-              children: [
-                Container(
-                  height: Get.height * 0.07,
-                  width: Get.width * 0.13,
-                  color: Colors.black12,
-                  child: Icon(Icons.person, color: Colors.grey, size: 35),
-                ),
-                SizedBox(width: Get.width * 0.03),
-                Expanded(
-                  child: TextFormField(
+            child: Row(children: [
+              Container(
+                height: Get.height * 0.07,
+                width: Get.width * 0.13,
+                color: Colors.black12,
+                child: Icon(Icons.person, color: Colors.grey, size: 35),
+              ),
+              SizedBox(width: Get.width * 0.03),
+              Expanded(
+                child: TextFormField(
                   controller: _idTextEditController,
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -177,10 +176,9 @@ class _LoginPageState extends State<LoginPage> {
                   onChanged: (text) {
                     setState(() {});
                   },
-              ),
                 ),
-              ]
-            ),
+              ),
+            ]),
           ),
           SizedBox(
             height: Get.height * 0.01,
@@ -190,17 +188,16 @@ class _LoginPageState extends State<LoginPage> {
             // height: Get.height * 1 / 30,
             height: Get.height * 0.07,
             width: Get.width * 4.5 / 7,
-            child: Row(
-              children:[
-                Container(
-                  height: Get.height * 0.07,
-                  width: Get.width * 0.13,
-                  color: Colors.black12,
-                  child: Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 35),
-                ),
-                SizedBox(width: Get.width * 0.03),
-                Expanded(
-                  child: TextFormField(
+            child: Row(children: [
+              Container(
+                height: Get.height * 0.07,
+                width: Get.width * 0.13,
+                color: Colors.black12,
+                child: Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 35),
+              ),
+              SizedBox(width: Get.width * 0.03),
+              Expanded(
+                child: TextFormField(
                   controller: _pwTextEditController,
                   obscureText: true,
                   decoration: InputDecoration(
@@ -212,10 +209,9 @@ class _LoginPageState extends State<LoginPage> {
                   onChanged: (text) {
                     setState(() {});
                   },
-              ),
                 ),
-            ]
-            ),
+              ),
+            ]),
           ),
         ],
       ),
@@ -235,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
           // _loginTest.loginTest(uid, pw);
-          Get.toNamed('/sensor');
+          Get.toNamed('/home');
         },
         child: Text(
           '로그인',
