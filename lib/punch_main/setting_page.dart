@@ -3,6 +3,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 import 'package:get/get.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:ndialog/ndialog.dart';
+import 'package:plms_start/dio/logout_dio.dart';
+import 'package:plms_start/mqtt/mqtt.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -10,9 +16,9 @@ import 'package:path_provider/path_provider.dart';
 /*
 * name : PageThree
 * description : punch issue three page
-* writer : walter
+* writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-12-29
+* last update : 2021-01-06
 * */
 
 class SettingPage extends StatefulWidget {
@@ -23,8 +29,27 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+
+  // logout API
+  Logout _logout = Logout();
+  // MQTT class
+  MqttClass _mqttClass = MqttClass();
+
+  // MQTT
+  String statusText = "Status Text";
+  bool isConnected = false;
+  final MqttServerClient client =
+  MqttServerClient('broker.mqttdashboard.com', '');
+  TextEditingController idTextController = TextEditingController();
+
+  // TextEditing Controller
   final _highTextEditController = TextEditingController();
   final _lowTextEditController = TextEditingController();
+
+  @override
+  void initState() {
+    // mqttConnect;
+  }
 
   @override
   void dispose() {
@@ -34,18 +59,76 @@ class _SettingPageState extends State<SettingPage> {
     super.dispose();
   }
 
+  //MQTT
+  Future<dynamic> mqttConnect(String dic, bool alarmen) async {
+
+    client.logging(on: true);
+    client.port = 1883;
+    client.secure = false;
+    final MqttConnectMessage connMess =
+    MqttConnectMessage().withClientIdentifier('3').startClean();// userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
+    client.connectionMessage = connMess;
+    await client.connect();
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      print("Connected to AWS Successfully!");
+    } else {
+      return false;
+    }
+
+    const topic = '/sf/e0000001/req/cfg';
+    client.subscribe(topic, MqttQos.atMostOnce);
+    const pubTopic = '/sf/e0000001/res/cfg';
+    final builder = MqttClientPayloadBuilder();
+
+    // PUBLISH alarm_en
+    // String _switch = '';
+
+    // setState(() {
+    //   status = alarmen;
+    //   // alarmen ? _switch = 'on' : _switch = 'off';
+    // });
+    builder.addString('{"$dic" : $alarmen}');
+
+
+    // if ( alarmen.isNotEmpty) {
+    //   builder.addString('{"alarm_en" : $alarmen}');
+    // } else {
+    //   print("alarm_en 값이 없음");
+    //   return false;
+    // }
+
+    // PUBLISH alarm_high_temp
+
+    // builder.addString('{"alarm_high_temp" : 40}');
+    // builder.addString('{"alarm_low_temp" : 10}');
+    // builder.addString('{"watering_timer" : 1}');
+    // builder.addString('{"alarm_en" : "$_switch"}');
+
+    // builder.addString('open');
+    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
+
+    return true;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          InkWell(
-            child: CircleAvatar(
-              child: Icon(Icons.logout),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            // 로그아웃
+            child: InkWell(
+              child: CircleAvatar(
+                child: Icon(Icons.logout),
+              ),
+              onTap: () {
+                _logout.logout();
+                // Get.offAllNamed('/'); // 로그아웃 연결 필요함
+              },
             ),
-            onTap: () {
-              Get.offAllNamed('/'); // 로그아웃 연결 필요함
-            },
           )
         ],
         title: Align(
@@ -53,23 +136,26 @@ class _SettingPageState extends State<SettingPage> {
           child: Column(children: [
             Text(
               'Farm in Earth',
-              style: TextStyle(color: Colors.white, fontSize: 25),
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             Padding(
                 padding: EdgeInsets.only(left: 30),
                 child: Text(stream.sitesDropdownValue,
-                    style: TextStyle(color: Colors.black, fontSize: 18))),
+                    style: TextStyle(color: Colors.black, fontSize: 16))),
           ]),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.only(left: 10, bottom: 15, top: 10),
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 15, left: 15),
         child: Column(
           children: [
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text('경보 설정',
-                    style: TextStyle(fontSize: 15, color: Colors.black54))),
+            Padding(
+              padding: EdgeInsets.only(top: 20, bottom: 15),
+              child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text('경보 설정',
+                      style: TextStyle(fontSize: 13, color: Colors.black54))),
+            ),
             _swichWidget('경보 활성화'),
             _tempFormField('고온 경보 (°C)', _highTextEditController),
             _tempFormField('저온 경보 (°C)', _lowTextEditController),
@@ -80,12 +166,15 @@ class _SettingPageState extends State<SettingPage> {
               endIndent: 0,
               color: Colors.grey,
             ),
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  '관수 타이머 설정',
-                  style: TextStyle(fontSize: 15, color: Colors.black54),
-                )),
+            Padding(
+              padding: EdgeInsets.only(top: 20, bottom: 15),
+              child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    '관수 타이머 설정',
+                    style: TextStyle(fontSize: 13, color: Colors.black54),
+                  )),
+            ),
             _timerDropDownButtons('타이머 시간'),
             _sitesDropDownButtons('사이트 설정'),
           ],
@@ -95,6 +184,9 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   bool status = true;
+  String on = 'on';
+  String off = 'off';
+
   Widget _swichWidget(String name) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,22 +196,26 @@ class _SettingPageState extends State<SettingPage> {
           style: TextStyle(
               fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54),
         ),
-        FlutterSwitch(
-          activeColor: Colors.green,
-          width: 70.0,
-          height: 40.0,
-          valueFontSize: 20.0,
-          toggleSize: 20.0,
-          value: status,
-          borderRadius: 30.0,
-          // padding: 3.0,
-          showOnOff: true,
-          onToggle: (val) {
-            setState(() {
-              status = val;
-              print('$name : $val');
-            });
-          },
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: FlutterSwitch(
+            activeColor: Colors.green,
+            width: Get.width * 0.2,
+            height: Get.height * 0.05,
+            valueFontSize: 20.0,
+            toggleSize: 20.0,
+            value: status,
+            borderRadius: 30.0,
+            // padding: 3.0,
+            showOnOff: true,
+            onToggle: (value){
+              setState(() {
+                status = value;
+                _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+              });
+              // _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+            }
+          ),
         ),
       ],
     );
@@ -142,7 +238,7 @@ class _SettingPageState extends State<SettingPage> {
           child: TextFormField(
             controller: controller,
             onChanged: (text) {
-              setState(() {});
+              // setState(() {});
               print('$title : $text');
             },
           ),
@@ -161,36 +257,45 @@ class _SettingPageState extends State<SettingPage> {
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
                 color: Colors.black54)),
-        DropdownButton<String>(
-          value: timerDropdownValue,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.deepPurple),
-          underline: Container(
-            height: 2,
-            color: Colors.deepPurpleAccent,
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: DropdownButton<String>(
+            value: timerDropdownValue,
+            icon: Column(
+                children : [
+             const Icon(Icons.arrow_drop_up, color: Colors.black, size: 30),
+              const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30)
+            ]
+            ),
+            elevation: 16,
+            style: const TextStyle(color: Colors.black54),
+            underline: Container(
+              height: 2,
+              width: 15,
+              color: Colors.black26,
+            ),
+            onChanged: (String? newValue) {
+              setState(() {
+                timerDropdownValue = newValue!;
+                print('$name : $newValue');
+              });
+            },
+            items: <String>[
+              '30분',
+              '1시간',
+              '1시간 30분',
+              '2시간',
+              '2시간 30분',
+              '3시간',
+              '3시간 30분',
+              '4시간'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              timerDropdownValue = newValue!;
-              print('$name : $newValue');
-            });
-          },
-          items: <String>[
-            '30분',
-            '1시간',
-            '1시간 30분',
-            '2시간',
-            '2시간 30분',
-            '3시간',
-            '3시간 30분',
-            '4시간'
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
         ),
       ],
     );
@@ -207,37 +312,45 @@ class _SettingPageState extends State<SettingPage> {
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
                 color: Colors.black54)),
-        DropdownButton<String>(
-          value: sitesDropdownValue,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.deepPurple),
-          underline: Container(
-            height: 2,
-            color: Colors.deepPurpleAccent,
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: DropdownButton<String>(
+            value: sitesDropdownValue,
+            icon: Column(
+                children : [
+                  const Icon(Icons.arrow_drop_up, color: Colors.black, size: 30),
+                  const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30)
+                ]
+            ),
+            elevation: 16,
+            style: const TextStyle(color: Colors.black54),
+            underline: Container(
+              height: 2,
+              color: Colors.black26,
+            ),
+            onChanged: (String? newValue) {
+              setState(() {
+                sitesDropdownValue = newValue!;
+                print('$name : $newValue');
+                stream.sitesDropdownValue = sitesDropdownValue;
+              });
+            },
+            items: <String>[
+              'EdgeWorks',
+              'Jsoftware',
+              'smartFarm',
+              'Project',
+              'Nodejs',
+              'Flutter',
+              'MySQL',
+              'AWS'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              sitesDropdownValue = newValue!;
-              print('$name : $newValue');
-              stream.sitesDropdownValue = sitesDropdownValue;
-            });
-          },
-          items: <String>[
-            'EdgeWorks',
-            'Jsoftware',
-            'smartFarm',
-            'Project',
-            'Nodejs',
-            'Flutter',
-            'MySQL',
-            'AWS'
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
         ),
       ],
     );

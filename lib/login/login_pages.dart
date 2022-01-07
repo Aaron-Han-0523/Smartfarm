@@ -234,7 +234,8 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
-          _loginTest.loginTest(uid, pw);
+          // _loginTest.loginTest(uid, pw);
+          Get.toNamed('/sensor');
         },
         child: Text(
           '로그인',
