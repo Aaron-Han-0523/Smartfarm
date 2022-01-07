@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+/simul_mqtt/
 
 # Web related
 lib/generated_plugin_registrant.dart
