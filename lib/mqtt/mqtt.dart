@@ -21,7 +21,7 @@ class MqttClass {
 
 
   //MQTT MOTOR & PUMP CTRL - publish
-  Future<dynamic> ctlSet(var dic, var dicValue, var dact, var dactValue, var subscibeTopic, var publishTopic) async {
+  Future<dynamic> ctlSet(var did, var dicValue, var dact, String dactValue, var subscibeTopic, var publishTopic) async {
 
     client.logging(on: true);
     client.port = 1883;
@@ -43,9 +43,7 @@ class MqttClass {
     final builder = MqttClientPayloadBuilder();
 
     // publish data
-    // builder.addString('{"did" : 1, "dact" : "run"}');
-
-    builder.addString('{"rt" : "set", "$dic" : $dicValue, "$dact" : "$dactValue"}');
+    builder.addString('{"rt" : "set", "$did" : $dicValue, "$dact" : "$dactValue"}');
 
     client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
     // client.publishMessage(publishTopic, MqttQos.atLeastOnce, builder.payload!);
