@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:plms_start/mqtt/mqtt.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -17,6 +18,8 @@ import '../globals/stream.dart' as stream;
 * create date : 2021-12-24
 * last update : 2021-12-29
 * */
+// MQTT class
+MqttClass _mqttClass = MqttClass();
 
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
@@ -49,12 +52,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
 
   //graph visibility
   bool _graph = true;
-
-  // onChange(bool _visibles){
-  //   setState(() {
-  //     _visibles = !_visibles;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,37 +100,21 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           _toggleSwitch(
                             context,
                             '츨장 (전)',
-                            'side',
-                            'test',
-                            'sid',
-                            'a_side',
                             status1,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (후)',
-                            'side',
-                            'test',
-                            'sid',
-                            'd_side',
                             status2,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (좌)',
-                            'side',
-                            'test2',
-                            'sid2',
-                            'e_side',
                             status3,
                           ),
                           _toggleSwitch(
                             context,
                             '측장 (우)',
-                            'side',
-                            'test2',
-                            'sid2',
-                            'g_side',
                             status4,
                           ),
                         ],
@@ -155,28 +136,16 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           _toggleSwitch(
                             context,
                             '천창 (#1)',
-                            'top',
-                            'test',
-                            'sid',
-                            'b_top',
                             status5,
                           ),
                           _toggleSwitch(
                             context,
                             '천창 (#2)',
-                            'top',
-                            'test2',
-                            'sid2',
-                            'f_top',
                             status6,
                           ),
                           _toggleSwitch(
                             context,
                             '천창 (#3)',
-                            'top',
-                            'test2',
-                            'sid2',
-                            'h_top',
                             status7,
                           ),
                         ],
@@ -310,29 +279,13 @@ BoxDecoration _decoration() {
   );
 }
 
-// Widget _card(String text) {
-//   return Container(
-//       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-//       height: Get.width * 0.15,
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Padding(
-//               padding: EdgeInsets.only(left: 15),
-//               child: Text(text,
-//                   style: _textStyle(Colors.grey, FontWeight.w600, 16))),
-//           Padding(
-//               padding: EdgeInsets.only(right: 5),
-//               child: _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'))
-//         ],
-//       ),
-//       decoration: _decoration());
-// }
 
 var api = dotenv.env['PHONE_IP'];
 var uris = '$api/farm';
 
 var dio = Dio();
+
+// 측창 개폐기 제어 전체
 Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
   var position = positions;
   var userId = userIds;
@@ -386,12 +339,8 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
   );
 }
 
-Widget _toggleSwitch(BuildContext context, String text, var positions,
-    var userIds, var siteIds, var motorIds, bool visibles) {
-  var position = positions;
-  var userId = userIds;
-  var siteId = siteIds;
-  var motorId = motorIds;
+// 측창 개폐기 제어
+Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -422,16 +371,19 @@ Widget _toggleSwitch(BuildContext context, String text, var positions,
               labels: ['열림', '정지', '닫힘'],
               radiusStyle: true,
               onToggle: (value) async {
-                // visibles = !visibles;
-                print('switched to: $value');
-                var response = await dio.put(
-                    '$uris/$userId/site/$siteId/controls/$position/motors/$motorId',
-                    data: {'motor_name': '$value'});
-                // .get('https://github.com/flutterchina/dio/tree/master/example');
-                var datas = jsonDecode(response.toString());
-                print(datas);
-                // print(datas['data'][0]);
-              },
+                String _switch = '';
+                if (value == 0){
+                  _switch = 'open';
+                  // _mqttClass.ctlSet('did', 1, 'dact', ''
+                  //     ''
+                  //     ''
+                  //     '');
+
+                } else if (value == 1) {
+                } else if (value == 2)
+                print('toggle value는 : $value');
+                print('toggle type은 : ${value.runtimeType}');
+                },
             ),
           )
         ],

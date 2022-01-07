@@ -18,7 +18,7 @@ import 'package:path_provider/path_provider.dart';
 * description : punch issue three page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-06
+* last update : 2021-01-07
 * */
 
 class SettingPage extends StatefulWidget {
@@ -32,6 +32,7 @@ class _SettingPageState extends State<SettingPage> {
 
   // logout API
   Logout _logout = Logout();
+
   // MQTT class
   MqttClass _mqttClass = MqttClass();
 
@@ -117,6 +118,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             _timerDropDownButtons('타이머 시간'),
             _sitesDropDownButtons('사이트 설정'),
+            _siteConfigSetButton()
           ],
         ),
       ),
@@ -192,6 +194,16 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
       ],
+    );
+  }
+
+  // SITE CONFIG SET widget
+  Widget _siteConfigSetButton() {
+    return RaisedButton(
+        onPressed: (){
+
+        },
+      child: Text("SET CONIG(저장)"),
     );
   }
 

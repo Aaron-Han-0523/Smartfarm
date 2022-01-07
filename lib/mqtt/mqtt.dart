@@ -19,6 +19,9 @@ class MqttClass {
   final MqttServerClient client =
   MqttServerClient('broker.mqttdashboard.com', '');
 
+  //MQTT SITE CONFIG SET - subscribe
+
+
 
   //MQTT MOTOR & PUMP CTRL - publish
   Future<dynamic> ctlSet(var did, var dicValue, var dact, String dactValue, var subscibeTopic, var publishTopic) async {
@@ -50,7 +53,6 @@ class MqttClass {
 
     return true;
   }
-
 
 
   //MQTT SITE CONFIG SET - publish

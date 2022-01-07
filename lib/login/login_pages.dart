@@ -231,7 +231,9 @@ class _LoginPageState extends State<LoginPage> {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
           // _loginTest.loginTest(uid, pw);
-          Get.toNamed('/home');
+          // Get.toNamed('/home');
+          Get.toNamed('/sensor');
+
         },
         child: Text(
           '로그인',
