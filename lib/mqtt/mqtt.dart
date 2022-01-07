@@ -21,7 +21,7 @@ class MqttClass {
 
 
   //MQTT publish
-  Future<dynamic> mqttConnect(String dic, bool dact, var subscibeTopic, var publishTopic) async {
+  Future<dynamic> mqttConnect(String dic, var dact, var subscibeTopic, var publishTopic) async {
 
     client.logging(on: true);
     client.port = 1883;
