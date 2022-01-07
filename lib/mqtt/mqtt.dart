@@ -15,13 +15,13 @@ class MqttClass {
 
   // MQTT
   String statusText = "Status Text";
-  bool isConnected = false;
+  // bool isConnected = false;
   final MqttServerClient client =
   MqttServerClient('broker.mqttdashboard.com', '');
 
 
-  //MQTT publish
-  Future<dynamic> mqttConnect(String dic, var dact, var subscibeTopic, var publishTopic) async {
+  //MQTT MOTOR & PUMP CTRL - publish
+  Future<dynamic> ctlSet(var dic, var dicValue, var dact, var dactValue, var subscibeTopic, var publishTopic) async {
 
     client.logging(on: true);
     client.port = 1883;
@@ -43,13 +43,50 @@ class MqttClass {
     final builder = MqttClientPayloadBuilder();
 
     // publish data
-    builder.addString('{"$dic" : $dact}');
+    // builder.addString('{"did" : 1, "dact" : "run"}');
+
+    builder.addString('{"rt" : "set", "$dic" : $dicValue, "$dact" : "$dactValue"}');
 
     client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
     // client.publishMessage(publishTopic, MqttQos.atLeastOnce, builder.payload!);
 
     return true;
   }
+
+
+
+  //MQTT SITE CONFIG SET - publish
+  Future<dynamic> configSet (String dact, var dactValue, var subscibeTopic, var publishTopic) async {
+
+    client.logging(on: true);
+    client.port = 1883;
+    client.secure = false;
+    final MqttConnectMessage connMess =
+    MqttConnectMessage().withClientIdentifier('3').startClean();// userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
+    client.connectionMessage = connMess;
+    await client.connect();
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      print("Connected to AWS Successfully!");
+    } else {
+      return false;
+    }
+
+    var topic = subscibeTopic;
+    client.subscribe(topic, MqttQos.atMostOnce);
+
+    var pubTopic = publishTopic;
+    final builder = MqttClientPayloadBuilder();
+
+    // publish data
+    builder.addString('{"rt" : "set", "$dact" : $dactValue}');
+
+    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
+    // client.publishMessage(publishTopic, MqttQos.atLeastOnce, builder.payload!);
+
+    return true;
+  }
+
+
 
 
 

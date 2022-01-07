@@ -35,13 +35,6 @@ class _SettingPageState extends State<SettingPage> {
   // MQTT class
   MqttClass _mqttClass = MqttClass();
 
-  // MQTT
-  String statusText = "Status Text";
-  bool isConnected = false;
-  final MqttServerClient client =
-  MqttServerClient('broker.mqttdashboard.com', '');
-  TextEditingController idTextController = TextEditingController();
-
   // TextEditing Controller
   final _highTextEditController = TextEditingController();
   final _lowTextEditController = TextEditingController();
@@ -58,59 +51,6 @@ class _SettingPageState extends State<SettingPage> {
 
     super.dispose();
   }
-
-  //MQTT
-  Future<dynamic> mqttConnect(String dic, bool alarmen) async {
-
-    client.logging(on: true);
-    client.port = 1883;
-    client.secure = false;
-    final MqttConnectMessage connMess =
-    MqttConnectMessage().withClientIdentifier('3').startClean();// userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
-    client.connectionMessage = connMess;
-    await client.connect();
-    if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print("Connected to AWS Successfully!");
-    } else {
-      return false;
-    }
-
-    const topic = '/sf/e0000001/req/cfg';
-    client.subscribe(topic, MqttQos.atMostOnce);
-    const pubTopic = '/sf/e0000001/res/cfg';
-    final builder = MqttClientPayloadBuilder();
-
-    // PUBLISH alarm_en
-    // String _switch = '';
-
-    // setState(() {
-    //   status = alarmen;
-    //   // alarmen ? _switch = 'on' : _switch = 'off';
-    // });
-    builder.addString('{"$dic" : $alarmen}');
-
-
-    // if ( alarmen.isNotEmpty) {
-    //   builder.addString('{"alarm_en" : $alarmen}');
-    // } else {
-    //   print("alarm_en 값이 없음");
-    //   return false;
-    // }
-
-    // PUBLISH alarm_high_temp
-
-    // builder.addString('{"alarm_high_temp" : 40}');
-    // builder.addString('{"alarm_low_temp" : 10}');
-    // builder.addString('{"watering_timer" : 1}');
-    // builder.addString('{"alarm_en" : "$_switch"}');
-
-    // builder.addString('open');
-    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
-
-    return true;
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +97,8 @@ class _SettingPageState extends State<SettingPage> {
                       style: TextStyle(fontSize: 13, color: Colors.black54))),
             ),
             _swichWidget('경보 활성화'),
-            _tempFormField('고온 경보 (°C)', _highTextEditController),
-            _tempFormField('저온 경보 (°C)', _lowTextEditController),
+            _tempFormField('고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
+            _tempFormField('저온 경보 (°C)', "alarm_low_temp",_lowTextEditController),
             const Divider(
               height: 10,
               thickness: 2,
@@ -211,7 +151,7 @@ class _SettingPageState extends State<SettingPage> {
             onToggle: (value){
               setState(() {
                 status = value;
-                _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+                _mqttClass.configSet("alarm_en", status, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
               });
               // _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
             }
@@ -221,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _tempFormField(String title, var controller) {
+  Widget _tempFormField(String title, String dic, var controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -237,6 +177,14 @@ class _SettingPageState extends State<SettingPage> {
           height: Get.height * 2.1 / 25,
           child: TextFormField(
             controller: controller,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.subdirectory_arrow_left),
+                onPressed: () {
+                  _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                }
+              )
+            ),
             onChanged: (text) {
               // setState(() {});
               print('$title : $text');
@@ -277,6 +225,7 @@ class _SettingPageState extends State<SettingPage> {
             onChanged: (String? newValue) {
               setState(() {
                 timerDropdownValue = newValue!;
+                _mqttClass.configSet("watering_timer", "$newValue", '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
                 print('$name : $newValue');
               });
             },
