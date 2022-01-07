@@ -57,7 +57,7 @@ class _CCTVPageState extends State<CCTVPage> {
   double _aspectRatio = 16 / 9;
 
   // visibiliby
-  List<bool> _visibility = [true, true];
+  List<bool> _visibility = [true, true, true];
 
   @override
   initState() {
