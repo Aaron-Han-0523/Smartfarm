@@ -36,8 +36,10 @@ List cctv_url = [];
 // soilControl page
 List pumps = [];
 List pump_name = [];
+List<bool> pumpStatus = [];
 List valves = [];
 List valve_name = [];
+List<bool> valveStatus = [];
 
 List sensors = [];
 List sensor_id = []; // pump1, pump2

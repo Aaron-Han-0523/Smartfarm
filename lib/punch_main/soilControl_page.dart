@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
+import 'package:plms_start/mqtt/mqtt.dart';
 import 'package:plms_start/punch_main/mqtt.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -13,6 +14,8 @@ import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+
+// TODO: valveStatus는 pump 값으로 하고있음
 
 /*
 * name : Soil Control Page
@@ -54,48 +57,11 @@ var options = BaseOptions(
 Dio dio = Dio(options);
 
 // MQTT
+MqttClass _mqttClass = MqttClass();
 String statusText = "Status Text";
 bool isConnected = false;
 final MqttServerClient client =
     MqttServerClient('broker.mqttdashboard.com', '');
-// Future<bool> mqttConnect(bool alarmen) async {
-//   client.logging(on: true);
-//   client.port = 1883;
-//   client.secure = false;
-//   final MqttConnectMessage connMess = MqttConnectMessage()
-//       .withClientIdentifier('3')
-//       .startClean(); // userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
-//   client.connectionMessage = connMess;
-//   await client.connect();
-//   if (client.connectionStatus!.state == MqttConnectionState.connected) {
-//     print("Connected to AWS Successfully!");
-//   } else {
-//     return false;
-//   }
-
-//   const topic = '/sf/e0000001/req/cfg';
-//   client.subscribe(topic, MqttQos.atMostOnce);
-//   const pubTopic = '/sf/e0000001/res/cfg';
-//   final builder = MqttClientPayloadBuilder();
-
-//   // PUBLISH alarm_en
-//   String _switch = '';
-
-//   setState(() {
-//     status = alarmen;
-//     alarmen ? _switch = 'on' : _switch = 'off';
-//   });
-
-//   if (_switch.isNotEmpty) {
-//     builder.addString('{"alarm_en" : "$_switch"}');
-//   } else {
-//     print("alarm_en 값이 없음");
-//     return false;
-//   }
-
-//   client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
-//   return true;
-// }
 
 // getData()
 void _getPumpData() async {
@@ -110,19 +76,12 @@ void _getPumpData() async {
     stream.pump_name.add(pumpName);
   }
 
-  // // get pump1, pump2 on/off status
-  // for (var i = 0; i < stream.sensor_id.length; i++) {
-  //   var sensorId = stream.sensor_id[i];
-  //   print('##### soilPage GET sensorId $sensorId');
-  //   if (sensorId == 'pump1') {
-  //     sensorId = 'pump_1';
-  //     final getSensorStatus =
-  //         await dio.get('$url/$userId/site/$siteId/sensors/$sensorId/trends');
-  //     print('##### soilPage GET switch status ${getSensorStatus.data}');
-  //     var sensorOnOffStatus = getSensorStatus.data[i]['value'];
-  //     stream.sensorStatus.add(sensorOnOffStatus);
-  //   }
-  // }
+  List<bool> pumpStatus = [
+    stream.pump_1 == 'on' ? true : false,
+    stream.pump_2 == 'on' ? true : false
+  ];
+  print('pumpStatus: $pumpStatus');
+  stream.pumpStatus = pumpStatus;
 }
 
 void _getValveData() async {
@@ -136,6 +95,13 @@ void _getValveData() async {
     var valveName = stream.valves[i]['valve_name'];
     stream.valve_name.add(valveName);
   }
+
+  // List<bool> valveStatus = [
+  //   stream.valve_1 == 'on' ? true : false,
+  //   stream.valve_2 == 'on' ? true : false
+  // ];
+  // print('##### 사실은 pump1, pump2인 valveStatus: $valveStatus');
+  // stream.valveStatus = valveStatus;
 }
 
 class SoilControlPage extends StatefulWidget {
@@ -197,8 +163,6 @@ class _MyWeatherState extends State<MyWeather> {
     print("innerTemp");
     print(innerTemp);
     print(stream.temp_1);
-    _getPumpData();
-    _getValveData();
     super.initState();
   }
 
@@ -269,47 +233,6 @@ class MyPumps extends StatefulWidget {
 }
 
 class _MyPumpsState extends State<MyPumps> {
-  List pumpStatus = [];
-
-  //MQTT
-  Future<bool> mqttConnectPump(bool alarmen) async {
-    client.logging(on: true);
-    client.port = 1883;
-    client.secure = false;
-    final MqttConnectMessage connMess = MqttConnectMessage()
-        .withClientIdentifier('3')
-        .startClean(); // userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
-    client.connectionMessage = connMess;
-    await client.connect();
-    if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print("Connected to AWS Successfully!");
-    } else {
-      return false;
-    }
-
-    const topic = '/sf/e0000001/req/pump';
-    client.subscribe(topic, MqttQos.atMostOnce);
-    const pubTopic = '/sf/e0000001/res/pump';
-    final builder = MqttClientPayloadBuilder();
-
-    // PUBLISH alarm_en
-    String _switch = '';
-
-    setState(() {
-      alarmen ? _switch = 'on' : _switch = 'off';
-    });
-
-    if (_switch.isNotEmpty) {
-      builder.addString('{"alarm_en" : "$_switch"}');
-    } else {
-      print("alarm_en 값이 없음");
-      return false;
-    }
-
-    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
-    return true;
-  }
-
   List<bool> status = [true, true];
   List<bool> visibility = [true, true];
 
@@ -319,6 +242,7 @@ class _MyPumpsState extends State<MyPumps> {
     // WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
   }
 
+  List<bool> pumpStatus = stream.pumpStatus;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -345,34 +269,30 @@ class _MyPumpsState extends State<MyPumps> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text("펌프 (#" + "${index + 1}" + ")"),
+                                  Text("펌프 (#${index + 1})"),
                                   Spacer(),
                                   FlutterSwitch(
                                     activeColor: Colors.green,
                                     inactiveColor: Colors.orange,
                                     activeTextColor: Colors.white,
                                     inactiveTextColor: Colors.white,
-                                    value: status[index],
+                                    value: pumpStatus[index],
                                     showOnOff: true,
-                                    onToggle: mqttConnectPump,
-                                    // (newValue) async {
-                                    //   var pumpId = pumps[index]['pump_id'];
-                                    //   var pumpType = newValue; // on/off 바뀐 값
-                                    //   var pumpName = pump_name[index];
-                                    //   final pumpReset = await dio.put(
-                                    //       '$url/$userId/site/$siteId/controls/pumps/$pumpId',
-                                    //       data: {
-                                    //         'pump_type': pumpType,
-                                    //         'pump_name': pumpName,
-                                    //       });
-                                    //   print('$pumpName : $pumpName');
-                                    //   setState(() {
-                                    //     status[index] = newValue;
-                                    //   });
-                                    //   print('##### 바뀜 $pumpName : $newValue');
-                                    //   print(
-                                    //       '##### 바뀜 $pumpName : $pumpReset');
-                                    // }
+                                    onToggle: (value) {
+                                      setState(() {
+                                        pumpStatus[index] = value;
+                                        String switchStatus = '';
+                                        switchStatus =
+                                            value == true ? 'on' : 'off';
+                                        _mqttClass.ctlSet(
+                                            'did',
+                                            "${index + 1}",
+                                            'dact',
+                                            switchStatus,
+                                            '/sf/e0000001/req/pump',
+                                            '/sf/e0000001/req/pump');
+                                      });
+                                    },
                                   ),
                                 ],
                               )),
@@ -397,7 +317,7 @@ class MyValves extends StatefulWidget {
 }
 
 class _MyValvesState extends State<MyValves> {
-  List<bool> status = [true, true];
+  List<bool> valveStatus = [true, true];
   List<bool> visibility = [true, true];
 
   @override
@@ -405,6 +325,7 @@ class _MyValvesState extends State<MyValves> {
     super.initState();
   }
 
+  // List<bool> valveStatus = stream.valveStatus;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -430,34 +351,31 @@ class _MyValvesState extends State<MyValves> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text("밸브 (#" + "${index + 1}" + ")"),
+                                  Text("밸브 (#${index + 1})"),
                                   Spacer(),
                                   FlutterSwitch(
-                                      activeColor: Colors.green,
-                                      inactiveColor: Colors.orange,
-                                      activeTextColor: Colors.white,
-                                      inactiveTextColor: Colors.white,
-                                      value: status[index],
-                                      showOnOff: true,
-                                      onToggle: (newValue) async {
-                                        var valveId = valves[index]['valve_id'];
-                                        var valveType = newValue; // on/off 바뀐 값
-                                        var valveName = valve_name[index];
-                                        final valveReset = await dio.put(
-                                            '$url/$userId/site/$siteId/controls/valves/$valveId',
-                                            data: {
-                                              'valve_type': valveType,
-                                              'valve_name': valveName,
-                                            });
-                                        print('$valveName : $valveName');
-                                        setState(() {
-                                          status[index] = newValue;
-                                        });
-                                        print(
-                                            '##### 바뀜 $valveName : $newValue');
-                                        print(
-                                            '##### 바뀜 $valveName : $valveReset');
-                                      }),
+                                    activeColor: Colors.green,
+                                    inactiveColor: Colors.orange,
+                                    activeTextColor: Colors.white,
+                                    inactiveTextColor: Colors.white,
+                                    value: valveStatus[index],
+                                    showOnOff: true,
+                                    onToggle: (value) {
+                                      setState(() {
+                                        valveStatus[index] = value;
+                                        // String switchStatus = '';
+                                        // switchStatus =
+                                        //     value == true ? 'on' : 'off';
+                                        // _mqttClass.ctlSet(
+                                        //     'did',
+                                        //     "${index + 1}",
+                                        //     'dact',
+                                        //     switchStatus,
+                                        //     '/sf/e0000001/req/valve',
+                                        //     '/sf/e0000001/req/valve');
+                                      });
+                                    },
+                                  ),
                                 ],
                               )),
                         ),
