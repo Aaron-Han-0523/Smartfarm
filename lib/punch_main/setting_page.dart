@@ -211,8 +211,9 @@ class _SettingPageState extends State<SettingPage> {
             onToggle: (value){
               setState(() {
                 status = value;
+                _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
               });
-              _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+              // _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
             }
           ),
         ),
