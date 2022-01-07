@@ -3,7 +3,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 import 'package:get/get.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:plms_start/dio/logout_dio.dart';
+import 'package:plms_start/mqtt/mqtt.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -24,9 +29,27 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+
+  // logout API
   Logout _logout = Logout();
+  // MQTT class
+  MqttClass _mqttClass = MqttClass();
+
+  // MQTT
+  String statusText = "Status Text";
+  bool isConnected = false;
+  final MqttServerClient client =
+  MqttServerClient('broker.mqttdashboard.com', '');
+  TextEditingController idTextController = TextEditingController();
+
+  // TextEditing Controller
   final _highTextEditController = TextEditingController();
   final _lowTextEditController = TextEditingController();
+
+  @override
+  void initState() {
+    // mqttConnect;
+  }
 
   @override
   void dispose() {
@@ -35,6 +58,59 @@ class _SettingPageState extends State<SettingPage> {
 
     super.dispose();
   }
+
+  //MQTT
+  Future<dynamic> mqttConnect(String dic, bool alarmen) async {
+
+    client.logging(on: true);
+    client.port = 1883;
+    client.secure = false;
+    final MqttConnectMessage connMess =
+    MqttConnectMessage().withClientIdentifier('3').startClean();// userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
+    client.connectionMessage = connMess;
+    await client.connect();
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      print("Connected to AWS Successfully!");
+    } else {
+      return false;
+    }
+
+    const topic = '/sf/e0000001/req/cfg';
+    client.subscribe(topic, MqttQos.atMostOnce);
+    const pubTopic = '/sf/e0000001/res/cfg';
+    final builder = MqttClientPayloadBuilder();
+
+    // PUBLISH alarm_en
+    // String _switch = '';
+
+    // setState(() {
+    //   status = alarmen;
+    //   // alarmen ? _switch = 'on' : _switch = 'off';
+    // });
+    builder.addString('{"$dic" : $alarmen}');
+
+
+    // if ( alarmen.isNotEmpty) {
+    //   builder.addString('{"alarm_en" : $alarmen}');
+    // } else {
+    //   print("alarm_en 값이 없음");
+    //   return false;
+    // }
+
+    // PUBLISH alarm_high_temp
+
+    // builder.addString('{"alarm_high_temp" : 40}');
+    // builder.addString('{"alarm_low_temp" : 10}');
+    // builder.addString('{"watering_timer" : 1}');
+    // builder.addString('{"alarm_en" : "$_switch"}');
+
+    // builder.addString('open');
+    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
+
+    return true;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +184,9 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   bool status = true;
+  String on = 'on';
+  String off = 'off';
+
   Widget _swichWidget(String name) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,12 +208,12 @@ class _SettingPageState extends State<SettingPage> {
             borderRadius: 30.0,
             // padding: 3.0,
             showOnOff: true,
-            onToggle: (val) {
+            onToggle: (value){
               setState(() {
-                status = val;
-                print('$name : $val');
+                status = value;
               });
-            },
+              _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+            }
           ),
         ),
       ],
@@ -158,7 +237,7 @@ class _SettingPageState extends State<SettingPage> {
           child: TextFormField(
             controller: controller,
             onChanged: (text) {
-              setState(() {});
+              // setState(() {});
               print('$title : $text');
             },
           ),
