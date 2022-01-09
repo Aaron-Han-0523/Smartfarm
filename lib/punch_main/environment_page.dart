@@ -380,7 +380,11 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
                   //     '');
 
                 } else if (value == 1) {
-                } else if (value == 2)
+                  _switch == 'stop';
+                } else if (value == 2) {
+                  _switch == 'close';
+                }
+                _mqttClass.ctlSet('did', '3', 'dact', _switch, '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
                 },
