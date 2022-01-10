@@ -44,6 +44,7 @@ dependencies:
   firebase_messaging: ^11.2.4
   url_launcher: ^6.0.17
   shared_preferences: ^2.0.11
+  convex_bottom_bar: ^3.0.0
 
 
 dev_dependencies:

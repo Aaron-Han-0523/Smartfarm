@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
@@ -89,21 +90,9 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Color(0xffF5F9FC),
         leading: Icon(Icons.message_outlined),
-        title: Align(
-          alignment: Alignment.topLeft,
-          child: Column(children: [
-            Text(
-              'Farm in Earth',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 30),
-                child: Text(siteDropdown,
-                    style: TextStyle(color: Colors.black, fontSize: 18))),
-          ]),
-        ), // 타이틀
+        // 타이틀
         actions: [
           IconButton(
               onPressed: _launchURL,
@@ -112,7 +101,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             child: CircleAvatar(
               backgroundColor: Colors.white,
               // backgroundImage: AssetImage('assets/images/gallery_button.png'),
-              child: Icon(Icons.person),
+              child: Image.asset('assets/images/icon_setting.png'),
               foregroundColor: Colors.teal,
             ),
             onTap: () {
@@ -122,30 +111,80 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         ],
       ),
       body: bodySteam(),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.thermostat),
-            label: '센서',
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.thermostat),
+      //       label: '센서',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings_remote_outlined),
+      //       label: '환경제어',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings_input_antenna),
+      //       label: '토양제어',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.videocam),
+      //       label: 'CCTV',
+      //     ),
+      //   ],
+      //   type: BottomNavigationBarType.fixed,
+      //   backgroundColor: Color(0xff2E6645),
+      //   currentIndex: _selectedIndex,
+      //   selectedIconTheme: IconThemeData(color: Colors.red),
+      //   // selectedItemColor: Colors.black,
+      //   unselectedItemColor: Colors.white,
+      //   onTap: _onItemTapped,
+      // ),
+      bottomNavigationBar: ConvexAppBar(
+        items: [
+          TabItem(
+            icon: Image.asset(
+              "assets/images/icon_sensor.png",
+              color:
+                  _selectedIndex == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
+              scale: 3,
+            ),
+            // title: '센서',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_remote_outlined),
-            label: '환경제어',
+          TabItem(
+            icon: Image.asset(
+              "assets/images/icon_env.png",
+              color:
+                  _selectedIndex == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
+              scale: 3,
+            ),
+            // title: '환경제어',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_input_antenna),
-            label: '토양제어',
+          TabItem(
+            icon: Image.asset(
+              "assets/images/icon_soil.png",
+              color:
+                  _selectedIndex == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
+              scale: 3,
+            ),
+            // title: '토양제어',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.videocam),
-            label: 'CCTV',
+          TabItem(
+            icon: Image.asset(
+              "assets/images/icon_cctv.png",
+              color:
+                  _selectedIndex == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
+              scale: 3,
+            ),
+            // title: '',
           ),
         ],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        unselectedItemColor: Colors.grey,
+        // currentIndex: _selectedIndex,
+        // selectedItemColor: Colors.black,
+        // unselectedItemColor: Colors.white,
+        backgroundColor: Color(0xff2E6645),
         onTap: _onItemTapped,
+        top: 0,
+        color: Color(0xffFFFFFF),
+        // activeColor: Color(0xff222222),
       ),
     );
   }
@@ -220,7 +259,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     setStatus("Connecting MQTT Broker");
 
     client.logging(on: true);
-    client.keepAlivePeriod = 20;
+    // client.keepAlivePeriod = 20;
     client.port = 1883;
     client.secure = false;
     client.onConnected = onConnected;
@@ -237,7 +276,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       return false;
     }
 
-    const topic = '/sf/#';
+    const topic = '/sf/e0000001/data';
     client.subscribe(topic, MqttQos.atMostOnce);
 
     return true;
