@@ -30,7 +30,7 @@ class MqttClass {
     client.port = 1883;
     client.secure = false;
     final MqttConnectMessage connMess =
-    MqttConnectMessage().withClientIdentifier('3').startClean();// userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
+    MqttConnectMessage().withClientIdentifier('3').startClean(); // userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
     client.connectionMessage = connMess;
     await client.connect();
     if (client.connectionStatus!.state == MqttConnectionState.connected) {

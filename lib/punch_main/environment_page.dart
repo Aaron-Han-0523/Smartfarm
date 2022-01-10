@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -16,8 +14,9 @@ import '../globals/stream.dart' as stream;
 * description : Environment Control Page
 * writer : mark
 * create date : 2021-12-24
-* last update : 2021-12-29
+* last update : 2021-01-10
 * */
+
 // MQTT class
 MqttClass _mqttClass = MqttClass();
 
@@ -29,6 +28,7 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
+
 // globalKey
   var innerTemp = stream.temp_1; // 내부온도
   var extTemp = stream.exttemp_1; // 외부온도
@@ -320,15 +320,21 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
               labels: ['전체열림', '전체정지', '전체닫힘'],
               radiusStyle: true,
               onToggle: (value) async {
-                // visibles = !visibles;
-                print('switched to: $value');
-                var response = await dio.put(
-                    '$uris/$userId/site/$siteId/controls/$position/motors',
-                    data: {'motor_name': '$value'});
-                // .get('https://github.com/flutterchina/dio/tree/master/example');
-                var datas = jsonDecode(response.toString());
-                print(datas);
-                // print(datas['data'][0]);
+                String _switch = '';
+
+                if (value == 0){
+                  _switch = 'open';
+
+                } else if (value == 1) {
+                  _switch == 'stop';
+
+                } else if (value == 2) {
+                  _switch == 'close';
+
+                }
+                print('toggle value는 : $value');
+                print('toggle type은 : ${value.runtimeType}');
+                print('open인가 : $_switch');
               },
             ),
           )
@@ -372,22 +378,20 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
               radiusStyle: true,
               onToggle: (value) async {
                 String _switch = '';
+
                 if (value == 0){
                   _switch = 'open';
-                  // _mqttClass.ctlSet('did', 1, 'dact', ''
-                  //     ''
-                  //     ''
-                  //     '');
-
-                } else if (value == 1) {
-                  _switch == 'stop';
-                } else if (value == 2) {
-                  _switch == 'close';
+                } if (value == 1) {
+                  _switch = 'stop';
+                } if (value == 2) {
+                  _switch = 'close';
                 }
-                _mqttClass.ctlSet('did', '3', 'dact', _switch, '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
-                },
+                print('value는 : $_switch');
+                _mqttClass.ctlSet('did', '1', 'dact', _switch, '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+
+              },
             ),
           )
         ],
