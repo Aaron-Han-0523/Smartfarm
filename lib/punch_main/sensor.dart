@@ -90,6 +90,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         backgroundColor: Color(0xffF5F9FC),
         leading: Icon(Icons.message_outlined),
         // 타이틀

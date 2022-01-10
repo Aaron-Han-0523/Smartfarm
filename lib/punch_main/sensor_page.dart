@@ -31,15 +31,47 @@ class _SensorPageState extends State<SensorPage> {
 
   @override
   Widget build(BuildContext context) {
-    // FutureBuilder listview
     return Scaffold(
-      body: Container(
-          color: Color(0xFFE6E6E6),
-          child: ListView(
-            padding: const EdgeInsets.all(8),
-            children: <Widget>[MyAccordian(), MyAccordian2(), MyGraph()],
-          )),
-    );
+        body: CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          toolbarHeight: 70.0,
+          backgroundColor: Color(0xffF5F9FC),
+          title: Align(
+            alignment: Alignment.topLeft,
+            child: Column(children: [
+              Text(
+                'Farm in Earth',
+                style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Text('siteDropdown',
+                      style: TextStyle(color: Colors.black, fontSize: 18))),
+            ]),
+          ),
+        ),
+        SliverList(
+          // itemExtent: 3.0,
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Container(
+                  alignment: Alignment.center,
+                  color: Color(0xffF5F9FC),
+                  child: Column(
+                    children: [
+                      MyAccordian(),
+                      MyAccordian2(),
+                      MyGraph(),
+                    ],
+                  ));
+            },
+            childCount: 1,
+          ),
+        ),
+      ],
+    ));
   }
 }
 
