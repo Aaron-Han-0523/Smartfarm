@@ -64,45 +64,45 @@ final MqttServerClient client =
     MqttServerClient('broker.mqttdashboard.com', '');
 
 // getData()
-void _getPumpData() async {
-  // pumps
-  final getPumps = await dio.get('$url/$userId/site/$siteId/controls/pumps');
-  stream.pumps = getPumps.data;
-  print('##### soilPage GET Pumps LIST: ${stream.pumps}');
-  print('##### soilPage GET Pumps LIST length: ${stream.pumps.length}');
-  stream.pump_name = [];
-  for (var i = 0; i < stream.pumps.length; i++) {
-    var pumpName = stream.pumps[i]['pump_name'];
-    stream.pump_name.add(pumpName);
-  }
+// void _getPumpData() async {
+//   // pumps
+//   final getPumps = await dio.get('$url/$userId/site/$siteId/controls/pumps');
+//   stream.pumps = getPumps.data;
+//   print('##### soilPage GET Pumps LIST: ${stream.pumps}');
+//   print('##### soilPage GET Pumps LIST length: ${stream.pumps.length}');
+//   stream.pump_name = [];
+//   for (var i = 0; i < stream.pumps.length; i++) {
+//     var pumpName = stream.pumps[i]['pump_name'];
+//     stream.pump_name.add(pumpName);
+//   }
 
-  List<bool> pumpStatus = [
-    stream.pump_1 == 'on' ? true : false,
-    stream.pump_2 == 'on' ? true : false
-  ];
-  print('pumpStatus: $pumpStatus');
-  stream.pumpStatus = pumpStatus;
-}
+//   List<bool> pumpStatus = [
+//     stream.pump_1 == 'on' ? true : false,
+//     stream.pump_2 == 'on' ? true : false
+//   ];
+//   print('pumpStatus: $pumpStatus');
+//   stream.pumpStatus = pumpStatus;
+// }
 
-void _getValveData() async {
-  // valves
-  final getValves = await dio.get('$url/$userId/site/$siteId/controls/valves');
-  stream.valves = getValves.data;
-  print('##### soilPage GET Valves LIST: ${stream.valves}');
-  print('##### soilPage GET Valves LIST length: ${stream.valves.length}');
-  stream.valve_name = [];
-  for (var i = 0; i < stream.valves.length; i++) {
-    var valveName = stream.valves[i]['valve_name'];
-    stream.valve_name.add(valveName);
-  }
+// void _getValveData() async {
+//   // valves
+//   final getValves = await dio.get('$url/$userId/site/$siteId/controls/valves');
+//   stream.valves = getValves.data;
+//   print('##### soilPage GET Valves LIST: ${stream.valves}');
+//   print('##### soilPage GET Valves LIST length: ${stream.valves.length}');
+//   stream.valve_name = [];
+//   for (var i = 0; i < stream.valves.length; i++) {
+//     var valveName = stream.valves[i]['valve_name'];
+//     stream.valve_name.add(valveName);
+//   }
 
-  // List<bool> valveStatus = [
-  //   stream.valve_1 == 'on' ? true : false,
-  //   stream.valve_2 == 'on' ? true : false
-  // ];
-  // print('##### 사실은 pump1, pump2인 valveStatus: $valveStatus');
-  // stream.valveStatus = valveStatus;
-}
+//   // List<bool> valveStatus = [
+//   //   stream.valve_1 == 'on' ? true : false,
+//   //   stream.valve_2 == 'on' ? true : false
+//   // ];
+//   // print('##### 사실은 pump1, pump2인 valveStatus: $valveStatus');
+//   // stream.valveStatus = valveStatus;
+// }
 
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);
@@ -114,8 +114,8 @@ class SoilControlPage extends StatefulWidget {
 class _SoilControlPageState extends State<SoilControlPage> {
   @override
   void initState() {
-    _getPumpData();
-    _getValveData();
+    // _getPumpData();
+    // _getValveData();
     super.initState();
   }
 
@@ -128,21 +128,25 @@ class _SoilControlPageState extends State<SoilControlPage> {
           slivers: <Widget>[
             SliverAppBar(
               pinned: true,
-              toolbarHeight: 250.0,
+              toolbarHeight: 220.0,
               backgroundColor: Color(0xffF5F9FC),
               title: Align(
                 alignment: Alignment.topLeft,
-                child: Column(children: [
-                  Text(
-                    'Farm in Earth',
-                    style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(left: 30),
-                      child: Text('siteDropdown',
-                          style: TextStyle(color: Colors.black, fontSize: 18))),
-                  MyWeather(),
-                ]),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Farm in Earth',
+                        style:
+                            TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 30),
+                          child: Text('siteDropdown',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 18))),
+                      MyWeather(),
+                    ]),
               ),
             ),
             SliverList(
@@ -197,18 +201,19 @@ class _MyWeatherState extends State<MyWeather> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
+      // alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Container(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          // padding: const EdgeInsets.only(left: 10, right: 10),
           child: Card(
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _firstCard(Icons.wb_sunny_rounded, "맑음", "12.5", "7860"),
+                    _firstCard(
+                        'assets/images/icon_shiny.png', "맑음", "12.5", "7860"),
                   ],
                 )),
             shape:
@@ -224,10 +229,10 @@ class _MyWeatherState extends State<MyWeather> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(Icons.device_thermostat, "내부 온도",
+                      _monitoring('assets/images/icon_temp.png', "내부 온도",
                           "$innerTemp" + "°C"),
-                      _monitoring(
-                          Icons.invert_colors_on, "내부 습도", "$innerHumid" + "%"),
+                      _monitoring('assets/images/icon_temp.png', "내부 습도",
+                          "$innerHumid" + "%"),
                     ],
                   )),
               shape: RoundedRectangleBorder(
@@ -239,10 +244,10 @@ class _MyWeatherState extends State<MyWeather> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _monitoring(
-                          Icons.device_thermostat, "토양 온도", "$soilTemp°C"),
-                      _monitoring(
-                          Icons.invert_colors_on, "토양 습도", "$soilHumid%"),
+                      _monitoring('assets/images/icon_temp.png', "토양 온도",
+                          "$soilTemp°C"),
+                      _monitoring('assets/images/icon_temp.png', "토양 습도",
+                          "$soilHumid%"),
                     ],
                   )),
               shape: RoundedRectangleBorder(
@@ -296,8 +301,6 @@ class _MyPumpsState extends State<MyPumps> {
               collapsedTextColor: Colors.white,
               iconColor: Colors.white,
               collapsedIconColor: Colors.white,
-              backgroundColor: Color(0xff2E8953),
-              collapsedBackgroundColor: Color(0xff2E8953),
               tilePadding: EdgeInsets.all(8.0),
               children: <Widget>[
                 Container(
@@ -389,70 +392,80 @@ class _MyValvesState extends State<MyValves> {
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        ExpansionTile(
-          title: Text('밸브 제어',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          textColor: Colors.white,
-          collapsedTextColor: Colors.white,
-          iconColor: Colors.white,
-          collapsedIconColor: Colors.white,
-          backgroundColor: Color(0xff2E8953),
-          collapsedBackgroundColor: Color(0xff2E8953),
-          tilePadding: EdgeInsets.all(8.0),
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(8.0),
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: valves.length,
-                  itemBuilder: (BuildContext context, var index) {
-                    return Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Visibility(
-                        visible: visibility[index],
-                        child: Card(
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text("밸브 (#${index + 1})"),
-                                  Spacer(),
-                                  FlutterSwitch(
-                                    activeColor: Colors.green,
-                                    inactiveColor: Colors.orange,
-                                    activeTextColor: Colors.white,
-                                    inactiveTextColor: Colors.white,
-                                    value: valveStatus[index],
-                                    showOnOff: true,
-                                    onToggle: (value) {
-                                      setState(() {
-                                        valveStatus[index] = value;
-                                        // String switchStatus = '';
-                                        // switchStatus =
-                                        //     value == true ? 'on' : 'off';
-                                        // _mqttClass.ctlSet(
-                                        //     'did',
-                                        //     "${index + 1}",
-                                        //     'dact',
-                                        //     switchStatus,
-                                        //     '/sf/e0000001/req/valve',
-                                        //     '/sf/e0000001/req/valve');
-                                      });
-                                    },
-                                  ),
-                                ],
-                              )),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                      ),
-                    );
-                  }),
-            )
-          ],
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Color(0xff2E8953),
+          child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: Text('  밸브 제어',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              textColor: Colors.white,
+              collapsedTextColor: Colors.white,
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              tilePadding: EdgeInsets.all(8.0),
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: valves.length,
+                      itemBuilder: (BuildContext context, var index) {
+                        return Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Visibility(
+                            visible: visibility[index],
+                            child: Card(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text("  밸브 (#${index + 1})",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Spacer(),
+                                      FlutterSwitch(
+                                        activeColor: Colors.green,
+                                        inactiveColor: Colors.orange,
+                                        activeTextColor: Colors.white,
+                                        inactiveTextColor: Colors.white,
+                                        value: valveStatus[index],
+                                        showOnOff: true,
+                                        onToggle: (value) {
+                                          setState(() {
+                                            valveStatus[index] = value;
+                                            // String switchStatus = '';
+                                            // switchStatus =
+                                            //     value == true ? 'on' : 'off';
+                                            // _mqttClass.ctlSet(
+                                            //     'did',
+                                            //     "${index + 1}",
+                                            //     'dact',
+                                            //     switchStatus,
+                                            //     '/sf/e0000001/req/valve',
+                                            //     '/sf/e0000001/req/valve');
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  )),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          ),
         ),
       ]),
     );
@@ -488,43 +501,54 @@ class _MyGraphState extends State<MyGraph> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: Color(0xffF5F9FC),
+      ),
       padding: EdgeInsets.all(8.0),
       alignment: Alignment.center,
-      child: Column(children: <Widget>[
-        ExpansionTile(
-          title: Text('그래프',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          textColor: Colors.white,
-          collapsedTextColor: Colors.white,
-          iconColor: Colors.white,
-          collapsedIconColor: Colors.white,
-          backgroundColor: Color(0xff2E8953),
-          collapsedBackgroundColor: Color(0xff2E8953),
-          tilePadding: EdgeInsets.all(8.0),
-          children: <Widget>[
-            Card(
-              margin: EdgeInsets.all(16.0),
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SfCartesianChart(
-                    margin: EdgeInsets.all(8.0),
-                    primaryXAxis: CategoryAxis(),
-                    primaryYAxis:
-                        NumericAxis(minimum: 0, maximum: 40, interval: 10),
-                    tooltipBehavior: _tooltip,
-                    series: <ChartSeries<_ChartData, String>>[
-                      BarSeries<_ChartData, String>(
-                          dataSource: data,
-                          xValueMapper: (_ChartData data, _) => data.x,
-                          yValueMapper: (_ChartData data, _) => data.y,
-                          name: '내부 온도',
-                          color: Color.fromRGBO(8, 142, 255, 1))
-                    ]),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Color(0xff2E8953),
+          child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: Text('  그래프',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              textColor: Colors.white,
+              collapsedTextColor: Colors.white,
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              tilePadding: EdgeInsets.all(8.0),
+              children: <Widget>[
+                Card(
+                  margin: EdgeInsets.all(16.0),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: SfCartesianChart(
+                        margin: EdgeInsets.all(8.0),
+                        primaryXAxis: CategoryAxis(),
+                        primaryYAxis:
+                            NumericAxis(minimum: 0, maximum: 40, interval: 10),
+                        tooltipBehavior: _tooltip,
+                        series: <ChartSeries<_ChartData, String>>[
+                          BarSeries<_ChartData, String>(
+                              dataSource: data,
+                              xValueMapper: (_ChartData data, _) => data.x,
+                              yValueMapper: (_ChartData data, _) => data.y,
+                              name: '내부 온도',
+                              color: Color.fromRGBO(8, 142, 255, 1))
+                        ]),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ]),
     );
@@ -532,11 +556,11 @@ class _MyGraphState extends State<MyGraph> {
 }
 
 Widget _firstCard(
-    dynamic icon, String weather, String temperNumber, String soilNumber) {
-  return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-    Icon(
+    String icon, String weather, String temperNumber, String soilNumber) {
+  return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+    Image.asset(
       icon,
-      size: 45,
+      scale: 2,
     ),
     Text(" $weather/$temperNumber°C ",
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -545,11 +569,14 @@ Widget _firstCard(
   ]);
 }
 
-Widget _monitoring(dynamic icon, String text, String temperText) {
+Widget _monitoring(String assets, String text, String temperText) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      Icon(icon, size: 20),
+      Image.asset(
+        assets,
+        scale: 4,
+      ),
       SizedBox(width: 10),
       Text(text),
       SizedBox(width: 20),

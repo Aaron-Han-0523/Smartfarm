@@ -56,6 +56,8 @@ class _HomeState extends State<Home> {
     stream.sensor_id = []; // pump1, pump2
     stream.sensorStatus = []; // pump1's on/off, pump2's on/off
 
+    stream.pumpStatus = [];
+
     getData();
     super.initState();
   }
@@ -86,6 +88,13 @@ class _HomeState extends State<Home> {
         var pumpName = stream.pumps[i]['pump_name'];
         stream.pump_name.add(pumpName);
       }
+
+      List<bool> pumpStatus = [
+        stream.pump_1 == 'on' ? true : false,
+        stream.pump_2 == 'on' ? true : false
+      ];
+      print('pumpStatus: $pumpStatus');
+      stream.pumpStatus = pumpStatus;
 
       // valves
       final getValves =
