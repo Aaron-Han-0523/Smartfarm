@@ -32,50 +32,60 @@ class _SensorPageState extends State<SensorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          pinned: true,
-          toolbarHeight: 70.0,
-          backgroundColor: Color(0xffF5F9FC),
-          title: Align(
-            alignment: Alignment.topLeft,
-            child: Column(children: [
-              Text(
-                'Farm in Earth',
-                style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text('siteDropdown',
-                      style: TextStyle(color: Colors.black, fontSize: 18))),
-            ]),
+    return Container(
+      color: Colors.red,
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            toolbarHeight: 70.0,
+            backgroundColor: Color(0xffF5F9FC),
+            title: Align(
+              alignment: Alignment.topLeft,
+              child: Column(children: [
+                Text(
+                  'Farm in Earth',
+                  style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(left: 30),
+                    child: Text('siteDropdown',
+                        style: TextStyle(color: Colors.black, fontSize: 18))),
+              ]),
+            ),
           ),
-        ),
-        SliverList(
-          // itemExtent: 3.0,
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xffF5F9FC),
+          SliverList(
+            // itemExtent: 3.0,
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  color: Colors.red,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xffF5F9FC),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                    ),
+                    alignment: Alignment.center,
+                    // color: Color(0xffF5F9FC),
+
+                    child: Column(
+                      children: [
+                        MyAccordian(),
+                        MyAccordian2(),
+                        MyGraph(),
+                      ],
+                    ),
                   ),
-                  alignment: Alignment.center,
-                  // color: Color(0xffF5F9FC),
-                  child: Column(
-                    children: [
-                      MyAccordian(),
-                      MyAccordian2(),
-                      MyGraph(),
-                    ],
-                  ));
-            },
-            childCount: 1,
+                );
+              },
+              childCount: 1,
+            ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }
 
