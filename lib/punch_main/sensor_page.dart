@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../globals/stream.dart' as stream;
 /*
@@ -57,8 +58,11 @@ class _SensorPageState extends State<SensorPage> {
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xffF5F9FC),
+                  ),
                   alignment: Alignment.center,
-                  color: Color(0xffF5F9FC),
+                  // color: Color(0xffF5F9FC),
                   child: Column(
                     children: [
                       MyAccordian(),
@@ -87,27 +91,44 @@ class _MyAccordianState extends State<MyAccordian> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          color: Colors.grey[350],
-          child: ExpansionTile(
-            backgroundColor: Colors.grey[350],
-            initiallyExpanded: true,
-            title: Text('외부환경'),
-            children: <Widget>[
-              Row(children: [
-                _cards('외부온도', extTemp, true, Icons.wb_sunny),
-                _cards('외부습도', extHumid, true, Icons.invert_colors)
-              ]),
-              Row(children: [
-                _cards('강우', '12.5', true, Icons.wb_sunny),
-                _cards('풍향', '12.5', true, Icons.wb_sunny)
-              ]),
-              Row(children: [
-                _cards('풍속', '12.5', true, Icons.wb_sunny),
-                _cards('일사량', '12.5', true, Icons.wb_sunny)
-              ])
-            ],
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            decoration: _decorations(),
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Image.asset(
+                      'assets/images/icon_exevn.png',
+                      scale: 3,
+                    ),
+                  ),
+                  Text(
+                    '외부환경',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              children: <Widget>[
+                Row(children: [
+                  _cards('외부온도', extTemp, true, 'assets/images/icon_temp.png'),
+                  _cards('외부습도', extHumid, true, 'assets/images/icon_humid.png')
+                ]),
+                Row(children: [
+                  _cards('강우', '12.5', true, 'assets/images/icon_rainy.png'),
+                  _cards('풍향', '12.5', true, 'assets/images/icon_wind.png')
+                ]),
+                Row(children: [
+                  _cards('풍속', '12.5', true, 'assets/images/icon_windsp.png'),
+                  _cards('일사량', '12.5', true, 'assets/images/icon_shiny.png')
+                ])
+              ],
+            ),
           ),
         ),
       ],
@@ -127,25 +148,44 @@ class _MyAccordian2State extends State<MyAccordian2> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          color: Colors.grey[350],
-          margin: EdgeInsets.only(bottom: 10),
-          child: ExpansionTile(
-            backgroundColor: Colors.grey[350],
-            title: Text('내부환경'),
-            children: <Widget>[
-              Row(children: [
-                _cards('내부온도', innerTemp, true, Icons.wb_sunny),
-                _cards('내부습도', innerHumid, true, Icons.wb_sunny)
-              ]),
-              Row(children: [
-                _cards('토양온도', soilTemp, true, Icons.wb_sunny),
-                _cards('토양습도', soilHumid, true, Icons.wb_sunny)
-              ]),
-              Row(children: [
-                _cards('토양건조도', '12.5', true, Icons.wb_sunny),
-              ]),
-            ],
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            decoration: _decorations(),
+            child: ExpansionTile(
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Image.asset(
+                      'assets/images/icon_inevn.png',
+                      scale: 3,
+                    ),
+                  ),
+                  Text(
+                    '내부환경',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              children: <Widget>[
+                Row(children: [
+                  _cards(
+                      '내부온도', innerTemp, true, 'assets/images/icon_temp.png'),
+                  _cards(
+                      '내부습도', innerHumid, true, 'assets/images/icon_temp.png')
+                ]),
+                Row(children: [
+                  _cards('토양온도', soilTemp, true, 'assets/images/icon_temp.png'),
+                  _cards('토양습도', soilHumid, true, 'assets/images/icon_temp.png')
+                ]),
+                Row(children: [
+                  _cards('토양건조도', '12.5', true, 'assets/images/icon_temp.png'),
+                ]),
+              ],
+            ),
           ),
         ),
       ],
@@ -165,13 +205,30 @@ class _MyGraphState extends State<MyGraph> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          color: Colors.grey[350],
-          child: ExpansionTile(
-            backgroundColor: Colors.grey[350],
-            title: Text("그래프"),
-            children: [_lineChart()],
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            decoration: _decorations(),
+            child: ExpansionTile(
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Image.asset(
+                      'assets/images/icon_graph.png',
+                      scale: 3,
+                    ),
+                  ),
+                  Text(
+                    "그래프",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              children: [_lineChart()],
+            ),
           ),
         ),
       ],
@@ -196,24 +253,27 @@ Widget _lineChart() {
     _SalesData('May', 28)
   ];
 
-  return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      series: <ChartSeries<_SalesData, String>>[
-        LineSeries<_SalesData, String>(
-            dataSource: data,
-            xValueMapper: (_SalesData sales, _) => sales.year,
-            yValueMapper: (_SalesData sales, _) => sales.sales,
-            name: 'Sales',
-            // Enable data label
-            dataLabelSettings: DataLabelSettings(isVisible: false)),
-        LineSeries<_SalesData, String>(
-            dataSource: subData,
-            xValueMapper: (_SalesData sales, _) => sales.year,
-            yValueMapper: (_SalesData sales, _) => sales.sales,
-            name: 'Sales',
-            // Enable data label
-            dataLabelSettings: DataLabelSettings(isVisible: false))
-      ]);
+  return Container(
+    color: Colors.white,
+    child: SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        series: <ChartSeries<_SalesData, String>>[
+          LineSeries<_SalesData, String>(
+              dataSource: data,
+              xValueMapper: (_SalesData sales, _) => sales.year,
+              yValueMapper: (_SalesData sales, _) => sales.sales,
+              name: 'Sales',
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: false)),
+          LineSeries<_SalesData, String>(
+              dataSource: subData,
+              xValueMapper: (_SalesData sales, _) => sales.year,
+              yValueMapper: (_SalesData sales, _) => sales.sales,
+              name: 'Sales',
+              // Enable data label
+              dataLabelSettings: DataLabelSettings(isVisible: false))
+        ]),
+  );
 }
 
 class _SalesData {
@@ -223,31 +283,36 @@ class _SalesData {
   final double sales;
 }
 
-Widget _cards(var title, var subtitle, bool visibles, dynamic icon) {
+// dynamic icon
+Widget _cards(var title, var subtitle, bool visibles, String assets) {
   return Visibility(
     visible: visibles,
     child: Container(
       // alignment: Alignment.center,
-      margin: EdgeInsets.only(left: 20, right: 5, bottom: 15),
-      height: 90,
-      width: 160,
+      margin: EdgeInsets.only(left: 7, right: 5, bottom: 10),
+      height: Get.height * 1 / 9,
+      width: Get.height * 1 / 4.5,
       decoration: _decoration(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Text(title,
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600)),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 23),
+              child: Text(title,
+                  style: TextStyle(color: Color(0xff2E8953), fontSize: 12)),
+            ),
             Text(subtitle,
                 style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600)),
+                    color: Color(0xff222222),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500)),
           ]),
-          Icon(icon, size: 60, color: Colors.black54)
+          Image.asset(
+            assets,
+            scale: 2,
+          )
+          // Icon(icon, size: 60, color: Colors.black54)
         ],
       ),
     ),
@@ -257,6 +322,21 @@ Widget _cards(var title, var subtitle, bool visibles, dynamic icon) {
 BoxDecoration _decoration() {
   return BoxDecoration(
     color: Colors.white,
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 2,
+        offset: Offset(3, 5), // changes position of shadow
+      ),
+    ],
+  );
+}
+
+BoxDecoration _decorations() {
+  return BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    color: Color(0xff2E8953),
     boxShadow: [
       BoxShadow(
         color: Colors.grey.withOpacity(0.5),
