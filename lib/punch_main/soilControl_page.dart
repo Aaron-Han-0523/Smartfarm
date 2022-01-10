@@ -123,23 +123,51 @@ class _SoilControlPageState extends State<SoilControlPage> {
   Widget build(BuildContext context) {
     // FutureBuilder listview
     return Scaffold(
-      backgroundColor: Color(0xFFE6E6E6),
-      body: Column(
-        children: [
-          MyWeather(), // 날씨, 고정
-          Flexible(
-            child: ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: <Widget>[
-                MyPumps(), // 관수 펌프 제어
-                MyValves(), // 밸브 제어
-                MyGraph(), // 그래프
-              ],
+        backgroundColor: Color(0xFFE6E6E6),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              toolbarHeight: 250.0,
+              backgroundColor: Color(0xffF5F9FC),
+              title: Align(
+                alignment: Alignment.topLeft,
+                child: Column(children: [
+                  Text(
+                    'Farm in Earth',
+                    style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(left: 30),
+                      child: Text('siteDropdown',
+                          style: TextStyle(color: Colors.black, fontSize: 18))),
+                  MyWeather(),
+                ]),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+            SliverList(
+              // itemExtent: 3.0,
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffF5F9FC),
+                      ),
+                      alignment: Alignment.center,
+                      // color: Color(0xffF5F9FC),
+                      child: Column(
+                        children: [
+                          MyPumps(),
+                          MyValves(),
+                          MyGraph(),
+                        ],
+                      ));
+                },
+                childCount: 1,
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -180,12 +208,11 @@ class _MyWeatherState extends State<MyWeather> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _weatherIcon(),
-                    _temperature(),
-                    Text("토양 전도도"),
-                    Text("7860 cm/μs")
+                    _firstCard(Icons.wb_sunny_rounded, "맑음", "12.5", "7860"),
                   ],
                 )),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
         ),
         Row(
@@ -203,6 +230,8 @@ class _MyWeatherState extends State<MyWeather> {
                           Icons.invert_colors_on, "내부 습도", "$innerHumid" + "%"),
                     ],
                   )),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
             ),
             Card(
               child: Padding(
@@ -216,6 +245,8 @@ class _MyWeatherState extends State<MyWeather> {
                           Icons.invert_colors_on, "토양 습도", "$soilHumid%"),
                     ],
                   )),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
             ),
           ],
         ),
@@ -246,62 +277,87 @@ class _MyPumpsState extends State<MyPumps> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(8.0),
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        ExpansionTile(
-          initiallyExpanded: true,
-          title: Text('관수 펌프 제어'),
-          children: <Widget>[
-            Container(
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: pumps.length,
-                  itemBuilder: (BuildContext context, var index) {
-                    return Container(
-                      child: Visibility(
-                        visible: visibility[index],
-                        child: Card(
-                          child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text("펌프 (#${index + 1})"),
-                                  Spacer(),
-                                  FlutterSwitch(
-                                    activeColor: Colors.green,
-                                    inactiveColor: Colors.orange,
-                                    activeTextColor: Colors.white,
-                                    inactiveTextColor: Colors.white,
-                                    value: pumpStatus[index],
-                                    showOnOff: true,
-                                    onToggle: (value) {
-                                      setState(() {
-                                        pumpStatus[index] = value;
-                                        String switchStatus = '';
-                                        switchStatus =
-                                            value == true ? 'on' : 'off';
-                                        _mqttClass.ctlSet(
-                                            'did',
-                                            "${index + 1}",
-                                            'dact',
-                                            switchStatus,
-                                            '/sf/e0000001/req/pump',
-                                            '/sf/e0000001/req/pump');
-                                      });
-                                    },
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ),
-                    );
-                  }),
-            )
-          ],
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Color(0xff2E8953),
+          child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              title: Text('  관수 펌프 제어',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              textColor: Colors.white,
+              collapsedTextColor: Colors.white,
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              backgroundColor: Color(0xff2E8953),
+              collapsedBackgroundColor: Color(0xff2E8953),
+              tilePadding: EdgeInsets.all(8.0),
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: pumps.length,
+                      itemBuilder: (BuildContext context, var index) {
+                        return Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Visibility(
+                            visible: visibility[index],
+                            child: Card(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text("  펌프 (#${index + 1})",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Spacer(),
+                                      FlutterSwitch(
+                                        activeColor: Colors.green,
+                                        inactiveColor: Colors.orange,
+                                        activeTextColor: Colors.white,
+                                        inactiveTextColor: Colors.white,
+                                        value: pumpStatus[index],
+                                        showOnOff: true,
+                                        onToggle: (value) {
+                                          setState(() {
+                                            pumpStatus[index] = value;
+                                            String switchStatus = '';
+                                            switchStatus =
+                                                value == true ? 'on' : 'off';
+                                            _mqttClass.ctlSet(
+                                                'did',
+                                                "${index + 1}",
+                                                'dact',
+                                                switchStatus,
+                                                '/sf/e0000001/req/pump',
+                                                '/sf/e0000001/req/pump');
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  )),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          ),
         ),
       ]),
     );
@@ -329,24 +385,35 @@ class _MyValvesState extends State<MyValves> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(8.0),
       alignment: Alignment.center,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         ExpansionTile(
-          title: Text('밸브 제어'),
+          title: Text('밸브 제어',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          textColor: Colors.white,
+          collapsedTextColor: Colors.white,
+          iconColor: Colors.white,
+          collapsedIconColor: Colors.white,
+          backgroundColor: Color(0xff2E8953),
+          collapsedBackgroundColor: Color(0xff2E8953),
+          tilePadding: EdgeInsets.all(8.0),
           children: <Widget>[
             Container(
+              padding: EdgeInsets.all(8.0),
               child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: valves.length,
                   itemBuilder: (BuildContext context, var index) {
                     return Container(
+                      padding: EdgeInsets.all(8.0),
                       child: Visibility(
                         visible: visibility[index],
                         child: Card(
                           child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -378,6 +445,8 @@ class _MyValvesState extends State<MyValves> {
                                   ),
                                 ],
                               )),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
                         ),
                       ),
                     );
@@ -418,43 +487,62 @@ class _MyGraphState extends State<MyGraph> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      ExpansionTile(
-        title: Text('그래프'),
-        children: <Widget>[
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  primaryYAxis:
-                      NumericAxis(minimum: 0, maximum: 40, interval: 10),
-                  tooltipBehavior: _tooltip,
-                  series: <ChartSeries<_ChartData, String>>[
-                    BarSeries<_ChartData, String>(
-                        dataSource: data,
-                        xValueMapper: (_ChartData data, _) => data.x,
-                        yValueMapper: (_ChartData data, _) => data.y,
-                        name: '내부 온도',
-                        color: Color.fromRGBO(8, 142, 255, 1))
-                  ]),
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      alignment: Alignment.center,
+      child: Column(children: <Widget>[
+        ExpansionTile(
+          title: Text('그래프',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          textColor: Colors.white,
+          collapsedTextColor: Colors.white,
+          iconColor: Colors.white,
+          collapsedIconColor: Colors.white,
+          backgroundColor: Color(0xff2E8953),
+          collapsedBackgroundColor: Color(0xff2E8953),
+          tilePadding: EdgeInsets.all(8.0),
+          children: <Widget>[
+            Card(
+              margin: EdgeInsets.all(16.0),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SfCartesianChart(
+                    margin: EdgeInsets.all(8.0),
+                    primaryXAxis: CategoryAxis(),
+                    primaryYAxis:
+                        NumericAxis(minimum: 0, maximum: 40, interval: 10),
+                    tooltipBehavior: _tooltip,
+                    series: <ChartSeries<_ChartData, String>>[
+                      BarSeries<_ChartData, String>(
+                          dataSource: data,
+                          xValueMapper: (_ChartData data, _) => data.x,
+                          yValueMapper: (_ChartData data, _) => data.y,
+                          name: '내부 온도',
+                          color: Color.fromRGBO(8, 142, 255, 1))
+                    ]),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
             ),
-          ),
-        ],
-      ),
-    ]);
+          ],
+        ),
+      ]),
+    );
   }
 }
 
-Widget _weatherIcon() {
-  return Icon(
-    Icons.wb_sunny_rounded,
-    size: 40,
-  );
-}
-
-Widget _temperature() {
-  return Text("맑음/12.5°C");
+Widget _firstCard(
+    dynamic icon, String weather, String temperNumber, String soilNumber) {
+  return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+    Icon(
+      icon,
+      size: 45,
+    ),
+    Text(" $weather/$temperNumber°C ",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+    Text(" 토양 전도도 $soilNumber cm/μs",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+  ]);
 }
 
 Widget _monitoring(dynamic icon, String text, String temperText) {
