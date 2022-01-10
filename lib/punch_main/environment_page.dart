@@ -20,6 +20,12 @@ import '../globals/stream.dart' as stream;
 // MQTT class
 MqttClass _mqttClass = MqttClass();
 
+//Api's
+var api = dotenv.env['PHONE_IP'];
+var uris = '$api/farm';
+
+var dio = Dio();
+
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
 
@@ -28,7 +34,6 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
-
 // globalKey
   var innerTemp = stream.temp_1; // 내부온도
   var extTemp = stream.exttemp_1; // 외부온도
@@ -53,15 +58,22 @@ class _EnvironmentState extends State<EnvironmentPage> {
   //graph visibility
   bool _graph = true;
 
+  // expanded tile
+  bool _customTileExpanded = false;
+
+
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Color(0xffF5F9FC),
         body: Column(children: [
           Container(
             alignment: Alignment.center,
             height: MediaQuery.of(context).size.height * 0.3,
-            color: Colors.grey[350], //색상변경 필요
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -87,98 +99,168 @@ class _EnvironmentState extends State<EnvironmentPage> {
             child: ListView(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  color: Colors.grey[350],
-                  child: ExpansionTile(
-                    backgroundColor: Colors.grey[350],
-                    title: Text('측창 개폐기 제어',
-                        style: _textStyle(Colors.black, FontWeight.w500, 20)),
-                    children: <Widget>[
-                      Column(
-                        children: [
-                          _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
-                          _toggleSwitch(
-                            context,
-                            '츨장 (전)',
-                            status1,
-                          ),
-                          _toggleSwitch(
-                            context,
-                            '측장 (후)',
-                            status2,
-                          ),
-                          _toggleSwitch(
-                            context,
-                            '측장 (좌)',
-                            status3,
-                          ),
-                          _toggleSwitch(
-                            context,
-                            '측장 (우)',
-                            status4,
-                          ),
+                  margin: new EdgeInsets.fromLTRB(5, 10, 10, 5),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    color: Color(0xff2E8953),
+                    child: Theme(
+                        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        // backgroundColor: Color(0xff2E8953),
+                        trailing: Icon(
+                            _customTileExpanded
+                            ? Icons.keyboard_arrow_up_rounded
+                                : Icons.keyboard_arrow_down_rounded
+                        ),
+                        onExpansionChanged: (bool expanded) {
+                          setState(() {
+                            _customTileExpanded = expanded;
+                          });
+                        },
+                        title: Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Text('측창 개폐기 제어',
+                              style: _textStyle(
+                                  Color(0xffFFFFFF), FontWeight.w500, 20)),
+                        ),
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 15, bottom: 15),
+                            child: Column(
+                              children: [
+                                _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '츨장 (전)',
+                                  status1,
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '측장 (후)',
+                                  status2,
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '측장 (좌)',
+                                  status3,
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '측장 (우)',
+                                  status4,
+                                ),
+                              ],
+                            ),
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  color: Colors.grey[350],
-                  child: ExpansionTile(
-                    backgroundColor: Colors.grey[350],
-                    title: Text('천창 개폐기 제어',
-                        style: _textStyle(Colors.black, FontWeight.w500, 20)),
-                    children: <Widget>[
-                      Column(
-                        children: [
-                          _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
-                          _toggleSwitch(
-                            context,
-                            '천창 (#1)',
-                            status5,
-                          ),
-                          _toggleSwitch(
-                            context,
-                            '천창 (#2)',
-                            status6,
-                          ),
-                          _toggleSwitch(
-                            context,
-                            '천창 (#3)',
-                            status7,
-                          ),
+                  margin: EdgeInsets.fromLTRB(5,10,10,5),
+                  child: Card(
+                    color: Color(0xff2E8953),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        title: Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Text('천창 개폐기 제어',
+                              style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                        ),
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 15, bottom: 15),
+                            child: Column(
+                              children: [
+                                _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '천창 (#1)',
+                                  status5,
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '천창 (#2)',
+                                  status6,
+                                ),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch(
+                                  context,
+                                  '천창 (#3)',
+                                  status7,
+                                ),
+                              ],
+                            ),
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  color: Colors.grey[350],
-                  child: ExpansionTile(
-                    backgroundColor: Colors.grey[350],
-                    title: Text('기타제어',
-                        style: _textStyle(Colors.black, FontWeight.w500, 20)),
-                    children: <Widget>[
-                      Column(
-                        children: [
-                          _toggleSwitch2(context, '환풍기 (#1)', status8),
-                          _toggleSwitch2(context, '환풍기 (#2)', status9),
-                          _toggleSwitch2(context, '외부 제어 (#1)', status10),
+                  margin: EdgeInsets.fromLTRB(5,10,10,5),
+                  child: Card(
+                    color: Color(0xff2E8953),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        title: Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Text('기타제어',
+                              style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                        ),
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 15, bottom: 15),
+                            child: Column(
+                              children: [
+                                _toggleSwitch2(context, '환풍기 (#1)', status8),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch2(context, '환풍기 (#2)', status9),
+                                SizedBox(height: Get.height * 0.01),
+                                _toggleSwitch2(context, '외부 제어 (#1)', status10),
+                              ],
+                            ),
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  color: Colors.grey[350],
-                  child: ExpansionTile(
-                    backgroundColor: Colors.grey[350],
-                    title: Text('그래프',
-                        style: _textStyle(Colors.black, FontWeight.w500, 20)),
-                    children: <Widget>[_lineChart(_graph)],
+                  margin: EdgeInsets.fromLTRB(5,10,10,5),
+                  child: Card(
+                    color: Color(0xff2E8953),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        title: Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Text('그래프',
+                              style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                        ),
+                        children: <Widget>[_lineChart(_graph)],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -269,52 +351,37 @@ TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
 BoxDecoration _decoration() {
   return BoxDecoration(
     color: Colors.white,
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        blurRadius: 2,
-        offset: Offset(3, 5), // changes position of shadow
-      ),
-    ],
+    borderRadius: BorderRadius.circular(20),
   );
 }
 
-
-var api = dotenv.env['PHONE_IP'];
-var uris = '$api/farm';
-
-var dio = Dio();
-
 // 측창 개폐기 제어 전체
 Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
-  var position = positions;
-  var userId = userIds;
-  var siteId = siteIds;
   return Visibility(
     visible: true,
     child: Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-      height: Get.width * 0.15,
+      height: Get.height * 0.09,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-              padding: EdgeInsets.only(left: 15),
+              padding: EdgeInsets.only(left: 20),
               child: Text(text,
-                  style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 16))),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: ToggleSwitch(
-              minWidth: 50.0,
-              cornerRadius: 50.0,
+              minWidth: 75.0,
+              cornerRadius: 80.0,
               activeBgColors: [
-                [Colors.green],
-                [Colors.orangeAccent],
-                [Colors.black54]
+                [Color(0xffe3fbed)],
+                [Color(0xffFFD6D6)],
+                [Color(0xfff2f2f2)]
               ],
-              activeFgColor: Colors.white,
-              inactiveBgColor: Colors.grey[400],
-              inactiveFgColor: Colors.white,
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
               initialLabelIndex: 1,
               totalSwitches: 3,
               labels: ['전체열림', '전체정지', '전체닫힘'],
@@ -322,19 +389,19 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
               onToggle: (value) async {
                 String _switch = '';
 
-                if (value == 0){
+                if (value == 0) {
                   _switch = 'open';
-
-                } else if (value == 1) {
-                  _switch == 'stop';
-
-                } else if (value == 2) {
-                  _switch == 'close';
-
+                }
+                if (value == 1) {
+                  _switch = 'stop';
+                }
+                if (value == 2) {
+                  _switch = 'close';
                 }
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
-                print('open인가 : $_switch');
+                print('value는 : $_switch');
+
               },
             ),
           )
@@ -344,6 +411,7 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
     ),
   );
 }
+
 
 // 측창 개폐기 제어
 Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
@@ -351,27 +419,27 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
     visible: visibles,
     child: Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-      height: MediaQuery.of(context).size.width * 0.15,
+      height: Get.height * 0.09,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-              padding: EdgeInsets.only(left: 15),
+              padding: EdgeInsets.only(left: 20),
               child: Text(text,
-                  style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 16))),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: ToggleSwitch(
-              minWidth: 50.0,
-              cornerRadius: 50.0,
+              minWidth: 60.0,
+              cornerRadius: 80.0,
               activeBgColors: [
-                [Colors.green],
-                [Colors.orangeAccent],
-                [Colors.black54]
+                [Color(0xffe3fbed)],
+                [Color(0xffFFD6D6)],
+                [Color(0xfff2f2f2)]
               ],
-              activeFgColor: Colors.white,
-              inactiveBgColor: Colors.grey[400],
-              inactiveFgColor: Colors.white,
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
               initialLabelIndex: 1,
               totalSwitches: 3,
               labels: ['열림', '정지', '닫힘'],
@@ -379,18 +447,20 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
               onToggle: (value) async {
                 String _switch = '';
 
-                if (value == 0){
+                if (value == 0) {
                   _switch = 'open';
-                } if (value == 1) {
+                }
+                if (value == 1) {
                   _switch = 'stop';
-                } if (value == 2) {
+                }
+                if (value == 2) {
                   _switch = 'close';
                 }
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
                 print('value는 : $_switch');
-                _mqttClass.ctlSet('did', '1', 'dact', _switch, '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-
+                _mqttClass.ctlSet('did', '1', 'dact', _switch,
+                    '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
               },
             ),
           )
@@ -401,38 +471,50 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
   );
 }
 
-@override
+//기타제어
 Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
   return Visibility(
     visible: visibles,
     child: Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-      height: MediaQuery.of(context).size.width * 0.15,
+      height: Get.height * 0.09,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-              padding: EdgeInsets.only(left: 15),
+              padding: EdgeInsets.only(left: 20),
               child: Text(text,
-                  style: _textStyle(Colors.grey, FontWeight.w600, 16))),
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 16))),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: ToggleSwitch(
-              minWidth: 50.0,
-              cornerRadius: 50.0,
+              minWidth: 60.0,
+              cornerRadius: 80.0,
               activeBgColors: [
-                [Colors.green],
-                [Colors.orangeAccent]
+                [Color(0xffe3fbed)],
+                [Color(0xfff2f2f2)]
               ],
-              activeFgColor: Colors.white,
-              inactiveBgColor: Colors.grey[400],
-              inactiveFgColor: Colors.white,
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
               initialLabelIndex: 1,
               totalSwitches: 2,
               labels: ['ON', 'OFF'],
               radiusStyle: true,
-              onToggle: (index) {
-                print('switched to: $index');
+              onToggle: (value) async {
+                String _switch = '';
+
+                if (value == 0) {
+                  _switch = 'open';
+                }
+                if (value == 1) {
+                  _switch = 'stop';
+                }
+                print('toggle value는 : $value');
+                print('toggle type은 : ${value.runtimeType}');
+                print('value는 : $_switch');
+                // _mqttClass.ctlSet('did', '1', 'dact', _switch,
+                //     '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
               },
             ),
           )
@@ -443,6 +525,8 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
   );
 }
 
+
+// 그래프
 Widget _lineChart(bool _visibles) {
   List<_SalesData> data = [
     _SalesData('Jan', 35),
@@ -462,24 +546,26 @@ Widget _lineChart(bool _visibles) {
 
   return Visibility(
     visible: _visibles,
-    child: SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        series: <ChartSeries<_SalesData, String>>[
-          LineSeries<_SalesData, String>(
-              dataSource: data,
-              xValueMapper: (_SalesData sales, _) => sales.year,
-              yValueMapper: (_SalesData sales, _) => sales.sales,
-              name: 'Sales',
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false)),
-          LineSeries<_SalesData, String>(
-              dataSource: subData,
-              xValueMapper: (_SalesData sales, _) => sales.year,
-              yValueMapper: (_SalesData sales, _) => sales.sales,
-              name: 'Sales',
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false))
-        ]),
+    child: Padding(
+      padding: EdgeInsets.all(15),
+      child: SfCartesianChart(
+        backgroundColor: Color(0xffFFFFFF),
+          primaryXAxis: CategoryAxis(),
+          series: <ChartSeries<_SalesData, String>>[
+            LineSeries<_SalesData, String>(
+                dataSource: data,
+                xValueMapper: (_SalesData sales, _) => sales.year,
+                yValueMapper: (_SalesData sales, _) => sales.sales,
+                name: 'Sales',
+                dataLabelSettings: DataLabelSettings(isVisible: false)),
+            LineSeries<_SalesData, String>(
+                dataSource: subData,
+                xValueMapper: (_SalesData sales, _) => sales.year,
+                yValueMapper: (_SalesData sales, _) => sales.sales,
+                name: 'Sales',
+                dataLabelSettings: DataLabelSettings(isVisible: false))
+          ]),
+    ),
   );
 }
 
