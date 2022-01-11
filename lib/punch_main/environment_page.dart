@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:plms_start/mqtt/mqtt.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -61,6 +62,10 @@ bool _graph = true;
 // expanded tile
 bool _customTileExpanded = false;
 
+// temp
+var temp = int.parse(extTemp);
+
+
 // getData()
 void _getMotorData() async {
   // pumps
@@ -92,6 +97,22 @@ class EnvironmentPage extends StatefulWidget {
 
 class _EnvironmentState extends State<EnvironmentPage> {
 
+  void getStatus() async {
+    String _switchStatus = await motor_1;
+    print('toggle motor는 : $motor_1');
+
+    setState(() {
+      if (_switchStatus == 'open') {
+
+      } else if (_switchStatus == 'stop') {
+
+      } else if (_switchStatus == 'close') {
+
+      }
+    });
+
+  }
+
 
   void initState() {
     super.initState();
@@ -100,31 +121,36 @@ class _EnvironmentState extends State<EnvironmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xffF5F9FC),
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              toolbarHeight: Get.height * 0.45,
-              backgroundColor: Color(0xffF5F9FC),
-              title: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Farm in Earth',
-                    style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
+        backgroundColor: Color(0xff2E6645),
+        body: Container(
+          // width: Get.width * 6,
+          decoration: BoxDecoration(
+            color: Color(0xffF5F9FC),
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: true,
+                toolbarHeight: Get.height * 0.45,
+                backgroundColor: Color(0xffF5F9FC),
+                title: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Farm in Earth',
+                      style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                    ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('siteDropdown',
-                      style: TextStyle(color: Colors.black, fontSize: 18)),
-                ),
-                SizedBox(height : Get.height * 0.05),
-                Container(
-                  child: Column(
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('siteDropdown',
+                        style: TextStyle(color: Colors.black, fontSize: 18)),
+                  ),
+                  SizedBox(height : Get.height * 0.05),
+                  Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _mainMonitoring(context),
@@ -142,197 +168,186 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                 '$innerHumid%'),
                             _subMonitoring(context,
                                 'assets/images/icon_wind.png', "풍향", "남동향",
-                                'assets/images/icon_windsp.png', "풍속", "1.2m/s"),
+                                'assets/images/icon_windsp.png', " 풍속", "1.2m/s"),
                           ],
                         )
                       ]),
-                ),
-              ]),
-            ),
-            SliverList(
-              // itemExtent: 3.0,
-              delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xffF5F9FC),
-                      ),
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: new EdgeInsets.fromLTRB(5, 10, 10, 5),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              color: Color(0xff2E8953),
-                              child: Theme(
-                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                                child: ExpansionTile(
-                                  // backgroundColor: Color(0xff2E8953),
-                                  trailing: Icon(
-                                      _customTileExpanded
-                                          ? Icons.keyboard_arrow_up_rounded
-                                          : Icons.keyboard_arrow_down_rounded
-                                  ),
-                                  onExpansionChanged: (bool expanded) {
-                                    setState(() {
-                                      _customTileExpanded = expanded;
-                                    });
-                                  },
-                                  title: Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Text('측창 개폐기 제어',
-                                        style: _textStyle(
-                                            Color(0xffFFFFFF), FontWeight.w500, 20)),
-                                  ),
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 15, bottom: 15),
-                                      child: Column(
-                                        children: [
-                                          _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '츨장 (전)',
-                                            status1,
-                                          ),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '측장 (후)',
-                                            status2,
-                                          ),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '측장 (좌)',
-                                            status3,
-                                          ),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '측장 (우)',
-                                            status4,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(5,10,10,5),
-                            child: Card(
-                              color: Color(0xff2E8953),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Theme(
-                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                                child: ExpansionTile(
-                                  title: Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Text('천창 개폐기 제어',
-                                        style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
-                                  ),
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 15, bottom: 15),
-                                      child: Column(
-                                        children: [
-                                          _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '천창 (#1)',
-                                            status5,
-                                          ),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '천창 (#2)',
-                                            status6,
-                                          ),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch(
-                                            context,
-                                            '천창 (#3)',
-                                            status7,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(5,10,10,5),
-                            child: Card(
-                              color: Color(0xff2E8953),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Theme(
-                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                                child: ExpansionTile(
-                                  title: Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Text('기타제어',
-                                        style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
-                                  ),
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 15, bottom: 15),
-                                      child: Column(
-                                        children: [
-                                          _toggleSwitch2(context, '환풍기 (#1)', status8),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch2(context, '환풍기 (#2)', status9),
-                                          SizedBox(height: Get.height * 0.01),
-                                          _toggleSwitch2(context, '외부 제어 (#1)', status10),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(5,10,10,5),
-                            child: Card(
-                              color: Color(0xff2E8953),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Theme(
-                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                                child: ExpansionTile(
-                                  title: Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Text('그래프',
-                                        style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
-                                  ),
-                                  children: <Widget>[_lineChart(_graph)],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ));
-                },
-                childCount: 1,
+                ]),
               ),
-            ),
-          ],
-        ));
+              SliverList(
+                // itemExtent: 3.0,
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xffF5F9FC),
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: new EdgeInsets.fromLTRB(5, 10, 10, 5),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                color: Color(0xff2E8953),
+                                child: Theme(
+                                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                  child: ExpansionTile(
+                                    // backgroundColor: Color(0xff2E8953),
+                                    iconColor: Colors.white,
+                                    collapsedIconColor: Colors.white,
+                                    trailing: Icon(
+                                        _customTileExpanded
+                                            ? Icons.keyboard_arrow_up_rounded
+                                            : Icons.keyboard_arrow_down_rounded
+                                    ),
+                                    onExpansionChanged: (bool expanded) {
+                                      setState(() {
+                                        _customTileExpanded = expanded;
+                                      });
+                                    },
+                                    title: Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text('측창 개폐기 제어',
+                                          style: _textStyle(
+                                              Color(0xffFFFFFF), FontWeight.w500, 20)),
+                                    ),
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                                        child: Column(
+                                          children: [
+                                            _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '츨장 (전)',
+                                              status1,
+                                            ),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '측장 (후)',
+                                              status2,
+                                            ),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '측장 (좌)',
+                                              status3,
+                                            ),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '측장 (우)',
+                                              status4,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(5,10,10,5),
+                              child: Card(
+                                color: Color(0xff2E8953),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Theme(
+                                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                  child: ExpansionTile(
+                                    iconColor: Colors.white,
+                                    collapsedIconColor: Colors.white,
+                                    title: Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text('천창 개폐기 제어',
+                                          style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                                    ),
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                                        child: Column(
+                                          children: [
+                                            _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '천창 (#1)',
+                                              status5,
+                                            ),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '천창 (#2)',
+                                              status6,
+                                            ),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch(
+                                              context,
+                                              '천창 (#3)',
+                                              status7,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(5,10,10,5),
+                              child: Card(
+                                color: Color(0xff2E8953),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Theme(
+                                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                  child: ExpansionTile(
+                                    iconColor: Colors.white,
+                                    collapsedIconColor: Colors.white,
+                                    title: Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text('기타제어',
+                                          style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                                    ),
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                                        child: Column(
+                                          children: [
+                                            _toggleSwitch2(context, '환풍기 (#1)', status8),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch2(context, '환풍기 (#2)', status9),
+                                            SizedBox(height: Get.height * 0.01),
+                                            _toggleSwitch2(context, '외부 제어 (#1)', status10),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                            ),
+                          ],
+                        )
+                    );
+                  },
+                  childCount: 1,
+                ),
+              ),
+            ],
+          ),
+        )
+    );
   }
 }
 
@@ -344,8 +359,11 @@ Widget _mainMonitoring(BuildContext context) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40),
-          Text("맑음/12.5°C",
+          temp == 20 ?
+          ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40)
+              :ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40),
+         // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
+          Text("맑음/$extTemp°C",
               style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
           ImageIcon(AssetImage('assets/images/icon_env_arrow_up.png'), color: Color(0xffffd5185),),
           Text("07:32", style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
@@ -357,6 +375,7 @@ Widget _mainMonitoring(BuildContext context) {
   );
 }
 
+
 // 내/외부 모니터링
 Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
     String _mainText, dynamic _icon, String subText, String _subText) {
@@ -366,42 +385,27 @@ Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    ImageIcon(AssetImage(icon), color: Color(0xff222222)),
-                    SizedBox(width: 10),
-                    Text(mainText,
-                        style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
-                  ],
-                ),
-                Text(_mainText,
-                    style: _textStyle(Color(0xff222222), FontWeight.w600, 18)),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ImageIcon(AssetImage(icon), color: Color(0xff222222)),
+              Text(mainText,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+              Text(_mainText,
+                  style: _textStyle(Color(0xff222222), FontWeight.w600, 18)),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    ImageIcon(AssetImage(icon), color: Color(0xff222222)),
-                    SizedBox(width: 10),
-                    Text(subText,
-                        style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
-                  ],
-                ),
-                Text(_subText,
-                    style: _textStyle(
-                        Color(0xff222222), FontWeight.w600, 18)), //"23.8°C"
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ImageIcon(AssetImage(_icon), color: Color(0xff222222)),
+              Text(subText,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+              Text(_subText,
+                  style: _textStyle(
+                      Color(0xff222222),
+                      FontWeight.w600, 18)),
+            ],
           ),
         ],
       ),
@@ -412,10 +416,18 @@ TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
   return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
 }
 
+// 흰색 decoration
 BoxDecoration _decoration() {
   return BoxDecoration(
-    color: Colors.white,
+    color: Color(0xffFFFFFF),
     borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 2,
+        offset: Offset(3, 5), // changes position of shadow
+      ),
+    ],
   );
 }
 
@@ -508,20 +520,22 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
               totalSwitches: 3,
               labels: ['열림', '정지', '닫힘'],
               radiusStyle: true,
-              onToggle: (motor_1) async {
+              onToggle: (value) async {
                 String _switch = '';
 
-                if (motor_1 == 0) {
+                if (value == 0) {
                   _switch = 'open';
                 }
-                if (motor_1 == 1) {
+                if (value == 1) {
                   _switch = 'stop';
                 }
-                if (motor_1 == 2) {
+                if (value == 2) {
                   _switch = 'close';
                 }
-                print('toggle value는 : $motor_1');
-                print('toggle type은 : ${motor_1.runtimeType}');
+                print('toggle value는 : $value');
+                print('toggle motor는 : $motor_1');
+
+                print('toggle type은 : ${value.runtimeType}');
                 print('value는 : $_switch');
                 _mqttClass.ctlSet('did', '1', 'dact', _switch,
                     '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
@@ -633,29 +647,6 @@ Widget _lineChart(bool _visibles) {
   );
 }
 
-//RaisedButton Widget
-
-Widget _raisedButoon(dynamic color, String text) {
-  return Container(
-    child: RaisedButton(
-      onPressed: () async {
-        print('hi111111111111');
-      },
-      color: color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
-          fontSize: 15,
-        ),
-      ),
-    ),
-  );
-}
 
 class _SalesData {
   _SalesData(this.year, this.sales);

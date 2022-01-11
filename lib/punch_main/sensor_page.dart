@@ -38,7 +38,7 @@ class _SensorPageState extends State<SensorPage> {
           // color: Color(0xffF5F9FC),
           decoration: BoxDecoration(
             color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(40),
           ),
           child: CustomScrollView(
             slivers: <Widget>[
