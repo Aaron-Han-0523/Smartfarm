@@ -300,12 +300,13 @@ class _MyPumpsState extends State<MyPumps> {
                               child: Text("펌프 (#${index + 1})",
                                   style: TextStyle(
                                       color: Color(0xff222222),
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.normal)),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 10),
                               child: ToggleSwitch(
+                                fontSize: 12,
                                 minWidth: 60.0,
                                 cornerRadius: 80.0,
                                 activeBgColors: [
@@ -423,15 +424,16 @@ class _MyValvesState extends State<MyValves> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(left: 20),
-                              child: Text("  밸브 (#${index + 1})",
+                              child: Text("밸브 (#${index + 1})",
                                   style: TextStyle(
                                       color: Color(0xff222222),
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.normal)),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 10),
                               child: ToggleSwitch(
+                                fontSize: 12,
                                 minWidth: 60.0,
                                 cornerRadius: 80.0,
                                 activeBgColors: [
