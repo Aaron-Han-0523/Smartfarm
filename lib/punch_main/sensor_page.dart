@@ -7,7 +7,7 @@ import '../globals/stream.dart' as stream;
 * description : open data page
 * writer : walter
 * create date : 2021-09-30
-* last update : 2021-09-30
+* last update : 2021-01-11
 * */
 
 // globalKey
@@ -32,58 +32,66 @@ class _SensorPageState extends State<SensorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            toolbarHeight: 70.0,
-            backgroundColor: Color(0xffF5F9FC),
-            title: Align(
-              alignment: Alignment.topLeft,
-              child: Column(children: [
-                Text(
-                  'Farm in Earth',
-                  style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(left: 30),
-                    child: Text('siteDropdown',
-                        style: TextStyle(color: Colors.black, fontSize: 18))),
-              ]),
-            ),
+    return Scaffold(
+      backgroundColor: Color(0xff2E6645),
+      body: Container(
+          // color: Color(0xffF5F9FC),
+          decoration: BoxDecoration(
+            color: Color(0xffF5F9FC),
+            borderRadius: BorderRadius.circular(50),
           ),
-          SliverList(
-            // itemExtent: 3.0,
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
-                  color: Colors.red,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xffF5F9FC),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                    ),
-                    alignment: Alignment.center,
-                    // color: Color(0xffF5F9FC),
-
-                    child: Column(
-                      children: [
-                        MyAccordian(),
-                        MyAccordian2(),
-                        MyGraph(),
-                      ],
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: true,
+                toolbarHeight: Get.height * 0.12 ,
+                backgroundColor: Color(0xffF5F9FC),
+                title: Column(children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Farm in Earth',
+                      style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
                     ),
                   ),
-                );
-              },
-              childCount: 1,
-            ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('siteDropdown',
+                        style: TextStyle(color: Colors.black, fontSize: 18)),
+                  ),
+                ]),
+              ),
+              SliverList(
+                // itemExtent: 3.0,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Container(
+                      // color: Colors.red,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xffF5F9FC),
+                          // borderRadius: BorderRadius.only(
+                          //     bottomLeft: Radius.circular(10),
+                          //     bottomRight: Radius.circular(10)),
+                        ),
+                        alignment: Alignment.center,
+                        // color: Color(0xffF5F9FC),
+
+                        child: Column(
+                          children: [
+                            MyAccordian(),
+                            MyAccordian2(),
+                            MyGraph(),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: 1,
+                ),
+              ),
+            ],
           ),
-        ],
       ),
     );
   }
@@ -102,42 +110,59 @@ class _MyAccordianState extends State<MyAccordian> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            decoration: _decorations(),
-            child: ExpansionTile(
-              initiallyExpanded: true,
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              title: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Image.asset(
-                      'assets/images/icon_exevn.png',
-                      scale: 3,
+          padding: const EdgeInsets.fromLTRB(5,10,10,5),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: Color(0xff2E8953),
+            // decoration: _decorations(),
+            child: Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                initiallyExpanded: true,
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                title: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Image.asset(
+                        'assets/images/icon_exevn.png',
+                        scale: 3,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '외부환경',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                    Text(
+                      '외부 환경',
+                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                children: <Widget>[
+                  SizedBox(height: Get.height * 0.01),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                    _cards('외부 온도', extTemp, true, 'assets/images/icon_temp.png'),
+                    _cards('외부 습도', extHumid, true, 'assets/images/icon_humid.png')
+                  ]),
+                  SizedBox(height: Get.height * 0.01),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                    _cards('강우', '12.5', true, 'assets/images/icon_rainy.png'),
+                    _cards('풍향', '12.5', true, 'assets/images/icon_wind.png')
+                  ]),
+                  SizedBox(height: Get.height * 0.01),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                    _cards('풍속', '12.5', true, 'assets/images/icon_windsp.png'),
+                    _cards('일사량', '12.5', true, 'assets/images/icon_shiny.png')
+                  ]),
+                  SizedBox(height: Get.height * 0.01),
                 ],
               ),
-              children: <Widget>[
-                Row(children: [
-                  _cards('외부온도', extTemp, true, 'assets/images/icon_temp.png'),
-                  _cards('외부습도', extHumid, true, 'assets/images/icon_humid.png')
-                ]),
-                Row(children: [
-                  _cards('강우', '12.5', true, 'assets/images/icon_rainy.png'),
-                  _cards('풍향', '12.5', true, 'assets/images/icon_wind.png')
-                ]),
-                Row(children: [
-                  _cards('풍속', '12.5', true, 'assets/images/icon_windsp.png'),
-                  _cards('일사량', '12.5', true, 'assets/images/icon_shiny.png')
-                ])
-              ],
             ),
           ),
         ),
@@ -159,42 +184,60 @@ class _MyAccordian2State extends State<MyAccordian2> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            decoration: _decorations(),
-            child: ExpansionTile(
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              title: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Image.asset(
-                      'assets/images/icon_inevn.png',
-                      scale: 3,
+          padding: const EdgeInsets.fromLTRB(5,10,10,5),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: Color(0xff2E8953),
+            // decoration: _decorations(),
+            child: Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                title: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Image.asset(
+                        'assets/images/icon_inevn.png',
+                        scale: 3,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '내부환경',
-                    style: TextStyle(color: Colors.white),
+                    Text(
+                      '내부 환경',
+                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                children: <Widget>[
+                  SizedBox(height: Get.height * 0.01),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                    _cards(
+                        '내부 온도', innerTemp, true, 'assets/images/icon_temp.png'),
+                    _cards(
+                        '내부 습도', innerHumid, true, 'assets/images/icon_temp.png')
+                  ]),
+                  SizedBox(height: Get.height * 0.01),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                    _cards('토양 온도', soilTemp, true, 'assets/images/icon_temp.png'),
+                    _cards('토양 습도', soilHumid, true, 'assets/images/icon_temp.png')
+                  ]),
+                  SizedBox(height: Get.height * 0.01),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, bottom: 5),
+                    child: Row(
+                        children: [
+                      _cards('토양 건조도', '12.5', true, 'assets/images/icon_temp.png'),
+                    ]),
                   ),
                 ],
               ),
-              children: <Widget>[
-                Row(children: [
-                  _cards(
-                      '내부온도', innerTemp, true, 'assets/images/icon_temp.png'),
-                  _cards(
-                      '내부습도', innerHumid, true, 'assets/images/icon_temp.png')
-                ]),
-                Row(children: [
-                  _cards('토양온도', soilTemp, true, 'assets/images/icon_temp.png'),
-                  _cards('토양습도', soilHumid, true, 'assets/images/icon_temp.png')
-                ]),
-                Row(children: [
-                  _cards('토양건조도', '12.5', true, 'assets/images/icon_temp.png'),
-                ]),
-              ],
             ),
           ),
         ),
@@ -216,28 +259,35 @@ class _MyGraphState extends State<MyGraph> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            decoration: _decorations(),
-            child: ExpansionTile(
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              title: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Image.asset(
-                      'assets/images/icon_graph.png',
-                      scale: 3,
+          padding: const EdgeInsets.fromLTRB(5,10,10,5),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: Color(0xff2E8953),
+            // decoration: _decorations(),
+            child: Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                title: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Image.asset(
+                        'assets/images/icon_graph.png',
+                        scale: 3,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "그래프",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
+                    Text(
+                      "그래프",
+                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                children: [_lineChart()],
               ),
-              children: [_lineChart()],
             ),
           ),
         ),
@@ -315,12 +365,12 @@ Widget _cards(var title, var subtitle, bool visibles, String assets) {
             Text(subtitle,
                 style: TextStyle(
                     color: Color(0xff222222),
-                    fontSize: 20,
+                    fontSize: 25,
                     fontWeight: FontWeight.w500)),
           ]),
           Image.asset(
             assets,
-            scale: 2,
+            scale: 3,
           )
           // Icon(icon, size: 60, color: Colors.black54)
         ],
