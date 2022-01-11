@@ -31,6 +31,9 @@ var motor_6 = '';
 // setting page dropdownButton
 var sitesDropdownValue = '';
 
+// main page fcm Token
+String fcmtoken = '';
+
 // cctv page
 List cctvs = [];
 List cctv_url = [];

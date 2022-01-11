@@ -65,6 +65,13 @@ class _HomeState extends State<Home> {
   // getData
   Future<dynamic> getData() async {
     if (mounted) {
+      // put fcm token
+      var fcmtoken = stream.fcmtoken;
+      var data = {'uid': userId, 'fcmtoken': fcmtoken};
+      final postToken =
+          await dio.put('$api/farm/$userId/pushAlarm', data: data);
+      print('##### postToken: $postToken');
+
       // cctvs
       final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
       stream.cctvs = getCctvs.data;
@@ -89,12 +96,11 @@ class _HomeState extends State<Home> {
         stream.pump_name.add(pumpName);
       }
 
-      List<int> pumpStatus = [
+      stream.pumpStatus = [
         stream.pump_1 == 'on' ? 1 : 0,
         stream.pump_2 == 'on' ? 1 : 0
       ];
-      print('pumpStatus: $pumpStatus');
-      stream.pumpStatus = pumpStatus;
+      print('pumpStatus: ${stream.pumpStatus}');
 
       // valves
       final getValves =
