@@ -89,6 +89,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff2E6645),
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Color(0xffF5F9FC),
@@ -140,6 +141,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       //   onTap: _onItemTapped,
       // ),
       bottomNavigationBar: ConvexAppBar(
+        elevation: 0.0,
         items: [
           TabItem(
             icon: Image.asset(
