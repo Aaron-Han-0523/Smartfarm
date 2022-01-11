@@ -1,6 +1,5 @@
 import 'package:plms_start/globals/checkUser.dart' as plms_start;
 import 'package:dio/dio.dart';
-import '../globals/stream.dart' as stream;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -41,8 +40,6 @@ class LoginTest {
         Get.toNamed('/sensor');
         print('jsonBody는: $jsonBody');
         print('password는: ${jsonBody['results']['password']}');
-        // post fcm token
-        postFcmToken(uid, stream.fcmtoken);
       } else if (jsonData == 'false') {
         print('ID/PW를 확인해주세요');
         Get.defaultDialog(
@@ -159,13 +156,5 @@ class LoginTest {
     // } else {
     //   print('error');
     // }
-  }
-
-  // fcm token sql로 보내기
-  Future<dynamic> postFcmToken(String userId, String fcmtoken) async {
-    var fcmtoken = stream.fcmtoken;
-    var data = {'uid': userId, 'fcmtoken': fcmtoken};
-    final postToken = await dio.put('$api/farm/$userId/pushAlarm', data: data);
-    print('##### postToken: $postToken');
   }
 }

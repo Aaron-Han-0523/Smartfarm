@@ -65,6 +65,13 @@ class _HomeState extends State<Home> {
   // getData
   Future<dynamic> getData() async {
     if (mounted) {
+      // put fcm token
+      var fcmtoken = stream.fcmtoken;
+      var data = {'uid': userId, 'fcmtoken': fcmtoken};
+      final postToken =
+          await dio.put('$api/farm/$userId/pushAlarm', data: data);
+      print('##### postToken: $postToken');
+
       // cctvs
       final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
       stream.cctvs = getCctvs.data;
