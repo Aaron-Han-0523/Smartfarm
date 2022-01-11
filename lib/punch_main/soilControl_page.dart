@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:plms_start/mqtt/mqtt.dart';
 import 'package:plms_start/punch_main/mqtt.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:dio/dio.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -63,47 +65,6 @@ bool isConnected = false;
 final MqttServerClient client =
     MqttServerClient('broker.mqttdashboard.com', '');
 
-// getData()
-// void _getPumpData() async {
-//   // pumps
-//   final getPumps = await dio.get('$url/$userId/site/$siteId/controls/pumps');
-//   stream.pumps = getPumps.data;
-//   print('##### soilPage GET Pumps LIST: ${stream.pumps}');
-//   print('##### soilPage GET Pumps LIST length: ${stream.pumps.length}');
-//   stream.pump_name = [];
-//   for (var i = 0; i < stream.pumps.length; i++) {
-//     var pumpName = stream.pumps[i]['pump_name'];
-//     stream.pump_name.add(pumpName);
-//   }
-
-//   List<bool> pumpStatus = [
-//     stream.pump_1 == 'on' ? true : false,
-//     stream.pump_2 == 'on' ? true : false
-//   ];
-//   print('pumpStatus: $pumpStatus');
-//   stream.pumpStatus = pumpStatus;
-// }
-
-// void _getValveData() async {
-//   // valves
-//   final getValves = await dio.get('$url/$userId/site/$siteId/controls/valves');
-//   stream.valves = getValves.data;
-//   print('##### soilPage GET Valves LIST: ${stream.valves}');
-//   print('##### soilPage GET Valves LIST length: ${stream.valves.length}');
-//   stream.valve_name = [];
-//   for (var i = 0; i < stream.valves.length; i++) {
-//     var valveName = stream.valves[i]['valve_name'];
-//     stream.valve_name.add(valveName);
-//   }
-
-//   // List<bool> valveStatus = [
-//   //   stream.valve_1 == 'on' ? true : false,
-//   //   stream.valve_2 == 'on' ? true : false
-//   // ];
-//   // print('##### 사실은 pump1, pump2인 valveStatus: $valveStatus');
-//   // stream.valveStatus = valveStatus;
-// }
-
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);
 
@@ -114,8 +75,6 @@ class SoilControlPage extends StatefulWidget {
 class _SoilControlPageState extends State<SoilControlPage> {
   @override
   void initState() {
-    // _getPumpData();
-    // _getValveData();
     super.initState();
   }
 
@@ -158,12 +117,10 @@ class _SoilControlPageState extends State<SoilControlPage> {
                         color: Color(0xffF5F9FC),
                       ),
                       alignment: Alignment.center,
-                      // color: Color(0xffF5F9FC),
                       child: Column(
                         children: [
                           MyPumps(),
                           MyValves(),
-                          MyGraph(),
                         ],
                       ));
                 },
@@ -278,7 +235,7 @@ class _MyPumpsState extends State<MyPumps> {
     // WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
   }
 
-  List<bool> pumpStatus = stream.pumpStatus;
+  List<int> pumpStatus = stream.pumpStatus;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -311,42 +268,63 @@ class _MyPumpsState extends State<MyPumps> {
                       itemCount: pumps.length,
                       itemBuilder: (BuildContext context, var index) {
                         return Container(
-                          padding: EdgeInsets.all(8.0),
+                          margin:
+                              EdgeInsets.only(left: 15, right: 15, bottom: 10),
+                          height: Get.height * 0.09,
                           child: Visibility(
                             visible: visibility[index],
                             child: Card(
                               child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.only(left: 20),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text("  펌프 (#${index + 1})",
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold)),
+                                              color: Color(0xff222222),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal)),
                                       Spacer(),
-                                      FlutterSwitch(
-                                        activeColor: Colors.green,
-                                        inactiveColor: Colors.orange,
-                                        activeTextColor: Colors.white,
-                                        inactiveTextColor: Colors.white,
-                                        value: pumpStatus[index],
-                                        showOnOff: true,
-                                        onToggle: (value) {
-                                          setState(() {
-                                            pumpStatus[index] = value;
-                                            String switchStatus = '';
-                                            switchStatus =
-                                                value == true ? 'on' : 'off';
-                                            _mqttClass.ctlSet(
-                                                'did',
-                                                "${index + 1}",
-                                                'dact',
-                                                switchStatus,
-                                                '/sf/e0000001/req/pump',
-                                                '/sf/e0000001/req/pump');
-                                          });
+                                      ToggleSwitch(
+                                        minWidth: 60.0,
+                                        cornerRadius: 80.0,
+                                        activeBgColors: [
+                                          [Color(0xffe3fbed)],
+                                          [Color(0xfff2f2f2)]
+                                        ],
+                                        activeFgColor: Color(0xff222222),
+                                        inactiveBgColor: Color(0xffFFFFFF),
+                                        inactiveFgColor: Color(0xff222222),
+                                        initialLabelIndex: pumpStatus[
+                                            index], // 시뮬레이터에서 현재 상태를 불러오질 못하고 있음
+                                        totalSwitches: 2,
+                                        labels: ['ON', 'OFF'],
+                                        radiusStyle: true,
+                                        onToggle: (value) async {
+                                          pumpStatus[index] = value;
+                                          String switchStatus = '';
+
+                                          if (value == 0) {
+                                            switchStatus = 'on';
+                                          } else if (value == 1) {
+                                            switchStatus = 'off';
+                                          }
+
+                                          print(
+                                              '### Pump${index + 1} toggle value는 : $value');
+                                          print(
+                                              '### Pump${index + 1} toggle type은 : ${value.runtimeType}');
+                                          print(
+                                              '### Pump${index + 1} value는 : $switchStatus');
+
+                                          _mqttClass.ctlSet(
+                                              'did',
+                                              "${index + 1}",
+                                              'dact',
+                                              switchStatus,
+                                              '/sf/e0000001/req/pump',
+                                              '/sf/e0000001/req/pump');
                                         },
                                       ),
                                     ],
@@ -376,7 +354,7 @@ class MyValves extends StatefulWidget {
 }
 
 class _MyValvesState extends State<MyValves> {
-  List<bool> valveStatus = [true, true];
+  List<int> valveStatus = [0, 0];
   List<bool> visibility = [true, true];
 
   @override
@@ -384,7 +362,7 @@ class _MyValvesState extends State<MyValves> {
     super.initState();
   }
 
-  // List<bool> valveStatus = stream.valveStatus;
+  // List<int> valveStatus = stream.valveStatus;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -416,42 +394,62 @@ class _MyValvesState extends State<MyValves> {
                       itemCount: valves.length,
                       itemBuilder: (BuildContext context, var index) {
                         return Container(
-                          padding: EdgeInsets.all(8.0),
+                          margin:
+                              EdgeInsets.only(left: 15, right: 15, bottom: 10),
+                          height: Get.height * 0.09,
                           child: Visibility(
                             visible: visibility[index],
                             child: Card(
                               child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.only(left: 20),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text("  밸브 (#${index + 1})",
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold)),
+                                              color: Color(0xff222222),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal)),
                                       Spacer(),
-                                      FlutterSwitch(
-                                        activeColor: Colors.green,
-                                        inactiveColor: Colors.orange,
-                                        activeTextColor: Colors.white,
-                                        inactiveTextColor: Colors.white,
-                                        value: valveStatus[index],
-                                        showOnOff: true,
-                                        onToggle: (value) {
-                                          setState(() {
-                                            valveStatus[index] = value;
-                                            // String switchStatus = '';
-                                            // switchStatus =
-                                            //     value == true ? 'on' : 'off';
-                                            // _mqttClass.ctlSet(
-                                            //     'did',
-                                            //     "${index + 1}",
-                                            //     'dact',
-                                            //     switchStatus,
-                                            //     '/sf/e0000001/req/valve',
-                                            //     '/sf/e0000001/req/valve');
-                                          });
+                                      ToggleSwitch(
+                                        minWidth: 60.0,
+                                        cornerRadius: 80.0,
+                                        activeBgColors: [
+                                          [Color(0xffe3fbed)],
+                                          [Color(0xfff2f2f2)]
+                                        ],
+                                        activeFgColor: Color(0xff222222),
+                                        inactiveBgColor: Color(0xffFFFFFF),
+                                        inactiveFgColor: Color(0xff222222),
+                                        initialLabelIndex: valveStatus[
+                                            index], // 시뮬레이터에서 현재 상태를 불러오질 못하고 있음
+                                        totalSwitches: 2,
+                                        labels: ['ON', 'OFF'],
+                                        radiusStyle: true,
+                                        onToggle: (value) async {
+                                          valveStatus[index] = value;
+                                          String switchStatus = '';
+
+                                          if (value == 0) {
+                                            switchStatus = 'on';
+                                          } else if (value == 1) {
+                                            switchStatus = 'off';
+                                          }
+                                          print(
+                                              '### Valve${index + 1} toggle value는 : $value');
+                                          print(
+                                              '### Valve${index + 1} toggle type은 : ${value.runtimeType}');
+                                          print(
+                                              '### Valve${index + 1} value는 : $switchStatus');
+
+                                          // _mqttClass.ctlSet(
+                                          //     'did',
+                                          //     "${index + 1}",
+                                          //     'dact',
+                                          //     switchStatus,
+                                          //     '/sf/e0000001/req/valve',
+                                          //     '/sf/e0000001/req/valve');
                                         },
                                       ),
                                     ],
@@ -463,89 +461,6 @@ class _MyValvesState extends State<MyValves> {
                         );
                       }),
                 )
-              ],
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-}
-
-// 그래프
-class MyGraph extends StatefulWidget {
-  const MyGraph({Key? key}) : super(key: key);
-
-  @override
-  State<MyGraph> createState() => _MyGraphState();
-}
-
-class _MyGraphState extends State<MyGraph> {
-  late List<_ChartData> data;
-  late TooltipBehavior _tooltip;
-
-  @override
-  void initState() {
-    data = [
-      _ChartData('내부 온도', 12),
-      _ChartData('내부 습도', 15),
-      _ChartData('토양 온도', 30),
-      _ChartData('토양 습도', 6.4),
-      _ChartData('토양 전도도', 14)
-    ];
-
-    _tooltip = TooltipBehavior(enable: true);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xffF5F9FC),
-      ),
-      padding: EdgeInsets.all(8.0),
-      alignment: Alignment.center,
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          color: Color(0xff2E8953),
-          child: Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              title: Text('  그래프',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              textColor: Colors.white,
-              collapsedTextColor: Colors.white,
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              tilePadding: EdgeInsets.all(8.0),
-              children: <Widget>[
-                Card(
-                  margin: EdgeInsets.all(16.0),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SfCartesianChart(
-                        margin: EdgeInsets.all(8.0),
-                        primaryXAxis: CategoryAxis(),
-                        primaryYAxis:
-                            NumericAxis(minimum: 0, maximum: 40, interval: 10),
-                        tooltipBehavior: _tooltip,
-                        series: <ChartSeries<_ChartData, String>>[
-                          BarSeries<_ChartData, String>(
-                              dataSource: data,
-                              xValueMapper: (_ChartData data, _) => data.x,
-                              yValueMapper: (_ChartData data, _) => data.y,
-                              name: '내부 온도',
-                              color: Color.fromRGBO(8, 142, 255, 1))
-                        ]),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                ),
               ],
             ),
           ),
@@ -583,10 +498,4 @@ Widget _monitoring(String assets, String text, String temperText) {
       Text(temperText)
     ],
   );
-}
-
-class _ChartData {
-  _ChartData(this.x, this.y);
-  final String x;
-  final double y;
 }

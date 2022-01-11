@@ -89,9 +89,9 @@ class _HomeState extends State<Home> {
         stream.pump_name.add(pumpName);
       }
 
-      List<bool> pumpStatus = [
-        stream.pump_1 == 'on' ? true : false,
-        stream.pump_2 == 'on' ? true : false
+      List<int> pumpStatus = [
+        stream.pump_1 == 'on' ? 1 : 0,
+        stream.pump_2 == 'on' ? 1 : 0
       ];
       print('pumpStatus: $pumpStatus');
       stream.pumpStatus = pumpStatus;
@@ -107,6 +107,13 @@ class _HomeState extends State<Home> {
         var valveName = stream.valves[i]['cctv_url'];
         stream.valve_name.add(valveName);
       }
+
+      // List<int> valveStatus = [
+      //   stream.valve_1 == 'on' ? 1 : 0,
+      //   stream.valve_2 == 'on' ? 1 : 0
+      // ];
+      // print('valveStatus: $valveStatus');
+      // stream.valveStatus = valveStatus;
 
       // get pump1, pump2 = sensorId
       final getSensorId = await dio.get('$url/$userId/site/$siteId/sensors');

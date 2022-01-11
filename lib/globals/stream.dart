@@ -19,6 +19,8 @@ var soilhumid_1 = '';
 var soilhumid_2 = '';
 var pump_1 = '';
 var pump_2 = '';
+var valve_1 = '';
+var valve_2 = '';
 var motor_1 = '';
 var motor_2 = '';
 var motor_3 = '';
@@ -36,10 +38,10 @@ List cctv_url = [];
 // soilControl page
 List pumps = [];
 List pump_name = [];
-List<bool> pumpStatus = [];
+List<int> pumpStatus = [];
 List valves = [];
 List valve_name = [];
-List<bool> valveStatus = [];
+List<int> valveStatus = [];
 
 List sensors = [];
 List sensor_id = []; // pump1, pump2
