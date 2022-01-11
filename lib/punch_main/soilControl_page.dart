@@ -17,7 +17,7 @@ import '../globals/stream.dart' as stream;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-// TODO: valveStatus는 pump 값으로 하고있음
+// TODO: valveStatus는 아직 없음
 
 /*
 * name : Soil Control Page
@@ -297,7 +297,7 @@ class _MyPumpsState extends State<MyPumps> {
                                         inactiveBgColor: Color(0xffFFFFFF),
                                         inactiveFgColor: Color(0xff222222),
                                         initialLabelIndex: pumpStatus[
-                                            index], // 시뮬레이터에서 현재 상태를 불러오질 못하고 있음
+                                            index], // 시뮬레이터에서 현재 상태를 불러오질 못하고 있음, default=0
                                         totalSwitches: 2,
                                         labels: ['ON', 'OFF'],
                                         radiusStyle: true,
@@ -310,6 +310,8 @@ class _MyPumpsState extends State<MyPumps> {
                                           } else if (value == 1) {
                                             switchStatus = 'off';
                                           }
+
+                                          // pumpStatus[index] = value;
 
                                           print(
                                               '### Pump${index + 1} toggle value는 : $value');
@@ -423,7 +425,7 @@ class _MyValvesState extends State<MyValves> {
                                         inactiveBgColor: Color(0xffFFFFFF),
                                         inactiveFgColor: Color(0xff222222),
                                         initialLabelIndex: valveStatus[
-                                            index], // 시뮬레이터에서 현재 상태를 불러오질 못하고 있음
+                                            index], // 시뮬레이터에서 현재 상태를 불러오질 못하고 있음, default=0
                                         totalSwitches: 2,
                                         labels: ['ON', 'OFF'],
                                         radiusStyle: true,
@@ -436,6 +438,9 @@ class _MyValvesState extends State<MyValves> {
                                           } else if (value == 1) {
                                             switchStatus = 'off';
                                           }
+
+                                          // valveStatus[index] = value;
+
                                           print(
                                               '### Valve${index + 1} toggle value는 : $value');
                                           print(
