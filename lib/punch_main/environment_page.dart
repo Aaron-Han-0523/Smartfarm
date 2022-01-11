@@ -182,11 +182,10 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
                         ),
-                        alignment: Alignment.center,
                         child: Column(
                           children: [
                             Padding(
-                              padding: new EdgeInsets.fromLTRB(5, 10, 10, 5),
+                              padding: new EdgeInsets.fromLTRB(15,10,15,5),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -195,7 +194,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                 child: Theme(
                                   data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                                   child: ExpansionTile(
-                                    // backgroundColor: Color(0xff2E8953),
                                     iconColor: Colors.white,
                                     collapsedIconColor: Colors.white,
                                     trailing: Icon(
@@ -253,7 +251,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(5,10,10,5),
+                              padding: new EdgeInsets.fromLTRB(15,10,15,5),
                               child: Card(
                                 color: Color(0xff2E8953),
                                 shape: RoundedRectangleBorder(
@@ -302,7 +300,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(5,10,10,5),
+                              padding: new EdgeInsets.fromLTRB(15,10,15,5),
                               child: Card(
                                 color: Color(0xff2E8953),
                                 shape: RoundedRectangleBorder(
@@ -359,9 +357,9 @@ Widget _mainMonitoring(BuildContext context) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          temp == 20 ?
+          temp > 20 ?
           ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40)
-              :ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40),
+              :ImageIcon(AssetImage('assets/images/icon_windy.png'), color: Color(0xff222222), size: 40),
          // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
           Text("맑음/$extTemp°C",
               style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
@@ -380,10 +378,10 @@ Widget _mainMonitoring(BuildContext context) {
 Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
     String _mainText, dynamic _icon, String subText, String _subText) {
   return Container(
-      height: Get.height * 0.15,
+      height: Get.height * 0.13,
       width:Get.width* 0.425,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -444,11 +442,12 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
           Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(text,
-                  style: _textStyle(Color(0xff222222), FontWeight.normal, 16))),
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: ToggleSwitch(
-              minWidth: 75.0,
+              fontSize: 12,
+              minWidth: 65.0,
               cornerRadius: 80.0,
               activeBgColors: [
                 [Color(0xffe3fbed)],
@@ -502,10 +501,11 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
           Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(text,
-                  style: _textStyle(Color(0xff222222), FontWeight.normal, 16))),
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: ToggleSwitch(
+              fontSize: 12,
               minWidth: 60.0,
               cornerRadius: 80.0,
               activeBgColors: [
@@ -562,10 +562,11 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
           Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(text,
-                  style: _textStyle(Color(0xff222222), FontWeight.normal, 16))),
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: ToggleSwitch(
+              fontSize: 12,
               minWidth: 60.0,
               cornerRadius: 80.0,
               activeBgColors: [
