@@ -219,21 +219,21 @@ class _MyAccordian2State extends State<MyAccordian2> {
                     _cards(
                         '내부 온도', innerTemp, true, 'assets/images/icon_temp.png'),
                     _cards(
-                        '내부 습도', innerHumid, true, 'assets/images/icon_temp.png')
+                        '내부 습도', innerHumid, true, 'assets/images/icon_humid.png')
                   ]),
                   SizedBox(height: Get.height * 0.01),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                    _cards('토양 온도', soilTemp, true, 'assets/images/icon_temp.png'),
-                    _cards('토양 습도', soilHumid, true, 'assets/images/icon_temp.png')
+                    _cards('토양 온도', soilTemp, true, 'assets/images/icon_soiltemp.png'),
+                    _cards('토양 습도', soilHumid, true, 'assets/images/icon_soilhumid.png')
                   ]),
                   SizedBox(height: Get.height * 0.01),
                   Padding(
                     padding: EdgeInsets.only(left: 5, bottom: 5),
                     child: Row(
                         children: [
-                      _cards('토양 건조도', '12.5', true, 'assets/images/icon_temp.png'),
+                      _cards('토양 건조도', '12.5', true, 'assets/images/icon_soilele.png'),
                     ]),
                   ),
                 ],
