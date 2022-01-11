@@ -32,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
 
+  // import
   LoginTest _loginTest = LoginTest();
 
   late double headerTopZone;
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
-        backgroundColor: Color(0xff1abc9c),
+        backgroundColor: Color(0xff34B27A),
         // 카카오 채널 고객센터/문의
         floatingActionButton: FloatingActionButton(
             onPressed: _launchURL,
@@ -95,9 +96,6 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     _textForm(),
-                    SizedBox(
-                      height: Get.height * 0.0001,
-                    ),
                     _textButton(),
                     SizedBox(
                       height: 30,
@@ -126,12 +124,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: EdgeInsets.only(top: 150),
           child: Column(children: [
-            Text(
-              'Farm in Earth',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 35,
-                  fontWeight: FontWeight.w500),
+            Image.asset(
+              'assets/images/main_farmInEarth_v2.png',
+              scale: 1.5,
             ),
             Align(
                 alignment: Alignment.centerRight,
@@ -153,26 +148,26 @@ class _LoginPageState extends State<LoginPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Container(
-            color: Colors.white,
-            // height: Get.height * 1 / 30,
-            height: Get.height * 0.07,
-            width: Get.width * 4.5 / 7,
+          SizedBox(
+            // decoration: _decorations(),
+            height: Get.height * 0.075,
+            width: Get.width * 0.8,
             child: Row(children: [
-              Container(
-                height: Get.height * 0.07,
-                width: Get.width * 0.13,
-                color: Colors.black12,
-                child: Icon(Icons.person, color: Colors.grey, size: 35),
-              ),
-              SizedBox(width: Get.width * 0.03),
               Expanded(
                 child: TextFormField(
                   controller: _idTextEditController,
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Username',
-                      hintStyle: TextStyle(color: Colors.black38)),
+                      fillColor: Color(0xffFFFFFF),
+                    filled: true,
+                    prefixIcon: Icon(Icons.person, color: Colors.grey, size: 25),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.black12
+                          ),
+                          borderRadius: BorderRadius.circular(25)
+                      ),
+                      hintText: '아이디',
+                      hintStyle: TextStyle(color: Colors.black38, fontSize: 15)),
                   onChanged: (text) {
                     setState(() {});
                   },
@@ -181,29 +176,29 @@ class _LoginPageState extends State<LoginPage> {
             ]),
           ),
           SizedBox(
-            height: Get.height * 0.01,
+            height: Get.height * 0.03,
           ),
-          Container(
-            color: Colors.white,
+          SizedBox(
             // height: Get.height * 1 / 30,
-            height: Get.height * 0.07,
-            width: Get.width * 4.5 / 7,
+            height: Get.height * 0.075,
+            width: Get.width * 0.8,
             child: Row(children: [
-              Container(
-                height: Get.height * 0.07,
-                width: Get.width * 0.13,
-                color: Colors.black12,
-                child: Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 35),
-              ),
-              SizedBox(width: Get.width * 0.03),
               Expanded(
                 child: TextFormField(
                   controller: _pwTextEditController,
                   obscureText: true,
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: AppLocalizations.of(context)!.loginPW,
-                      hintStyle: TextStyle(color: Colors.black38)
+                      fillColor: Color(0xffFFFFFF),
+                      filled: true,
+                    prefixIcon: Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 25),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.black12
+                          ),
+                          borderRadius: BorderRadius.circular(25)
+                      ),
+                      hintText: '비밀번호',
+                      hintStyle: TextStyle(color: Colors.black38, fontSize: 15)
                       // labelText: AppLocalizations.of(context)!.loginPW,
                       ),
                   onChanged: (text) {
@@ -221,8 +216,8 @@ class _LoginPageState extends State<LoginPage> {
   // 로그인 버튼
   Widget _button() {
     return Container(
-      height: Get.height * 0.07,
-      width: Get.width * 0.65,
+      height: Get.height * 0.08,
+      width: Get.width * 0.75,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Color(0xff0a4b3e),
@@ -230,8 +225,8 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
-          // _loginTest.loginTest(uid, pw);
-          Get.toNamed('/home');
+          _loginTest.loginTest(uid, pw);
+          // Get.toNamed('/home');
           // Get.toNamed('/sensor');
         },
         child: Text(
@@ -289,6 +284,14 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  // decoration(without box shadow)
+  BoxDecoration _decorations() {
+    return BoxDecoration(
+      color: Color(0xffFFFFFF),
+      borderRadius: BorderRadius.circular(30),
+    );
   }
 
 // 로그인 에러 다이얼로그

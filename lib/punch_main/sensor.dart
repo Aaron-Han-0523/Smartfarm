@@ -93,22 +93,26 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Color(0xffF5F9FC),
-        leading: Icon(Icons.message_outlined),
+        leading: InkWell(child: Image.asset('assets/images/icon_board.png', scale: 3), onTap: (){}),
         // 타이틀
         actions: [
           IconButton(
-              onPressed: _launchURL,
-              icon: Image.asset('assets/images/kakao_channel.png')),
-          InkWell(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              // backgroundImage: AssetImage('assets/images/gallery_button.png'),
-              child: Image.asset('assets/images/icon_setting.png'),
-              foregroundColor: Colors.teal,
+                onPressed: _launchURL,
+                icon: Image.asset('assets/images/kakao_channel.png'), iconSize: 30),
+
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: InkWell(
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                // backgroundImage: AssetImage('assets/images/gallery_button.png'),
+                child: Image.asset('assets/images/icon_setting.png', scale: 3),
+                foregroundColor: Colors.teal,
+              ),
+              onTap: () {
+                Get.toNamed('/setting');
+              },
             ),
-            onTap: () {
-              Get.toNamed('/setting');
-            },
           ),
         ],
       ),
@@ -305,7 +309,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   }
 
   _launchURL() async {
-    const url = 'http://pf.kakao.com/_TAxfdb';
+    const url = 'http://pf.kakao.com/_xledxfb';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
