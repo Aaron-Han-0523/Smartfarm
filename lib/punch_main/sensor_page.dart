@@ -44,7 +44,7 @@ class _SensorPageState extends State<SensorPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.12 ,
+                toolbarHeight: Get.height * 0.14 ,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(children: [
                   Align(
@@ -110,13 +110,9 @@ class _MyAccordianState extends State<MyAccordian> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(5,10,10,5),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            color: Color(0xff2E8953),
-            // decoration: _decorations(),
+          padding: const EdgeInsets.fromLTRB(15,10,15,5),
+          child: Container(
+            decoration: _decorations(),
             child: Theme(
               data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
@@ -184,13 +180,9 @@ class _MyAccordian2State extends State<MyAccordian2> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(5,10,10,5),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            color: Color(0xff2E8953),
-            // decoration: _decorations(),
+          padding: const EdgeInsets.fromLTRB(15,10,15,5),
+          child: Container(
+            decoration: _decorations(),
             child: Theme(
               data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
@@ -259,13 +251,9 @@ class _MyGraphState extends State<MyGraph> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(5,10,10,5),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            color: Color(0xff2E8953),
-            // decoration: _decorations(),
+          padding: const EdgeInsets.fromLTRB(15,10,15,5),
+          child: Container(
+            decoration: _decorations(),
             child: Theme(
               data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
@@ -349,9 +337,9 @@ Widget _cards(var title, var subtitle, bool visibles, String assets) {
     visible: visibles,
     child: Container(
       // alignment: Alignment.center,
-      margin: EdgeInsets.only(left: 7, right: 5, bottom: 10),
+      margin: EdgeInsets.only(left: 7, right: 7, bottom: 10),
       height: Get.height * 1 / 9,
-      width: Get.height * 1 / 4.5,
+      width: Get.width * 0.4,
       decoration: _decoration(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -383,13 +371,6 @@ BoxDecoration _decoration() {
   return BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(20),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        blurRadius: 2,
-        offset: Offset(3, 5), // changes position of shadow
-      ),
-    ],
   );
 }
 

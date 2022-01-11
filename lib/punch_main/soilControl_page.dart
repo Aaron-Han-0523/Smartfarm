@@ -69,9 +69,10 @@ final MqttServerClient client =
     MqttServerClient('broker.mqttdashboard.com', '');
 
 // decoration (with box shadow)
-BoxDecoration _decoration() {
+BoxDecoration _decoration(dynamic color) {
   return BoxDecoration(
-    color: Color(0xffFFFFFF),
+    color: color,
+    // color: Color(0xffFFFFFF),
     borderRadius: BorderRadius.circular(20),
     boxShadow: [
       BoxShadow(
@@ -212,7 +213,7 @@ class _MyWeatherState extends State<MyWeather> {
                       "$innerHumid" + "%"),
                 ],
               ),
-              decoration: _decoration(),
+              decoration: _decoration(Color(0xffFFFFFF)),
             ),
             Container(
               height: Get.height * 0.13,
@@ -226,7 +227,7 @@ class _MyWeatherState extends State<MyWeather> {
                       "$soilHumid%"),
                 ],
               ),
-              decoration: _decoration(),
+              decoration: _decoration(Color(0xffFFFFFF)),
             ),
           ],
         ),
@@ -259,11 +260,8 @@ class _MyPumpsState extends State<MyPumps> {
     return Column(children: [
         Container(
     padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      color: Color(0xff2E8953),
+    child: Container(
+      decoration: _decoration(Color(0xff2E8953)),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -387,11 +385,8 @@ class _MyValvesState extends State<MyValves> {
     return Column(children: [
         Padding(
     padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      color: Color(0xff2E8953),
+    child: Container(
+      decoration: _decoration(Color(0xff2E8953)),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
@@ -511,7 +506,7 @@ Widget _firstCard(String weather, String temperNumber, String soilNumber) {
               fontWeight: FontWeight.w600,
               color: Color(0xff222222))),
     ]),
-    decoration: _decoration(),
+    decoration: _decoration(Color(0xffFFFFFF)),
   );
 }
 

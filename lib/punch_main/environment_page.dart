@@ -186,11 +186,8 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           children: [
                             Padding(
                               padding: new EdgeInsets.fromLTRB(15,10,15,5),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                color: Color(0xff2E8953),
+                              child: Container(
+                                decoration: _decoration(Color(0xff2E8953)),
                                 child: Theme(
                                   data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                                   child: ExpansionTile(
@@ -252,11 +249,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             ),
                             Padding(
                               padding: new EdgeInsets.fromLTRB(15,10,15,5),
-                              child: Card(
-                                color: Color(0xff2E8953),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
+                              child: Container(
                                 child: Theme(
                                   data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                                   child: ExpansionTile(
@@ -297,15 +290,12 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                     ],
                                   ),
                                 ),
+                                decoration: _decoration(Color(0xff2E8953)),
                               ),
                             ),
                             Padding(
                               padding: new EdgeInsets.fromLTRB(15,10,15,5),
-                              child: Card(
-                                color: Color(0xff2E8953),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
+                              child: Container(
                                 child: Theme(
                                   data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                                   child: ExpansionTile(
@@ -332,8 +322,8 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                     ],
                                   ),
                                 ),
+                                decoration: _decoration(Color(0xff2E8953)),
                               ),
-
                             ),
                           ],
                         )
@@ -369,7 +359,7 @@ Widget _mainMonitoring(BuildContext context) {
           Text("18:08", style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
         ],
       ),
-      decoration: _decoration()
+      decoration: _decoration(Color(0xffFFFFFF))
   );
 }
 
@@ -407,17 +397,18 @@ Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
           ),
         ],
       ),
-      decoration: _decoration());
+      decoration: _decoration(Color(0xffFFFFFF)));
 }
 
 TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
   return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
 }
 
-// 흰색 decoration
-BoxDecoration _decoration() {
+// decoration (with box shadow)
+BoxDecoration _decoration(dynamic color) {
   return BoxDecoration(
-    color: Color(0xffFFFFFF),
+    color: color,
+    // color: Color(0xffFFFFFF),
     borderRadius: BorderRadius.circular(20),
     boxShadow: [
       BoxShadow(
