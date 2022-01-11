@@ -358,14 +358,14 @@ Widget _mainMonitoring(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           temp > 20 ?
-          ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40)
-              :ImageIcon(AssetImage('assets/images/icon_windy.png'), color: Color(0xff222222), size: 40),
+          Image.asset('assets/images/icon_shiny.png', color: Color(0xff222222), scale: 3)
+              :Image.asset('assets/images/icon_windy.png', color: Color(0xff222222), scale: 3),
          // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
           Text("맑음/$extTemp°C",
               style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
-          ImageIcon(AssetImage('assets/images/icon_env_arrow_up.png'), color: Color(0xffffd5185),),
+          Image.asset('assets/images/icon_env_arrow_up.png', color: Color(0xffffd5185), scale: 3),
           Text("07:32", style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
-          ImageIcon(AssetImage('assets/images/icon_env_arrow_down.png'), color: Color(0xfff656565),),
+          Image.asset('assets/images/icon_env_arrow_down.png', color: Color(0xfff656565), scale: 3),
           Text("18:08", style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
         ],
       ),
@@ -386,7 +386,7 @@ Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ImageIcon(AssetImage(icon), color: Color(0xff222222)),
+              Image.asset(icon, color: Color(0xff222222), scale: 5),
               Text(mainText,
                   style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               Text(_mainText,
@@ -396,7 +396,7 @@ Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ImageIcon(AssetImage(_icon), color: Color(0xff222222)),
+              Image.asset(_icon, color: Color(0xff222222), scale: 5),
               Text(subText,
                   style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               Text(_subText,
@@ -426,6 +426,14 @@ BoxDecoration _decoration() {
         offset: Offset(3, 5), // changes position of shadow
       ),
     ],
+  );
+}
+
+// decoration(without box shadow)
+BoxDecoration _decorations() {
+  return BoxDecoration(
+    color: Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(20),
   );
 }
 
@@ -482,7 +490,7 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
           )
         ],
       ),
-      decoration: _decoration(),
+      decoration: _decorations(),
     ),
   );
 }
@@ -544,7 +552,7 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
           )
         ],
       ),
-      decoration: _decoration(),
+      decoration: _decorations(),
     ),
   );
 }
@@ -599,7 +607,7 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
           )
         ],
       ),
-      decoration: _decoration(),
+      decoration: _decorations(),
     ),
   );
 }
