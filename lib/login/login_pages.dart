@@ -11,6 +11,7 @@ import 'package:plms_start/dio/login_dio.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../globals/login.dart' as login;
+import '../globals/stream.dart' as stream;
 
 // import 'package:google_fonts/google_fonts.dart';
 
@@ -231,6 +232,7 @@ class _LoginPageState extends State<LoginPage> {
           var uid = _idTextEditController.text;
           var pw = _pwTextEditController.text;
           // _loginTest.loginTest(uid, pw);
+          // _loginTest.postFcmToken(uid, stream.fcmtoken);
           Get.toNamed('/home');
           // Get.toNamed('/sensor');
         },
