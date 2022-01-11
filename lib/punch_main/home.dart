@@ -89,12 +89,11 @@ class _HomeState extends State<Home> {
         stream.pump_name.add(pumpName);
       }
 
-      List<int> pumpStatus = [
+      stream.pumpStatus = [
         stream.pump_1 == 'on' ? 1 : 0,
         stream.pump_2 == 'on' ? 1 : 0
       ];
-      print('pumpStatus: $pumpStatus');
-      stream.pumpStatus = pumpStatus;
+      print('pumpStatus: ${stream.pumpStatus}');
 
       // valves
       final getValves =

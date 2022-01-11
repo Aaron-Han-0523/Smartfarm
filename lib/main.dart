@@ -123,6 +123,11 @@ class _MyAppState extends State<MyApp> {
     _messaging = FirebaseMessaging.instance;
     _messaging.getToken().then((fcmtoken) async {
       print('##### First Get fcmtoken: $fcmtoken');
+      // var data = {userId: userId, fcmtoken: fcmtoken};
+      // final postToken = await dio.post('$url/$userId/pushAlarm', data: data);
+      // print('fcmtoken data가 잘 보내졌을까? : ${postToken.data}');
+      // print('fcmtoken이 잘 보내졌을까? : ${postToken.statusCode}');
+      // print('fcmtoken이 잘 보내졌을까? : ${postToken.statusMessage}');
     });
 
     // 푸시알림 앱 실행 시
