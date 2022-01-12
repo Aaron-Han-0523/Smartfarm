@@ -22,7 +22,7 @@ import 'dart:convert';
 * description : change password
 * writer : mark
 * create date : 2021-01-03
-* last update : 2021-01-05
+* last update : 2021-01-12
 * */
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -107,76 +107,91 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff2B3745),
+        backgroundColor: Color(0xffFFFFFF),
         automaticallyImplyLeading: false,
-        title: Header(
-          title: AppLocalizations.of(context)!.signUpHeader,
+        elevation: 0.0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded),
+          color: Color(0xff222222),
+          onPressed: () {
+            Get.toNamed('/');
+          },
+        ),
+        title: Text(
+          '비밀번호 변경',
+          style: TextStyle(color: Color(0xff4cbb8b)),
         ),
       ),
       body: ListView(
         children: [
+          SizedBox(height: Get.height * 0.07),
           _firstPage(),
         ],
       ),
-      bottomNavigationBar: Container(
-        color: Color(0xFFE6E6E6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: Get.width * 2.2 / 7,
-              child: new ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xff71838D),
-                ),
-                child:
-                    new Text(AppLocalizations.of(context)!.signUpbottomButton1),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-            ),
-            // registration 버튼
-            Container(
-              width: Get.width * 2.2 / 7,
-              child: new ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xff2F4C5A), // background
-                  // onPrimary: Colors.white, // foreground
-                ),
-                child:
-                    new Text(AppLocalizations.of(context)!.signUpbottomButton2),
-                onPressed: () async {
-                  if (formKey.currentState!.validate() == true) {
-                    var response = await dio.post(
-                        '$api/farm/login/${_idTextEditController.text}/checkpw', data: {
-                        'password': _currentPwTextEditController.text,
-                    });
-                    print('비밀번호는 : ${_currentPwTextEditController.text}');
-                    print('ID는 : ${_idTextEditController.text}');
-
-                    Map jsonBody = response.data;
-                    var jsonData = jsonBody['result'].toString();
-                    if (jsonData == 'true' ) {
-                      print('result는 성공: $jsonData');
-                      _loginTest.updatePW(_idTextEditController.text, _repwTextEditController.text)
-                          .then((value) => formKey.currentState!.save());
-                      print('result는 성공2: $jsonData');
-
-                    } else {
-                      print('result는 실패');
-                      Get.defaultDialog(backgroundColor: Colors.white, title: '실패', middleText: 'ID/PW를 확인해주세요', textCancel: 'Cancel');
-                    }
-                  }else{
-                    print('새비밀번호 확인');
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Container(
+      //       width: Get.width * 2.2 / 7,
+      //       child: new ElevatedButton(
+      //         style: ElevatedButton.styleFrom(
+      //           primary: Color(0xff4cbb8b),
+      //         ),
+      //         child:
+      //             new Text('취소', style: TextStyle(
+      //               color: Color(0xffFFFFFF),
+      //               fontSize: 15,
+      //               fontWeight: FontWeight.w500
+      //             ),),
+      //         onPressed: () {
+      //           Get.back();
+      //         },
+      //       ),
+      //     ),
+      //     // registration 버튼
+      //     Container(
+      //       width: Get.width * 2.2 / 7,
+      //       child: new ElevatedButton(
+      //         style: ElevatedButton.styleFrom(
+      //           primary: Color(0xff4cbb8b), // background
+      //         ),
+      //         child: new Text('변경', style: TextStyle(
+      //           color: Color(0xffFFFFFF),
+      //           fontSize: 15,
+      //           fontWeight: FontWeight.w500
+      //       ),
+      //         ),
+      //         onPressed: () async {
+      //           if (formKey.currentState!.validate() == true) {
+      //             var response = await dio.post(
+      //                 '$api/farm/login/${_idTextEditController.text}/checkpw', data: {
+      //                 'password': _currentPwTextEditController.text,
+      //             });
+      //             print('비밀번호는 : ${_currentPwTextEditController.text}');
+      //             print('ID는 : ${_idTextEditController.text}');
+      //
+      //             Map jsonBody = response.data;
+      //             var jsonData = jsonBody['result'].toString();
+      //             if (jsonData == 'true' ) {
+      //               print('result는 성공: $jsonData');
+      //               _loginTest.updatePW(_idTextEditController.text, _repwTextEditController.text)
+      //                   .then((value) => formKey.currentState!.save());
+      //               print('result는 성공2: $jsonData');
+      //
+      //             } else {
+      //               print('result는 실패');
+      //               Get.defaultDialog(backgroundColor: Colors.white, title: '실패', middleText: 'ID/PW를 확인해주세요', textCancel: 'Cancel');
+      //             }
+      //           }else{
+      //             print('새비밀번호 확인');
+      //           }
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -188,89 +203,41 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // first page
   Widget _firstPage() {
-    var radius = Radius.circular(10);
     return Form(
       key: formKey,
-      child: Container(
-        // height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Color(0xFFE6E6E6),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
+      child: Column(
+          children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30),
+          child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffB7C5B9),
-                  borderRadius:
-                      BorderRadius.only(topLeft: radius, bottomLeft: radius),
-                ),
-                height: MediaQuery.of(context).size.height * 7.5 / 9,
-                width: Get.width * 1 / 50,
+              _textField('아이디', _idTextEditController),
+              _size15(),
+              _currentPwField('현재 비밀번호', _currentPwTextEditController),
+              _size15(),
+              _pwFormField(
+                '새 비밀번호',
+                _pwTextEditController,
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 7.5 / 9,
-                width: Get.width - Get.width * 0.83 / 8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.only(topRight: radius, bottomRight: radius),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xffB7C5B9),
-                      offset: Offset(0, 0.3),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: Get.width,
-                        decoration:
-                            BoxDecoration(border: Border.all(width: 0.3)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          children: [
-                            _textField(
-                                '아이디',
-                                // AppLocalizations.of(context)!.signUpID,
-                                _idTextEditController),
-                            _size15(),
-                            _currentPwField(
-                                '현재 비밀번호', _currentPwTextEditController),
-                            _size15(),
-                            _pwFormField(
-                              '새 비밀번호',
-                              _pwTextEditController,
-                            ),
-                            _size15(),
-                            _repwtextField(
-                              '비밀번호 확인',
-                              // AppLocalizations.of(context)!.signUprepw,
-                              _repwTextEditController,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              _size15(),
+              _repwtextField(
+                '비밀번호 확인',
+                _repwTextEditController,
               ),
             ],
           ),
         ),
-      ),
+        SizedBox(height : Get.height * 0.3),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // _cancleButton(),
+            _registerButton(),
+          ],
+        )
+      ]),
     );
   }
-
-  // dropdown button
 
   // 사용자 이메일 필드
   Widget _textField(String title, var controller) {
@@ -312,18 +279,18 @@ class _SignUpPageState extends State<SignUpPage> {
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
           child: TextFormField(
-              style: TextStyle(fontSize: 17),
-              controller: controller,
-              focusNode: _currentPwFocus,
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: _textDecoration(),
-              validator: (value)
-              => CheckValidate().currentPassword(_currentPwFocus, value!, _idTextEditController),
-              onChanged: (text) {
-                setState(() {});
-              },
-              ),
+            style: TextStyle(fontSize: 17),
+            controller: controller,
+            focusNode: _currentPwFocus,
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
+            decoration: _textDecoration(),
+            validator: (value) => CheckValidate().currentPassword(
+                _currentPwFocus, value!, _idTextEditController),
+            onChanged: (text) {
+              setState(() {});
+            },
+          ),
         ),
       ],
     );
@@ -351,8 +318,9 @@ class _SignUpPageState extends State<SignUpPage> {
             style: TextStyle(fontSize: 17),
             keyboardType: TextInputType.visiblePassword,
             obscureText: true,
-            validator: (_repwTextEditController) => CheckValidate().validaterePassword(
-                _repasswordFocus, _repwTextEditController!, _pwTextEditController),
+            validator: (_repwTextEditController) => CheckValidate()
+                .validaterePassword(_repasswordFocus, _repwTextEditController!,
+                    _pwTextEditController),
             controller: controller,
             decoration: _textFormDecoration(),
             onChanged: (text) {
@@ -382,15 +350,93 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: _textFormDecoration(),
             controller: controller,
             validator: (value) => CheckValidate().validatePassword(
-                _passwordFocus,
-                value!,
-                _currentPwTextEditController),
+                _passwordFocus, value!, _currentPwTextEditController),
             onChanged: (text) {
               setState(() {});
             },
           ),
         ),
       ],
+    );
+  }
+
+  // 변경 등록 버튼
+  Widget _registerButton() {
+    return Container(
+      height: Get.height * 0.07,
+      width: Get.width * 0.8,
+      child: new ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xff4cbb8b),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)
+          ),// background
+        ),
+        child: new Text(
+          '등록',
+          style: TextStyle(
+              color: Color(0xffFFFFFF),
+              fontSize: 18,
+              fontWeight: FontWeight.w500),
+        ),
+        onPressed: () async {
+          if (formKey.currentState!.validate() == true) {
+            var response = await dio.post(
+                '$api/farm/login/${_idTextEditController.text}/checkpw',
+                data: {
+                  'password': _currentPwTextEditController.text,
+                });
+            print('비밀번호는 : ${_currentPwTextEditController.text}');
+            print('ID는 : ${_idTextEditController.text}');
+
+            Map jsonBody = response.data;
+            var jsonData = jsonBody['result'].toString();
+            if (jsonData == 'true') {
+              print('result는 성공: $jsonData');
+              _loginTest
+                  .updatePW(
+                      _idTextEditController.text, _repwTextEditController.text)
+                  .then((value) => formKey.currentState!.save());
+              print('result는 성공2: $jsonData');
+            } else {
+              print('result는 실패');
+              Get.defaultDialog(
+                  backgroundColor: Colors.white,
+                  title: '실패',
+                  middleText: 'ID/PW를 확인해주세요',
+                  textCancel: 'Cancel');
+            }
+          } else {
+            print('새비밀번호 확인');
+          }
+        },
+      ),
+    );
+  }
+
+  // 취소 버튼
+  Widget _cancleButton() {
+    return Container(
+      // height: Get.height * 0.06,
+      width: Get.width * 0.4,
+      child: new ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xff4cbb8b),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)
+          ),
+        ),
+        child: new Text(
+          '취소',
+          style: TextStyle(
+              color: Color(0xffFFFFFF),
+              fontSize: 15,
+              fontWeight: FontWeight.w500),
+        ),
+        onPressed: () {
+          Get.back();
+        },
+      ),
     );
   }
 
@@ -404,7 +450,4 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-// radio button
-
-// agreement page one
 }
