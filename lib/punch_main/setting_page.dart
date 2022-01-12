@@ -127,7 +127,7 @@ class _SettingPageState extends State<SettingPage> {
           _timerDropDownButtons('타이머 시간'),
           SizedBox(height: Get.height * 0.02),
           _sitesDropDownButtons('사이트 설정'),
-          SizedBox(height: Get.height * 0.04),
+          SizedBox(height: Get.height * 0.15),
           _siteConfigSetButton()
         ],
       ),
@@ -236,7 +236,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget _siteConfigSetButton() {
     return Container(
       height: Get.height * 0.07,
-      padding: EdgeInsets.fromLTRB(10,0,10,0),
+      padding: EdgeInsets.fromLTRB(15,0,15,0),
       child: new ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Color(0xff4cbb8b),
