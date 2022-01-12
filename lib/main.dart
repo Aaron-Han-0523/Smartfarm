@@ -89,11 +89,11 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff34B27A),
+      backgroundColor: Color(0xffF5F9FC),
       body: Center(
         child: Image.asset(
-          'assets/images/main_farmInEarth_v2.png',
-          scale: 2,
+          'assets/images/main_Farm in Earth_v1.png',
+          scale: 1.5,
         ),
       ),
     );

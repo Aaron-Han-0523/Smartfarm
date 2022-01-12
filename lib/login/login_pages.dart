@@ -77,12 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
-        backgroundColor: Color(0xff34B27A),
-        // 카카오 채널 고객센터/문의
-        floatingActionButton: FloatingActionButton(
-            onPressed: _launchURL,
-            backgroundColor: Colors.transparent,
-            child: Image.asset('assets/images/kakao_channel.png')),
+        backgroundColor: Color(0xffF5F9FC),
         // resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Stack(
@@ -91,22 +86,15 @@ class _LoginPageState extends State<LoginPage> {
               Positioned(
                 left: 0,
                 right: 0,
-                top: Get.height * 4.5 / 8,
+                top: Get.height * 0.35,
                 bottom: 10,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _textForm(),
-                    _textButton(),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    // _textButton(),
                     _button(),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
+                    // _textButton(),
                   ],
                 ),
               ),
@@ -125,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.only(top: 150),
           child: Column(children: [
             Image.asset(
-              'assets/images/main_farmInEarth_v2.png',
+              'assets/images/main_Farm in Earth_v1.png',
               scale: 1.5,
             ),
             Align(
@@ -145,96 +133,95 @@ class _LoginPageState extends State<LoginPage> {
 
   // 로그인 폼
   Widget _textForm() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            // decoration: _decorations(),
-            height: Get.height * 0.075,
-            width: Get.width * 0.8,
-            child: Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _idTextEditController,
-                  decoration: InputDecoration(
-                      fillColor: Color(0xffFFFFFF),
+    return Column(
+      children: [
+        Container(
+          // decoration: _decorations(),
+          // height: Get.height * 0.075,
+          width: Get.width * 0.8,
+          child: Row(children: [
+            Expanded(
+              child: TextFormField(
+                controller: _idTextEditController,
+                decoration: InputDecoration(
+                    fillColor: Color(0xffFFFFFF),
                     filled: true,
-                    prefixIcon: Icon(Icons.person, color: Colors.grey, size: 25),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.black12
-                          ),
-                          borderRadius: BorderRadius.circular(25)
-                      ),
-                      hintText: '아이디',
-                      hintStyle: TextStyle(color: Colors.black38, fontSize: 15)),
-                  onChanged: (text) {
-                    setState(() {});
-                  },
-                ),
+                    prefixIcon:
+                        Icon(Icons.person, color: Colors.grey, size: 25),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(),
+                        borderRadius: BorderRadius.circular(25)),
+                    hintText: '아이디',
+                    hintStyle: TextStyle(color: Colors.black38, fontSize: 15)),
+                onChanged: (text) {
+                  setState(() {});
+                },
               ),
-            ]),
-          ),
-          SizedBox(
-            height: Get.height * 0.03,
-          ),
-          SizedBox(
-            // height: Get.height * 1 / 30,
-            height: Get.height * 0.075,
-            width: Get.width * 0.8,
-            child: Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _pwTextEditController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      fillColor: Color(0xffFFFFFF),
-                      filled: true,
-                    prefixIcon: Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 25),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.black12
-                          ),
-                          borderRadius: BorderRadius.circular(25)
-                      ),
-                      hintText: '비밀번호',
-                      hintStyle: TextStyle(color: Colors.black38, fontSize: 15)
-                      // labelText: AppLocalizations.of(context)!.loginPW,
-                      ),
-                  onChanged: (text) {
-                    setState(() {});
-                  },
-                ),
+            ),
+          ]),
+        ),
+        // SizedBox(
+        //   height: Get.height * 0.03,
+        // ),
+        Container(
+          padding: EdgeInsets.only(top: 25),
+          // height: Get.height * 1 / 30,
+          // height: Get.height * 0.075,
+          width: Get.width * 0.8,
+          child: Row(children: [
+            Expanded(
+              child: TextFormField(
+                controller: _pwTextEditController,
+                obscureText: true,
+                decoration: InputDecoration(
+                    fillColor: Color(0xffFFFFFF),
+                    filled: true,
+                    prefixIcon:
+                        Icon(Icons.vpn_key_sharp, color: Colors.grey, size: 25),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(),
+                        borderRadius: BorderRadius.circular(25)),
+                    hintText: '비밀번호',
+                    hintStyle: TextStyle(color: Colors.black38, fontSize: 15)
+                    // labelText: AppLocalizations.of(context)!.loginPW,
+                    ),
+                onChanged: (text) {
+                  setState(() {});
+                },
               ),
-            ]),
-          ),
-        ],
-      ),
+            ),
+          ]),
+        ),
+      ],
     );
   }
 
   // 로그인 버튼
   Widget _button() {
-    return Container(
-      height: Get.height * 0.08,
-      width: Get.width * 0.75,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xff0a4b3e),
-        ),
-        onPressed: () async {
-          var uid = _idTextEditController.text;
-          var pw = _pwTextEditController.text;
-          _loginTest.loginTest(uid, pw);
-          // Get.toNamed('/home');
-          // Get.toNamed('/sensor');
-        },
-        child: Text(
-          '로그인',
-          style: TextStyle(fontSize: 20, color: Colors.white),
+    return Column(children: [
+      Container(
+        height: Get.height * 0.08,
+        width: Get.width * 0.8,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              primary: Color(0xff2E8953),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25))),
+          onPressed: () async {
+            var uid = _idTextEditController.text;
+            var pw = _pwTextEditController.text;
+            await _loginTest.loginTest(uid, pw);
+            // Get.toNamed('/home');
+            // Get.toNamed('/sensor');
+          },
+          child: Text(
+            '로그인',
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
         ),
       ),
-    );
+      _textButton()
+    ]);
   }
 
   // 회원가입 폼
@@ -257,28 +244,33 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-// 회원가입 버튼
+// 비밀번호 변경 / 카카오 채널 연결
   Widget _textButton() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Container(
-        height: Get.height * 0.045,
-        width: Get.width * 4 / 7,
-        child: TextButton(
-            onPressed: () {
-              Get.toNamed("/signup");
-            },
-            child: Text(
-              '비밀번호 변경',
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            )),
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TextButton(
+          onPressed: () {
+            Get.toNamed("/signup");
+          },
+          child: Text(
+            '비밀번호 변경',
+            style: TextStyle(color: Color(0xff2E6645), fontSize: 14),
+          )),
+      Text(
+        '/',
+        style: TextStyle(color: Color(0xff2E6645), fontSize: 14),
       ),
-    );
+      TextButton(
+          onPressed: _launchURL,
+          child: Text(
+            '카카오 채널 연결',
+            style: TextStyle(color: Color(0xff2E6645), fontSize: 14),
+          ))
+    ]);
   }
 
   //카카오 채널 url launcher
   _launchURL() async {
-    const url = 'http://pf.kakao.com/_TAxfdb';
+    const url = 'http://pf.kakao.com/_xledxfb';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

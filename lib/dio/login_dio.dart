@@ -29,15 +29,22 @@ class LoginTest {
     Map jsonBody = response.data;
 
     var jsonData = jsonBody['result'].toString();
-    var cookies = response.headers['set-cookie'];
-    // var data = cookies![0].split()
-    print('header!!!!!!!!!!!!!!!!');
-    print(cookies![0].split('Path')[0]);
-    plms_start.cookies = cookies[0].split('Path')[0];
+    // var cookies = response.headers['set-cookie'];
+    // // var data = cookies![0].split()
+    // print('header!!!!!!!!!!!!!!!!');
+    // print(cookies![0].split('Path')[0]);
+    // plms_start.cookies = cookies[0].split('Path')[0];
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
         Get.toNamed('/sensor');
+
+        var cookies = response.headers['set-cookie'];
+        // var data = cookies![0].split()
+        print('header!!!!!!!!!!!!!!!!');
+        print(cookies![0].split('Path')[0]);
+        plms_start.cookies = cookies[0].split('Path')[0];
+
         print('jsonBody는: $jsonBody');
         print('password는: ${jsonBody['results']['password']}');
       } else if (jsonData == 'false') {
