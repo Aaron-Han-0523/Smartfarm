@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -49,214 +50,281 @@ class _SettingPageState extends State<SettingPage> {
   void dispose() {
     _highTextEditController.dispose();
     _lowTextEditController.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF5F9FC),
       appBar: AppBar(
+        backgroundColor: Color(0xffFFFFFF),
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded, color: Color(0xff222222)),
+          onPressed: (){
+            Get.back();
+          },
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10),
             // 로그아웃
-            child: InkWell(
-              child: CircleAvatar(
-                child: Icon(Icons.logout),
-              ),
-              onTap: () {
+            child: IconButton(
+              icon: Icon(Icons.login_rounded, color: Color(0xff222222)),
+              onPressed: () {
                 _logout.logout();
-                // Get.offAllNamed('/'); // 로그아웃 연결 필요함
               },
             ),
           )
         ],
-        title: Align(
-          alignment: Alignment.topLeft,
-          child: Column(children: [
-            Text(
+        title: Column(children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
               'Farm in Earth',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(color: Color(0xff2E8953), fontSize: 18),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 30),
-                child: Text(stream.sitesDropdownValue,
-                    style: TextStyle(color: Colors.black, fontSize: 16))),
-          ]),
-        ),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(stream.sitesDropdownValue,
+                style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600)),
+          ),
+        ]),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(bottom: 15, left: 15),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 15),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('경보 설정',
-                      style: TextStyle(fontSize: 13, color: Colors.black54))),
-            ),
-            _swichWidget('경보 활성화'),
-            _tempFormField('고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
-            _tempFormField('저온 경보 (°C)', "alarm_low_temp",_lowTextEditController),
-            const Divider(
-              height: 10,
-              thickness: 2,
-              indent: 0,
-              endIndent: 0,
-              color: Colors.grey,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 15),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    '관수 타이머 설정',
-                    style: TextStyle(fontSize: 13, color: Colors.black54),
-                  )),
-            ),
-            _timerDropDownButtons('타이머 시간'),
-            _sitesDropDownButtons('사이트 설정'),
-            _siteConfigSetButton()
-          ],
-        ),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 15, top: 20, bottom: 15),
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: Text('경보 설정',
+                    style: TextStyle(fontSize: 15, color: Colors.black54))),
+          ),
+          _swichWidget('경보 활성화'),
+          SizedBox(height: Get.height * 0.02),
+          _tempFormField('고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
+          SizedBox(height: Get.height * 0.02),
+          _tempFormField('저온 경보 (°C)', "alarm_low_temp",_lowTextEditController),
+          const Divider(
+            height: 30,
+            thickness: 1,
+            indent: 0,
+            endIndent: 0,
+            color: Colors.black26,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15, top: 20, bottom: 15),
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  '관수 타이머 설정',
+                  style: TextStyle(fontSize: 13, color: Colors.black54),
+                )),
+          ),
+          _timerDropDownButtons('타이머 시간'),
+          SizedBox(height: Get.height * 0.02),
+          _sitesDropDownButtons('사이트 설정'),
+          SizedBox(height: Get.height * 0.04),
+          _siteConfigSetButton()
+        ],
       ),
     );
   }
 
   bool status = true;
-  String on = 'on';
-  String off = 'off';
 
   Widget _swichWidget(String name) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          name,
-          style: TextStyle(
-              fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black54),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: FlutterSwitch(
-            activeColor: Colors.green,
-            width: Get.width * 0.2,
-            height: Get.height * 0.05,
-            valueFontSize: 20.0,
-            toggleSize: 20.0,
-            value: status,
-            borderRadius: 30.0,
-            // padding: 3.0,
-            showOnOff: true,
-            onToggle: (value){
-              setState(() {
-                status = value;
-                _mqttClass.configSet("alarm_en", status, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-              });
-              // _mqttClass.mqttConnect("alarm_en", status, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
-            }
+    return Container(
+      color: Color(0xffFFFFFF),
+      height: Get.height * 0.08,
+      width: Get.width,
+      // decoration: _decoration(Color(0xffFFFFFF)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(
+              name,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black54),
+            ),
           ),
-        ),
-      ],
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              fontSize: 12,
+              minWidth: 60.0,
+              cornerRadius: 80.0,
+              activeBgColors: [
+                [Color(0xffe3fbed)],
+                [Color(0xfff2f2f2)]
+              ],
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
+              // initialLabelIndex:
+              // stream.pumpStatus[index] == 0 ? 1 : 0,
+              totalSwitches: 2,
+              labels: ['ON', 'OFF'],
+              radiusStyle: true,
+              onToggle: (value) async {
+                if (value == 0) {
+                  status = true;
+                } else if (value == 1) {
+                  status = false;
+                }
+                _mqttClass.configSet("alarm_en", status, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _tempFormField(String title, String dic, var controller) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-            width: Get.width * 1 / 3.9,
+    return Container(
+      color: Color(0xffFFFFFF),
+      height: Get.height * 0.08,
+      width: Get.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
             child: Text(title,
                 style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black54))),
-        SizedBox(
-          width: Get.width * 2.8 / 5,
-          height: Get.height * 2.1 / 25,
-          child: TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.subdirectory_arrow_left),
-                onPressed: () {
-                  _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                }
-              )
-            ),
-            onChanged: (text) {
-              // setState(() {});
-              print('$title : $text');
-            },
+                    color: Colors.black54)),
           ),
-        ),
-      ],
+          Container(
+            padding: EdgeInsets.only(right: 15),
+            width: Get.width * 0.35,
+            height: Get.height * 0.06,
+            child: TextFormField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: ' 온도를 입력하세요',
+                hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
+                // border: OutlineInputBorder(),
+                // suffixIcon: IconButton(
+                //   icon: const Icon(Icons.subdirectory_arrow_left),
+                //   onPressed: () {
+                //     _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                //   }
+                // )
+              ),
+              onChanged: (text) {
+                // setState(() {});
+                print('$title : $text');
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   // SITE CONFIG SET widget
   Widget _siteConfigSetButton() {
-    return RaisedButton(
-        onPressed: (){
+    return Container(
+      height: Get.height * 0.07,
+      padding: EdgeInsets.fromLTRB(10,0,10,0),
+      child: new ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xff4cbb8b),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)
+          ),// background
+        ),
+        child: new Text(
+          'SET CONIG(저장)',
+          style: TextStyle(
+              color: Color(0xffFFFFFF),
+              fontSize: 18,
+              fontWeight: FontWeight.w500),
+        ),
+        onPressed: () async {
 
         },
-      child: Text("SET CONIG(저장)"),
+      ),
     );
   }
 
+
   String timerDropdownValue = '30분';
   Widget _timerDropDownButtons(var name) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(name,
-            style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-                color: Colors.black54)),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: DropdownButton<String>(
-            value: timerDropdownValue,
-            icon: Column(
-                children : [
-             const Icon(Icons.arrow_drop_up, color: Colors.black, size: 30),
-              const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30)
-            ]
-            ),
-            elevation: 16,
-            style: const TextStyle(color: Colors.black54),
-            underline: Container(
-              height: 2,
-              width: 15,
-              color: Colors.black26,
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                timerDropdownValue = newValue!;
-                _mqttClass.configSet("watering_timer", "$newValue", '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
-                print('$name : $newValue');
-              });
-            },
-            items: <String>[
-              '30분',
-              '1시간',
-              '1시간 30분',
-              '2시간',
-              '2시간 30분',
-              '3시간',
-              '3시간 30분',
-              '4시간'
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+    return Container(
+      color: Color(0xffFFFFFF),
+      height: Get.height * 0.08,
+      width: Get.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(name,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54)),
           ),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: DropdownButton<String>(
+              value: timerDropdownValue,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+              style: const TextStyle(color: Colors.black54),
+              underline: Container(
+                height: 2,
+                // width: 30,
+                color: Colors.black26,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  timerDropdownValue = newValue!;
+                  _mqttClass.configSet("watering_timer", newValue, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+                  print('$name : $newValue');
+                });
+              },
+              items: <String>[
+                '30분',
+                '1시간',
+                '1시간 30분',
+                '2시간',
+                '2시간 30분',
+                '3시간',
+                '3시간 30분',
+                '4시간'
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value, style: TextStyle(color: Colors.black38, fontWeight: FontWeight.normal, fontSize: 13),),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // decoration (with box shadow)
+  BoxDecoration _decoration(dynamic color) {
+    return BoxDecoration(
+      color: color,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          blurRadius: 2,
+          offset: Offset(3, 5), // changes position of shadow
         ),
       ],
     );
@@ -264,56 +332,59 @@ class _SettingPageState extends State<SettingPage> {
 
   String sitesDropdownValue =
       stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
   Widget _sitesDropDownButtons(var name) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(name,
-            style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-                color: Colors.black54)),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: DropdownButton<String>(
-            value: sitesDropdownValue,
-            icon: Column(
-                children : [
-                  const Icon(Icons.arrow_drop_up, color: Colors.black, size: 30),
-                  const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30)
-                ]
-            ),
-            elevation: 16,
-            style: const TextStyle(color: Colors.black54),
-            underline: Container(
-              height: 2,
-              color: Colors.black26,
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                sitesDropdownValue = newValue!;
-                print('$name : $newValue');
-                stream.sitesDropdownValue = sitesDropdownValue;
-              });
-            },
-            items: <String>[
-              'EdgeWorks',
-              'Jsoftware',
-              'smartFarm',
-              'Project',
-              'Nodejs',
-              'Flutter',
-              'MySQL',
-              'AWS'
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+    return Container(
+      color: Color(0xffFFFFFF),
+      height: Get.height * 0.08,
+      width: Get.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(name,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54)),
           ),
-        ),
-      ],
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: DropdownButton<String>(
+              value: sitesDropdownValue,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+              style: const TextStyle(color: Colors.black54),
+              underline: Container(
+                height: 2,
+                color: Colors.black26,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  sitesDropdownValue = newValue!;
+                  print('$name : $newValue');
+                  stream.sitesDropdownValue = sitesDropdownValue;
+                });
+              },
+              items: <String>[
+                'EdgeWorks',
+                'Jsoftware',
+                'smartFarm',
+                'Project',
+                'Nodejs',
+                'Flutter',
+                'MySQL',
+                'AWS'
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value, style: TextStyle(color: Colors.black38, fontWeight: FontWeight.normal, fontSize: 13),),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
