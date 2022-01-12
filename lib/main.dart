@@ -35,10 +35,10 @@ import '../globals/stream.dart' as stream;
 
 /*
 * name : main
-* description : This is a start page.
-* writer : john
-* create date : 2021-09-30
-* last update : 2021-09-30
+* description : This is a start page. code for fcm push notification.
+* writer : Sherry
+* create date : 2022-01-10
+* last update : 2022-01-12
 * */
 
 // APIs
@@ -65,8 +65,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 late AndroidNotificationChannel channel;
 
 // Initialize the [FlutterLocalNotificationsPlugin] package.
-late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
 // 안드로이드 푸시알림 메세지 구성 설정
 class PushNotification {
@@ -108,7 +108,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // // 푸시알림 토큰 firebase token = fcmtoken
   // var fcmtoken = '';
-  late int _totalNotifications;
+  late int _totalNotifications = 0;
   // late final FirebaseMessaging _messaging;
   PushNotification? _notificationInfo;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -125,11 +125,6 @@ class _MyAppState extends State<MyApp> {
     _messaging.getToken().then((fcmtoken) async {
       stream.fcmtoken = fcmtoken!;
       print('##### Not first Get fcmtoken: ${stream.fcmtoken}');
-      // var data = {userId: userId, fcmtoken: fcmtoken};
-      // final postToken = await dio.post('$url/$userId/pushAlarm', data: data);
-      // print('fcmtoken data가 잘 보내졌을까? : ${postToken.data}');
-      // print('fcmtoken이 잘 보내졌을까? : ${postToken.statusCode}');
-      // print('fcmtoken이 잘 보내졌을까? : ${postToken.statusMessage}');
     });
 
     // 푸시알림 앱 실행 시
@@ -154,12 +149,11 @@ class _MyAppState extends State<MyApp> {
       ));
 
       print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}'); // message.data는 이미지 url을 뜻합니다.
 
       if (message.notification != null && android != null) {
         print('Message also contained a notification: ${message.notification}');
         print(// 타이틀: 메시지 제목; 바디: 메시지 내용; 데이터: 이미지 url
-            'Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
+            'Message title: ${message.notification?.title}, body: ${message.notification?.body}');
 
         PushNotification notification = PushNotification(
           title: message.notification?.title,
