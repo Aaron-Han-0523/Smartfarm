@@ -139,8 +139,10 @@ class _MyAppState extends State<MyApp> {
       // 여기서는 data가 표시 안됨
       // 백그라운드와 비활성화일 시에는 data(image)가 뜨게끔 설정해두었으나 확인요망
       Get.dialog(AlertDialog(
-        title: Text(message.notification?.title ?? 'TITLE'), // 메세지 제목
-        content: Text(message.notification?.body ?? 'BODY'), // 메세지 내용
+        title: Text(
+            message.notification?.title ?? '${notification?.title}'), // 메세지 제목
+        content: Text(
+            message.notification?.body ?? '${notification?.body}'), // 메세지 내용
         actions: <Widget>[
           TextButton(
             child: Text("OK"),
