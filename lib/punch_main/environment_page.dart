@@ -146,7 +146,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                   ),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text('siteDropdown',
+                    child: Text(stream.sitesDropdownValue,
                         style: TextStyle(color: Colors.black, fontSize: 18)),
                   ),
                   SizedBox(height : Get.height * 0.05),

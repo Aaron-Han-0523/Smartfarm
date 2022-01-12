@@ -56,7 +56,7 @@ class _SensorPageState extends State<SensorPage> {
                   ),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text('siteDropdown',
+                    child: Text(stream.sitesDropdownValue,
                         style: TextStyle(color: Colors.black, fontSize: 18)),
                   ),
                 ]),

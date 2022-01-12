@@ -134,7 +134,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
                       ),
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text('siteDropdown',
+                        child: Text(stream.sitesDropdownValue,
                             style:
                                 TextStyle(color: Colors.black, fontSize: 18)),
                       ),
