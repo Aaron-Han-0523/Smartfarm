@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,23 +11,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-// import 'package:plms_start/punch_main/punch_photo.dart';
-import 'package:plms_start/punch_main/home.dart';
-import 'package:plms_start/punch_main/setting_page.dart';
-// import 'package:plms_start/modify/punch_modify.dart';
-import 'package:plms_start/signup/sign_up_page.dart';
-// import 'package:plms_start/punch_issue/loading.dart';
-
-// import 'punch_main/punch_complete.dart';
-// import 'punch_success/confirm_page.dart';
+import 'package:plms_start/pages/home.dart';
+import 'package:plms_start/pages/setting_page.dart';
+import 'package:plms_start/pages/sign_up_page.dart';
 import 'login/login_pages.dart';
-import 'punch_main/mqtt.dart';
-import 'punch_main/sensor.dart';
-// import 'punch_issue/punch_issue.dart';
-// import 'punch_success/success_page.dart';
-// import 'modify/popup_page.dart';
-// import 'punch_issue/draft_screen.dart';
-
+import 'pages/mqtt.dart';
+import 'pages/sensor.dart';
 import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
 

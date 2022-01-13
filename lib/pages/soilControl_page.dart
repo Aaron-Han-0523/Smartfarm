@@ -8,7 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:plms_start/mqtt/mqtt.dart';
-import 'package:plms_start/punch_main/mqtt.dart';
+import 'package:plms_start/pages/mqtt.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:dio/dio.dart';

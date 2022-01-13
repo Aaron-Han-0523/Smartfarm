@@ -86,6 +86,42 @@ class MqttClass {
     return true;
   }
 
+  //MQTT SITE CONFIG SET - publish
+  Future<dynamic> test (String alarm, var alarmValue, String highTemp, String highTempValue, String lowTemp, String lowTempValue, String timer, String timerValue, var subscibeTopic, var publishTopic) async {
+
+    client.logging(on: true);
+    client.port = 1883;
+    client.secure = false;
+    final MqttConnectMessage connMess =
+    MqttConnectMessage().withClientIdentifier('3').startClean();// userid를 global에 저장하고 shared 해서 불러온다음 id 값 함수에 인자로 받아서 넣어주기
+    client.connectionMessage = connMess;
+    await client.connect();
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      print("Connected to AWS Successfully!");
+    } else {
+      return false;
+    }
+
+    var topic = subscibeTopic;
+    client.subscribe(topic, MqttQos.atMostOnce);
+
+    var pubTopic = publishTopic;
+    final builder = MqttClientPayloadBuilder();
+
+    // publish data
+    builder.addString('{"rt" : "set", "$alarm" : $alarmValue}');
+    builder.addString('{"rt" : "set", "$highTemp" : $highTempValue}');
+    builder.addString('{"rt" : "set", "$lowTemp" : $lowTempValue}');
+    builder.addString('{"rt" : "set", "$timer" : $timerValue}');
+
+    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
+    // client.publishMessage(publishTopic, MqttQos.atLeastOnce, builder.payload!);
+
+    return true;
+  }
+
+
+
 
 
 

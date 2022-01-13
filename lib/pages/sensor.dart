@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:get/get.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:plms_start/punch_main/cctv_page.dart';
-
+import 'package:plms_start/pages/cctv_page.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import "package:ndialog/ndialog.dart";
-
 import 'package:url_launcher/url_launcher.dart';
-import '../globals/login.dart' as login;
-import '../globals/issue.dart' as issue;
-import '../globals/photos.dart' as photos;
-
 import '../globals/stream.dart' as stream;
-
-import 'environment_page.dart';
+import '../pages/environment_page.dart';
 import 'sensor_page.dart';
 import 'soilControl_page.dart';
 

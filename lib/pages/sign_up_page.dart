@@ -8,12 +8,9 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:plms_start/dio/login_dio.dart';
-import 'package:plms_start/ontap_draft/confirm_page_ontap.dart';
 import 'package:plms_start/pages/components/registrations/validate.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
-
-import '../pages/utils/header_issue.dart';
 import 'package:plms_start/globals/checkUser.dart' as plms_start;
 import 'dart:convert';
 

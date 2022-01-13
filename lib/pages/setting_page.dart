@@ -13,13 +13,14 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:plms_start/globals/siteConfig.dart' as siteConfig;
 
 /*
 * name : PageThree
 * description : punch issue three page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-07
+* last update : 2021-01-12
 * */
 
 class SettingPage extends StatefulWidget {
@@ -41,8 +42,15 @@ class _SettingPageState extends State<SettingPage> {
   final _highTextEditController = TextEditingController();
   final _lowTextEditController = TextEditingController();
 
+  //global key
+  var _setTimer = siteConfig.set_timer;
+  bool _switchStatus = siteConfig.status_alarm;
+  var _lowTemp = siteConfig.low_temp;
+  var _highTemp = siteConfig.high_temp;
+
   @override
   void initState() {
+    print('저장된 global key의 alarm Status는 : $_switchStatus');
     // mqttConnect;
   }
 
@@ -105,9 +113,9 @@ class _SettingPageState extends State<SettingPage> {
           ),
           _swichWidget('경보 활성화'),
           SizedBox(height: Get.height * 0.02),
-          _tempFormField('고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
+          _highTempFormField('고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
           SizedBox(height: Get.height * 0.02),
-          _tempFormField('저온 경보 (°C)', "alarm_low_temp",_lowTextEditController),
+          _lowTempFormField('저온 경보 (°C)', "alarm_low_temp",_lowTextEditController),
           const Divider(
             height: 30,
             thickness: 1,
@@ -134,7 +142,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  bool status = true;
+  bool status = false;
 
   Widget _swichWidget(String name) {
     return Container(
@@ -179,7 +187,9 @@ class _SettingPageState extends State<SettingPage> {
                 } else if (value == 1) {
                   status = false;
                 }
-                _mqttClass.configSet("alarm_en", status, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                _switchStatus = status;
+                print('global key의 alarm Status는 : $_switchStatus');
+                // _mqttClass.configSet("alarm_en", _switchStatus, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
               },
             ),
           ),
@@ -188,7 +198,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _tempFormField(String title, String dic, var controller) {
+  Widget _highTempFormField(String title, String dic, var highTempController) {
     return Container(
       color: Color(0xffFFFFFF),
       height: Get.height * 0.08,
@@ -209,17 +219,64 @@ class _SettingPageState extends State<SettingPage> {
             width: Get.width * 0.35,
             height: Get.height * 0.06,
             child: TextFormField(
-              controller: controller,
+              controller: highTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
                 hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
                 // border: OutlineInputBorder(),
-                // suffixIcon: IconButton(
-                //   icon: const Icon(Icons.subdirectory_arrow_left),
-                //   onPressed: () {
-                //     _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                //   }
-                // )
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.subdirectory_arrow_left),
+                  onPressed: () {
+                    _highTemp = highTempController.text;
+                    print('high temp 는? $_highTemp');
+                    // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                  }
+                )
+              ),
+              onChanged: (text) {
+                // setState(() {});
+                print('$title : $text');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _lowTempFormField(String title, String dic, var lowTempController) {
+    return Container(
+      color: Color(0xffFFFFFF),
+      height: Get.height * 0.08,
+      width: Get.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(title,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54)),
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 15),
+            width: Get.width * 0.35,
+            height: Get.height * 0.06,
+            child: TextFormField(
+              controller: lowTempController,
+              decoration: InputDecoration(
+                  hintText: ' 온도를 입력하세요',
+                  hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
+                  // border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                      icon: const Icon(Icons.subdirectory_arrow_left),
+                      onPressed: () {
+                        _lowTemp = lowTempController.text;
+                        print('low temp 는? $_highTemp');
+                        // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                      }
+                  )
               ),
               onChanged: (text) {
                 // setState(() {});
@@ -252,6 +309,11 @@ class _SettingPageState extends State<SettingPage> {
               fontWeight: FontWeight.w500),
         ),
         onPressed: () async {
+          // _mqttClass.configSet("alarm_en", _switchStatus, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+          // _mqttClass.configSet('alarm_high_temp', _highTemp, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+          // _mqttClass.configSet('alarm_low_temp', _lowTemp, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+          // _mqttClass.configSet("watering_timer", _setTimer, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+          _mqttClass.test("alarm_en", _switchStatus, 'alarm_high_temp', _highTemp, 'alarm_low_temp',  _lowTemp, "watering_timer", _setTimer, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
 
         },
       ),
@@ -259,7 +321,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
 
-  String timerDropdownValue = '30분';
+  String timerDropdownValue = '30';
   Widget _timerDropDownButtons(var name) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -290,19 +352,20 @@ class _SettingPageState extends State<SettingPage> {
               onChanged: (String? newValue) {
                 setState(() {
                   timerDropdownValue = newValue!;
-                  _mqttClass.configSet("watering_timer", newValue, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
-                  print('$name : $newValue');
+                  _setTimer = newValue;
+                  // _mqttClass.configSet("watering_timer", newValue, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+                  print('타이머 시간은 : $name : $_setTimer');
                 });
               },
               items: <String>[
-                '30분',
-                '1시간',
-                '1시간 30분',
-                '2시간',
-                '2시간 30분',
-                '3시간',
-                '3시간 30분',
-                '4시간'
+                '30',
+                '60',
+                '90',
+                '120',
+                '150',
+                '180',
+                '210',
+                '240'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
