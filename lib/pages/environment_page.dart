@@ -322,13 +322,22 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                         child: Column(
                                           children: [
                                             _toggleSwitch2(
-                                                context, '환풍기 (#1)', status8),
+                                                context,
+                                                '환풍기 (#1)',
+                                                status8,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch2(
-                                                context, '환풍기 (#2)', status9),
+                                                context,
+                                                '환풍기 (#2)',
+                                                status9,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
-                                            _toggleSwitch2(context,
-                                                '외부 제어 (#1)', status10),
+                                            _toggleSwitch2(
+                                                context,
+                                                '외부 제어 (#1)',
+                                                status10,
+                                                stream.motorStatus[index]),
                                           ],
                                         ),
                                       )
@@ -527,7 +536,11 @@ Widget _toggleSwitch(
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: statusIndex == 0 ? 1 : 0,
+              initialLabelIndex: statusIndex == 0
+                  ? 0
+                  : statusIndex == 1
+                      ? 1
+                      : 2,
               totalSwitches: 3,
               labels: ['열림', '정지', '닫힘'],
               radiusStyle: true,
@@ -561,7 +574,8 @@ Widget _toggleSwitch(
 }
 
 //기타제어
-Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
+Widget _toggleSwitch2(
+    BuildContext context, String text, bool visibles, int statusIndex) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -587,7 +601,7 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: 1,
+              initialLabelIndex: statusIndex == 0 ? 1 : 0,
               totalSwitches: 2,
               labels: ['ON', 'OFF'],
               radiusStyle: true,
