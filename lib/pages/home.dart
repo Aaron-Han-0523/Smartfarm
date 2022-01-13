@@ -44,6 +44,11 @@ class _HomeState extends State<Home> {
     stream.cctvs = [];
     stream.cctv_url = [];
 
+    // environment page
+    stream.sideMotors = [];
+    stream.topMotors = [];
+    stream.motor_name = [];
+
     // soilControl page
     stream.pumps = [];
     stream.pump_name = [];
@@ -55,6 +60,7 @@ class _HomeState extends State<Home> {
     stream.sensorStatus = []; // pump1's on/off, pump2's on/off
 
     stream.pumpStatus = [];
+    stream.motorStatus = [];
 
     getData();
     super.initState();
@@ -82,6 +88,45 @@ class _HomeState extends State<Home> {
       }
       print('##### homePage GET CCTV Url List: ${stream.cctv_url}');
 
+      // motors
+      final getSideMotors =
+          await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+      stream.sideMotors = getSideMotors.data['data'];
+      print('##### homePage GET sideMotors list : ${stream.sideMotors}');
+      print(
+          '##### homePage sideMotors List length : ${stream.sideMotors.length}');
+      stream.motor_name = [];
+      for (var i = 0; i < stream.sideMotors.length; i++) {
+        var sideMotorName = stream.sideMotors[i]['motor_name'];
+        stream.motor_name.add(sideMotorName);
+      }
+
+      final getTopMotors =
+          await dio.get('$url/$userId/site/$siteId/controls/top/motors');
+      stream.topMotors = getTopMotors.data['data'];
+      print('##### homePage GET topMotors list : ${stream.topMotors}');
+      print(
+          '##### homePage topMotors List length : ${stream.topMotors.length}');
+      stream.motor_name = [];
+      for (var i = 0; i < stream.topMotors.length; i++) {
+        var topMotorName = stream.topMotors[i]['motor_name'];
+        stream.motor_name.add(topMotorName);
+      }
+
+      stream.motorStatus = [
+        stream.motor_1 == 'on' ? 1 : 0,
+        stream.motor_2 == 'on' ? 1 : 0,
+        stream.motor_3 == 'on' ? 1 : 0,
+        stream.motor_4 == 'on' ? 1 : 0,
+        stream.motor_5 == 'on' ? 1 : 0,
+        stream.motor_6 == 'on' ? 1 : 0,
+        stream.motor_6 == 'on' ? 1 : 0, // motor 7개
+        stream.pump_1 == 'on' ? 1 : 0,
+        stream.pump_1 == 'on' ? 1 : 0, // on/off pump ㅇㅇ
+        stream.pump_2 == 'on' ? 1 : 0,
+      ];
+      print('motorStatus: ${stream.motorStatus}');
+
       // pumps
       final getPumps =
           await dio.get('$url/$userId/site/$siteId/controls/pumps');
@@ -96,7 +141,7 @@ class _HomeState extends State<Home> {
 
       stream.pumpStatus = [
         stream.pump_1 == 'on' ? 1 : 0,
-        stream.pump_2 == 'on' ? 1 : 0
+        stream.pump_2 == 'on' ? 1 : 0,
       ];
       print('pumpStatus: ${stream.pumpStatus}');
 
