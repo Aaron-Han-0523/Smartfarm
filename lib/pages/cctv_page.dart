@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
 
@@ -52,33 +53,34 @@ class CCTVPage extends StatefulWidget {
 }
 
 class _CCTVPageState extends State<CCTVPage> {
-  late List<VideoPlayerController> VideoPlayerControllers;
-  late List<ChewieController> ChewieControllers;
-  double _aspectRatio = 16 / 9;
+  late List<VlcPlayerController> controllers;
+  late VlcPlayerController vlcPlayerController;
+  List<String> urls = [
+    'rtsp://admin:dbslzhs123%21%40%23@14.46.231.48:60554/Streaming/Channels/101',
+    'rtsp://admin:dbslzhs123%21%40%23@14.46.231.48:60554/Streaming/Channels/101',
+    'https://www.tomandjerryonline.com/Videos/tjpb1.mov'
+  ];
 
   // visibiliby
   List<bool> _visibility = [true, true, true];
 
   @override
-  initState() {
+  void initState() {
     _getData();
     super.initState();
-    VideoPlayerControllers = [];
-    ChewieControllers = [];
-    for (var i = 0; i < cctv_url.length; i++) {
-      var videoPlayerController = VideoPlayerController.network(cctv_url[i]);
-      VideoPlayerControllers.add(videoPlayerController);
-      var chewieController = ChewieController(
-        allowFullScreen: true,
-        videoPlayerController: VideoPlayerControllers[i],
-        aspectRatio: _aspectRatio,
-        autoInitialize: true,
+    controllers = <VlcPlayerController>[];
+    for (var i = 0; i < urls.length; i++) {
+      var controller = VlcPlayerController.network(
+        urls[i],
+        // hwAcc: HwAcc.FULL,
         autoPlay: true,
+        // options: VlcPlayerOptions(),
       );
-      ChewieControllers.add(chewieController);
+      controllers.add(controller);
     }
   }
 
+  double _ratio = 16 / 9;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +103,7 @@ class _CCTVPageState extends State<CCTVPage> {
                                 onPressed: () {
                                   setState(() {
                                     // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                                    ChewieControllers[index].enterFullScreen();
+                                    // controllers[index].enterFullScreen();
                                   });
                                 },
                                 icon: Icon(Icons.control_camera)),
@@ -115,8 +117,9 @@ class _CCTVPageState extends State<CCTVPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.3,
                                 width: MediaQuery.of(context).size.width,
-                                child: Chewie(
-                                  controller: ChewieControllers[index],
+                                child: VlcPlayer(
+                                  controller: controllers[index],
+                                  aspectRatio: _ratio,
                                 ),
                               ),
                             ),
@@ -132,14 +135,21 @@ class _CCTVPageState extends State<CCTVPage> {
     );
   }
 
-  @override
-  void dispose() async {
-    super.dispose();
-    for (final videoPlayerController in VideoPlayerControllers) {
-      await videoPlayerController.dispose();
-    }
-    for (final chewieController in ChewieControllers) {
-      chewieController.dispose();
-    }
-  }
+  // @override
+  // void dispose() async {
+  //   super.dispose();
+  //   for (final controllers in controllers) {
+  //     await controllers.dispose();
+  //   }
+  //   for (final controllers in controllers) {
+  //     controllers.dispose();
+  //   }
+  // }
 }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   // TODO: implement build
+  //   throw UnimplementedError();
+  // }
+

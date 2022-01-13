@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:plms_start/dio/logout_dio.dart';
@@ -19,6 +21,15 @@ import 'package:plms_start/globals/siteConfig.dart' as siteConfig;
 * last update : 2021-01-13
 * */
 
+var api = dotenv.env['PHONE_IP'];
+var url = '$api/farm';
+var userId = 'test';
+var siteId = 'sid';
+
+// dio APIs
+
+Dio dio = Dio();
+
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
@@ -27,7 +38,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   // logout API
   Logout _logout = Logout();
 
@@ -57,6 +67,21 @@ class _SettingPageState extends State<SettingPage> {
     super.dispose();
   }
 
+  Future<void> _updateData(var site_set_alarm_enable, var site_set_alarm_high,
+      var site_set_alarm_low, var site_set_alarm_timer) async {
+    var params = {
+      'site_set_alarm_enable': site_set_alarm_enable,
+      'site_set_alarm_high': site_set_alarm_high,
+      'site_set_alarm_low': site_set_alarm_low,
+      'site_set_alarm_timer': site_set_alarm_timer,
+    };
+    var response =
+        await dio.put('$url/$userId/site/$siteId/settings', data: params);
+    // var response = await dio.get('$api/$userId/site/$siteId/settings');
+    print('!!!!!!!!!!!!!!!!!');
+    print(response);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +91,7 @@ class _SettingPageState extends State<SettingPage> {
         elevation: 0.0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, color: Color(0xff222222)),
-          onPressed: (){
+          onPressed: () {
             Get.back();
           },
         ),
@@ -93,7 +118,10 @@ class _SettingPageState extends State<SettingPage> {
           Align(
             alignment: Alignment.topLeft,
             child: Text(stream.sitesDropdownValue,
-                style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600)),
           ),
         ]),
       ),
@@ -109,9 +137,11 @@ class _SettingPageState extends State<SettingPage> {
           ),
           _swichWidget('경보 활성화'),
           SizedBox(height: Get.height * 0.02),
-          _highTempFormField('고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
+          _highTempFormField(
+              '고온 경보 (°C)', "alarm_high_temp", _highTextEditController),
           SizedBox(height: Get.height * 0.02),
-          _lowTempFormField('저온 경보 (°C)', "alarm_low_temp",_lowTextEditController),
+          _lowTempFormField(
+              '저온 경보 (°C)', "alarm_low_temp", _lowTextEditController),
           const Divider(
             height: 30,
             thickness: 1,
@@ -218,7 +248,10 @@ class _SettingPageState extends State<SettingPage> {
               controller: highTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
-                hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
+                hintStyle: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black38),
                 // border: OutlineInputBorder(),
                 // suffixIcon: IconButton(
                 //   icon: const Icon(Icons.subdirectory_arrow_left),
@@ -239,6 +272,7 @@ class _SettingPageState extends State<SettingPage> {
       ),
     );
   }
+
   Widget _lowTempFormField(String title, String dic, var lowTempController) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -262,17 +296,20 @@ class _SettingPageState extends State<SettingPage> {
             child: TextFormField(
               controller: lowTempController,
               decoration: InputDecoration(
-                  hintText: ' 온도를 입력하세요',
-                  hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
-                  // border: OutlineInputBorder(),
-                  // suffixIcon: IconButton(
-                  //     icon: const Icon(Icons.subdirectory_arrow_left),
-                  //     onPressed: () {
-                  //       _lowTemp = lowTempController.text;
-                  //       print('low temp 는? $_lowTemp');
-                  //       // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                  //     }
-                  // )
+                hintText: ' 온도를 입력하세요',
+                hintStyle: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black38),
+                // border: OutlineInputBorder(),
+                // suffixIcon: IconButton(
+                //     icon: const Icon(Icons.subdirectory_arrow_left),
+                //     onPressed: () {
+                //       _lowTemp = lowTempController.text;
+                //       print('low temp 는? $_lowTemp');
+                //       // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                //     }
+                // )
               ),
               onChanged: (text) {
                 // setState(() {});
@@ -289,13 +326,12 @@ class _SettingPageState extends State<SettingPage> {
   Widget _siteConfigSetButton() {
     return Container(
       height: Get.height * 0.07,
-      padding: EdgeInsets.fromLTRB(15,0,15,0),
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: new ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Color(0xff4cbb8b),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
-          ),// background
+              borderRadius: BorderRadius.circular(20)), // background
         ),
         child: new Text(
           'SET CONIG(저장)',
@@ -305,12 +341,20 @@ class _SettingPageState extends State<SettingPage> {
               fontWeight: FontWeight.w500),
         ),
         onPressed: () async {
-            _mqttClass.setConfig(_switchStatus, _highTextEditController.text, _lowTextEditController.text, _setTimer, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+          // _mqttClass.setConfig(
+          //     _switchStatus,
+          //     _highTextEditController.text,
+          //     _lowTextEditController.text,
+          //     _setTimer,
+          //     '/sf/e0000001/req/cfg',
+          //     '/sf/e0000001/req/cfg');
+          _updateData(_switchStatus, _highTextEditController.text,
+              _lowTextEditController.text, _setTimer);
+          print('hi!!!!!!!!!!!');
         },
       ),
     );
   }
-
 
   String timerDropdownValue = '30';
   Widget _timerDropDownButtons(var name) {
@@ -333,7 +377,8 @@ class _SettingPageState extends State<SettingPage> {
             padding: EdgeInsets.only(right: 10),
             child: DropdownButton<String>(
               value: timerDropdownValue,
-              icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+              icon: const Icon(Icons.arrow_drop_down,
+                  color: Colors.black, size: 30),
               style: const TextStyle(color: Colors.black54),
               underline: Container(
                 height: 2,
@@ -360,7 +405,13 @@ class _SettingPageState extends State<SettingPage> {
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: TextStyle(color: Colors.black38, fontWeight: FontWeight.normal, fontSize: 13),),
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 13),
+                  ),
                 );
               }).toList(),
             ),
@@ -407,7 +458,8 @@ class _SettingPageState extends State<SettingPage> {
             padding: EdgeInsets.only(right: 10),
             child: DropdownButton<String>(
               value: sitesDropdownValue,
-              icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+              icon: const Icon(Icons.arrow_drop_down,
+                  color: Colors.black, size: 30),
               style: const TextStyle(color: Colors.black54),
               underline: Container(
                 height: 2,
@@ -432,7 +484,13 @@ class _SettingPageState extends State<SettingPage> {
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: TextStyle(color: Colors.black38, fontWeight: FontWeight.normal, fontSize: 13),),
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 13),
+                  ),
                 );
               }).toList(),
             ),
