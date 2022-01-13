@@ -42,18 +42,11 @@ var options = BaseOptions(
 );
 Dio dio = Dio(options);
 
-// 푸시알림 백그라운드 설정
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print("Handling a background message: ${message.messageId}");
-}
-
-// Create a [AndroidNotificationChannel] for heads up notifications
-late AndroidNotificationChannel channel;
-
-// Initialize the [FlutterLocalNotificationsPlugin] package.
-// late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
+// 푸시알림
+late int _totalNotifications = 0;
+late final FirebaseMessaging _messaging;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 // 안드로이드 푸시알림 메세지 구성 설정
 class PushNotification {
@@ -64,6 +57,20 @@ class PushNotification {
   String? title;
   String? body;
 }
+
+PushNotification? _notificationInfo;
+
+// 푸시알림 백그라운드 설정
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
+
+// Create a [AndroidNotificationChannel] for heads up notifications
+late AndroidNotificationChannel channel;
+// Initialize the [FlutterLocalNotificationsPlugin] package.
+// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/config/.env');
@@ -93,81 +100,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // // 푸시알림 토큰 firebase token = fcmtoken
-  // var fcmtoken = '';
-  late int _totalNotifications = 0;
-  // late final FirebaseMessaging _messaging;
-  PushNotification? _notificationInfo;
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  // 푸시알림 관련 앱 최초 실행 아닐 때 쓰는 코드 ; 매번 앱 실행 시 실행되어야 함
+  // 푸시알림
   void activateNotification() async {
-    print('##### activateNotification');
-
-    final FirebaseMessaging _messaging;
+    // late int _totalNotifications = 0;
+    // late FirebaseMessaging _messaging;
+    // late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    //     FlutterLocalNotificationsPlugin();
+    print('##### FCM START #####');
 
     // 푸시알림 fcm 초기화해야 사용할 수 있음
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
+    // 앱이 완전히 꺼졌을 때 위한 fcm 초기화
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    // fcm get token
     _messaging.getToken().then((fcmtoken) async {
       stream.fcmtoken = fcmtoken!;
-      print('##### Not first Get fcmtoken: ${stream.fcmtoken}');
+      print('##### Get fcmtoken: ${stream.fcmtoken}');
     });
-
-    // 푸시알림 앱 실행 시
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      // 여기서는 data가 표시 안됨
-      // 백그라운드와 비활성화일 시에는 data(image)가 뜨게끔 설정해두었으나 확인요망
-      Get.dialog(AlertDialog(
-        title: Text(
-            message.notification?.title ?? '${notification?.title}'), // 메세지 제목
-        content: Text(
-            message.notification?.body ?? '${notification?.body}'), // 메세지 내용
-        actions: <Widget>[
-          TextButton(
-            child: Text("OK"),
-            onPressed: () async {
-              Get.back();
-            },
-          )
-        ],
-      ));
-
-      print('Got a message whilst in the foreground!');
-
-      if (message.notification != null && android != null) {
-        print('Message also contained a notification: ${message.notification}');
-        print(// 타이틀: 메시지 제목; 바디: 메시지 내용; 데이터: 이미지 url
-            'Message title: ${message.notification?.title}, body: ${message.notification?.body}');
-
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-        setState(() {
-          _totalNotifications++;
-          _notificationInfo = notification;
-          print(_notificationInfo);
-        });
-      }
-    });
-
-    // 백그라운드는 푸시 알림 수신 잘됨!
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  // 푸시알림 설정 관련 앱 최초 실행 시 실행 됨
-  void registerNotification() async {
-    print('##### registerNotification');
-
-    final FirebaseMessaging _messaging;
-
-    // 푸시알림 fcm 초기화해야 사용할 수 있음
-    await Firebase.initializeApp();
-    _messaging = FirebaseMessaging.instance;
 
     // 권한 설정 여부
     NotificationSettings settings = await
@@ -184,15 +135,6 @@ class _MyAppState extends State<MyApp> {
     // 푸시알림 앱 최초 실행 시 권한 설정 경우에 따른 코드
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print("User granted permission");
-
-      _messaging.getToken().then((fcmtoken) async {
-        stream.fcmtoken = fcmtoken!;
-        print('##### First Get fcmtoken: ${stream.fcmtoken}');
-      });
-
-      // notification channel을 디바이스에 생성
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
 
       // 출력된 푸쉬 알림을 탭했을 때 동작 처리를 위해 콜백을 등록해준다
       flutterLocalNotificationsPlugin.initialize(
@@ -236,16 +178,49 @@ class _MyAppState extends State<MyApp> {
       print('User declined or has not accepted permission');
     }
 
+    // 푸시알림 앱 실행 시
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = notification?.android;
+      // 여기서는 data가 표시 안됨
+      // 백그라운드와 비활성화일 시에는 data(image)가 뜨게끔 설정해두었으나 확인요망
+      Get.dialog(AlertDialog(
+        title: Text(notification?.title ?? 'title'), // 메세지 제목
+        content: Text(notification?.body ?? 'body'), // 메세지 내용
+        actions: <Widget>[
+          TextButton(
+            child: Text("OK"),
+            onPressed: () async {
+              Get.back();
+            },
+          )
+        ],
+      ));
+
+      print('Got a message whilst in the foreground!');
+
+      if (notification != null && android != null) {
+        print('Message also contained a notification: $notification');
+        print(// 타이틀: 메시지 제목; 바디: 메시지 내용;
+            'Message title: ${notification.title}, body: ${notification.body}');
+
+        PushNotification pushNotification = PushNotification(
+          title: notification.title,
+          body: notification.body,
+        );
+
+        setState(() {
+          _totalNotifications++;
+          _notificationInfo = pushNotification;
+          print(_notificationInfo);
+        });
+      }
+    });
+
     // 백그라운드는 푸시 알림 수신 잘됨!
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
 
-  // 앱 비활성화 시 푸시알림 수신 - 잘됨
-  checkForInitialMessage() async {
-    await Firebase.initializeApp();
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
+    // 앱이 완전히 꺼졌을 때
     if (initialMessage != null) {
       PushNotification notification = PushNotification(
         title: initialMessage.notification?.title,
@@ -263,18 +238,16 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // 푸시알림
     _totalNotifications = 0;
-    registerNotification();
     activateNotification();
-    checkForInitialMessage();
 
     // 푸시알림 - 앱이 백그라운드 모드일 때
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      PushNotification notification = PushNotification(
+      PushNotification pushNotification = PushNotification(
         title: message.notification?.title,
         body: message.notification?.body,
       );
       setState(() {
-        _notificationInfo = notification;
+        _notificationInfo = pushNotification;
         _totalNotifications++;
       });
     });
@@ -337,31 +310,6 @@ class _MyAppState extends State<MyApp> {
                   name: '/home',
                   page: () => Home(),
                 ),
-                // GetPage(
-                //   name: '/complete',
-                //   page: () => PunchComplete(),
-                // ),
-                // GetPage(
-                //   name: '/loading',
-                //   page: () => Loading(),
-                //   opaque: false,
-                // ),
-                // GetPage(
-                //   name: '/punchList',
-                //   page: () => PunchScreen(),
-                // ),
-                // GetPage(
-                //   name: '/draft',
-                //   page: () => DraftPage(),
-                // ),
-                // GetPage(
-                //   name: '/confirm',
-                //   page: () => ConfirmPage(),
-                // ),
-                // GetPage(
-                //   name: '/success',
-                //   page: () => SuccessPage(),
-                // ),
               ],
             );
           }
