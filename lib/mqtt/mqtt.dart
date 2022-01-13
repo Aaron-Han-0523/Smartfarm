@@ -8,7 +8,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 * description : MQTT class
 * writer : mark
 * create date : 2021-01-07
-* last update : 2021-01-07
+* last update : 2021-01-13
 * */
 
 class MqttClass {
@@ -86,8 +86,9 @@ class MqttClass {
     return true;
   }
 
+
   //MQTT SITE CONFIG SET - publish
-  Future<dynamic> test (String alarm, var alarmValue, String highTemp, String highTempValue, String lowTemp, String lowTempValue, String timer, String timerValue, var subscibeTopic, var publishTopic) async {
+  Future<dynamic> setConfig (var alarmValue, var highTempValue, var lowTempValue, var timerValue, var subscibeTopic, var publishTopic) async {
 
     client.logging(on: true);
     client.port = 1883;
@@ -109,13 +110,8 @@ class MqttClass {
     final builder = MqttClientPayloadBuilder();
 
     // publish data
-    builder.addString('{"rt" : "set", "$alarm" : $alarmValue}');
-    builder.addString('{"rt" : "set", "$highTemp" : $highTempValue}');
-    builder.addString('{"rt" : "set", "$lowTemp" : $lowTempValue}');
-    builder.addString('{"rt" : "set", "$timer" : $timerValue}');
-
+    builder.addString('{"rt":"set", "alarm_en":$alarmValue, "alarm_high_temp":$highTempValue, "alarm_low_temp":$lowTempValue, "watering_timer":$timerValue}');
     client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
-    // client.publishMessage(publishTopic, MqttQos.atLeastOnce, builder.payload!);
 
     return true;
   }

@@ -1,26 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-
 import 'package:get/get.dart';
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:plms_start/dio/logout_dio.dart';
 import 'package:plms_start/mqtt/mqtt.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:plms_start/globals/siteConfig.dart' as siteConfig;
 
 /*
-* name : PageThree
-* description : punch issue three page
+* name : Setting Page
+* description : setting page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-12
+* last update : 2021-01-13
 * */
 
 class SettingPage extends StatefulWidget {
@@ -224,14 +216,14 @@ class _SettingPageState extends State<SettingPage> {
                 hintText: ' 온도를 입력하세요',
                 hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
                 // border: OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.subdirectory_arrow_left),
-                  onPressed: () {
-                    _highTemp = highTempController.text;
-                    print('high temp 는? $_highTemp');
-                    // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                  }
-                )
+                // suffixIcon: IconButton(
+                //   icon: const Icon(Icons.subdirectory_arrow_left),
+                //   onPressed: () {
+                //     _highTemp = highTempController.text;
+                //     print('high temp 는? $_highTemp');
+                //     // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                //   }
+                // )
               ),
               onChanged: (text) {
                 // setState(() {});
@@ -269,14 +261,14 @@ class _SettingPageState extends State<SettingPage> {
                   hintText: ' 온도를 입력하세요',
                   hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black38),
                   // border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                      icon: const Icon(Icons.subdirectory_arrow_left),
-                      onPressed: () {
-                        _lowTemp = lowTempController.text;
-                        print('low temp 는? $_highTemp');
-                        // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                      }
-                  )
+                  // suffixIcon: IconButton(
+                  //     icon: const Icon(Icons.subdirectory_arrow_left),
+                  //     onPressed: () {
+                  //       _lowTemp = lowTempController.text;
+                  //       print('low temp 는? $_lowTemp');
+                  //       // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+                  //     }
+                  // )
               ),
               onChanged: (text) {
                 // setState(() {});
@@ -309,12 +301,7 @@ class _SettingPageState extends State<SettingPage> {
               fontWeight: FontWeight.w500),
         ),
         onPressed: () async {
-          // _mqttClass.configSet("alarm_en", _switchStatus, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-          // _mqttClass.configSet('alarm_high_temp', _highTemp, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-          // _mqttClass.configSet('alarm_low_temp', _lowTemp, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-          // _mqttClass.configSet("watering_timer", _setTimer, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-          _mqttClass.test("alarm_en", _switchStatus, 'alarm_high_temp', _highTemp, 'alarm_low_temp',  _lowTemp, "watering_timer", _setTimer, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-
+            _mqttClass.setConfig(_switchStatus, _highTextEditController.text, _lowTextEditController.text, _setTimer, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
         },
       ),
     );
