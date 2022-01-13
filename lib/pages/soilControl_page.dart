@@ -327,11 +327,11 @@ class _MyPumpsState extends State<MyPumps> {
                                       String switchStatus = '';
 
                                       if (value == 0) {
-                                        switchStatus = 'on';
-                                        stream.pumpStatus[index] = 1;
-                                      } else if (value == 1) {
                                         switchStatus = 'off';
                                         stream.pumpStatus[index] = 0;
+                                      } else if (value == 1) {
+                                        switchStatus = 'on';
+                                        stream.pumpStatus[index] = 1;
                                       }
                                       // pumpStatus[index] = value;
                                       print(
@@ -445,8 +445,8 @@ class _MyValvesState extends State<MyValves> {
                                     activeFgColor: Color(0xff222222),
                                     inactiveBgColor: Color(0xffFFFFFF),
                                     inactiveFgColor: Color(0xff222222),
-                                    initialLabelIndex:
-                                        stream.valveStatus[index] == 0 ? 1 : 0,
+                                    initialLabelIndex: valveStatus[index],
+                                    // stream.valveStatus[index] == 0 ? 1 : 0,
                                     totalSwitches: 2,
                                     labels: ['ON', 'OFF'],
                                     radiusStyle: true,
