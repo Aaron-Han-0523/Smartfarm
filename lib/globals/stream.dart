@@ -28,6 +28,11 @@ var motor_4 = '';
 var motor_5 = '';
 var motor_6 = '';
 
+var alarm_en = '';
+var alarm_high_temp = '';
+var alarm_low_temp = '';
+var watering_timer = '';
+
 // setting page dropdownButton
 var sitesDropdownValue = '';
 
