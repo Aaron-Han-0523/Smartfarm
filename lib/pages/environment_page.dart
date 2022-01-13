@@ -38,8 +38,12 @@ var extHumid = stream.humid_1; // 외부습도
 var soilHumid = stream.soilhumid_1; // 토양습도
 var motor_1 = stream.motor_1;
 var motor_2 = stream.motor_2;
+var motor_3 = stream.motor_3;
+var motor_4 = stream.motor_4;
+var motor_5 = stream.motor_5;
+var motor_6 = stream.motor_6;
 
-List motors = stream.motors;
+List sideMotors = stream.sideMotors;
 List motor_name = stream.motor_name;
 List switchId = stream.switch_id;
 
@@ -65,28 +69,26 @@ bool _customTileExpanded = false;
 // temp
 var temp = int.parse(extTemp);
 
+// // getData()
+// void _getMotorData() async {
+//   // motors
+//   final getMotor = await dio.get('$url/$userId/site/$siteId/controls/motors');
+//   stream.motors = getMotor.data;
+//   print('motor list : ${stream.motors}');
+//   print('motor length : ${stream.motors.length}');
+//   stream.motor_name = [];
+//   for (var i = 0; i < stream.motors.length; i++) {
+//     var motorName = stream.motors[i]['motor_name'];
+//     stream.motor_name.add(motorName);
+//   }
 
-// getData()
-void _getMotorData() async {
-  // pumps
-  final getMotor = await dio.get('$url/$userId/site/$siteId/controls/motors');
-  stream.motors = getMotor.data;
-  print('motor list : ${stream.motors}');
-  print('motor length : ${stream.motors.length}');
-  stream.motor_name = [];
-  for (var i = 0; i < stream.motors.length; i++) {
-    var motorName = stream.motors[i]['motor_name'];
-    stream.motor_name.add(motorName);
-  }
-
-  List<bool> motorStatus = [
-    stream.pump_1 == 'on' ? true : false,
-    stream.pump_2 == 'on' ? true : false
-  ];
-  print('motorStatus: $motorStatus');
-  stream.motorStatus = motorStatus;
-}
-
+//   List<bool> motorStatus = [
+//     stream.pump_1 == 'on' ? true : false,
+//     stream.pump_2 == 'on' ? true : false
+//   ];
+//   print('motorStatus: $motorStatus');
+//   stream.motorStatus = motorStatus;
+// }
 
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
@@ -96,23 +98,16 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
-
   void getStatus() async {
     String _switchStatus = await motor_1;
     print('toggle motor는 : $motor_1');
 
     setState(() {
       if (_switchStatus == 'open') {
-
       } else if (_switchStatus == 'stop') {
-
-      } else if (_switchStatus == 'close') {
-
-      }
+      } else if (_switchStatus == 'close') {}
     });
-
   }
-
 
   void initState() {
     super.initState();
@@ -135,49 +130,56 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 toolbarHeight: Get.height * 0.45,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Farm in Earth',
-                      style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(stream.sitesDropdownValue,
-                        style: TextStyle(color: Colors.black, fontSize: 18)),
-                  ),
-                  SizedBox(height : Get.height * 0.05),
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _mainMonitoring(context),
-                        SizedBox(height: Get.height * 0.03),
-                        Row(
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Farm in Earth',
+                          style:
+                              TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(stream.sitesDropdownValue,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 18)),
+                      ),
+                      SizedBox(height: Get.height * 0.05),
+                      Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _subMonitoring(
-                                context,
-                                'assets/images/icon_temp.png',
-                                "내부 온도",
-                                '$innerTemp°C',
-                                'assets/images/icon_humid.png',
-                                "내부 습도",
-                                '$innerHumid%'),
-                            _subMonitoring(context,
-                                'assets/images/icon_wind.png', "풍향", "남동향",
-                                'assets/images/icon_windsp.png', " 풍속", "1.2m/s"),
-                          ],
-                        )
-                      ]),
-                ]),
+                            _mainMonitoring(context),
+                            SizedBox(height: Get.height * 0.03),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _subMonitoring(
+                                    context,
+                                    'assets/images/icon_temp.png',
+                                    "내부 온도",
+                                    '$innerTemp°C',
+                                    'assets/images/icon_humid.png',
+                                    "내부 습도",
+                                    '$innerHumid%'),
+                                _subMonitoring(
+                                    context,
+                                    'assets/images/icon_wind.png',
+                                    "풍향",
+                                    "남동향",
+                                    'assets/images/icon_windsp.png',
+                                    " 풍속",
+                                    "1.2m/s"),
+                              ],
+                            )
+                          ]),
+                    ]),
               ),
               SliverList(
                 // itemExtent: 3.0,
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                     return Container(
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
@@ -185,19 +187,18 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: new EdgeInsets.fromLTRB(15,10,15,5),
+                              padding: new EdgeInsets.fromLTRB(15, 10, 15, 5),
                               child: Container(
                                 decoration: _decoration(Color(0xff2E8953)),
                                 child: Theme(
-                                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                  data: Theme.of(context).copyWith(
+                                      dividerColor: Colors.transparent),
                                   child: ExpansionTile(
                                     iconColor: Colors.white,
                                     collapsedIconColor: Colors.white,
-                                    trailing: Icon(
-                                        _customTileExpanded
-                                            ? Icons.keyboard_arrow_up_rounded
-                                            : Icons.keyboard_arrow_down_rounded
-                                    ),
+                                    trailing: Icon(_customTileExpanded
+                                        ? Icons.keyboard_arrow_up_rounded
+                                        : Icons.keyboard_arrow_down_rounded),
                                     onExpansionChanged: (bool expanded) {
                                       setState(() {
                                         _customTileExpanded = expanded;
@@ -206,39 +207,41 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                     title: Padding(
                                       padding: EdgeInsets.only(left: 15),
                                       child: Text('측창 개폐기 제어',
-                                          style: _textStyle(
-                                              Color(0xffFFFFFF), FontWeight.w500, 20)),
+                                          style: _textStyle(Color(0xffFFFFFF),
+                                              FontWeight.w500, 20)),
                                     ),
                                     children: <Widget>[
                                       Padding(
-                                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                                        padding: EdgeInsets.only(
+                                            top: 15, bottom: 15),
                                         child: Column(
                                           children: [
-                                            _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                                            _alltoggleSwitch('측창(전체)', 'side',
+                                                'test', 'sid'),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '츨장 (전)',
-                                              status1,
-                                            ),
+                                                context,
+                                                '측장 (전)',
+                                                status1,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '측장 (후)',
-                                              status2,
-                                            ),
+                                                context,
+                                                '측장 (후)',
+                                                status2,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '측장 (좌)',
-                                              status3,
-                                            ),
+                                                context,
+                                                '측장 (좌)',
+                                                status3,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '측장 (우)',
-                                              status4,
-                                            ),
+                                                context,
+                                                '측장 (우)',
+                                                status4,
+                                                stream.motorStatus[index]),
                                           ],
                                         ),
                                       )
@@ -248,42 +251,46 @@ class _EnvironmentState extends State<EnvironmentPage> {
                               ),
                             ),
                             Padding(
-                              padding: new EdgeInsets.fromLTRB(15,10,15,5),
+                              padding: new EdgeInsets.fromLTRB(15, 10, 15, 5),
                               child: Container(
                                 child: Theme(
-                                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                  data: Theme.of(context).copyWith(
+                                      dividerColor: Colors.transparent),
                                   child: ExpansionTile(
                                     iconColor: Colors.white,
                                     collapsedIconColor: Colors.white,
                                     title: Padding(
                                       padding: EdgeInsets.only(left: 15),
                                       child: Text('천창 개폐기 제어',
-                                          style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                                          style: _textStyle(Color(0xffFFFFFF),
+                                              FontWeight.w500, 20)),
                                     ),
                                     children: <Widget>[
                                       Padding(
-                                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                                        padding: EdgeInsets.only(
+                                            top: 15, bottom: 15),
                                         child: Column(
                                           children: [
-                                            _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
+                                            _alltoggleSwitch(
+                                                '천창(전체)', 'top', 'test', 'sid'),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '천창 (#1)',
-                                              status5,
-                                            ),
+                                                context,
+                                                '천창 (#1)',
+                                                status5,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '천창 (#2)',
-                                              status6,
-                                            ),
+                                                context,
+                                                '천창 (#2)',
+                                                status6,
+                                                stream.motorStatus[index]),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                              context,
-                                              '천창 (#3)',
-                                              status7,
-                                            ),
+                                                context,
+                                                '천창 (#3)',
+                                                status7,
+                                                stream.motorStatus[index]),
                                           ],
                                         ),
                                       )
@@ -294,28 +301,34 @@ class _EnvironmentState extends State<EnvironmentPage> {
                               ),
                             ),
                             Padding(
-                              padding: new EdgeInsets.fromLTRB(15,10,15,5),
+                              padding: new EdgeInsets.fromLTRB(15, 10, 15, 5),
                               child: Container(
                                 child: Theme(
-                                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                  data: Theme.of(context).copyWith(
+                                      dividerColor: Colors.transparent),
                                   child: ExpansionTile(
                                     iconColor: Colors.white,
                                     collapsedIconColor: Colors.white,
                                     title: Padding(
                                       padding: EdgeInsets.only(left: 15),
                                       child: Text('기타제어',
-                                          style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                                          style: _textStyle(Color(0xffFFFFFF),
+                                              FontWeight.w500, 20)),
                                     ),
                                     children: <Widget>[
                                       Padding(
-                                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                                        padding: EdgeInsets.only(
+                                            top: 15, bottom: 15),
                                         child: Column(
                                           children: [
-                                            _toggleSwitch2(context, '환풍기 (#1)', status8),
+                                            _toggleSwitch2(
+                                                context, '환풍기 (#1)', status8),
                                             SizedBox(height: Get.height * 0.01),
-                                            _toggleSwitch2(context, '환풍기 (#2)', status9),
+                                            _toggleSwitch2(
+                                                context, '환풍기 (#2)', status9),
                                             SizedBox(height: Get.height * 0.01),
-                                            _toggleSwitch2(context, '외부 제어 (#1)', status10),
+                                            _toggleSwitch2(context,
+                                                '외부 제어 (#1)', status10),
                                           ],
                                         ),
                                       )
@@ -326,16 +339,14 @@ class _EnvironmentState extends State<EnvironmentPage> {
                               ),
                             ),
                           ],
-                        )
-                    );
+                        ));
                   },
                   childCount: 1,
                 ),
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
@@ -347,29 +358,33 @@ Widget _mainMonitoring(BuildContext context) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          temp > 20 ?
-          Image.asset('assets/images/icon_shiny.png', color: Color(0xff222222), scale: 3)
-              :Image.asset('assets/images/icon_windy.png', color: Color(0xff222222), scale: 3),
-         // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
+          temp > 20
+              ? Image.asset('assets/images/icon_shiny.png',
+                  color: Color(0xff222222), scale: 3)
+              : Image.asset('assets/images/icon_windy.png',
+                  color: Color(0xff222222), scale: 3),
+          // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
           Text("맑음/$extTemp°C",
               style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
-          Image.asset('assets/images/icon_env_arrow_up.png', color: Color(0xffffd5185), scale: 3),
-          Text("07:32", style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
-          Image.asset('assets/images/icon_env_arrow_down.png', color: Color(0xfff656565), scale: 3),
-          Text("18:08", style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
+          Image.asset('assets/images/icon_env_arrow_up.png',
+              color: Color(0xffffd5185), scale: 3),
+          Text("07:32",
+              style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
+          Image.asset('assets/images/icon_env_arrow_down.png',
+              color: Color(0xfff656565), scale: 3),
+          Text("18:08",
+              style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
         ],
       ),
-      decoration: _decoration(Color(0xffFFFFFF))
-  );
+      decoration: _decoration(Color(0xffFFFFFF)));
 }
-
 
 // 내/외부 모니터링
 Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
     String _mainText, dynamic _icon, String subText, String _subText) {
   return Container(
       height: Get.height * 0.13,
-      width:Get.width* 0.425,
+      width: Get.width * 0.425,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -390,9 +405,7 @@ Widget _subMonitoring(BuildContext context, dynamic icon, String mainText,
               Text(subText,
                   style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               Text(_subText,
-                  style: _textStyle(
-                      Color(0xff222222),
-                      FontWeight.w600, 18)),
+                  style: _textStyle(Color(0xff222222), FontWeight.w600, 18)),
             ],
           ),
         ],
@@ -475,7 +488,6 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
                 print('value는 : $_switch');
-
               },
             ),
           )
@@ -486,9 +498,9 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
   );
 }
 
-
 // 측창 개폐기 제어
-Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
+Widget _toggleSwitch(
+    BuildContext context, String text, bool visibles, int statusIndex) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -515,7 +527,7 @@ Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: 1,
+              initialLabelIndex: statusIndex == 0 ? 1 : 0,
               totalSwitches: 3,
               labels: ['열림', '정지', '닫힘'],
               radiusStyle: true,
@@ -603,7 +615,6 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
   );
 }
 
-
 // 그래프
 Widget _lineChart(bool _visibles) {
   List<_SalesData> data = [
@@ -627,7 +638,7 @@ Widget _lineChart(bool _visibles) {
     child: Padding(
       padding: EdgeInsets.all(15),
       child: SfCartesianChart(
-        backgroundColor: Color(0xffFFFFFF),
+          backgroundColor: Color(0xffFFFFFF),
           primaryXAxis: CategoryAxis(),
           series: <ChartSeries<_SalesData, String>>[
             LineSeries<_SalesData, String>(
@@ -646,7 +657,6 @@ Widget _lineChart(bool _visibles) {
     ),
   );
 }
-
 
 class _SalesData {
   _SalesData(this.year, this.sales);

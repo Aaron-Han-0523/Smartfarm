@@ -51,9 +51,10 @@ List sensor_id = []; // pump1, pump2
 List sensorStatus = []; // pump1's on/off, pump2's on/off
 
 // environment controll page
-List motors = [];
+List<dynamic> sideMotors = [];
+List<dynamic> topMotors = [];
 List motor_name = [];
-List<bool> motorStatus = [];
+List<int> motorStatus = [];
 
 List switchs = [];
 List switch_id = [];
