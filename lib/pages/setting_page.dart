@@ -341,13 +341,13 @@ class _SettingPageState extends State<SettingPage> {
               fontWeight: FontWeight.w500),
         ),
         onPressed: () async {
-          // _mqttClass.setConfig(
-          //     _switchStatus,
-          //     _highTextEditController.text,
-          //     _lowTextEditController.text,
-          //     _setTimer,
-          //     '/sf/e0000001/req/cfg',
-          //     '/sf/e0000001/req/cfg');
+          _mqttClass.setConfig(
+              _switchStatus,
+              _highTextEditController.text,
+              _lowTextEditController.text,
+              _setTimer,
+              '/sf/e0000001/req/cfg',
+              '/sf/e0000001/req/cfg');
           _updateData(_switchStatus, _highTextEditController.text,
               _lowTextEditController.text, _setTimer);
           print('hi!!!!!!!!!!!');
