@@ -34,7 +34,7 @@ var alarm_low_temp = '';
 var watering_timer = '';
 
 // setting page dropdownButton
-var sitesDropdownValue = '';
+String sitesDropdownValue = '';
 
 // main page fcm Token
 String fcmtoken = '';
@@ -61,7 +61,6 @@ List<dynamic> topMotors = [];
 List motors = [];
 List motor_name = [];
 List<int> motorStatus = [];
-
 
 List switchs = [];
 List switch_id = [];

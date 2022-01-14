@@ -47,7 +47,6 @@ List sideMotors = stream.sideMotors;
 List motor_name = stream.motor_name;
 List switchId = stream.switch_id;
 
-
 // visibility
 bool status1 = true;
 bool status2 = true;
@@ -117,6 +116,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
     super.initState();
   }
 
+  var siteDropdown =
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,7 +148,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       ),
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text(stream.sitesDropdownValue,
+                        child: Text(siteDropdown,
                             style:
                                 TextStyle(color: Colors.black, fontSize: 18)),
                       ),
@@ -224,28 +226,28 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                                 'test', 'sid'),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '측장 (전)',
-                                                status1,
+                                              context,
+                                              '측장 (전)',
+                                              status1,
                                             ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '측장 (후)',
-                                                status2,
-                                                ),
+                                              context,
+                                              '측장 (후)',
+                                              status2,
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '측장 (좌)',
-                                                status3,
-                                                ),
+                                              context,
+                                              '측장 (좌)',
+                                              status3,
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '측장 (우)',
-                                                status4,
-                                                ),
+                                              context,
+                                              '측장 (우)',
+                                              status4,
+                                            ),
                                           ],
                                         ),
                                       )
@@ -279,22 +281,22 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                                 '천창(전체)', 'top', 'test', 'sid'),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '천창 (#1)',
-                                                status5,
-                                                ),
+                                              context,
+                                              '천창 (#1)',
+                                              status5,
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '천창 (#2)',
-                                                status6,
-                                                ),
+                                              context,
+                                              '천창 (#2)',
+                                              status6,
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
-                                                context,
-                                                '천창 (#3)',
-                                                status7,
-                                                ),
+                                              context,
+                                              '천창 (#3)',
+                                              status7,
+                                            ),
                                           ],
                                         ),
                                       )
@@ -326,22 +328,22 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                         child: Column(
                                           children: [
                                             _toggleSwitch2(
-                                                context,
-                                                '환풍기 (#1)',
-                                                status8,
-                                                ),
+                                              context,
+                                              '환풍기 (#1)',
+                                              status8,
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch2(
-                                                context,
-                                                '환풍기 (#2)',
-                                                status9,
-                                                ),
+                                              context,
+                                              '환풍기 (#2)',
+                                              status9,
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch2(
-                                                context,
-                                                '외부 제어 (#1)',
-                                                status10,
-                                                ),
+                                              context,
+                                              '외부 제어 (#1)',
+                                              status10,
+                                            ),
                                           ],
                                         ),
                                       )
@@ -512,8 +514,7 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
 }
 
 // 측창 개폐기 제어
-Widget _toggleSwitch(
-    BuildContext context, String text, bool visibles) {
+Widget _toggleSwitch(BuildContext context, String text, bool visibles) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -579,8 +580,7 @@ Widget _toggleSwitch(
 }
 
 // 천창 개폐기 제어
-Widget _topControlSwitch(
-    BuildContext context, String text, var visibles) {
+Widget _topControlSwitch(BuildContext context, String text, var visibles) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -646,8 +646,7 @@ Widget _topControlSwitch(
 }
 
 //기타제어
-Widget _toggleSwitch2(
-    BuildContext context, String text, bool visibles) {
+Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
   return Visibility(
     visible: visibles,
     child: Container(

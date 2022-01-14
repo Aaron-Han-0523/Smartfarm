@@ -30,68 +30,71 @@ class _SensorPageState extends State<SensorPage> {
     super.initState();
   }
 
+  var siteDropdown =
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
       body: Container(
-          // color: Color(0xffF5F9FC),
-          decoration: BoxDecoration(
-            color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                toolbarHeight: Get.height * 0.14 ,
-                backgroundColor: Color(0xffF5F9FC),
-                title: Column(children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Farm in Earth',
-                      style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
-                    ),
+        // color: Color(0xffF5F9FC),
+        decoration: BoxDecoration(
+          color: Color(0xffF5F9FC),
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              toolbarHeight: Get.height * 0.14,
+              backgroundColor: Color(0xffF5F9FC),
+              title: Column(children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Farm in Earth',
+                    style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
                   ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(stream.sitesDropdownValue,
-                        style: TextStyle(color: Colors.black, fontSize: 18)),
-                  ),
-                ]),
-              ),
-              SliverList(
-                // itemExtent: 3.0,
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Container(
-                      // color: Colors.red,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffF5F9FC),
-                          // borderRadius: BorderRadius.only(
-                          //     bottomLeft: Radius.circular(10),
-                          //     bottomRight: Radius.circular(10)),
-                        ),
-                        alignment: Alignment.center,
-                        // color: Color(0xffF5F9FC),
-
-                        child: Column(
-                          children: [
-                            MyAccordian(),
-                            MyAccordian2(),
-                            MyGraph(),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  childCount: 1,
                 ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(siteDropdown,
+                      style: TextStyle(color: Colors.black, fontSize: 18)),
+                ),
+              ]),
+            ),
+            SliverList(
+              // itemExtent: 3.0,
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                    // color: Colors.red,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffF5F9FC),
+                        // borderRadius: BorderRadius.only(
+                        //     bottomLeft: Radius.circular(10),
+                        //     bottomRight: Radius.circular(10)),
+                      ),
+                      alignment: Alignment.center,
+                      // color: Color(0xffF5F9FC),
+
+                      child: Column(
+                        children: [
+                          MyAccordian(),
+                          MyAccordian2(),
+                          MyGraph(),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                childCount: 1,
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,11 +113,12 @@ class _MyAccordianState extends State<MyAccordian> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(15,10,15,5),
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
           child: Container(
             decoration: _decorations(),
             child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 initiallyExpanded: true,
                 iconColor: Colors.white,
@@ -130,32 +134,41 @@ class _MyAccordianState extends State<MyAccordian> {
                     ),
                     Text(
                       '외부 환경',
-                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
                 children: <Widget>[
                   SizedBox(height: Get.height * 0.01),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                    _cards('외부 온도', extTemp, true, 'assets/images/icon_temp.png'),
-                    _cards('외부 습도', extHumid, true, 'assets/images/icon_humid.png')
-                  ]),
+                        _cards('외부 온도', extTemp, true,
+                            'assets/images/icon_temp.png'),
+                        _cards('외부 습도', extHumid, true,
+                            'assets/images/icon_humid.png')
+                      ]),
                   SizedBox(height: Get.height * 0.01),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                    _cards('강우', '12.5', true, 'assets/images/icon_rainy.png'),
-                    _cards('풍향', '12.5', true, 'assets/images/icon_wind.png')
-                  ]),
+                        _cards(
+                            '강우', '12.5', true, 'assets/images/icon_rainy.png'),
+                        _cards(
+                            '풍향', '12.5', true, 'assets/images/icon_wind.png')
+                      ]),
                   SizedBox(height: Get.height * 0.01),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                    _cards('풍속', '12.5', true, 'assets/images/icon_windsp.png'),
-                    _cards('일사량', '12.5', true, 'assets/images/icon_shiny.png')
-                  ]),
+                        _cards('풍속', '12.5', true,
+                            'assets/images/icon_windsp.png'),
+                        _cards(
+                            '일사량', '12.5', true, 'assets/images/icon_shiny.png')
+                      ]),
                   SizedBox(height: Get.height * 0.01),
                 ],
               ),
@@ -180,11 +193,12 @@ class _MyAccordian2State extends State<MyAccordian2> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(15,10,15,5),
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
           child: Container(
             decoration: _decorations(),
             child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -199,7 +213,10 @@ class _MyAccordian2State extends State<MyAccordian2> {
                     ),
                     Text(
                       '내부 환경',
-                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -208,24 +225,26 @@ class _MyAccordian2State extends State<MyAccordian2> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                    _cards(
-                        '내부 온도', innerTemp, true, 'assets/images/icon_temp.png'),
-                    _cards(
-                        '내부 습도', innerHumid, true, 'assets/images/icon_humid.png')
-                  ]),
+                        _cards('내부 온도', innerTemp, true,
+                            'assets/images/icon_temp.png'),
+                        _cards('내부 습도', innerHumid, true,
+                            'assets/images/icon_humid.png')
+                      ]),
                   SizedBox(height: Get.height * 0.01),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                    _cards('토양 온도', soilTemp, true, 'assets/images/icon_soiltemp.png'),
-                    _cards('토양 습도', soilHumid, true, 'assets/images/icon_soilhumid.png')
-                  ]),
+                        _cards('토양 온도', soilTemp, true,
+                            'assets/images/icon_soiltemp.png'),
+                        _cards('토양 습도', soilHumid, true,
+                            'assets/images/icon_soilhumid.png')
+                      ]),
                   SizedBox(height: Get.height * 0.01),
                   Padding(
                     padding: EdgeInsets.only(left: 5, bottom: 5),
-                    child: Row(
-                        children: [
-                      _cards('토양 건조도', '12.5', true, 'assets/images/icon_soilele.png'),
+                    child: Row(children: [
+                      _cards('토양 건조도', '12.5', true,
+                          'assets/images/icon_soilele.png'),
                     ]),
                   ),
                 ],
@@ -251,11 +270,12 @@ class _MyGraphState extends State<MyGraph> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(15,10,15,5),
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
           child: Container(
             decoration: _decorations(),
             child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -270,7 +290,10 @@ class _MyGraphState extends State<MyGraph> {
                     ),
                     Text(
                       "그래프",
-                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),

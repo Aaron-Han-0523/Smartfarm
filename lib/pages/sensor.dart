@@ -48,7 +48,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   @override
   void initState() {
     _connect();
-
+    print('!!!!!!!!!!!!!!!');
+    print(stream.sitesDropdownValue);
     super.initState();
   }
 
@@ -83,13 +84,15 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Color(0xffF5F9FC),
-        leading: InkWell(child: Image.asset('assets/images/icon_board.png', scale: 3), onTap: (){}),
+        leading: InkWell(
+            child: Image.asset('assets/images/icon_board.png', scale: 3),
+            onTap: () {}),
         // 타이틀
         actions: [
           IconButton(
-                onPressed: _launchURL,
-                icon: Image.asset('assets/images/kakao_channel.png'), iconSize: 30),
-
+              onPressed: _launchURL,
+              icon: Image.asset('assets/images/kakao_channel.png'),
+              iconSize: 30),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: InkWell(

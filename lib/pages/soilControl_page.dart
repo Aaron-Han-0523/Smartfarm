@@ -105,6 +105,9 @@ class _SoilControlPageState extends State<SoilControlPage> {
     super.initState();
   }
 
+  var siteDropdown =
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
   @override
   Widget build(BuildContext context) {
     // FutureBuilder listview
@@ -134,7 +137,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
                       ),
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text(stream.sitesDropdownValue,
+                        child: Text(siteDropdown,
                             style:
                                 TextStyle(color: Colors.black, fontSize: 18)),
                       ),
