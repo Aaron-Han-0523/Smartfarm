@@ -80,23 +80,4 @@ class CounterController extends GetxController {
 
     return true;
   }
-
-  // void setStatus(String content) {
-  //   setState(() {
-  //     statusText = content;
-  //   });
-  // }
-
-  // void onConnected() {
-  //   setStatus("Client connection was successful");
-  // }
-
-  // void onDisconnected() {
-  //   setStatus("Client Disconnected");
-  //   isConnected = false;
-  // }
-
-  // void pong() {
-  //   print('Ping response client callback invoked');
-  // }
 }
