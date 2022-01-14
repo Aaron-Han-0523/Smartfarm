@@ -18,7 +18,7 @@ import 'package:plms_start/globals/siteConfig.dart' as siteConfig;
 * description : setting page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-13
+* last update : 2021-01-14
 * */
 
 var api = dotenv.env['PHONE_IP'];
@@ -50,13 +50,13 @@ class _SettingPageState extends State<SettingPage> {
 
   //global key
   var _setTimer = siteConfig.set_timer;
-  bool _switchStatus = siteConfig.status_alarm;
+  bool _alarmStatus = siteConfig.status_alarm;
   var _lowTemp = siteConfig.low_temp;
   var _highTemp = siteConfig.high_temp;
 
   @override
   void initState() {
-    print('저장된 global key의 alarm Status는 : $_switchStatus');
+    print('저장된 global key의 alarm Status는 : $_alarmStatus');
     // mqttConnect;
   }
 
@@ -169,6 +169,9 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   bool status = false;
+  List<String> labelName = ['ON', 'OFF'];
+  var selectedLabel = '';
+  int initialIndex = 0;
 
   Widget _swichWidget(String name) {
     return Container(
@@ -202,20 +205,30 @@ class _SettingPageState extends State<SettingPage> {
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              // initialLabelIndex:
+              initialLabelIndex: initialIndex,
               // stream.pumpStatus[index] == 0 ? 1 : 0,
               totalSwitches: 2,
-              labels: ['ON', 'OFF'],
+              labels: labelName,
               radiusStyle: true,
               onToggle: (value) async {
-                if (value == 0) {
-                  status = true;
-                } else if (value == 1) {
-                  status = false;
-                }
-                _switchStatus = status;
-                print('global key의 alarm Status는 : $_switchStatus');
-                // _mqttClass.configSet("alarm_en", _switchStatus, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
+
+                setState(() {
+                  initialIndex = value;
+                  if (value == 0) {
+                    status = true;
+                  } else if (value == 1) {
+                    status = false;
+                  }
+                  _alarmStatus = status;
+
+                });
+                // if (value == 0) {
+                //   status = true;
+                // } else if (value == 1) {
+                //   status = false;
+                // }
+                // _alarmStatus = status;
+                print('global key의 alarm Status는 : $_alarmStatus');
               },
             ),
           ),
@@ -342,13 +355,13 @@ class _SettingPageState extends State<SettingPage> {
         ),
         onPressed: () async {
           _mqttClass.setConfig(
-              _switchStatus,
+              _alarmStatus,
               _highTextEditController.text,
               _lowTextEditController.text,
               _setTimer,
               '/sf/e0000001/req/cfg',
               '/sf/e0000001/req/cfg');
-          _updateData(_switchStatus, _highTextEditController.text,
+          _updateData(_alarmStatus, _highTextEditController.text,
               _lowTextEditController.text, _setTimer);
           print('hi!!!!!!!!!!!');
         },
@@ -385,11 +398,10 @@ class _SettingPageState extends State<SettingPage> {
                 // width: 30,
                 color: Colors.black26,
               ),
-              onChanged: (String? newValue) {
+              onChanged: (value) {
                 setState(() {
-                  timerDropdownValue = newValue!;
-                  _setTimer = newValue;
-                  // _mqttClass.configSet("watering_timer", newValue, '/sf/e0000001/res/cfg', '/sf/e0000001/res/cfg');
+                  timerDropdownValue = value!;
+                  _setTimer = value;
                   print('타이머 시간은 : $name : $_setTimer');
                 });
               },
