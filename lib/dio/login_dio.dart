@@ -37,8 +37,6 @@ class LoginTest {
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
-        // Get.toNamed('/sensor');
-
         // sherry
         Get.toNamed('/home');
         // post fcm token

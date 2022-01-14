@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:plms_start/pages/sensor_page.dart';
 import '../globals/stream.dart' as stream;
 
 /*

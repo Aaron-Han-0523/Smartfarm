@@ -47,6 +47,7 @@ List sideMotors = stream.sideMotors;
 List motor_name = stream.motor_name;
 List switchId = stream.switch_id;
 
+
 // visibility
 bool status1 = true;
 bool status2 = true;
@@ -68,6 +69,9 @@ bool _customTileExpanded = false;
 
 // temp
 var temp = int.parse(extTemp);
+
+//천창 개폐기 제어
+List topMotors = stream.topMotors;
 
 // // getData()
 // void _getMotorData() async {
@@ -223,25 +227,25 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                                 context,
                                                 '측장 (전)',
                                                 status1,
-                                                stream.motorStatus[index]),
+                                            ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
                                                 context,
                                                 '측장 (후)',
                                                 status2,
-                                                stream.motorStatus[index]),
+                                                ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
                                                 context,
                                                 '측장 (좌)',
                                                 status3,
-                                                stream.motorStatus[index]),
+                                                ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
                                                 context,
                                                 '측장 (우)',
                                                 status4,
-                                                stream.motorStatus[index]),
+                                                ),
                                           ],
                                         ),
                                       )
@@ -278,19 +282,19 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                                 context,
                                                 '천창 (#1)',
                                                 status5,
-                                                stream.motorStatus[index]),
+                                                ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
                                                 context,
                                                 '천창 (#2)',
                                                 status6,
-                                                stream.motorStatus[index]),
+                                                ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch(
                                                 context,
                                                 '천창 (#3)',
                                                 status7,
-                                                stream.motorStatus[index]),
+                                                ),
                                           ],
                                         ),
                                       )
@@ -325,19 +329,19 @@ class _EnvironmentState extends State<EnvironmentPage> {
                                                 context,
                                                 '환풍기 (#1)',
                                                 status8,
-                                                stream.motorStatus[index]),
+                                                ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch2(
                                                 context,
                                                 '환풍기 (#2)',
                                                 status9,
-                                                stream.motorStatus[index]),
+                                                ),
                                             SizedBox(height: Get.height * 0.01),
                                             _toggleSwitch2(
                                                 context,
                                                 '외부 제어 (#1)',
                                                 status10,
-                                                stream.motorStatus[index]),
+                                                ),
                                           ],
                                         ),
                                       )
@@ -509,7 +513,7 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
 
 // 측창 개폐기 제어
 Widget _toggleSwitch(
-    BuildContext context, String text, bool visibles, int statusIndex) {
+    BuildContext context, String text, bool visibles) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -536,11 +540,79 @@ Widget _toggleSwitch(
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: statusIndex == 0
-                  ? 0
-                  : statusIndex == 1
-                      ? 1
-                      : 2,
+              initialLabelIndex: 1,
+              // statusIndex == 0
+              //     ? 0
+              //     : statusIndex == 1
+              //         ? 1
+              //         : 2,
+              totalSwitches: 3,
+              labels: ['열림', '정지', '닫힘'],
+              radiusStyle: true,
+              onToggle: (value) async {
+                String _switch = '';
+
+                if (value == 0) {
+                  _switch = 'open';
+                }
+                if (value == 1) {
+                  _switch = 'stop';
+                }
+                if (value == 2) {
+                  _switch = 'close';
+                }
+                print('toggle value는 : $value');
+                print('toggle motor는 : $motor_1');
+
+                print('toggle type은 : ${value.runtimeType}');
+                print('value는 : $_switch');
+                _mqttClass.ctlSet('did', '1', 'dact', _switch,
+                    '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decorations(),
+    ),
+  );
+}
+
+// 천창 개폐기 제어
+Widget _topControlSwitch(
+    BuildContext context, String text, var visibles) {
+  return Visibility(
+    visible: visibles,
+    child: Container(
+      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: Get.height * 0.09,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(text,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              fontSize: 12,
+              minWidth: 60.0,
+              cornerRadius: 80.0,
+              activeBgColors: [
+                [Color(0xffe3fbed)],
+                [Color(0xffFFD6D6)],
+                [Color(0xfff2f2f2)]
+              ],
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
+              initialLabelIndex: 1,
+              // statusIndex == 0
+              //     ? 0
+              //     : statusIndex == 1
+              //         ? 1
+              //         : 2,
               totalSwitches: 3,
               labels: ['열림', '정지', '닫힘'],
               radiusStyle: true,
@@ -575,7 +647,7 @@ Widget _toggleSwitch(
 
 //기타제어
 Widget _toggleSwitch2(
-    BuildContext context, String text, bool visibles, int statusIndex) {
+    BuildContext context, String text, bool visibles) {
   return Visibility(
     visible: visibles,
     child: Container(
@@ -601,7 +673,8 @@ Widget _toggleSwitch2(
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: statusIndex == 0 ? 1 : 0,
+              initialLabelIndex: 1,
+              // statusIndex == 0 ? 1 : 0,
               totalSwitches: 2,
               labels: ['ON', 'OFF'],
               radiusStyle: true,
