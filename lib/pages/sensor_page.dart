@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../globals/stream.dart' as stream;
+import 'components/getx_controller/controller.dart';
 /*
 * name : ListOpen Page
 * description : open data page
@@ -356,35 +357,38 @@ class _SalesData {
 
 // dynamic icon
 Widget _cards(var title, var subtitle, bool visibles, String assets) {
+  final controller = Get.put(CounterController());
   return Visibility(
     visible: visibles,
-    child: Container(
-      // alignment: Alignment.center,
-      margin: EdgeInsets.only(left: 7, right: 7, bottom: 10),
-      height: Get.height * 1 / 9,
-      width: Get.width * 0.4,
-      decoration: _decoration(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 23),
-              child: Text(title,
-                  style: TextStyle(color: Color(0xff2E8953), fontSize: 12)),
-            ),
-            Text(subtitle,
-                style: TextStyle(
-                    color: Color(0xff222222),
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500)),
-          ]),
-          Image.asset(
-            assets,
-            scale: 3,
-          )
-          // Icon(icon, size: 60, color: Colors.black54)
-        ],
+    child: Obx(
+      () => Container(
+        // alignment: Alignment.center,
+        margin: EdgeInsets.only(left: 7, right: 7, bottom: 10),
+        height: Get.height * 1 / 9,
+        width: Get.width * 0.4,
+        decoration: _decoration(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 23),
+                child: Text(title,
+                    style: TextStyle(color: Color(0xff2E8953), fontSize: 12)),
+              ),
+              Text('${controller.innerTemp.value}',
+                  style: TextStyle(
+                      color: Color(0xff222222),
+                      fontSize: 25,
+                      fontWeight: FontWeight.w500)),
+            ]),
+            Image.asset(
+              assets,
+              scale: 3,
+            )
+            // Icon(icon, size: 60, color: Colors.black54)
+          ],
+        ),
       ),
     ),
   );

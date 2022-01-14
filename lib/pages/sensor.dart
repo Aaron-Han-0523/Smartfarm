@@ -9,8 +9,10 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../globals/stream.dart' as stream;
 import '../pages/environment_page.dart';
+import 'components/getx_controller/controller.dart';
 import 'sensor_page.dart';
 import 'soilControl_page.dart';
+import 'dart:async';
 
 /*
 * name : Home
@@ -44,12 +46,14 @@ class SensorStatefulWidget extends StatefulWidget {
 
 class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   int _selectedIndex = 0;
-
+  final controller = Get.put(CounterController());
   @override
   void initState() {
-    _connect();
-    print('!!!!!!!!!!!!!!!');
-    print(stream.sitesDropdownValue);
+    controller.connect();
+
+    // _connect();
+    // });
+
     super.initState();
   }
 
@@ -74,7 +78,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     });
   }
 
-  var trap = 0;
+  // var trap = 0;
   var siteDropdown =
       stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
   @override
@@ -109,34 +113,9 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
           ),
         ],
       ),
-      body: bodySteam(),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.thermostat),
-      //       label: '센서',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.settings_remote_outlined),
-      //       label: '환경제어',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.settings_input_antenna),
-      //       label: '토양제어',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.videocam),
-      //       label: 'CCTV',
-      //     ),
-      //   ],
-      //   type: BottomNavigationBarType.fixed,
-      //   backgroundColor: Color(0xff2E6645),
-      //   currentIndex: _selectedIndex,
-      //   selectedIconTheme: IconThemeData(color: Colors.red),
-      //   // selectedItemColor: Colors.black,
-      //   unselectedItemColor: Colors.white,
-      //   onTap: _onItemTapped,
-      // ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: ConvexAppBar(
         elevation: 0.0,
         items: [
@@ -216,27 +195,28 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             var streamData = MqttPublishPayload.bytesToStringAsString(
                 recMess.payload.message);
             var streamDatas = jsonDecode(streamData);
-            print('img width = ${streamDatas}');
+            // print('img width = ${streamDatas}');
             // print('img width = ${streamData.runtimeType}');
-            print('temp_1 = ${streamDatas['temp_1'].runtimeType}');
-            if (trap == 0) {
-              stream.temp_1 = streamDatas['temp_1'].toString();
-              stream.humid_1 = streamDatas['humid_1'].toString();
-              stream.exttemp_1 = streamDatas['exttemp_1'].toString();
-              stream.soiltemp_1 = streamDatas['soiltemp_1'].toString();
-              stream.soiltemp_2 = streamDatas['soiltemp_2'].toString();
-              stream.soilhumid_1 = streamDatas['soilhumid_1'].toString();
-              stream.soilhumid_2 = streamDatas['soilhumid_2'].toString();
-              stream.pump_1 = streamDatas['pump_1'].toString();
-              stream.pump_2 = streamDatas['pump_2'].toString();
-              stream.motor_1 = streamDatas['motor_1'].toString();
-              stream.motor_2 = streamDatas['motor_2'].toString();
-              stream.motor_3 = streamDatas['motor_3'].toString();
-              stream.motor_4 = streamDatas['motor_4'].toString();
-              stream.motor_5 = streamDatas['motor_5'].toString();
-              stream.motor_6 = streamDatas['motor_6'].toString();
-              trap = 1;
-            }
+            // print('temp_1 = ${streamDatas['temp_1'].runtimeType}');
+            // if (trap == 0) {
+            print('!!!!!!!!!!!!!!');
+            // stream.temp_1 = streamDatas['temp_1'].toString();
+            stream.humid_1 = streamDatas['humid_1'].toString();
+            stream.exttemp_1 = streamDatas['exttemp_1'].toString();
+            stream.soiltemp_1 = streamDatas['soiltemp_1'].toString();
+            stream.soiltemp_2 = streamDatas['soiltemp_2'].toString();
+            stream.soilhumid_1 = streamDatas['soilhumid_1'].toString();
+            stream.soilhumid_2 = streamDatas['soilhumid_2'].toString();
+            stream.pump_1 = streamDatas['pump_1'].toString();
+            stream.pump_2 = streamDatas['pump_2'].toString();
+            stream.motor_1 = streamDatas['motor_1'].toString();
+            stream.motor_2 = streamDatas['motor_2'].toString();
+            stream.motor_3 = streamDatas['motor_3'].toString();
+            stream.motor_4 = streamDatas['motor_4'].toString();
+            stream.motor_5 = streamDatas['motor_5'].toString();
+            stream.motor_6 = streamDatas['motor_6'].toString();
+            // trap = 1;
+            // }
             print('stream.temp_1 = ${stream.temp_1}');
             return Center(
               child: _widgetOptions.elementAt(_selectedIndex),
@@ -275,9 +255,41 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     } else {
       return false;
     }
-
     const topic = '/sf/e0000001/data';
     client.subscribe(topic, MqttQos.atMostOnce);
+    client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      final mqttReceivedMessages = c;
+      // print('img width = ${mqttReceivedMessages}');
+      // print('img width = ${mqttReceivedMessages.runtimeType}');
+      // print('img width = ${mqttReceivedMessages![0]}');
+      final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
+
+      // print('recMess = ${recMess}');
+      // print('recMess = ${recMess.runtimeType}');
+      // print('recMess = ${recMess}');
+      var streamData =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      var streamDatas = jsonDecode(streamData);
+      print('!!!!!!!!!!!!!!');
+      // stream.temp_1 = streamDatas['temp_1'].toString();
+      stream.humid_1 = streamDatas['humid_1'].toString();
+      stream.exttemp_1 = streamDatas['exttemp_1'].toString();
+      stream.soiltemp_1 = streamDatas['soiltemp_1'].toString();
+      stream.soiltemp_2 = streamDatas['soiltemp_2'].toString();
+      stream.soilhumid_1 = streamDatas['soilhumid_1'].toString();
+      stream.soilhumid_2 = streamDatas['soilhumid_2'].toString();
+      stream.pump_1 = streamDatas['pump_1'].toString();
+      stream.pump_2 = streamDatas['pump_2'].toString();
+      stream.motor_1 = streamDatas['motor_1'].toString();
+      stream.motor_2 = streamDatas['motor_2'].toString();
+      stream.motor_3 = streamDatas['motor_3'].toString();
+      stream.motor_4 = streamDatas['motor_4'].toString();
+      stream.motor_5 = streamDatas['motor_5'].toString();
+      stream.motor_6 = streamDatas['motor_6'].toString();
+      // trap = 1;
+      // }
+      print('stream.temp_1 = ${stream.temp_1}');
+    });
 
     return true;
   }
