@@ -61,6 +61,8 @@ List<dynamic> topMotors = [];
 List motors = [];
 List motor_name = [];
 List<int> motorStatus = [];
+List<int> sideMotorStatus = [];
+
 
 List switchs = [];
 List switch_id = [];

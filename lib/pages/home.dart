@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
 
     stream.pumpStatus = [];
     stream.motorStatus = [];
+    stream.sideMotorStatus = [];
 
     getData();
     super.initState();
@@ -87,17 +88,20 @@ class _HomeState extends State<Home> {
 
       // motors
       final getSideMotors =
-          await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+      await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
       print('##### homePage GET sideMotors list : ${stream.sideMotors}');
       print(
           '##### homePage sideMotors List length : ${stream.sideMotors.length}');
-      stream.motor_name = [];
+      // stream.motor_name = [];
       for (var i = 0; i < stream.sideMotors.length; i++) {
         var sideMotorName = stream.sideMotors[i]['motor_name'];
         stream.motor_name.add(sideMotorName);
+        print('## homePage motor name : ${stream.motor_name}');
       }
 
+
+      // 천창
       final getTopMotors =
           await dio.get('$url/$userId/site/$siteId/controls/top/motors');
       stream.topMotors = getTopMotors.data['data'];
@@ -111,16 +115,22 @@ class _HomeState extends State<Home> {
       }
 
       stream.motorStatus = [
-        stream.motor_1 == 'on' ? 1 : 0,
-        stream.motor_2 == 'on' ? 1 : 0,
-        stream.motor_3 == 'on' ? 1 : 0,
-        stream.motor_4 == 'on' ? 1 : 0,
-        stream.motor_5 == 'on' ? 1 : 0,
-        stream.motor_6 == 'on' ? 1 : 0,
-        stream.motor_6 == 'on' ? 1 : 0, // motor 7개
+        stream.motor_1 == 'open' ? 0 : stream.motor_1 == 'stop' ? 1 : 2,
+        stream.motor_2 == 'open' ? 0 : stream.motor_2 == 'stop' ? 1 : 2,
+        stream.motor_3 == 'open' ? 0 : stream.motor_3 == 'stop' ? 1 : 2,
+        // stream.motor_4 == 'open' ? 0 : stream.motor_4 == 'stop' ? 1 : 2,
+        // stream.motor_5 == 'open' ? 0 : stream.motor_5 == 'stop' ? 1 : 2,
+        // stream.motor_6 == 'open' ? 0 : stream.motor_6 == 'stop' ? 1 : 2,
+        // stream.motor_6 == 'open' ? 1 : 0, // motor 7개
         stream.pump_1 == 'on' ? 1 : 0,
         stream.pump_1 == 'on' ? 1 : 0, // on/off pump ㅇㅇ
         stream.pump_2 == 'on' ? 1 : 0,
+      ];
+
+      stream.sideMotorStatus = [
+        stream.motor_4 == 'open' ? 0 : stream.motor_4 == 'stop' ? 1 : 2,
+        stream.motor_5 == 'open' ? 0 : stream.motor_5 == 'stop' ? 1 : 2,
+        stream.motor_6 == 'open' ? 0 : stream.motor_6 == 'stop' ? 1 : 2,
       ];
       print('motorStatus: ${stream.motorStatus}');
 
