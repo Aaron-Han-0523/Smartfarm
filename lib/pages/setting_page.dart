@@ -53,6 +53,8 @@ class _SettingPageState extends State<SettingPage> {
   bool _alarmStatus = siteConfig.status_alarm;
   var _lowTemp = siteConfig.low_temp;
   var _highTemp = siteConfig.high_temp;
+  var siteDropdown =
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   void initState() {
@@ -117,7 +119,7 @@ class _SettingPageState extends State<SettingPage> {
           ),
           Align(
             alignment: Alignment.topLeft,
-            child: Text(stream.sitesDropdownValue,
+            child: Text(siteDropdown,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
