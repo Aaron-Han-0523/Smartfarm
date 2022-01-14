@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:chewie/chewie.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:dio/dio.dart';
@@ -11,7 +12,7 @@ import '../globals/stream.dart' as stream;
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2022-01-04
+* last update : 2022-01-14
 * */
 
 // global
@@ -84,56 +85,102 @@ class _CCTVPageState extends State<CCTVPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-          itemCount: cctvs.length,
-          itemBuilder: (BuildContext context, var index) {
-            return Container(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Visibility(
-                      visible: _visibility[index],
-                      child: Column(children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("CCTV #" + "${index + 1}"),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                                    // controllers[index].enterFullScreen();
-                                  });
-                                },
-                                icon: Icon(Icons.control_camera)),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.3,
-                                width: MediaQuery.of(context).size.width,
-                                child: VlcPlayer(
-                                  controller: controllers[index],
-                                  aspectRatio: _ratio,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            toolbarHeight: Get.height * 0.14 ,
+            backgroundColor: Color(0xffF5F9FC),
+            title: Column(children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Farm in Earth',
+                  style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
                 ),
               ),
-            );
-          }),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(stream.sitesDropdownValue,
+                    style: TextStyle(color: Colors.black, fontSize: 18)),
+              ),
+            ]),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return SingleChildScrollView(
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffF5F9FC),
+                      ),
+                      alignment: Alignment.center,
+                      child: _cctvBuilder()),
+                );
+              },
+              childCount: 1,
+            ),
+          ),
+        ],
+      ),
     );
   }
+
+  Widget _cctvBuilder() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: cctvs.length,
+        itemBuilder: (BuildContext context, var index) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: _visibility[index],
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("CCTV #" + "${index + 1}"),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  // 카메라를 움직이는 버튼이나 일단 풀스크린전환
+                                  // controllers[index].enterFullScreen();
+                                });
+                              },
+                              icon: Icon(Icons.control_camera)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              // height: Get.height * 0.3,
+                              width: MediaQuery.of(context).size.width,
+                              child: VlcPlayer(
+                                controller: controllers[index],
+                                aspectRatio: _ratio,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+        );
+  }
+
+
 
   // @override
   // void dispose() async {
@@ -147,9 +194,4 @@ class _CCTVPageState extends State<CCTVPage> {
   // }
 }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   // TODO: implement build
-  //   throw UnimplementedError();
-  // }
 
