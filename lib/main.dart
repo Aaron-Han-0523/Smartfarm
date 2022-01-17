@@ -53,9 +53,6 @@ class PushNotification {
 }
 
 // 푸시알림
-// late int _totalNotifications = 0;
-// late FirebaseMessaging _messaging;
-// PushNotification? _notificationInfo;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 // 푸시알림 백그라운드 설정
@@ -96,9 +93,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // 푸시알림
-
   late int _totalNotifications;
-  late FirebaseMessaging _messaging;
+  late final FirebaseMessaging _messaging;
   PushNotification? _notificationInfo;
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -207,14 +203,6 @@ class _MyAppState extends State<MyApp> {
             )
           ],
         ));
-
-        // _totalNotifications = 1;
-        // _notificationInfo = pushNotification;
-        setState(() {
-          _totalNotifications++;
-          _notificationInfo = pushNotification;
-          print(_notificationInfo);
-        });
       }
     });
 
@@ -223,14 +211,15 @@ class _MyAppState extends State<MyApp> {
 
     // 앱이 완전히 꺼졌을 때
     if (initialMessage != null) {
+      _totalNotifications = 0;
       PushNotification pushNotification = PushNotification(
         title: initialMessage.notification?.title,
         body: initialMessage.notification?.body,
       );
 
       setState(() {
-        _totalNotifications = 1;
         _notificationInfo = pushNotification;
+        _totalNotifications++;
       });
     }
   }
@@ -249,8 +238,8 @@ class _MyAppState extends State<MyApp> {
       );
 
       setState(() {
-        _totalNotifications = 1;
         _notificationInfo = pushNotification;
+        _totalNotifications++;
       });
     });
 
