@@ -42,12 +42,6 @@ var options = BaseOptions(
 );
 Dio dio = Dio(options);
 
-// 푸시알림
-late int _totalNotifications = 0;
-late final FirebaseMessaging _messaging;
-late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 // 안드로이드 푸시알림 메세지 구성 설정
 class PushNotification {
   PushNotification({
@@ -58,7 +52,11 @@ class PushNotification {
   String? body;
 }
 
-PushNotification? _notificationInfo;
+// 푸시알림
+// late int _totalNotifications = 0;
+// late FirebaseMessaging _messaging;
+// PushNotification? _notificationInfo;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 // 푸시알림 백그라운드 설정
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -68,9 +66,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 // Create a [AndroidNotificationChannel] for heads up notifications
 late AndroidNotificationChannel channel;
-// Initialize the [FlutterLocalNotificationsPlugin] package.
-// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/config/.env');
@@ -101,11 +96,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // 푸시알림
+
+  late int _totalNotifications;
+  late FirebaseMessaging _messaging;
+  PushNotification? _notificationInfo;
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   void activateNotification() async {
-    // late int _totalNotifications = 0;
-    // late FirebaseMessaging _messaging;
-    // late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    //     FlutterLocalNotificationsPlugin();
     print('##### FCM START #####');
 
     // 푸시알림 fcm 초기화해야 사용할 수 있음
@@ -184,18 +182,6 @@ class _MyAppState extends State<MyApp> {
       AndroidNotification? android = notification?.android;
       // 여기서는 data가 표시 안됨
       // 백그라운드와 비활성화일 시에는 data(image)가 뜨게끔 설정해두었으나 확인요망
-      Get.dialog(AlertDialog(
-        title: Text(notification?.title ?? 'title'), // 메세지 제목
-        content: Text(notification?.body ?? 'body'), // 메세지 내용
-        actions: <Widget>[
-          TextButton(
-            child: Text("OK"),
-            onPressed: () async {
-              Get.back();
-            },
-          )
-        ],
-      ));
 
       print('Got a message whilst in the foreground!');
 
@@ -209,6 +195,21 @@ class _MyAppState extends State<MyApp> {
           body: notification.body,
         );
 
+        Get.dialog(AlertDialog(
+          title: Text(notification.title ?? 'title'), // 메세지 제목
+          content: Text(notification.body ?? 'body'), // 메세지 내용
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () async {
+                Get.back();
+              },
+            )
+          ],
+        ));
+
+        // _totalNotifications = 1;
+        // _notificationInfo = pushNotification;
         setState(() {
           _totalNotifications++;
           _notificationInfo = pushNotification;
@@ -222,14 +223,14 @@ class _MyAppState extends State<MyApp> {
 
     // 앱이 완전히 꺼졌을 때
     if (initialMessage != null) {
-      PushNotification notification = PushNotification(
+      PushNotification pushNotification = PushNotification(
         title: initialMessage.notification?.title,
         body: initialMessage.notification?.body,
       );
 
       setState(() {
-        _totalNotifications++;
-        _notificationInfo = notification;
+        _totalNotifications = 1;
+        _notificationInfo = pushNotification;
       });
     }
   }
@@ -246,9 +247,10 @@ class _MyAppState extends State<MyApp> {
         title: message.notification?.title,
         body: message.notification?.body,
       );
+
       setState(() {
+        _totalNotifications = 1;
         _notificationInfo = pushNotification;
-        _totalNotifications++;
       });
     });
 

@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
 
       // motors
       final getSideMotors =
-      await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+          await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
       print('##### homePage GET sideMotors list : ${stream.sideMotors}');
       print(
@@ -99,7 +99,6 @@ class _HomeState extends State<Home> {
         stream.motor_name.add(sideMotorName);
         print('## homePage motor name : ${stream.motor_name}');
       }
-
 
       // 천창
       final getTopMotors =
@@ -115,9 +114,21 @@ class _HomeState extends State<Home> {
       }
 
       stream.motorStatus = [
-        stream.motor_1 == 'open' ? 0 : stream.motor_1 == 'stop' ? 1 : 2,
-        stream.motor_2 == 'open' ? 0 : stream.motor_2 == 'stop' ? 1 : 2,
-        stream.motor_3 == 'open' ? 0 : stream.motor_3 == 'stop' ? 1 : 2,
+        stream.motor_1 == 'open'
+            ? 0
+            : stream.motor_1 == 'stop'
+                ? 1
+                : 2,
+        stream.motor_2 == 'open'
+            ? 0
+            : stream.motor_2 == 'stop'
+                ? 1
+                : 2,
+        stream.motor_3 == 'open'
+            ? 0
+            : stream.motor_3 == 'stop'
+                ? 1
+                : 2,
         // stream.motor_4 == 'open' ? 0 : stream.motor_4 == 'stop' ? 1 : 2,
         // stream.motor_5 == 'open' ? 0 : stream.motor_5 == 'stop' ? 1 : 2,
         // stream.motor_6 == 'open' ? 0 : stream.motor_6 == 'stop' ? 1 : 2,
@@ -128,9 +139,21 @@ class _HomeState extends State<Home> {
       ];
 
       stream.sideMotorStatus = [
-        stream.motor_4 == 'open' ? 0 : stream.motor_4 == 'stop' ? 1 : 2,
-        stream.motor_5 == 'open' ? 0 : stream.motor_5 == 'stop' ? 1 : 2,
-        stream.motor_6 == 'open' ? 0 : stream.motor_6 == 'stop' ? 1 : 2,
+        stream.motor_4 == 'open'
+            ? 0
+            : stream.motor_4 == 'stop'
+                ? 1
+                : 2,
+        stream.motor_5 == 'open'
+            ? 0
+            : stream.motor_5 == 'stop'
+                ? 1
+                : 2,
+        stream.motor_6 == 'open'
+            ? 0
+            : stream.motor_6 == 'stop'
+                ? 1
+                : 2,
       ];
       print('motorStatus: ${stream.motorStatus}');
 

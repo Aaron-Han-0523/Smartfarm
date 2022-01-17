@@ -213,6 +213,17 @@
         "className": ""
     },
     {
+        "id": "08769aaa45bc5c43",
+        "type": "ui_group",
+        "name": "VALVE CTRL",
+        "tab": "b7f2ce414d343358",
+        "order": 7,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "24d6ed20dc792d29",
         "type": "inject",
         "z": "e767c55edf472ecd",
@@ -254,7 +265,7 @@
         "type": "function",
         "z": "e767c55edf472ecd",
         "name": "set monitoring",
-        "func": "msg.payload = \n{\n\"s\":global.get(\"g_seq\"),\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"temp_1\":global.get(\"g_temp_1\"),\n\"humid_1\":global.get(\"g_humid_1\"),\n\"exttemp_1\":global.get(\"g_exttemp_1\"),\n\"soiltemp_1\":global.get(\"g_soiltemp_1\"),\n\"soiltemp_2\":global.get(\"g_soiltemp_2\"),\n\"soilhumid_1\":global.get(\"g_soilhumid_1\"),\n\"soilhumid_2\":global.get(\"g_soilhumid_2\"),\n\"pump_1\":global.get(\"g_pump_1\"),\n\"pump_2\":global.get(\"g_pump_2\"),\n\"motor_1\":global.get(\"g_motor_1\"),\n\"motor_2\":global.get(\"g_motor_2\"),\n\"motor_3\":global.get(\"g_motor_3\"),\n\"motor_4\":global.get(\"g_motor_4\"),\n\"motor_5\":global.get(\"g_motor_5\"),\n\"motor_6\":global.get(\"g_motor_6\")\n}\n\nglobal.set(\"g_seq\",global.get(\"g_seq\")+1)\n\nreturn msg;",
+        "func": "msg.payload = \n{\n\"s\":global.get(\"g_seq\"),\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"temp_1\":global.get(\"g_temp_1\"),\n\"humid_1\":global.get(\"g_humid_1\"),\n\"exttemp_1\":global.get(\"g_exttemp_1\"),\n\"soiltemp_1\":global.get(\"g_soiltemp_1\"),\n\"soiltemp_2\":global.get(\"g_soiltemp_2\"),\n\"soilhumid_1\":global.get(\"g_soilhumid_1\"),\n\"soilhumid_2\":global.get(\"g_soilhumid_2\"),\n\"pump_1\":global.get(\"g_pump_1\"),\n\"pump_2\":global.get(\"g_pump_2\"),\n\"motor_1\":global.get(\"g_motor_1\"),\n\"motor_2\":global.get(\"g_motor_2\"),\n\"motor_3\":global.get(\"g_motor_3\"),\n\"motor_4\":global.get(\"g_motor_4\"),\n\"motor_5\":global.get(\"g_motor_5\"),\n\"motor_6\":global.get(\"g_motor_6\"),\n\"valve_1\":global.get(\"g_valve_1\")\n}\n\nglobal.set(\"g_seq\",global.get(\"g_seq\")+1)\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -313,7 +324,7 @@
         "func": "\nmin=0;\nmax=100;\nglobal.set(\"g_temp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_humid_1\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_exttemp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soiltemp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soiltemp_2\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_soilhumid_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soilhumid_2\",Math.floor((Math.random() * (max-min+1)) + min));\n",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "// COMMON\nglobal.set(\"g_seq\", 1)\n\n// SITE CONFIGURATION\nglobal.set(\"g_sname\", \"grape-house\")\nglobal.set(\"g_temp_ss_cnt\", 1)\nglobal.set(\"g_humid_ss_cnt\", 1)\nglobal.set(\"g_exttemp_ss_cnt\", 1)\nglobal.set(\"g_soiltemp_ss_cnt\", 2)\nglobal.set(\"g_soilhumid_ss_cnt\", 2)\nglobal.set(\"g_motor_cnt\", 2)\nglobal.set(\"g_pump_cnt\", 2)\n\nglobal.set(\"g_temp_ss_name_1\", \"temp\")\nglobal.set(\"g_humid_ss_name_1\", \"humid\")\nglobal.set(\"g_exttemp_ss_name_1\", \"ext temp\")\nglobal.set(\"g_soiltemp_ss_name_1\", \"soil temp left\")\nglobal.set(\"g_soiltemp_ss_name_2\", \"soil temp right\")\nglobal.set(\"g_soilhumid_ss_name_1\", \"soil humid left\")\nglobal.set(\"g_soilhumid_ss_name_2\", \"soil humid right\")\nglobal.set(\"g_pump_name_1\", \"pump grape\")\nglobal.set(\"g_pump_name_2\", \"pump berry\")\nglobal.set(\"g_motor_name_1\", \"motor side left 1\")\nglobal.set(\"g_motor_name_2\", \"motor side left 2\")\nglobal.set(\"g_motor_name_3\", \"motor side right 1\")\nglobal.set(\"g_motor_name_4\", \"motor side right 2\")\nglobal.set(\"g_motor_name_5\", \"motor side top 1\")\nglobal.set(\"g_motor_name_6\", \"motor side top 2\")\n\nglobal.set(\"g_alarm_en\", true)\nglobal.set(\"g_alarm_high_temp\", 27.3)\nglobal.set(\"g_alarm_low_temp\", 11.4)\nglobal.set(\"g_watering_timer\", 120)\n\nglobal.set(\"g_gps_x\", 35.6)\nglobal.set(\"g_gps_y\", 126.9)\n\n// SITE DATA\nmin=0;\nmax=100;\nglobal.set(\"g_temp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_humid_1\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_exttemp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soiltemp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soiltemp_2\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_soilhumid_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soilhumid_2\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_pump_1\", \"off\")\nglobal.set(\"g_pump_2\", \"off\")\n\nglobal.set(\"g_motor_1\", \"stop\")\nglobal.set(\"g_motor_2\", \"stop\")\nglobal.set(\"g_motor_3\", \"stop\")\nglobal.set(\"g_motor_4\", \"stop\")\nglobal.set(\"g_motor_5\", \"stop\")\nglobal.set(\"g_motor_6\", \"stop\")\n\n// EVENT\nglobal.set(\"g_ec\", \"AT01\")\nglobal.set(\"g_ev\", 30.7)\n\n\n",
+        "initialize": "// COMMON\nglobal.set(\"g_seq\", 1)\n\n// SITE CONFIGURATION\nglobal.set(\"g_sname\", \"grape-house\")\nglobal.set(\"g_temp_ss_cnt\", 1)\nglobal.set(\"g_humid_ss_cnt\", 1)\nglobal.set(\"g_exttemp_ss_cnt\", 1)\nglobal.set(\"g_soiltemp_ss_cnt\", 2)\nglobal.set(\"g_soilhumid_ss_cnt\", 2)\nglobal.set(\"g_motor_cnt\", 2)\nglobal.set(\"g_pump_cnt\", 2)\nglobal.set(\"g_valve_cnt\", 1)\n\nglobal.set(\"g_temp_ss_name_1\", \"temp\")\nglobal.set(\"g_humid_ss_name_1\", \"humid\")\nglobal.set(\"g_exttemp_ss_name_1\", \"ext temp\")\nglobal.set(\"g_soiltemp_ss_name_1\", \"soil temp left\")\nglobal.set(\"g_soiltemp_ss_name_2\", \"soil temp right\")\nglobal.set(\"g_soilhumid_ss_name_1\", \"soil humid left\")\nglobal.set(\"g_soilhumid_ss_name_2\", \"soil humid right\")\nglobal.set(\"g_pump_name_1\", \"pump grape\")\nglobal.set(\"g_pump_name_2\", \"pump berry\")\nglobal.set(\"g_motor_name_1\", \"motor side left 1\")\nglobal.set(\"g_motor_name_2\", \"motor side left 2\")\nglobal.set(\"g_motor_name_3\", \"motor side right 1\")\nglobal.set(\"g_motor_name_4\", \"motor side right 2\")\nglobal.set(\"g_motor_name_5\", \"motor side top 1\")\nglobal.set(\"g_motor_name_6\", \"motor side top 2\")\nglobal.set(\"g_valve_name_1\", \"valve top 2\")\n\nglobal.set(\"g_alarm_en\", true)\nglobal.set(\"g_alarm_high_temp\", 27.3)\nglobal.set(\"g_alarm_low_temp\", 11.4)\nglobal.set(\"g_watering_timer\", 120)\n\nglobal.set(\"g_gps_x\", 35.6)\nglobal.set(\"g_gps_y\", 126.9)\n\n// SITE DATA\nmin=0;\nmax=100;\nglobal.set(\"g_temp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_humid_1\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_exttemp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soiltemp_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soiltemp_2\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_soilhumid_1\",Math.floor((Math.random() * (max-min+1)) + min));\nglobal.set(\"g_soilhumid_2\",Math.floor((Math.random() * (max-min+1)) + min));\n\nglobal.set(\"g_pump_1\", \"off\")\nglobal.set(\"g_pump_2\", \"off\")\n\nglobal.set(\"g_motor_1\", \"stop\")\nglobal.set(\"g_motor_2\", \"stop\")\nglobal.set(\"g_motor_3\", \"stop\")\nglobal.set(\"g_motor_4\", \"stop\")\nglobal.set(\"g_motor_5\", \"stop\")\nglobal.set(\"g_motor_6\", \"stop\")\n\nglobal.set(\"g_valve_1\", \"close\")\n\n// EVENT\nglobal.set(\"g_ec\", \"AT01\")\nglobal.set(\"g_ev\", 30.7)\n\n\n",
         "finalize": "",
         "libs": [],
         "x": 270,
@@ -366,7 +377,7 @@
         "type": "function",
         "z": "e767c55edf472ecd",
         "name": "set get_resp",
-        "func": "rs=msg.payload.rs;\n\nmsg.payload = \n{\n\"rs\":rs,\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"rt\":\"get\",\n\"rc\":0,\n\"sname\":global.get(\"g_sname\"),\n\"temp_ss_cnt\":global.get(\"g_temp_ss_cnt\"),\n\"humid_ss_cnt\":global.get(\"g_humid_ss_cnt\"),\n\"exttemp_ss_cnt\":global.get(\"g_exttemp_ss_cnt\"),\n\"soiltemp_ss_cnt\":global.get(\"g_soiltemp_ss_cnt\"),\n\"soilhumid_ss_cnt\":global.get(\"g_soilhumid_ss_cnt\"),\n\"motor_ss_cnt\":global.get(\"g_motor_cnt\"),\n\"pump_ss_cnt\":global.get(\"g_pump_cnt\"),\n\n\"temp_ss_name_1\":global.get(\"g_temp_ss_name_1\"),\n\"humid_ss_name_1\":global.get(\"g_humid_ss_name_1\"),\n\"exttemp_ss_name_1\":global.get(\"g_exttemp_ss_name_1\"),\n\"soiltemp_ss_name_1\":global.get(\"g_soiltemp_ss_name_1\"),\n\"soiltemp_ss_name_2\":global.get(\"g_soiltemp_ss_name_2\"),\n\"soilhumid_ss_name_1\":global.get(\"g_soilhumid_ss_name_1\"),\n\"soilhumid_ss_name_2\":global.get(\"g_soilhumid_ss_name_2\"),\n\"pump_name_1\":global.get(\"g_pump_name_1\"),\n\"pump_name_2\":global.get(\"g_pump_name_2\"),\n\"motor_name_1\":global.get(\"g_motor_name_1\"),\n\"motor_name_2\":global.get(\"g_motor_name_2\"),\n\"motor_name_3\":global.get(\"g_motor_name_3\"),\n\"motor_name_4\":global.get(\"g_motor_name_4\"),\n\"motor_name_5\":global.get(\"g_motor_name_5\"),\n\"motor_name_6\":global.get(\"g_motor_name_6\"),\n\"alarm_en\":global.get(\"g_alarm_en\"),\n\"alarm_high_temp\":global.get(\"g_alarm_high_temp\"),\n\"alarm_low_temp\":global.get(\"g_alarm_low_temp\"),\n\"watering_timer\":global.get(\"g_watering_timer\"),\n\n\"gps_x\":global.get(\"g_gps_x\"),\n\"gps_y\":global.get(\"g_gps_y\")\n}\n\nreturn msg;",
+        "func": "rs=msg.payload.rs;\n\nmsg.payload = \n{\n\"rs\":rs,\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"rt\":\"get\",\n\"rc\":0,\n\"sname\":global.get(\"g_sname\"),\n\"temp_ss_cnt\":global.get(\"g_temp_ss_cnt\"),\n\"humid_ss_cnt\":global.get(\"g_humid_ss_cnt\"),\n\"exttemp_ss_cnt\":global.get(\"g_exttemp_ss_cnt\"),\n\"soiltemp_ss_cnt\":global.get(\"g_soiltemp_ss_cnt\"),\n\"soilhumid_ss_cnt\":global.get(\"g_soilhumid_ss_cnt\"),\n\"motor_cnt\":global.get(\"g_motor_cnt\"),\n\"pump_cnt\":global.get(\"g_pump_cnt\"),\n\"valve_cnt\":global.get(\"g_valve_cnt\"),\n\n\"temp_ss_name_1\":global.get(\"g_temp_ss_name_1\"),\n\"humid_ss_name_1\":global.get(\"g_humid_ss_name_1\"),\n\"exttemp_ss_name_1\":global.get(\"g_exttemp_ss_name_1\"),\n\"soiltemp_ss_name_1\":global.get(\"g_soiltemp_ss_name_1\"),\n\"soiltemp_ss_name_2\":global.get(\"g_soiltemp_ss_name_2\"),\n\"soilhumid_ss_name_1\":global.get(\"g_soilhumid_ss_name_1\"),\n\"soilhumid_ss_name_2\":global.get(\"g_soilhumid_ss_name_2\"),\n\"pump_name_1\":global.get(\"g_pump_name_1\"),\n\"pump_name_2\":global.get(\"g_pump_name_2\"),\n\"motor_name_1\":global.get(\"g_motor_name_1\"),\n\"motor_name_2\":global.get(\"g_motor_name_2\"),\n\"motor_name_3\":global.get(\"g_motor_name_3\"),\n\"motor_name_4\":global.get(\"g_motor_name_4\"),\n\"motor_name_5\":global.get(\"g_motor_name_5\"),\n\"motor_name_6\":global.get(\"g_motor_name_6\"),\n\"valve_name_6\":global.get(\"g_valve_name_1\"),\n\n\"alarm_en\":global.get(\"g_alarm_en\"),\n\"alarm_high_temp\":global.get(\"g_alarm_high_temp\"),\n\"alarm_low_temp\":global.get(\"g_alarm_low_temp\"),\n\"watering_timer\":global.get(\"g_watering_timer\"),\n\n\"gps_x\":global.get(\"g_gps_x\"),\n\"gps_y\":global.get(\"g_gps_y\")\n}\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -607,7 +618,7 @@
         "type": "function",
         "z": "e767c55edf472ecd",
         "name": "set event",
-        "func": "msg.payload = \n{\n\"s\":global.get(\"g_seq\"),\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"ec\":global.get(\"g_ec\"),\n\"ev\":global.get(\"g_ev\"),\n}\n\nglobal.set(\"g_seq\",global.get(\"g_seq\")+1)\n\nreturn msg;",
+        "func": "min=0;\nmax=2;\nrand = Math.floor((Math.random() * (max-min+1)) + min);\n\nif(global.get(\"g_ec\") == \"AT01\") {\n    global.set(\"g_ec\", \"AT00\")\n    global.set(\"g_ev\", 0)\n} else if(global.get(\"g_ec\") == \"AR01\") {\n    global.set(\"g_ec\", \"AR00\")\n    global.set(\"g_ev\", 0)\n} else if(global.get(\"g_ec\") == \"AW01\") {\n    global.set(\"g_ec\", \"AW00\")\n    global.set(\"g_ev\", 0)\n} else {\n    if(rand == 0) {\n        global.set(\"g_ec\", \"AT01\")\n        global.set(\"g_ev\", 30.7)\n    } else if (rand == 1) {\n        global.set(\"g_ec\", \"AR01\")\n        global.set(\"g_ev\", 0)\n    } else if (rand == 2) {\n        global.set(\"g_ec\", \"AW01\")\n        global.set(\"g_ev\", 0)\n    }\n}\n\nmsg.payload = \n{\n\"s\":global.get(\"g_seq\"),\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"ec\":global.get(\"g_ec\"),\n\"ev\":global.get(\"g_ev\"),\n}\n\nglobal.set(\"g_seq\",global.get(\"g_seq\")+1)\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -663,7 +674,7 @@
         "z": "e767c55edf472ecd",
         "name": "5min",
         "props": [],
-        "repeat": "30",
+        "repeat": "10",
         "crontab": "",
         "once": true,
         "onceDelay": "3",
@@ -675,6 +686,82 @@
                 "ab94515acb9cdff1"
             ]
         ]
+    },
+    {
+        "id": "5a45122418a4dd54",
+        "type": "mqtt in",
+        "z": "e767c55edf472ecd",
+        "name": "sub_req_ctrl_valve",
+        "topic": "/sf/e0000001/req/valve",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "cdd30221c26eb3f1",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 920,
+        "wires": [
+            [
+                "8ab88274782f6d3f",
+                "7d9566a0f4928006"
+            ]
+        ]
+    },
+    {
+        "id": "8ab88274782f6d3f",
+        "type": "function",
+        "z": "e767c55edf472ecd",
+        "name": "set set_resp",
+        "func": "rs=msg.payload.rs;\n\nswitch(msg.payload.did) {\n  case 1:\n    global.set(\"g_valve_1\",msg.payload.dact);\n    break;\n}\n\nmsg.payload = \n{\n\"rs\":rs,\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"rt\":\"set\",\n\"rc\":0\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 920,
+        "wires": [
+            [
+                "b0b9909387683965"
+            ]
+        ]
+    },
+    {
+        "id": "b0b9909387683965",
+        "type": "mqtt out",
+        "z": "e767c55edf472ecd",
+        "name": "pub_res_ctrl_valve",
+        "topic": "/sf/e0000001/res/valve",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cdd30221c26eb3f1",
+        "x": 650,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "7d9566a0f4928006",
+        "type": "debug",
+        "z": "e767c55edf472ecd",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 960,
+        "wires": []
     },
     {
         "id": "e561ef9e409ac78c",
@@ -721,7 +808,7 @@
         "expiry": "",
         "broker": "cdd30221c26eb3f1",
         "x": 660,
-        "y": 640,
+        "y": 740,
         "wires": []
     },
     {
@@ -745,7 +832,7 @@
         "topic": "topic",
         "topicType": "msg",
         "x": 100,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "3de86e56cd0a69b3"
@@ -764,7 +851,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "d00744b07538ec22"
@@ -988,7 +1075,8 @@
                 "f533907bf1d2df07",
                 "7ababae5c7d4a8c8",
                 "109907fa8dd96b58",
-                "d7a31bd85c822e3a"
+                "d7a31bd85c822e3a",
+                "af70a1382360c254"
             ]
         ]
     },
@@ -1630,7 +1718,7 @@
         "id": "78d859bf44c91fba",
         "type": "mqtt out",
         "z": "387f82341c73a9b9",
-        "name": "pub_req_ctrl_motor",
+        "name": "pub_req_ctrl_pump",
         "topic": "/sf/e0000001/req/pump",
         "qos": "2",
         "retain": "",
@@ -1908,6 +1996,286 @@
         "className": "",
         "x": 310,
         "y": 600,
+        "wires": []
+    },
+    {
+        "id": "1a5855e0210bfee8",
+        "type": "inject",
+        "z": "387f82341c73a9b9",
+        "name": "first",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "3",
+        "topic": "",
+        "x": 110,
+        "y": 680,
+        "wires": [
+            [
+                "991837fa550a325e"
+            ]
+        ]
+    },
+    {
+        "id": "991837fa550a325e",
+        "type": "function",
+        "z": "387f82341c73a9b9",
+        "name": "set req_getcfg",
+        "func": "msg.payload =\n{\n\"rs\":2001,\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"rt\":\"get\"\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 680,
+        "wires": [
+            [
+                "71ab44ed87911923"
+            ]
+        ]
+    },
+    {
+        "id": "71ab44ed87911923",
+        "type": "mqtt out",
+        "z": "387f82341c73a9b9",
+        "name": "pub_req_getcfg",
+        "topic": "/sf/e0000001/req/cfg",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cdd30221c26eb3f1",
+        "x": 660,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "af70a1382360c254",
+        "type": "ui_text",
+        "z": "387f82341c73a9b9",
+        "group": "b98653af9940db90",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "valve1",
+        "format": "{{msg.payload.valve_1}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 310,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "77a382fccf11421a",
+        "type": "ui_button",
+        "z": "387f82341c73a9b9",
+        "name": "",
+        "group": "08769aaa45bc5c43",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "ctrl valve",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 100,
+        "y": 1740,
+        "wires": [
+            [
+                "c8afc66a87038b85"
+            ]
+        ]
+    },
+    {
+        "id": "c8afc66a87038b85",
+        "type": "function",
+        "z": "387f82341c73a9b9",
+        "name": "set req_ctrl_valve",
+        "func": "msg.payload =\n{\n\"rs\":3001,\n\"t\":new Date().toJSON().split('.')[0]+\"Z\",\n\"rt\":\"set\",\n\"did\":global.get(\"g_ctrl_valve_did\"),\n\"dact\":global.get(\"g_ctrl_valve_dact\"),\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1740,
+        "wires": [
+            [
+                "6b1c4672b529a9c1",
+                "bb0eeffd9693c1b3"
+            ]
+        ]
+    },
+    {
+        "id": "6b1c4672b529a9c1",
+        "type": "mqtt out",
+        "z": "387f82341c73a9b9",
+        "name": "pub_req_ctrl_valve",
+        "topic": "/sf/e0000001/req/valve",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cdd30221c26eb3f1",
+        "x": 670,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "2868a4c824f03140",
+        "type": "mqtt in",
+        "z": "387f82341c73a9b9",
+        "name": "sub_res_ctrl_valve",
+        "topic": "/sf/e0000001/res/valve",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "cdd30221c26eb3f1",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 1600,
+        "wires": [
+            [
+                "38d9735bee12910b"
+            ]
+        ]
+    },
+    {
+        "id": "38d9735bee12910b",
+        "type": "debug",
+        "z": "387f82341c73a9b9",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 350,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "2b57539d20fa2097",
+        "type": "ui_text_input",
+        "z": "387f82341c73a9b9",
+        "name": "",
+        "label": "ctrl valve id",
+        "tooltip": "",
+        "group": "08769aaa45bc5c43",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "number",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 110,
+        "y": 1660,
+        "wires": [
+            [
+                "e0bd7e8ee4c81db3"
+            ]
+        ]
+    },
+    {
+        "id": "e0bd7e8ee4c81db3",
+        "type": "function",
+        "z": "387f82341c73a9b9",
+        "name": "set global",
+        "func": "global.set(\"g_ctrl_valve_did\", msg.payload)",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nglobal.set(\"g_ctrl_pump_did\", 1)",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "144c13fda5abf662",
+        "type": "ui_text_input",
+        "z": "387f82341c73a9b9",
+        "name": "",
+        "label": "ctrl valve action",
+        "tooltip": "open, close",
+        "group": "08769aaa45bc5c43",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 120,
+        "y": 1700,
+        "wires": [
+            [
+                "c79c662b34c2d10c"
+            ]
+        ]
+    },
+    {
+        "id": "c79c662b34c2d10c",
+        "type": "function",
+        "z": "387f82341c73a9b9",
+        "name": "set global",
+        "func": "global.set(\"g_ctrl_valve_dact\", msg.payload)",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nglobal.set(\"g_ctrl_pump_dact\", \"off\")",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb0eeffd9693c1b3",
+        "type": "debug",
+        "z": "387f82341c73a9b9",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 1700,
         "wires": []
     }
 ]
