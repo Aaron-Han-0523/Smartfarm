@@ -75,6 +75,7 @@ class CounterController extends GetxController {
       stream.soiltemp_2 = streamDatas['soiltemp_2'].toString();
       stream.soilhumid_1 = streamDatas['soilhumid_1'].toString();
       stream.soilhumid_2 = streamDatas['soilhumid_2'].toString();
+      stream.valve_1 = streamDatas['valve_1'].toString();
       stream.pump_1 = streamDatas['pump_1'].toString();
       stream.pump_2 = streamDatas['pump_2'].toString();
       stream.motor_1 = streamDatas['motor_1'].toString();
