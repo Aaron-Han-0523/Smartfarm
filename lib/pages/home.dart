@@ -10,7 +10,7 @@ import '../globals/stream.dart' as stream;
 * description : get Data
 * writer : sherry
 * create date : 2022-01-10
-* last update : 2022-01-12
+* last update : 2022-01-17
 * */
 
 // APIs
@@ -170,8 +170,8 @@ class _HomeState extends State<Home> {
       }
 
       stream.pumpStatus = [
-        stream.pump_1 == 'on' ? 1 : 0,
-        stream.pump_2 == 'on' ? 1 : 0,
+        stream.pump_1 == 'on' ? 0 : 1,
+        stream.pump_2 == 'on' ? 0 : 1,
       ];
       print('pumpStatus: ${stream.pumpStatus}');
 

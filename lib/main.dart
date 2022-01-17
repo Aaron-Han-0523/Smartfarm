@@ -25,7 +25,7 @@ import '../globals/stream.dart' as stream;
 * description : This is a start page. code for fcm push notification.
 * writer : Sherry
 * create date : 2022-01-10
-* last update : 2022-01-12
+* last update : 2022-01-17
 * */
 
 // APIs

@@ -26,7 +26,7 @@ import 'components/getx_controller/controller.dart';
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24    
-* last update : 2022-01-11
+* last update : 2022-01-17
 * */
 
 // globalKey
@@ -326,7 +326,7 @@ class _MyPumpsState extends State<MyPumps> {
                                     inactiveBgColor: Color(0xffFFFFFF),
                                     inactiveFgColor: Color(0xff222222),
                                     initialLabelIndex:
-                                        stream.pumpStatus[index] == 0 ? 1 : 0,
+                                        stream.pumpStatus[index] == 1 ? 1 : 0,
                                     totalSwitches: 2,
                                     labels: ['ON', 'OFF'],
                                     radiusStyle: true,
@@ -335,10 +335,10 @@ class _MyPumpsState extends State<MyPumps> {
                                       String switchStatus = '';
 
                                       if (value == 0) {
-                                        switchStatus = 'off';
+                                        switchStatus = 'on';
                                         stream.pumpStatus[index] = 0;
                                       } else if (value == 1) {
-                                        switchStatus = 'on';
+                                        switchStatus = 'off';
                                         stream.pumpStatus[index] = 1;
                                       }
                                       // pumpStatus[index] = value;
@@ -356,6 +356,18 @@ class _MyPumpsState extends State<MyPumps> {
                                           switchStatus,
                                           '/sf/e0000001/req/pump',
                                           '/sf/e0000001/req/pump');
+
+                                      // var pumpId = 'pump_${index + 1}';
+                                      // var data = {
+                                      //   'uid': userId,
+                                      //   'sid': siteId,
+                                      //   'pump_id': pumpId,
+                                      //   'pump_action': value,
+                                      // };
+                                      // final putPumps = await dio.put(
+                                      //     '$url/$userId/site/$siteId/controls/pumps/$pumpId',
+                                      //     data: data);
+                                      // print(putPumps);
                                     },
                                   ),
                                 ),
