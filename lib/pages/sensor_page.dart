@@ -40,7 +40,7 @@ class _SensorPageState extends State<SensorPage> {
   }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class _SensorPageState extends State<SensorPage> {
             SliverList(
               // itemExtent: 3.0,
               delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                   return Container(
                     // color: Colors.red,
                     child: Container(
@@ -121,10 +121,9 @@ class _MyAccordianState extends State<MyAccordian> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
+          () => Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+          _fromLTRBPadding(
             child: Container(
               decoration: _decorations(),
               child: Theme(
@@ -136,8 +135,7 @@ class _MyAccordianState extends State<MyAccordian> {
                   collapsedIconColor: Colors.white,
                   title: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
+                      _leftRightPadding(
                         child: Image.asset(
                           'assets/images/icon_exevn.png',
                           scale: 3,
@@ -204,10 +202,9 @@ class _MyAccordian2State extends State<MyAccordian2> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
+          () => Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+          _fromLTRBPadding(
             child: Container(
               decoration: _decorations(),
               child: Theme(
@@ -218,8 +215,7 @@ class _MyAccordian2State extends State<MyAccordian2> {
                   collapsedIconColor: Colors.white,
                   title: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
+                      _leftRightPadding(
                         child: Image.asset(
                           'assets/images/icon_inevn.png',
                           scale: 3,
@@ -238,10 +234,10 @@ class _MyAccordian2State extends State<MyAccordian2> {
                     SizedBox(
                       width: Get.width,
                       height:
-                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+                      (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
                         childAspectRatio:
-                            (Get.width * 0.4) / (Get.height * 1 / 9),
+                        (Get.width * 0.4) / (Get.height * 1 / 9),
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.
                         crossAxisCount: 2,
@@ -302,20 +298,18 @@ class _MyGraphState extends State<MyGraph> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+        _fromLTRBPadding(
           child: Container(
             decoration: _decorations(),
             child: Theme(
               data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
                 title: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                    _leftRightPadding(
                       child: Image.asset(
                         'assets/images/icon_graph.png',
                         scale: 3,
@@ -442,4 +436,18 @@ BoxDecoration _decorations() {
       ),
     ],
   );
+}
+
+// padding widget
+Padding _fromLTRBPadding({child}) {
+  return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
+}
+
+Padding _edgeTopPadding(double top, {child}) {
+  return Padding(padding: new EdgeInsets.only(top: top), child: child);
+}
+
+Padding _leftRightPadding({child}) {
+  return Padding(
+      padding: new EdgeInsets.only(left: 10, right: 10), child: child);
 }
