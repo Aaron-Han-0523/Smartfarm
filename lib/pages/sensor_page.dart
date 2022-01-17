@@ -18,6 +18,14 @@ var soilTemp = stream.soiltemp_1; // 토양온도
 var innerHumid = stream.humid_1; // 내부습도
 var extHumid = stream.humid_1; // 외부습도
 var soilHumid = stream.soilhumid_1; // 토양습도
+final controller = Get.put(CounterController());
+List innerData = ['내부 온도', '내부 습도', '토양 온도', '토양 습도'];
+List innerCon = [
+  controller.innerTemp,
+  controller.innerHumid,
+  controller.soilTemp,
+  controller.soilHumid
+];
 
 class SensorPage extends StatefulWidget {
   SensorPage({Key? key}) : super(key: key);
@@ -192,7 +200,7 @@ class MyAccordian2 extends StatefulWidget {
 }
 
 class _MyAccordian2State extends State<MyAccordian2> {
-  final controller = Get.put(CounterController());
+  // final controller = Get.put(CounterController());
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -227,32 +235,50 @@ class _MyAccordian2State extends State<MyAccordian2> {
                     ],
                   ),
                   children: <Widget>[
-                    SizedBox(height: Get.height * 0.01),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _cards('내부 온도', controller.innerTemp.value, true,
-                              'assets/images/icon_temp.png'),
-                          _cards('내부 습도', controller.innerHumid.value, true,
-                              'assets/images/icon_humid.png')
-                        ]),
-                    SizedBox(height: Get.height * 0.01),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _cards('토양 온도', controller.soilTemp.value, true,
-                              'assets/images/icon_soiltemp.png'),
-                          _cards('토양 습도', controller.soilHumid.value, true,
-                              'assets/images/icon_soilhumid.png')
-                        ]),
-                    SizedBox(height: Get.height * 0.01),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5, bottom: 5),
-                      child: Row(children: [
-                        _cards('토양 건조도', '12.5', true,
-                            'assets/images/icon_soilele.png'),
-                      ]),
+                    SizedBox(
+                      width: Get.width,
+                      height:
+                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+                      child: GridView.count(
+                        childAspectRatio:
+                            (Get.width * 0.4) / (Get.height * 1 / 9),
+                        // Create a grid with 2 columns. If you change the scrollDirection to
+                        // horizontal, this produces 2 rows.
+                        crossAxisCount: 2,
+                        // Generate 100 widgets that display their index in the List.
+
+                        children: List.generate(innerData.length, (index) {
+                          return _cards(innerData[index], innerCon[index].value,
+                              true, 'assets/images/icon_temp.png');
+                        }),
+                      ),
                     ),
+                    // SizedBox(height: Get.height * 0.01),
+                    // Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //     children: [
+                    //       _cards('내부 온도', controller.innerTemp.value, true,
+                    //           'assets/images/icon_temp.png'),
+                    //       _cards('내부 습도', controller.innerHumid.value, true,
+                    //           'assets/images/icon_humid.png')
+                    //     ]),
+                    // SizedBox(height: Get.height * 0.01),
+                    // Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //     children: [
+                    //       _cards('토양 온도', controller.soilTemp.value, true,
+                    //           'assets/images/icon_soiltemp.png'),
+                    //       _cards('토양 습도', controller.soilHumid.value, true,
+                    //           'assets/images/icon_soilhumid.png')
+                    //     ]),
+                    // SizedBox(height: Get.height * 0.01),
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: 5, bottom: 5),
+                    //   child: Row(children: [
+                    //     _cards('토양 건조도', '12.5', true,
+                    //         'assets/images/icon_soilele.png'),
+                    //   ]),
+                    // ),
                   ],
                 ),
               ),

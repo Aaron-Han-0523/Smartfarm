@@ -1,25 +1,12 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:plms_start/mqtt/mqtt.dart';
-import 'package:plms_start/pages/mqtt.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:dio/dio.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
-import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-
 import 'components/getx_controller/controller.dart';
-
-// TODO: valveStatus는 아직 없음
 
 /*
 * name : Soil Control Page
@@ -262,13 +249,9 @@ class MyPumps extends StatefulWidget {
 }
 
 class _MyPumpsState extends State<MyPumps> {
-  List<bool> status = [true, true];
-  List<bool> visibility = [true, true];
-
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) => _connect());
   }
 
   @override
@@ -301,7 +284,7 @@ class _MyPumpsState extends State<MyPumps> {
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: pumps.length,
+                      itemCount: stream.pumpStatus.length,
                       itemBuilder: (BuildContext context, var index) {
                         return _switchToggle(
                             index, '펌프', stream.pumpStatus, 'pump');
@@ -325,9 +308,6 @@ class MyValves extends StatefulWidget {
 }
 
 class _MyValvesState extends State<MyValves> {
-  List<int> valveStatus = [0, 0];
-  List<bool> visibility = [true, true];
-
   @override
   void initState() {
     super.initState();
@@ -362,10 +342,10 @@ class _MyValvesState extends State<MyValves> {
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: valves.length,
+                      itemCount: stream.valveStatus.length,
                       itemBuilder: (BuildContext context, var index) {
-                        return _switchToggle(
-                            index, '벨브', stream.valveStatus, 'valve');
+                        return _switchToggle2(
+                            index, '밸브', stream.valveStatus, 'valve');
                       }),
                 )
               ],
@@ -409,7 +389,6 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
             labels: ['ON', 'OFF'],
             radiusStyle: true,
             onToggle: (value) async {
-              // stream.pumpStatus[index] = value;
               String switchStatus = '';
 
               if (value == 0) {
@@ -419,10 +398,10 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
                 switchStatus = 'off';
                 streamStatus[index] = 1;
               }
-              // pumpStatus[index] = value;
-              print('### Pump${index + 1} toggle value는 : $value');
-              print('### Pump${index + 1} toggle type은 : ${value.runtimeType}');
-              print('### Pump${index + 1} value는 : $switchStatus');
+              print('### $action${index + 1} toggle value는 : $value');
+              print(
+                  '### $action${index + 1} toggle type은 : ${value.runtimeType}');
+              print('### $action${index + 1} value는 : $switchStatus');
 
               _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
                   '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
@@ -438,6 +417,78 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
               //     '$url/$userId/site/$siteId/controls/pumps/$pumpId',
               //     data: data);
               // print(putPumps);
+            },
+          ),
+        ),
+      ],
+    ),
+    decoration: _decorations(),
+  );
+}
+
+Widget _switchToggle2(var index, var text, var streamStatus, var action) {
+  return Container(
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+    height: Get.height * 0.09,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: 20),
+          child: Text("$text (#${index + 1})",
+              style: TextStyle(
+                  color: Color(0xff222222),
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal)),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: ToggleSwitch(
+            fontSize: 12,
+            minWidth: 60.0,
+            cornerRadius: 80.0,
+            activeBgColors: [
+              [Color(0xffe3fbed)],
+              [Color(0xfff2f2f2)]
+            ],
+            activeFgColor: Color(0xff222222),
+            inactiveBgColor: Color(0xffFFFFFF),
+            inactiveFgColor: Color(0xff222222),
+            initialLabelIndex: streamStatus[index] == 0 ? 0 : 1,
+            totalSwitches: 2,
+            labels: ['OPEN', 'CLOSE'],
+            radiusStyle: true,
+            onToggle: (value) async {
+              String switchStatus = '';
+
+              if (value == 0) {
+                switchStatus = 'open';
+                streamStatus[index] = 0;
+              } else if (value == 1) {
+                switchStatus = 'close';
+                streamStatus[index] = 1;
+              }
+              print('### $action${index + 1} toggle value는 : $value');
+              print(
+                  '### $action${index + 1} toggle type은 : ${value.runtimeType}');
+              print('### $action${index + 1} value는 : $switchStatus');
+              print(
+                  '### $action${index + 1} $action Status는 : ${streamStatus[index]}');
+
+              _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
+                  '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
+
+              // var valveId = 'valve_${index + 1}';
+              // var data = {
+              //   'uid': userId,
+              //   'sid': siteId,
+              //   'valve_id': valveId,
+              //   'valve_action': value,
+              // };
+              // final putValves = await dio.put(
+              //     '$url/$userId/site/$siteId/controls/valves/$valveId',
+              //     data: data);
+              // print(putValves);
             },
           ),
         ),
