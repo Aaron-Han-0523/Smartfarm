@@ -68,7 +68,7 @@ MqttClass _mqttClass = MqttClass();
 String statusText = "Status Text";
 bool isConnected = false;
 final MqttServerClient client =
-MqttServerClient('broker.mqttdashboard.com', '');
+    MqttServerClient('broker.mqttdashboard.com', '');
 
 // decoration (with box shadow)
 BoxDecoration _decoration(dynamic color) {
@@ -108,7 +108,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
   }
 
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -134,14 +134,14 @@ class _SoilControlPageState extends State<SoilControlPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                          TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                              TextStyle(color: Color(0xff2E8953), fontSize: 25),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                            TextStyle(color: Colors.black, fontSize: 18)),
+                                TextStyle(color: Colors.black, fontSize: 18)),
                       ),
                       SizedBox(height: Get.height * 0.05),
                       MyWeather(),
@@ -150,7 +150,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
               SliverList(
                 // itemExtent: 3.0,
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                     return Container(
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
@@ -200,49 +200,51 @@ class _MyWeatherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-          () => Container(
+      () => Container(
         // alignment: Alignment.center,
         child:
-        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
-          SizedBox(height: Get.height * 0.03),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                height: Get.height * 0.13,
-                width: Get.width * 0.425,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _subMonitoring(
-                        'assets/images/icon_temp.png',
-                        "내부 온도",
-                        "${controller.innerTemp.value}" + "°C",
-                        'assets/images/icon_humid.png',
-                        "내부 습도",
-                        "${controller.innerHumid.value}" + "%"),
-                  ],
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+             _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
+             SizedBox(height: Get.height * 0.03),
+              Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  child: Container(
+                    height: Get.height * 0.13,
+                    width: Get.width * 0.425,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _subMonitoring(
+                            'assets/images/icon_temp.png',
+                            "내부 온도",
+                            "${controller.innerTemp.value}" + "°C",
+                            'assets/images/icon_humid.png',
+                            "내부 습도",
+                            "${controller.innerHumid.value}" + "%"),
+                      ],
+                    ),
+                    decoration: _decoration(Color(0xffFFFFFF)),
+                  ),
                 ),
-                decoration: _decoration(Color(0xffFFFFFF)),
-              ),
-              Container(
-                height: Get.height * 0.13,
-                width: Get.width * 0.425,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _subMonitoring(
-                        'assets/images/icon_soiltemp.png',
-                        "토양 온도",
-                        "${controller.soilTemp.value}°C",
-                        'assets/images/icon_soilhumid.png',
-                        "토양 습도",
-                        "${controller.soilHumid.value}%"),
-                  ],
+                Container(
+                  height: Get.height * 0.13,
+                  width: Get.width * 0.425,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _subMonitoring(
+                          'assets/images/icon_soiltemp.png',
+                          "토양 온도",
+                          "${controller.soilTemp.value}°C",
+                          'assets/images/icon_soilhumid.png',
+                          "토양 습도",
+                          "${controller.soilHumid.value}%"),
+                    ],
+                  ),
+                  decoration: _decoration(Color(0xffFFFFFF)),
                 ),
-                decoration: _decoration(Color(0xffFFFFFF)),
-              ),
             ],
           ),
         ]),
@@ -272,16 +274,15 @@ class _MyPumpsState extends State<MyPumps> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
-        padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+      _fromLTRBPadding(
         child: Container(
           decoration: _decoration(Color(0xff2E8953)),
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
               initiallyExpanded: true,
-              title: Padding(
-                padding: EdgeInsets.only(left: 15),
+              title: _edgeLeftPadding(
+                15,
                 child: Text('관수 펌프 제어',
                     style: TextStyle(
                         fontSize: 20,
@@ -294,8 +295,9 @@ class _MyPumpsState extends State<MyPumps> {
               collapsedIconColor: Colors.white,
               // tilePadding: EdgeInsets.all(8.0),
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 15, bottom: 15),
+                _topBottomPadding(
+                  15,
+                  15,
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
@@ -334,15 +336,14 @@ class _MyValvesState extends State<MyValves> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Padding(
-        padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+      _fromLTRBPadding(
         child: Container(
           decoration: _decoration(Color(0xff2E8953)),
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
-              title: Padding(
-                padding: EdgeInsets.only(left: 15),
+              title: _edgeLeftPadding(
+                15,
                 child: Text('밸브 제어',
                     style: TextStyle(
                         fontSize: 20,
@@ -355,8 +356,9 @@ class _MyValvesState extends State<MyValves> {
               collapsedIconColor: Colors.white,
               // tilePadding: EdgeInsets.all(8.0),
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 15, bottom: 15),
+                _topBottomPadding(
+                  15,
+                  15,
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
@@ -376,22 +378,21 @@ class _MyValvesState extends State<MyValves> {
 }
 
 Widget _switchToggle(var index, var text, var streamStatus, var action) {
-  return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+  return _marginContainer(
     height: Get.height * 0.09,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 20),
+        _edgeLeftPadding(
+          20,
           child: Text("$text (#${index + 1})",
               style: TextStyle(
                   color: Color(0xff222222),
                   fontSize: 15,
                   fontWeight: FontWeight.normal)),
         ),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
+        _edgeRightPadding(
+          10,
           child: ToggleSwitch(
             fontSize: 12,
             minWidth: 60.0,
@@ -449,12 +450,13 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
 Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
   return Container(
     height: Get.height * 0.1,
+    width: Get.width * 0.9,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       temp > 20
           ? Image.asset('assets/images/icon_shiny.png',
-          color: Color(0xff222222), scale: 3)
+              color: Color(0xff222222), scale: 3)
           : Image.asset('assets/images/icon_windy.png',
-          color: Color(0xff222222), scale: 3),
+              color: Color(0xff222222), scale: 3),
       Text(" $weather/$temperNumber°C ",
           style: TextStyle(
               fontSize: 16,
@@ -507,9 +509,29 @@ Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
       decoration: _decoration(Color(0xffFFFFFF)));
 }
 
-//텍스트 스타일 지정
+// padding widget
+Padding _fromLTRBPadding({child}) {
+  return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
+}
 
-// TextStyle _textStyle(dynamic _weight, double _size) {
-//   return TextStyle(
-//       color: Color(0xff222222), fontWeight: _weight, fontSize: _size);
-// }
+Padding _edgeLeftPadding(double left, {child}) {
+  return Padding(padding: new EdgeInsets.only(left: left), child: child);
+}
+
+Padding _edgeRightPadding(double right, {child}) {
+  return Padding(padding: new EdgeInsets.only(right: right), child: child);
+}
+
+Padding _topBottomPadding(double top, double bottom, {child}) {
+  return Padding(
+      padding: new EdgeInsets.only(top: top, bottom: bottom), child: child);
+}
+
+Container _marginContainer({child, dynamic height, decoration}) {
+  return Container(
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+    height: height,
+    child: child,
+    decoration: decoration,
+  );
+}
