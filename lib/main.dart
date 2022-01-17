@@ -93,7 +93,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // 푸시알림
-  late int _totalNotifications;
+  // late int _totalNotifications;
   late final FirebaseMessaging _messaging;
   PushNotification? _notificationInfo;
 
@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
         _messaging.requestPermission(
       alert: true, // 장치에서 알림 표시 여부
       announcement: false, // 아이폰의 경우 활성화 시 장치가 연결될 때 내용 읽음
-      badge: true, // 읽지 않은 알림 있을 때 앱 아이콘 옆에 표시할 알림 여부 설정
+      badge: false, // 읽지 않은 알림 있을 때 앱 아이콘 옆에 표시할 알림 여부 설정
       provisional: false, // 임시 권한 여부 설정
       sound: true, // 알림 표시 시 소리 재생할지의 여부
     );
@@ -161,7 +161,7 @@ class _MyAppState extends State<MyApp> {
             // 아이폰에서 이하 옵션 함수를 호출하면 필요한 옵션을 지정할 수 있다
             .setForegroundNotificationPresentationOptions(
           alert: true,
-          badge: true,
+          badge: false,
           sound: true,
         );
       }
@@ -211,7 +211,7 @@ class _MyAppState extends State<MyApp> {
 
     // 앱이 완전히 꺼졌을 때
     if (initialMessage != null) {
-      _totalNotifications = 0;
+      // _totalNotifications = 0;
       PushNotification pushNotification = PushNotification(
         title: initialMessage.notification?.title,
         body: initialMessage.notification?.body,
@@ -219,7 +219,7 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         _notificationInfo = pushNotification;
-        _totalNotifications++;
+        // _totalNotifications++;
       });
     }
   }
@@ -227,7 +227,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // 푸시알림
-    _totalNotifications = 0;
+    // _totalNotifications = 0;
     activateNotification();
 
     // 푸시알림 - 앱이 백그라운드 모드일 때
@@ -239,7 +239,7 @@ class _MyAppState extends State<MyApp> {
 
       setState(() {
         _notificationInfo = pushNotification;
-        _totalNotifications++;
+        // _totalNotifications++;
       });
     });
 

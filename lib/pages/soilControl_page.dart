@@ -204,7 +204,7 @@ class _MyWeatherState extends State<MyWeather> {
         // alignment: Alignment.center,
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          _firstCard("맑음", "${controller.extTemp.value}", "7860"),
+          _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
           SizedBox(height: Get.height * 0.03),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -215,9 +215,12 @@ class _MyWeatherState extends State<MyWeather> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _monitoring('assets/images/icon_temp.png', "내부 온도",
-                        "${controller.innerTemp.value}" + "°C"),
-                    _monitoring('assets/images/icon_humid.png', "내부 습도",
+                    _subMonitoring(
+                        'assets/images/icon_temp.png',
+                        "내부 온도",
+                        "${controller.innerTemp.value}" + "°C",
+                        'assets/images/icon_humid.png',
+                        "내부 습도",
                         "${controller.innerHumid.value}" + "%"),
                   ],
                 ),
@@ -229,9 +232,12 @@ class _MyWeatherState extends State<MyWeather> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _monitoring('assets/images/icon_soiltemp.png', "토양 온도",
-                        "${controller.soilTemp.value}°C"),
-                    _monitoring('assets/images/icon_soilhumid.png', "토양 습도",
+                    _subMonitoring(
+                        'assets/images/icon_soiltemp.png',
+                        "토양 온도",
+                        "${controller.soilTemp.value}°C",
+                        'assets/images/icon_soilhumid.png',
+                        "토양 습도",
                         "${controller.soilHumid.value}%"),
                   ],
                 ),
@@ -295,87 +301,8 @@ class _MyPumpsState extends State<MyPumps> {
                       shrinkWrap: true,
                       itemCount: pumps.length,
                       itemBuilder: (BuildContext context, var index) {
-                        return Visibility(
-                          visible: visibility[index],
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: 15, right: 15, bottom: 15),
-                            height: Get.height * 0.09,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Text("펌프 (#${index + 1})",
-                                      style: TextStyle(
-                                          color: Color(0xff222222),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: ToggleSwitch(
-                                    fontSize: 12,
-                                    minWidth: 60.0,
-                                    cornerRadius: 80.0,
-                                    activeBgColors: [
-                                      [Color(0xffe3fbed)],
-                                      [Color(0xfff2f2f2)]
-                                    ],
-                                    activeFgColor: Color(0xff222222),
-                                    inactiveBgColor: Color(0xffFFFFFF),
-                                    inactiveFgColor: Color(0xff222222),
-                                    initialLabelIndex:
-                                        stream.pumpStatus[index] == 1 ? 1 : 0,
-                                    totalSwitches: 2,
-                                    labels: ['ON', 'OFF'],
-                                    radiusStyle: true,
-                                    onToggle: (value) async {
-                                      // stream.pumpStatus[index] = value;
-                                      String switchStatus = '';
-
-                                      if (value == 0) {
-                                        switchStatus = 'on';
-                                        stream.pumpStatus[index] = 0;
-                                      } else if (value == 1) {
-                                        switchStatus = 'off';
-                                        stream.pumpStatus[index] = 1;
-                                      }
-                                      // pumpStatus[index] = value;
-                                      print(
-                                          '### Pump${index + 1} toggle value는 : $value');
-                                      print(
-                                          '### Pump${index + 1} toggle type은 : ${value.runtimeType}');
-                                      print(
-                                          '### Pump${index + 1} value는 : $switchStatus');
-
-                                      _mqttClass.ctlSet(
-                                          'did',
-                                          "${index + 1}",
-                                          'dact',
-                                          switchStatus,
-                                          '/sf/e0000001/req/pump',
-                                          '/sf/e0000001/req/pump');
-
-                                      // var pumpId = 'pump_${index + 1}';
-                                      // var data = {
-                                      //   'uid': userId,
-                                      //   'sid': siteId,
-                                      //   'pump_id': pumpId,
-                                      //   'pump_action': value,
-                                      // };
-                                      // final putPumps = await dio.put(
-                                      //     '$url/$userId/site/$siteId/controls/pumps/$pumpId',
-                                      //     data: data);
-                                      // print(putPumps);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                            decoration: _decorations(),
-                          ),
-                        );
+                        return _switchToggle(
+                            index, '펌프', stream.pumpStatus, 'pump');
                       }),
                 )
               ],
@@ -435,77 +362,8 @@ class _MyValvesState extends State<MyValves> {
                       shrinkWrap: true,
                       itemCount: valves.length,
                       itemBuilder: (BuildContext context, var index) {
-                        return Container(
-                          margin:
-                              EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                          height: Get.height * 0.09,
-                          child: Visibility(
-                            visible: visibility[index],
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Text("밸브 (#${index + 1})",
-                                      style: TextStyle(
-                                          color: Color(0xff222222),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: ToggleSwitch(
-                                    fontSize: 12,
-                                    minWidth: 60.0,
-                                    cornerRadius: 80.0,
-                                    activeBgColors: [
-                                      [Color(0xffe3fbed)],
-                                      [Color(0xfff2f2f2)]
-                                    ],
-                                    activeFgColor: Color(0xff222222),
-                                    inactiveBgColor: Color(0xffFFFFFF),
-                                    inactiveFgColor: Color(0xff222222),
-                                    initialLabelIndex: valveStatus[index],
-                                    // stream.valveStatus[index] == 0 ? 1 : 0,
-                                    totalSwitches: 2,
-                                    labels: ['ON', 'OFF'],
-                                    radiusStyle: true,
-                                    onToggle: (value) async {
-                                      valveStatus[index] = value;
-                                      String switchStatus = '';
-
-                                      if (value == 0) {
-                                        switchStatus = 'on';
-                                        stream.valveStatus[index] = 1;
-                                      } else if (value == 1) {
-                                        switchStatus = 'off';
-                                        stream.valveStatus[index] = 2;
-                                      }
-
-                                      // valveStatus[index] = value;
-
-                                      print(
-                                          '### Valve${index + 1} toggle value는 : $value');
-                                      print(
-                                          '### Valve${index + 1} toggle type은 : ${value.runtimeType}');
-                                      print(
-                                          '### Valve${index + 1} value는 : $switchStatus');
-
-                                      // _mqttClass.ctlSet(
-                                      //     'did',
-                                      //     "${index + 1}",
-                                      //     'dact',
-                                      //     switchStatus,
-                                      //     '/sf/e0000001/req/valve',
-                                      //     '/sf/e0000001/req/valve');
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          decoration: _decorations(),
-                        );
+                        return _switchToggle(
+                            index, '벨브', stream.valveStatus, 'valve');
                       }),
                 )
               ],
@@ -517,7 +375,78 @@ class _MyValvesState extends State<MyValves> {
   }
 }
 
-Widget _firstCard(String weather, String temperNumber, String soilNumber) {
+Widget _switchToggle(var index, var text, var streamStatus, var action) {
+  return Container(
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+    height: Get.height * 0.09,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: 20),
+          child: Text("$text (#${index + 1})",
+              style: TextStyle(
+                  color: Color(0xff222222),
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal)),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: ToggleSwitch(
+            fontSize: 12,
+            minWidth: 60.0,
+            cornerRadius: 80.0,
+            activeBgColors: [
+              [Color(0xffe3fbed)],
+              [Color(0xfff2f2f2)]
+            ],
+            activeFgColor: Color(0xff222222),
+            inactiveBgColor: Color(0xffFFFFFF),
+            inactiveFgColor: Color(0xff222222),
+            initialLabelIndex: streamStatus[index] == 1 ? 1 : 0,
+            totalSwitches: 2,
+            labels: ['ON', 'OFF'],
+            radiusStyle: true,
+            onToggle: (value) async {
+              // stream.pumpStatus[index] = value;
+              String switchStatus = '';
+
+              if (value == 0) {
+                switchStatus = 'on';
+                streamStatus[index] = 0;
+              } else if (value == 1) {
+                switchStatus = 'off';
+                streamStatus[index] = 1;
+              }
+              // pumpStatus[index] = value;
+              print('### Pump${index + 1} toggle value는 : $value');
+              print('### Pump${index + 1} toggle type은 : ${value.runtimeType}');
+              print('### Pump${index + 1} value는 : $switchStatus');
+
+              _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
+                  '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
+
+              // var pumpId = 'pump_${index + 1}';
+              // var data = {
+              //   'uid': userId,
+              //   'sid': siteId,
+              //   'pump_id': pumpId,
+              //   'pump_action': value,
+              // };
+              // final putPumps = await dio.put(
+              //     '$url/$userId/site/$siteId/controls/pumps/$pumpId',
+              //     data: data);
+              // print(putPumps);
+            },
+          ),
+        ),
+      ],
+    ),
+    decoration: _decorations(),
+  );
+}
+
+Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
   return Container(
     height: Get.height * 0.1,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
@@ -541,23 +470,46 @@ Widget _firstCard(String weather, String temperNumber, String soilNumber) {
   );
 }
 
-Widget _monitoring(String assets, String text, String temperText) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      Image.asset(
-        assets,
-        scale: 5,
+TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
+  return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
+}
+
+Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
+    dynamic _icon, String subText, String _subText) {
+  return Container(
+      height: Get.height * 0.13,
+      width: Get.width * 0.425,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Image.asset(icon, color: Color(0xff222222), scale: 5),
+              Text(mainText,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+              Text(_mainText,
+                  style: _textStyle(Color(0xff222222), FontWeight.w600, 18)),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Image.asset(_icon, color: Color(0xff222222), scale: 5),
+              Text(subText,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+              Text(_subText,
+                  style: _textStyle(Color(0xff222222), FontWeight.w600, 18)),
+            ],
+          ),
+        ],
       ),
-      Text(text, style: _textStyle(FontWeight.normal, 15)),
-      Text(temperText, style: _textStyle(FontWeight.w600, 18))
-    ],
-  );
+      decoration: _decoration(Color(0xffFFFFFF)));
 }
 
 //텍스트 스타일 지정
 
-TextStyle _textStyle(dynamic _weight, double _size) {
-  return TextStyle(
-      color: Color(0xff222222), fontWeight: _weight, fontSize: _size);
-}
+// TextStyle _textStyle(dynamic _weight, double _size) {
+//   return TextStyle(
+//       color: Color(0xff222222), fontWeight: _weight, fontSize: _size);
+// }
