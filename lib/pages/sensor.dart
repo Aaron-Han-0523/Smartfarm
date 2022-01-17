@@ -80,25 +80,42 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 카카오 채널 연결 drawer
+      drawer: Drawer(
+        backgroundColor: Color(0xffF5F9FC),
+        child: ListView(
+          children: [
+            Container(
+              height: Get.height * 0.08,
+              child: DrawerHeader(
+                child: Text("더보기",
+                  style: TextStyle(color: Color(0xff318A55), fontSize: 20), ),
+                decoration: BoxDecoration(
+                    color: Color(0xffF5F9FC)
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Image.asset('assets/images/kakao_channel.png', scale: 3),
+              title: Text('카카오 채널 연결'),
+              onTap: _launchURL
+            ),
+          ],
+        ),
+
+      ),
       backgroundColor: Color(0xff2E6645),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Color(0xff222222)),
         elevation: 0.0,
         backgroundColor: Color(0xffF5F9FC),
-        leading: InkWell(
-            child: Image.asset('assets/images/icon_board.png', scale: 3),
-            onTap: () {}),
         // 타이틀
         actions: [
-          IconButton(
-              onPressed: _launchURL,
-              icon: Image.asset('assets/images/kakao_channel.png'),
-              iconSize: 30),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: InkWell(
               child: CircleAvatar(
                 backgroundColor: Colors.white,
-                // backgroundImage: AssetImage('assets/images/gallery_button.png'),
                 child: Image.asset('assets/images/icon_setting.png', scale: 3),
                 foregroundColor: Colors.teal,
               ),
