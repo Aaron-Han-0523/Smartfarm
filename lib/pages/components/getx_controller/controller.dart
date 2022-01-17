@@ -11,6 +11,11 @@ class CounterController extends GetxController {
   final MqttServerClient client =
       MqttServerClient('broker.mqttdashboard.com', '');
   var innerTemp = ''.obs;
+  var extTemp = ''.obs;
+  var soilTemp = ''.obs;
+  var innerHumid = ''.obs;
+  var extHumid = ''.obs;
+  var soilHumid = ''.obs;
 
   connect() async {
     isConnected = await mqttConnect('test');
@@ -56,7 +61,13 @@ class CounterController extends GetxController {
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       var streamDatas = jsonDecode(streamData);
       print('!!!!!!!!!!!!!!');
+
       innerTemp.value = streamDatas['temp_1'].toString();
+      extTemp.value = streamDatas['exttemp_1'].toString();
+      soilTemp.value = streamDatas['soiltemp_1'].toString();
+      innerHumid.value = streamDatas['soiltemp_2'].toString();
+      extHumid.value = streamDatas['soilhumid_1'].toString();
+      soilHumid.value = streamDatas['soilhumid_2'].toString();
       stream.temp_1 = streamDatas['temp_1'].toString();
       stream.humid_1 = streamDatas['humid_1'].toString();
       stream.exttemp_1 = streamDatas['exttemp_1'].toString();

@@ -17,6 +17,8 @@ import '../globals/stream.dart' as stream;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
+import 'components/getx_controller/controller.dart';
+
 // TODO: valveStatus는 아직 없음
 
 /*
@@ -196,46 +198,49 @@ class _MyWeatherState extends State<MyWeather> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // alignment: Alignment.center,
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        _firstCard("맑음", "$extTemp", "7860"),
-        SizedBox(height: Get.height * 0.03),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              height: Get.height * 0.13,
-              width: Get.width * 0.425,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _monitoring('assets/images/icon_temp.png', "내부 온도",
-                      "$innerTemp" + "°C"),
-                  _monitoring('assets/images/icon_humid.png', "내부 습도",
-                      "$innerHumid" + "%"),
-                ],
+    final controller = Get.put(CounterController());
+    return Obx(
+      () => Container(
+        // alignment: Alignment.center,
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          _firstCard("맑음", "${controller.extTemp.value}", "7860"),
+          SizedBox(height: Get.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                height: Get.height * 0.13,
+                width: Get.width * 0.425,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _monitoring('assets/images/icon_temp.png', "내부 온도",
+                        "${controller.innerTemp.value}" + "°C"),
+                    _monitoring('assets/images/icon_humid.png', "내부 습도",
+                        "${controller.innerHumid.value}" + "%"),
+                  ],
+                ),
+                decoration: _decoration(Color(0xffFFFFFF)),
               ),
-              decoration: _decoration(Color(0xffFFFFFF)),
-            ),
-            Container(
-              height: Get.height * 0.13,
-              width: Get.width * 0.425,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _monitoring('assets/images/icon_soiltemp.png', "토양 온도",
-                      "$soilTemp°C"),
-                  _monitoring('assets/images/icon_soilhumid.png', "토양 습도",
-                      "$soilHumid%"),
-                ],
+              Container(
+                height: Get.height * 0.13,
+                width: Get.width * 0.425,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _monitoring('assets/images/icon_soiltemp.png', "토양 온도",
+                        "${controller.soilTemp.value}°C"),
+                    _monitoring('assets/images/icon_soilhumid.png', "토양 습도",
+                        "${controller.soilHumid.value}%"),
+                  ],
+                ),
+                decoration: _decoration(Color(0xffFFFFFF)),
               ),
-              decoration: _decoration(Color(0xffFFFFFF)),
-            ),
-          ],
-        ),
-      ]),
+            ],
+          ),
+        ]),
+      ),
     );
   }
 }

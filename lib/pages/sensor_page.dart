@@ -109,74 +109,77 @@ class MyAccordian extends StatefulWidget {
 }
 
 class _MyAccordianState extends State<MyAccordian> {
+  final controller = Get.put(CounterController());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-          child: Container(
-            decoration: _decorations(),
-            child: Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                initiallyExpanded: true,
-                iconColor: Colors.white,
-                collapsedIconColor: Colors.white,
-                title: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Image.asset(
-                        'assets/images/icon_exevn.png',
-                        scale: 3,
+    return Obx(
+      () => Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+            child: Container(
+              decoration: _decorations(),
+              child: Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  initiallyExpanded: true,
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Image.asset(
+                          'assets/images/icon_exevn.png',
+                          scale: 3,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '외부 환경',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
-                    ),
+                      Text(
+                        '외부 환경',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  children: <Widget>[
+                    SizedBox(height: Get.height * 0.01),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _cards('외부 온도', controller.extTemp.value, true,
+                              'assets/images/icon_temp.png'),
+                          _cards('외부 습도', controller.extHumid.value, true,
+                              'assets/images/icon_humid.png')
+                        ]),
+                    SizedBox(height: Get.height * 0.01),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _cards('강우', '12.5', true,
+                              'assets/images/icon_rainy.png'),
+                          _cards(
+                              '풍향', '12.5', true, 'assets/images/icon_wind.png')
+                        ]),
+                    SizedBox(height: Get.height * 0.01),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _cards('풍속', '12.5', true,
+                              'assets/images/icon_windsp.png'),
+                          _cards('일사량', '12.5', true,
+                              'assets/images/icon_shiny.png')
+                        ]),
+                    SizedBox(height: Get.height * 0.01),
                   ],
                 ),
-                children: <Widget>[
-                  SizedBox(height: Get.height * 0.01),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _cards('외부 온도', extTemp, true,
-                            'assets/images/icon_temp.png'),
-                        _cards('외부 습도', extHumid, true,
-                            'assets/images/icon_humid.png')
-                      ]),
-                  SizedBox(height: Get.height * 0.01),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _cards(
-                            '강우', '12.5', true, 'assets/images/icon_rainy.png'),
-                        _cards(
-                            '풍향', '12.5', true, 'assets/images/icon_wind.png')
-                      ]),
-                  SizedBox(height: Get.height * 0.01),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _cards('풍속', '12.5', true,
-                            'assets/images/icon_windsp.png'),
-                        _cards(
-                            '일사량', '12.5', true, 'assets/images/icon_shiny.png')
-                      ]),
-                  SizedBox(height: Get.height * 0.01),
-                ],
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -189,71 +192,74 @@ class MyAccordian2 extends StatefulWidget {
 }
 
 class _MyAccordian2State extends State<MyAccordian2> {
+  final controller = Get.put(CounterController());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-          child: Container(
-            decoration: _decorations(),
-            child: Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                iconColor: Colors.white,
-                collapsedIconColor: Colors.white,
-                title: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Image.asset(
-                        'assets/images/icon_inevn.png',
-                        scale: 3,
+    return Obx(
+      () => Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+            child: Container(
+              decoration: _decorations(),
+              child: Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Image.asset(
+                          'assets/images/icon_inevn.png',
+                          scale: 3,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '내부 환경',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                      Text(
+                        '내부 환경',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  children: <Widget>[
+                    SizedBox(height: Get.height * 0.01),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _cards('내부 온도', controller.innerTemp.value, true,
+                              'assets/images/icon_temp.png'),
+                          _cards('내부 습도', controller.innerHumid.value, true,
+                              'assets/images/icon_humid.png')
+                        ]),
+                    SizedBox(height: Get.height * 0.01),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _cards('토양 온도', controller.soilTemp.value, true,
+                              'assets/images/icon_soiltemp.png'),
+                          _cards('토양 습도', controller.soilHumid.value, true,
+                              'assets/images/icon_soilhumid.png')
+                        ]),
+                    SizedBox(height: Get.height * 0.01),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5, bottom: 5),
+                      child: Row(children: [
+                        _cards('토양 건조도', '12.5', true,
+                            'assets/images/icon_soilele.png'),
+                      ]),
                     ),
                   ],
                 ),
-                children: <Widget>[
-                  SizedBox(height: Get.height * 0.01),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _cards('내부 온도', innerTemp, true,
-                            'assets/images/icon_temp.png'),
-                        _cards('내부 습도', innerHumid, true,
-                            'assets/images/icon_humid.png')
-                      ]),
-                  SizedBox(height: Get.height * 0.01),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _cards('토양 온도', soilTemp, true,
-                            'assets/images/icon_soiltemp.png'),
-                        _cards('토양 습도', soilHumid, true,
-                            'assets/images/icon_soilhumid.png')
-                      ]),
-                  SizedBox(height: Get.height * 0.01),
-                  Padding(
-                    padding: EdgeInsets.only(left: 5, bottom: 5),
-                    child: Row(children: [
-                      _cards('토양 건조도', '12.5', true,
-                          'assets/images/icon_soilele.png'),
-                    ]),
-                  ),
-                ],
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -357,38 +363,35 @@ class _SalesData {
 
 // dynamic icon
 Widget _cards(var title, var subtitle, bool visibles, String assets) {
-  final controller = Get.put(CounterController());
   return Visibility(
     visible: visibles,
-    child: Obx(
-      () => Container(
-        // alignment: Alignment.center,
-        margin: EdgeInsets.only(left: 7, right: 7, bottom: 10),
-        height: Get.height * 1 / 9,
-        width: Get.width * 0.4,
-        decoration: _decoration(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 23),
-                child: Text(title,
-                    style: TextStyle(color: Color(0xff2E8953), fontSize: 12)),
-              ),
-              Text('${controller.innerTemp.value}',
-                  style: TextStyle(
-                      color: Color(0xff222222),
-                      fontSize: 25,
-                      fontWeight: FontWeight.w500)),
-            ]),
-            Image.asset(
-              assets,
-              scale: 3,
-            )
-            // Icon(icon, size: 60, color: Colors.black54)
-          ],
-        ),
+    child: Container(
+      // alignment: Alignment.center,
+      margin: EdgeInsets.only(left: 7, right: 7, bottom: 10),
+      height: Get.height * 1 / 9,
+      width: Get.width * 0.4,
+      decoration: _decoration(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 23),
+              child: Text(title,
+                  style: TextStyle(color: Color(0xff2E8953), fontSize: 12)),
+            ),
+            Text(subtitle,
+                style: TextStyle(
+                    color: Color(0xff222222),
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500)),
+          ]),
+          Image.asset(
+            assets,
+            scale: 3,
+          )
+          // Icon(icon, size: 60, color: Colors.black54)
+        ],
       ),
     ),
   );
