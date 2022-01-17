@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:plms_start/dio/logout_dio.dart';
 import 'package:plms_start/mqtt/mqtt.dart';
+import 'package:plms_start/pages/components/getx_controller/controller.dart';
 import 'package:plms_start/pages/soilControl_page.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
@@ -38,6 +39,9 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  // real time data
+  final realTimeController = Get.put(CounterController());
+
   // logout API
   Logout _logout = Logout();
 
@@ -53,13 +57,16 @@ class _SettingPageState extends State<SettingPage> {
   bool _alarmStatus = siteConfig.status_alarm;
   var _lowTemp = siteConfig.low_temp;
   var _highTemp = siteConfig.high_temp;
+  var _waterTimer = stream.watering_timer;
   var siteDropdown =
   stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   void initState() {
     print('저장된 global key의 alarm Status는 : $_alarmStatus');
-    // mqttConnect;
+    print('저장된 global key의 stream alarm은 : ${stream.alarm_en}');
+    // realTimeController.getConfig();
+    _mqttClass.getSiteConfig();
   }
 
   @override
@@ -176,67 +183,69 @@ class _SettingPageState extends State<SettingPage> {
   int initialIndex = 0;
 
   Widget _swichWidget(String name) {
+    // int initialIndex = stream.alarm_en == true ? 0 : 1;
     return Container(
-      color: Color(0xffFFFFFF),
-      height: Get.height * 0.08,
-      width: Get.width,
-      // decoration: _decoration(Color(0xffFFFFFF)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Text(
-              name,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black54),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: ToggleSwitch(
-              fontSize: 12,
-              minWidth: 60.0,
-              cornerRadius: 80.0,
-              activeBgColors: [
-                [Color(0xffe3fbed)],
-                [Color(0xfff2f2f2)]
-              ],
-              activeFgColor: Color(0xff222222),
-              inactiveBgColor: Color(0xffFFFFFF),
-              inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: initialIndex,
-              // stream.pumpStatus[index] == 0 ? 1 : 0,
-              totalSwitches: 2,
-              labels: labelName,
-              radiusStyle: true,
-              onToggle: (value) async {
-
-                setState(() {
-                  initialIndex = value;
-                  if (value == 0) {
-                    status = true;
-                  } else if (value == 1) {
-                    status = false;
-                  }
-                  _alarmStatus = status;
-
-                });
-                // if (value == 0) {
-                //   status = true;
-                // } else if (value == 1) {
-                //   status = false;
-                // }
-                // _alarmStatus = status;
-                print('global key의 alarm Status는 : $_alarmStatus');
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+              color: Color(0xffFFFFFF),
+              height: Get.height * 0.08,
+              width: Get.width,
+              // decoration: _decoration(Color(0xffFFFFFF)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: ToggleSwitch(
+                      fontSize: 12,
+                      minWidth: 60.0,
+                      cornerRadius: 80.0,
+                      activeBgColors: [
+                        [Color(0xffe3fbed)],
+                        [Color(0xfff2f2f2)]
+                      ],
+                      activeFgColor: Color(0xff222222),
+                      inactiveBgColor: Color(0xffFFFFFF),
+                      inactiveFgColor: Color(0xff222222),
+                      initialLabelIndex: initialIndex,
+                      // stream.alarm_en == true ? 0 : 1,
+                      // stream.pumpStatus[index] == 0 ? 1 : 0,
+                      totalSwitches: 2,
+                      labels: labelName,
+                      radiusStyle: true,
+                      onToggle: (value) async {
+                        setState(() {
+                          initialIndex = value;
+                          if (value == 0) {
+                            status = true;
+                            // stream.alarm_en == true ? 0 : 1;
+                          } else if (value == 1) {
+                            status = false;
+                            // stream.alarm_en == true ? 0 : 1;
+                          }
+                          _alarmStatus = status;
+                        });
+                        // if (value == 0) {
+                        //   status = true;
+                        // } else if (value == 1) {
+                        //   status = false;
+                        // }
+                        // _alarmStatus = status;
+                        print('global key의 alarm Status는 : $_alarmStatus');
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
   }
 
   Widget _highTempFormField(String title, String dic, var highTempController) {
@@ -371,7 +380,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  String timerDropdownValue = '30';
+  var timerDropdownValue = '${stream.watering_timer}';
   Widget _timerDropDownButtons(var name) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -391,7 +400,7 @@ class _SettingPageState extends State<SettingPage> {
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: DropdownButton<String>(
-              value: timerDropdownValue,
+              value: '90',
               icon: const Icon(Icons.arrow_drop_down,
                   color: Colors.black, size: 30),
               style: const TextStyle(color: Colors.black54),
@@ -402,7 +411,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
               onChanged: (value) {
                 setState(() {
-                  timerDropdownValue = value!;
+                  timerDropdownValue = value!.toString();
                   _setTimer = value;
                   print('타이머 시간은 : $name : $_setTimer');
                 });
