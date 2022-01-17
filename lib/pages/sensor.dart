@@ -88,21 +88,20 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             Container(
               height: Get.height * 0.08,
               child: DrawerHeader(
-                child: Text("더보기",
-                  style: TextStyle(color: Color(0xff318A55), fontSize: 20), ),
-                decoration: BoxDecoration(
-                    color: Color(0xffF5F9FC)
+                child: Text(
+                  "더보기",
+                  style: TextStyle(color: Color(0xff318A55), fontSize: 20),
                 ),
+                decoration: BoxDecoration(color: Color(0xffF5F9FC)),
               ),
             ),
             ListTile(
-              leading: Image.asset('assets/images/kakao_channel.png', scale: 3),
-              title: Text('카카오 채널 연결'),
-              onTap: _launchURL
-            ),
+                leading:
+                    Image.asset('assets/images/kakao_channel.png', scale: 3),
+                title: Text('카카오 채널 연결'),
+                onTap: _launchURL),
           ],
         ),
-
       ),
       backgroundColor: Color(0xff2E6645),
       appBar: AppBar(
@@ -126,9 +125,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
           ),
         ],
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: bodySteam(),
       bottomNavigationBar: ConvexAppBar(
         elevation: 0.0,
         items: [
@@ -177,6 +174,31 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         top: 0,
         color: Color(0xffFFFFFF),
         // activeColor: Color(0xff222222),
+      ),
+    );
+  }
+
+  Widget bodySteam() {
+    return Container(
+      color: Colors.black,
+      child: StreamBuilder(
+        stream: controller.client.updates,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return Container(
+              color: Color(0xffF5F9FC),
+              child: Center(
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff318A55)),
+                ),
+              ),
+            );
+          else {
+            return Center(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            );
+          }
+        },
       ),
     );
   }
