@@ -126,69 +126,6 @@ class _SignUpPageState extends State<SignUpPage> {
           _firstPage(),
         ],
       ),
-      // bottomNavigationBar: Row(
-      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Container(
-      //       width: Get.width * 2.2 / 7,
-      //       child: new ElevatedButton(
-      //         style: ElevatedButton.styleFrom(
-      //           primary: Color(0xff4cbb8b),
-      //         ),
-      //         child:
-      //             new Text('취소', style: TextStyle(
-      //               color: Color(0xffFFFFFF),
-      //               fontSize: 15,
-      //               fontWeight: FontWeight.w500
-      //             ),),
-      //         onPressed: () {
-      //           Get.back();
-      //         },
-      //       ),
-      //     ),
-      //     // registration 버튼
-      //     Container(
-      //       width: Get.width * 2.2 / 7,
-      //       child: new ElevatedButton(
-      //         style: ElevatedButton.styleFrom(
-      //           primary: Color(0xff4cbb8b), // background
-      //         ),
-      //         child: new Text('변경', style: TextStyle(
-      //           color: Color(0xffFFFFFF),
-      //           fontSize: 15,
-      //           fontWeight: FontWeight.w500
-      //       ),
-      //         ),
-      //         onPressed: () async {
-      //           if (formKey.currentState!.validate() == true) {
-      //             var response = await dio.post(
-      //                 '$api/farm/login/${_idTextEditController.text}/checkpw', data: {
-      //                 'password': _currentPwTextEditController.text,
-      //             });
-      //             print('비밀번호는 : ${_currentPwTextEditController.text}');
-      //             print('ID는 : ${_idTextEditController.text}');
-      //
-      //             Map jsonBody = response.data;
-      //             var jsonData = jsonBody['result'].toString();
-      //             if (jsonData == 'true' ) {
-      //               print('result는 성공: $jsonData');
-      //               _loginTest.updatePW(_idTextEditController.text, _repwTextEditController.text)
-      //                   .then((value) => formKey.currentState!.save());
-      //               print('result는 성공2: $jsonData');
-      //
-      //             } else {
-      //               print('result는 실패');
-      //               Get.defaultDialog(backgroundColor: Colors.white, title: '실패', middleText: 'ID/PW를 확인해주세요', textCancel: 'Cancel');
-      //             }
-      //           }else{
-      //             print('새비밀번호 확인');
-      //           }
-      //         },
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 
@@ -400,7 +337,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Get.defaultDialog(
                   backgroundColor: Colors.white,
                   title: '실패',
-                  middleText: 'ID/PW를 확인해주세요',
+                  middleText: '현재 ID/PW를 확인해주세요',
                   textCancel: 'Cancel');
             }
           } else {

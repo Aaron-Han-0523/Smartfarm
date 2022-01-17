@@ -50,7 +50,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   @override
   void initState() {
     controller.connect();
-
     // _connect();
     // });
 

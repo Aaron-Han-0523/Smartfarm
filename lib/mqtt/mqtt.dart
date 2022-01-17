@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-
+import '../globals/stream.dart' as stream;
 
 /*
 * name : MQTT class
 * description : MQTT class
 * writer : mark
 * create date : 2021-01-07
-* last update : 2021-01-13
+* last update : 2021-01-17
 * */
 
 class MqttClass {
@@ -19,8 +20,46 @@ class MqttClass {
   final MqttServerClient client =
   MqttServerClient('broker.mqttdashboard.com', '');
 
-  //MQTT SITE CONFIG SET - subscribe
+  // var alarm_en = ''.obs;
+  // var alarm_high_temp = ''.obs;
+  // var alarm_low_temp = ''.obs;
+  // var watering_timer = ''.obs;
 
+
+  //MQTT SITE CONFIG SET - subscribe
+  Future<bool> getSiteConfig() async {
+
+    client.logging(on: true);
+    client.port = 1883;
+    client.secure = false;
+
+    final MqttConnectMessage connMess =
+    MqttConnectMessage().withClientIdentifier('3').startClean();
+    client.connectionMessage = connMess;
+    await client.connect();
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      print("Connected to AWS Successfully!");
+    } else {
+      return false;
+    }
+    const topic = '/sf/e0000001/res/cfg';
+    client.subscribe(topic, MqttQos.atMostOnce);
+    client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      final mqttReceivedMessages = c;
+      final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
+
+      var streamData =
+      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      var streamDatas = jsonDecode(streamData);
+      print('!!!!!!!!!!!!!!');
+      print('setting data는 : $streamDatas');
+      stream.alarm_en = streamDatas['alarm_en'].toString();
+      stream.alarm_high_temp = streamDatas['alarm_high_temp'].toString();
+      stream.alarm_low_temp = streamDatas['alarm_low_temp'].toString();
+      stream.watering_timer = streamDatas['watering_timer'].toString();
+    });
+    return true;
+  }
 
 
   //MQTT MOTOR & PUMP CTRL - publish

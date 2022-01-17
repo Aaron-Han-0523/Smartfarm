@@ -55,7 +55,7 @@ MqttClass _mqttClass = MqttClass();
 String statusText = "Status Text";
 bool isConnected = false;
 final MqttServerClient client =
-    MqttServerClient('broker.mqttdashboard.com', '');
+MqttServerClient('broker.mqttdashboard.com', '');
 
 // decoration (with box shadow)
 BoxDecoration _decoration(dynamic color) {
@@ -95,7 +95,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
   }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -121,14 +121,14 @@ class _SoilControlPageState extends State<SoilControlPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                              TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                          TextStyle(color: Color(0xff2E8953), fontSize: 25),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 18)),
+                            TextStyle(color: Colors.black, fontSize: 18)),
                       ),
                       SizedBox(height: Get.height * 0.05),
                       MyWeather(),
@@ -137,7 +137,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
               SliverList(
                 // itemExtent: 3.0,
                 delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                     return Container(
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
@@ -187,10 +187,10 @@ class _MyWeatherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-      () => Container(
+          () => Container(
         // alignment: Alignment.center,
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
           SizedBox(height: Get.height * 0.03),
           Row(
@@ -503,9 +503,9 @@ Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       temp > 20
           ? Image.asset('assets/images/icon_shiny.png',
-              color: Color(0xff222222), scale: 3)
+          color: Color(0xff222222), scale: 3)
           : Image.asset('assets/images/icon_windy.png',
-              color: Color(0xff222222), scale: 3),
+          color: Color(0xff222222), scale: 3),
       Text(" $weather/$temperNumber°C ",
           style: TextStyle(
               fontSize: 16,

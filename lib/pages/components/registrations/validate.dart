@@ -21,7 +21,7 @@ class CheckValidate {
   String? validateEmail(FocusNode focusNode, String value) {
     if (value.isEmpty) {
       focusNode.requestFocus();
-      return '이메일을 입력하세요.';
+      return '아이디를 입력하세요.';
     } else {
     }
   }

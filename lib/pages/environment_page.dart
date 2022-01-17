@@ -116,7 +116,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       child: Text(
                         'Farm in Earth',
                         style:
-                            TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                        TextStyle(color: Color(0xff2E8953), fontSize: 25),
                       ),
                     ),
                     Align(
@@ -158,7 +158,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             SliverList(
               // itemExtent: 3.0,
               delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                   return Container(
                       decoration: BoxDecoration(
                         color: Color(0xffF5F9FC),
@@ -208,10 +208,10 @@ class _MyWeatherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-      () => Container(
+          () => Container(
         // alignment: Alignment.center,
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring(),
           SizedBox(height: Get.height * 0.03),
           Row(
@@ -263,7 +263,7 @@ class _MyWeatherState extends State<MyWeather> {
 Widget _mainMonitoring() {
   final controller = Get.put(CounterController());
   return Obx(
-    () => Container(
+        () => Container(
         height: Get.height * 0.1,
         // width: Get.width * 0.9,
         child: Row(
@@ -271,9 +271,9 @@ Widget _mainMonitoring() {
           children: [
             temp > 20
                 ? Image.asset('assets/images/icon_shiny.png',
-                    color: Color(0xff222222), scale: 3)
+                color: Color(0xff222222), scale: 3)
                 : Image.asset('assets/images/icon_windy.png',
-                    color: Color(0xff222222), scale: 3),
+                color: Color(0xff222222), scale: 3),
             // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
             Text("맑음/${controller.extTemp.value}°C",
                 style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
@@ -343,7 +343,7 @@ class _SideMotorState extends State<SideMotor> {
             decoration: _decoration(Color(0xff2E8953)),
             child: Theme(
               data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -359,7 +359,7 @@ class _SideMotorState extends State<SideMotor> {
                   padding: EdgeInsets.only(left: 15),
                   child: Text('측창 개폐기 제어',
                       style:
-                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                      _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                 ),
                 children: <Widget>[
                   Padding(
