@@ -262,7 +262,7 @@ class _MyAppState extends State<MyApp> {
                 fontFamily: 'Nanum',
               ),
               localizationsDelegates: [
-                AppLocalizations.delegate, // Add this line
+                // AppLocalizations.delegate, // Add this line
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,

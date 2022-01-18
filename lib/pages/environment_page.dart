@@ -513,6 +513,7 @@ BoxDecoration _decorations() {
 }
 
 // 측창 개폐기 제어 전체
+int allToggleInitial = 1;
 Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
   return _marginContainer(
     height: Get.height * 0.09,
@@ -536,15 +537,17 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
             activeFgColor: Color(0xff222222),
             inactiveBgColor: Color(0xffFFFFFF),
             inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: 1,
+            initialLabelIndex: allToggleInitial,
             totalSwitches: 3,
             labels: ['전체열림', '전체정지', '전체닫힘'],
             radiusStyle: true,
             onToggle: (value) async {
+              allToggleInitial = value;
               String _switch = '';
 
               if (value == 0) {
                 _switch = 'open';
+                
               }
               if (value == 1) {
                 _switch = 'stop';
@@ -555,6 +558,9 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
               print('toggle value는 : $value');
               print('toggle type은 : ${value.runtimeType}');
               print('value는 : $_switch');
+              var index;
+              _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
+                  '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
             },
           ),
         )
