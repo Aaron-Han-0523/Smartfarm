@@ -75,6 +75,11 @@ class _HomeState extends State<Home> {
           await dio.put('$api/farm/$userId/pushAlarm', data: data);
       print('##### postToken: $postToken');
 
+      // trends innerTemp
+      final getInnerTemp =
+          await dio.get('$url/$userId/site/$siteId/innerTemps');
+      print('##### getInnerTemp: ${getInnerTemp.data['data']}');
+
       // cctvs
       final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
       stream.cctvs = getCctvs.data;
