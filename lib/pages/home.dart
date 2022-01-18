@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../globals/stream.dart' as stream;
 
 /*
@@ -79,6 +80,23 @@ class _HomeState extends State<Home> {
       final getInnerTemp =
           await dio.get('$url/$userId/site/$siteId/innerTemps');
       print('##### getInnerTemp: ${getInnerTemp.data['data']}');
+      print(
+          '##### getInnerTemp 최근 내부온도 시간: ${getInnerTemp.data['data'][0]['time_stamp']}');
+
+      var date = getInnerTemp.data['data'][0]['time_stamp'];
+      var yyyyMMddE = date.substring(0, 10);
+      yyyyMMddE = yyyyMMddE.replaceAll('-', '');
+      yyyyMMddE = DateFormat('yyyy년 MM월 dd일')
+          .format(DateTime.parse(yyyyMMddE))
+          .toString();
+      var hhMMss = date.substring(11, 19);
+      print('yyyy년 MM월 dd일 (E): $yyyyMMddE');
+      print('hh시 MM분 ss초: $hhMMss');
+      print(
+          '##### getInnerTemp 최근 내부온도 온도: ${getInnerTemp.data['data'][0]['value']}');
+
+      int innerTempLength = getInnerTemp.data['data'].length;
+      print('innerTempLength: $innerTempLength');
 
       // cctvs
       final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');

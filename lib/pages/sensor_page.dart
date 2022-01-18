@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -8,7 +10,7 @@ import 'components/getx_controller/controller.dart';
 * description : open data page
 * writer : walter
 * create date : 2021-09-30
-* last update : 2021-01-11
+* last update : 2022-01-11
 * */
 
 // globalKey
@@ -35,12 +37,26 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-  void initState() {
-    super.initState();
-  }
+  // Timer timer = Timer.periodic(const Duration(minutes: 10), _updateDataSource);
+
+  // List<_ChartData>? chartData;
+  // late int count;
+  // ChartSeriesController? _chartSeriesController;
+
+  // void initState() {
+  //   super.initState();
+  // }
+
+  // @override
+  // void dispose() {
+  //   timer?.cancel();
+  //   chartData!.clear();
+  //   _chartSeriesController = null;
+  //   super.dispose();
+  // }
 
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +92,7 @@ class _SensorPageState extends State<SensorPage> {
             SliverList(
               // itemExtent: 3.0,
               delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                (BuildContext context, int index) {
                   return Container(
                     // color: Colors.red,
                     child: Container(
@@ -121,7 +137,7 @@ class _MyAccordianState extends State<MyAccordian> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => Column(
+      () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -202,7 +218,7 @@ class _MyAccordian2State extends State<MyAccordian2> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => Column(
+      () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -234,10 +250,10 @@ class _MyAccordian2State extends State<MyAccordian2> {
                     SizedBox(
                       width: Get.width,
                       height:
-                      (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
                         childAspectRatio:
-                        (Get.width * 0.4) / (Get.height * 1 / 9),
+                            (Get.width * 0.4) / (Get.height * 1 / 9),
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.
                         crossAxisCount: 2,
@@ -303,7 +319,7 @@ class _MyGraphState extends State<MyGraph> {
             decoration: _decorations(),
             child: Theme(
               data:
-              Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -335,50 +351,50 @@ class _MyGraphState extends State<MyGraph> {
 }
 
 Widget _lineChart() {
-  List<_SalesData> data = [
-    _SalesData('Jan', 35),
-    _SalesData('Feb', 28),
-    _SalesData('Mar', 34),
-    _SalesData('Apr', 32),
-    _SalesData('May', 40)
+  List<_InnerTempData> data = [
+    _InnerTempData('Jan', 35),
+    _InnerTempData('Feb', 28),
+    _InnerTempData('Mar', 34),
+    _InnerTempData('Apr', 32),
+    _InnerTempData('May', 40)
   ];
 
-  List<_SalesData> subData = [
-    _SalesData('Jan', 20),
-    _SalesData('Feb', 50),
-    _SalesData('Mar', 30),
-    _SalesData('Apr', 40),
-    _SalesData('May', 28)
-  ];
+  // List<_SalesData> subData = [
+  //   _SalesData('Jan', 20),
+  //   _SalesData('Feb', 50),
+  //   _SalesData('Mar', 30),
+  //   _SalesData('Apr', 40),
+  //   _SalesData('May', 28)
+  // ];
 
   return Container(
     color: Colors.white,
     child: SfCartesianChart(
         primaryXAxis: CategoryAxis(),
-        series: <ChartSeries<_SalesData, String>>[
-          LineSeries<_SalesData, String>(
+        series: <ChartSeries<_InnerTempData, String>>[
+          LineSeries<_InnerTempData, String>(
               dataSource: data,
-              xValueMapper: (_SalesData sales, _) => sales.year,
-              yValueMapper: (_SalesData sales, _) => sales.sales,
-              name: 'Sales',
+              xValueMapper: (_InnerTempData sales, _) => sales.dateTime,
+              yValueMapper: (_InnerTempData sales, _) => sales.tempValue,
+              name: 'InnerTemp',
               // Enable data label
               dataLabelSettings: DataLabelSettings(isVisible: false)),
-          LineSeries<_SalesData, String>(
-              dataSource: subData,
-              xValueMapper: (_SalesData sales, _) => sales.year,
-              yValueMapper: (_SalesData sales, _) => sales.sales,
-              name: 'Sales',
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false))
+          // LineSeries<_SalesData, String>(
+          //     dataSource: subData,
+          //     xValueMapper: (_SalesData sales, _) => sales.year,
+          //     yValueMapper: (_SalesData sales, _) => sales.sales,
+          //     name: 'Sales',
+          //     // Enable data label
+          //     dataLabelSettings: DataLabelSettings(isVisible: false))
         ]),
   );
 }
 
-class _SalesData {
-  _SalesData(this.year, this.sales);
+class _InnerTempData {
+  _InnerTempData(this.dateTime, this.tempValue);
 
-  final String year;
-  final double sales;
+  final String dateTime;
+  final double tempValue;
 }
 
 // dynamic icon

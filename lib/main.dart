@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
@@ -262,7 +262,7 @@ class _MyAppState extends State<MyApp> {
                 fontFamily: 'Nanum',
               ),
               localizationsDelegates: [
-                AppLocalizations.delegate, // Add this line
+                // AppLocalizations.delegate, // Add this line
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
