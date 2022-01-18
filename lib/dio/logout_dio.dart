@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:plms_start/globals/checkUser.dart' as plms_start;
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 /*
 * name : logout API
 * description : logout Api page
@@ -19,7 +19,7 @@ class Logout {
     var options = Options(
       headers: {
         "Content-Type": "application/json",
-        "cookie": plms_start.cookies
+        "cookie": edgeworks.cookies
       },
     );
     var response = await dio.post('$api/farm/logout', options: options);

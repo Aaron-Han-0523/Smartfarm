@@ -1,4 +1,4 @@
-import 'package:plms_start/globals/checkUser.dart' as plms_start;
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class LoginTest {
     // // var data = cookies![0].split()
     // print('header!!!!!!!!!!!!!!!!');
     // print(cookies![0].split('Path')[0]);
-    // plms_start.cookies = cookies[0].split('Path')[0];
+    // edgeworks.cookies = cookies[0].split('Path')[0];
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
@@ -46,7 +46,7 @@ class LoginTest {
         // var data = cookies![0].split()
         print('header!!!!!!!!!!!!!!!!');
         print(cookies![0].split('Path')[0]);
-        plms_start.cookies = cookies[0].split('Path')[0];
+        edgeworks.cookies = cookies[0].split('Path')[0];
 
         print('jsonBody는: $jsonBody');
         print('password는: ${jsonBody['results']['password']}');
@@ -84,7 +84,7 @@ class LoginTest {
     if (response.statusCode == 200) {
       if (jsonBody['result'] == true) {
         print('jsonBody는: $jsonBody');
-        plms_start.checkUserKey = jsonBody['result'].toString();
+        edgeworks.checkUserKey = jsonBody['result'].toString();
         // _checkValidate.validatePassword;
         // return true;
       }
@@ -109,8 +109,8 @@ class LoginTest {
 
     var jsonData = jsonBody['result'].toString();
     if (jsonData == 'true') {
-      plms_start.checkUserKey = jsonData;
-      print('result는 성공 : ${plms_start.checkUserKey}');
+      edgeworks.checkUserKey = jsonData;
+      print('result는 성공 : ${edgeworks.checkUserKey}');
     } else if ((jsonBody['results'][0]['uid']) != uid) {
       Get.defaultDialog(
           backgroundColor: Colors.white,
@@ -154,7 +154,7 @@ class LoginTest {
       return false;
     }
 
-    // if (response.statusCode == 200 && plms_start.checkUserKey.isNotEmpty) {
+    // if (response.statusCode == 200 && edgeworks.checkUserKey.isNotEmpty) {
     //   print('new pw는 ${jsonBody['result'][0]==1}');
     //   if (jsonBody['result'][0] == 1) {
     //     Get.defaultDialog(backgroundColor: Colors.white, title: '성공', middleText: '비밀번호가 변경되었습니다.', textCancel: 'Cancel').then((value) => Get.back());

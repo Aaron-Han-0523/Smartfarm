@@ -6,7 +6,7 @@
 * last update : 2021-09-30
 * */
 
-library plms.login;
+library edgeworks.login;
 
 // user data
 List authority = [];

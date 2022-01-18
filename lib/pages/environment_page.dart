@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:plms_start/mqtt/mqtt.dart';
+import 'package:edgeworks/mqtt/mqtt.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -116,7 +116,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   }
 
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       child: Text(
                         'Farm in Earth',
                         style:
-                        TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                            TextStyle(color: Color(0xff2E8953), fontSize: 25),
                       ),
                     ),
                     Align(
@@ -158,7 +158,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             SliverList(
               // itemExtent: 3.0,
               delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                (BuildContext context, int index) {
                   return Container(
                       decoration: BoxDecoration(
                         color: Color(0xffF5F9FC),
@@ -208,53 +208,53 @@ class _MyWeatherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-          () => Container(
-            child:
-              Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                _mainMonitoring(),
-                SizedBox(height: Get.height * 0.03),
-                Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+      () => Container(
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          _mainMonitoring(),
+          SizedBox(height: Get.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Flexible(
+                child: Container(
+                  height: Get.height * 0.13,
+                  width: Get.width * 0.425,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _subMonitoring(
+                          'assets/images/icon_temp.png',
+                          "내부 온도",
+                          "${controller.innerTemp.value}" + "°C",
+                          'assets/images/icon_humid.png',
+                          "내부 습도",
+                          "${controller.innerHumid.value}" + "%"),
+                    ],
+                  ),
+                  decoration: _decoration(Color(0xffFFFFFF)),
+                ),
+              ),
+              Container(
+                height: Get.height * 0.13,
+                width: Get.width * 0.425,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Flexible(
-                      child: Container(
-                        height: Get.height * 0.13,
-                        width: Get.width * 0.425,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            _subMonitoring(
-                                'assets/images/icon_temp.png',
-                                "내부 온도",
-                                "${controller.innerTemp.value}" + "°C",
-                                'assets/images/icon_humid.png',
-                                "내부 습도",
-                                "${controller.innerHumid.value}" + "%"),
-                          ],
-                        ),
-                        decoration: _decoration(Color(0xffFFFFFF)),
-                      ),
-                    ),
-                    Container(
-                      height: Get.height * 0.13,
-                      width: Get.width * 0.425,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _subMonitoring(
-                              'assets/images/icon_soiltemp.png',
-                              "토양 온도",
-                              "${controller.soilTemp.value}°C",
-                              'assets/images/icon_soilhumid.png',
-                              "토양 습도",
-                              "${controller.soilHumid.value}%"),
-                        ],
-                      ),
-                      decoration: _decoration(Color(0xffFFFFFF)),
-                    ),
-              ],
-            ),
-          ]),
+                    _subMonitoring(
+                        'assets/images/icon_soiltemp.png',
+                        "토양 온도",
+                        "${controller.soilTemp.value}°C",
+                        'assets/images/icon_soilhumid.png',
+                        "토양 습도",
+                        "${controller.soilHumid.value}%"),
+                  ],
+                ),
+                decoration: _decoration(Color(0xffFFFFFF)),
+              ),
+            ],
+          ),
+        ]),
       ),
     );
   }
@@ -264,7 +264,7 @@ class _MyWeatherState extends State<MyWeather> {
 Widget _mainMonitoring() {
   final controller = Get.put(CounterController());
   return Obx(
-        () => Container(
+    () => Container(
         height: Get.height * 0.1,
         width: Get.width * 0.9,
         child: Row(
@@ -272,9 +272,9 @@ Widget _mainMonitoring() {
           children: [
             temp > 20
                 ? Image.asset('assets/images/icon_shiny.png',
-                color: Color(0xff222222), scale: 3)
+                    color: Color(0xff222222), scale: 3)
                 : Image.asset('assets/images/icon_windy.png',
-                color: Color(0xff222222), scale: 3),
+                    color: Color(0xff222222), scale: 3),
             // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
             Text("맑음/${controller.extTemp.value}°C",
                 style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
@@ -343,7 +343,7 @@ class _SideMotorState extends State<SideMotor> {
             decoration: _decoration(Color(0xff2E8953)),
             child: Theme(
               data:
-              Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -359,10 +359,12 @@ class _SideMotorState extends State<SideMotor> {
                   15,
                   child: Text('측창 개폐기 제어',
                       style:
-                      _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                 ),
                 children: <Widget>[
-                  _topBottomPadding(15,15,
+                  _topBottomPadding(
+                    15,
+                    15,
                     child: Column(
                       children: [
                         _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
@@ -405,7 +407,9 @@ class _TopMotorState extends State<TopMotor> {
                   style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
             ),
             children: <Widget>[
-          _topBottomPadding(15,15,
+              _topBottomPadding(
+                15,
+                15,
                 child: Column(
                   children: [
                     _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
@@ -446,7 +450,9 @@ class _EtcMotorState extends State<EtcMotor> {
                   style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
             ),
             children: <Widget>[
-              _topBottomPadding(15, 15,
+              _topBottomPadding(
+                15,
+                15,
                 child: Column(
                   children: [
                     _toggleSwitch2(
@@ -513,12 +519,11 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _edgeLeftPadding(
-          20,
+        _edgeLeftPadding(20,
             child: Text(text,
                 style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
-    _edgeRightPadding(
-      10,
+        _edgeRightPadding(
+          10,
           child: ToggleSwitch(
             fontSize: 12,
             minWidth: 65.0,
@@ -579,13 +584,12 @@ Widget _sideControlSwitch() {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          _edgeLeftPadding(
-            20,
+              _edgeLeftPadding(20,
                   child: Text("${stream.sideMotors[0]['motor_name']}",
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
-          _edgeRightPadding(
-            10,
+              _edgeRightPadding(
+                10,
                 child: ToggleSwitch(
                   fontSize: 12,
                   minWidth: 60.0,
@@ -649,13 +653,12 @@ Widget _topControlSwitch() {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          _edgeLeftPadding(
-            20,
+              _edgeLeftPadding(20,
                   child: Text("천창 (#${index + 1})",
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
-          _edgeRightPadding(
-            10,
+              _edgeRightPadding(
+                10,
                 child: ToggleSwitch(
                   fontSize: 12,
                   minWidth: 60.0,
@@ -716,12 +719,11 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _edgeLeftPadding(
-          20,
+        _edgeLeftPadding(20,
             child: Text(text,
                 style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
-    _edgeRightPadding(
-      10,
+        _edgeRightPadding(
+          10,
           child: ToggleSwitch(
             fontSize: 12,
             minWidth: 60.0,
@@ -762,21 +764,30 @@ Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
 }
 
 // padding widget
-Padding _fromLTRBPadding ({child}) {
+Padding _fromLTRBPadding({child}) {
   return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
 }
-Padding _edgeLeftPadding (double left, {child}) {
+
+Padding _edgeLeftPadding(double left, {child}) {
   return Padding(padding: new EdgeInsets.only(left: left), child: child);
 }
-Padding _edgeRightPadding (double right, {child}) {
+
+Padding _edgeRightPadding(double right, {child}) {
   return Padding(padding: new EdgeInsets.only(right: right), child: child);
 }
-Padding _topBottomPadding (double top, double bottom, {child}) {
-  return Padding(padding: new EdgeInsets.only(top: top, bottom: bottom), child: child);
+
+Padding _topBottomPadding(double top, double bottom, {child}) {
+  return Padding(
+      padding: new EdgeInsets.only(top: top, bottom: bottom), child: child);
 }
-Container _marginContainer ({child, dynamic height, decoration}) {
+
+Container _marginContainer({child, dynamic height, decoration}) {
   return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10), height: height, child: child, decoration: decoration,);
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+    height: height,
+    child: child,
+    decoration: decoration,
+  );
 }
 
 // 그래프

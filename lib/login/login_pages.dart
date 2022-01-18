@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:plms_start/dio/login_dio.dart';
+import 'package:edgeworks/dio/login_dio.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../globals/login.dart' as login;
@@ -210,10 +210,9 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             var uid = _idTextEditController.text;
             var pw = _pwTextEditController.text;
-            await _loginTest.loginTest(uid, pw);// Get.toNamed('/home');
+            await _loginTest.loginTest(uid, pw); // Get.toNamed('/home');
             // Get.toNamed('/home');
             // Get.toNamed('/sensor');
-
           },
           child: Text(
             '로그인',

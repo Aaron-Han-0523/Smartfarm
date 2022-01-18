@@ -11,9 +11,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:plms_start/pages/home.dart';
-import 'package:plms_start/pages/setting_page.dart';
-import 'package:plms_start/pages/sign_up_page.dart';
+import 'package:edgeworks/pages/home.dart';
+import 'package:edgeworks/pages/setting_page.dart';
+import 'package:edgeworks/pages/sign_up_page.dart';
 import 'login/login_pages.dart';
 import 'pages/mqtt.dart';
 import 'pages/sensor.dart';
@@ -107,7 +107,7 @@ class _MyAppState extends State<MyApp> {
     _messaging = FirebaseMessaging.instance;
     // 앱이 완전히 꺼졌을 때 위한 fcm 초기화
     RemoteMessage? initialMessage =
-    await FirebaseMessaging.instance.getInitialMessage();
+        await FirebaseMessaging.instance.getInitialMessage();
     // fcm get token
     _messaging.getToken().then((fcmtoken) async {
       stream.fcmtoken = fcmtoken!;
@@ -116,9 +116,9 @@ class _MyAppState extends State<MyApp> {
 
     // 권한 설정 여부
     NotificationSettings settings = await
-    // Android에서는 별도의 확인 없이 리턴되지만, requestPermission을 호출하지 않으면 수신 안됨
-    // 그래서 사용자에게 권한 요청을 해야함
-    _messaging.requestPermission(
+        // Android에서는 별도의 확인 없이 리턴되지만, requestPermission을 호출하지 않으면 수신 안됨
+        // 그래서 사용자에게 권한 요청을 해야함
+        _messaging.requestPermission(
       alert: true, // 장치에서 알림 표시 여부
       announcement: false, // 아이폰의 경우 활성화 시 장치가 연결될 때 내용 읽음
       badge: false, // 읽지 않은 알림 있을 때 앱 아이콘 옆에 표시할 알림 여부 설정
@@ -150,15 +150,15 @@ class _MyAppState extends State<MyApp> {
         // notification channel을 디바이스에 생성 완료
         await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        // 위에서 생성한 채널을 로컬 푸시 메세지에 등록해서 푸쉬 메세지 띄운다
-        // create~()에 채널을 인자로 넘겨줘서 생성을 완료한다
+                AndroidFlutterLocalNotificationsPlugin>()
+            // 위에서 생성한 채널을 로컬 푸시 메세지에 등록해서 푸쉬 메세지 띄운다
+            // create~()에 채널을 인자로 넘겨줘서 생성을 완료한다
             ?.createNotificationChannel(channel);
       }
 
       if (Platform.isIOS) {
         await FirebaseMessaging.instance
-        // 아이폰에서 이하 옵션 함수를 호출하면 필요한 옵션을 지정할 수 있다
+            // 아이폰에서 이하 옵션 함수를 호출하면 필요한 옵션을 지정할 수 있다
             .setForegroundNotificationPresentationOptions(
           alert: true,
           badge: false,

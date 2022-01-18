@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:plms_start/dio/logout_dio.dart';
-import 'package:plms_start/mqtt/mqtt.dart';
-import 'package:plms_start/pages/components/getx_controller/controller.dart';
-import 'package:plms_start/pages/soilControl_page.dart';
+import 'package:edgeworks/dio/logout_dio.dart';
+import 'package:edgeworks/mqtt/mqtt.dart';
+import 'package:edgeworks/pages/components/getx_controller/controller.dart';
+import 'package:edgeworks/pages/soilControl_page.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
-import 'package:plms_start/globals/siteConfig.dart' as siteConfig;
+import 'package:edgeworks/globals/siteConfig.dart' as siteConfig;
 
 /*
 * name : Setting Page
@@ -59,7 +59,7 @@ class _SettingPageState extends State<SettingPage> {
   var _highTemp = siteConfig.high_temp;
   var _waterTimer = stream.watering_timer;
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   void initState() {
@@ -185,67 +185,67 @@ class _SettingPageState extends State<SettingPage> {
   Widget _swichWidget(String name) {
     // int initialIndex = stream.alarm_en == true ? 0 : 1;
     return Container(
-              color: Color(0xffFFFFFF),
-              height: Get.height * 0.08,
-              width: Get.width,
-              // decoration: _decoration(Color(0xffFFFFFF)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text(
-                      name,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: ToggleSwitch(
-                      fontSize: 12,
-                      minWidth: 60.0,
-                      cornerRadius: 80.0,
-                      activeBgColors: [
-                        [Color(0xffe3fbed)],
-                        [Color(0xfff2f2f2)]
-                      ],
-                      activeFgColor: Color(0xff222222),
-                      inactiveBgColor: Color(0xffFFFFFF),
-                      inactiveFgColor: Color(0xff222222),
-                      initialLabelIndex: initialIndex,
-                      // stream.alarm_en == true ? 0 : 1,
-                      // stream.pumpStatus[index] == 0 ? 1 : 0,
-                      totalSwitches: 2,
-                      labels: labelName,
-                      radiusStyle: true,
-                      onToggle: (value) async {
-                        setState(() {
-                          initialIndex = value;
-                          if (value == 0) {
-                            status = true;
-                            // stream.alarm_en == true ? 0 : 1;
-                          } else if (value == 1) {
-                            status = false;
-                            // stream.alarm_en == true ? 0 : 1;
-                          }
-                          _alarmStatus = status;
-                        });
-                        // if (value == 0) {
-                        //   status = true;
-                        // } else if (value == 1) {
-                        //   status = false;
-                        // }
-                        // _alarmStatus = status;
-                        print('global key의 alarm Status는 : $_alarmStatus');
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
+      color: Color(0xffFFFFFF),
+      height: Get.height * 0.08,
+      width: Get.width,
+      // decoration: _decoration(Color(0xffFFFFFF)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(
+              name,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black54),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: ToggleSwitch(
+              fontSize: 12,
+              minWidth: 60.0,
+              cornerRadius: 80.0,
+              activeBgColors: [
+                [Color(0xffe3fbed)],
+                [Color(0xfff2f2f2)]
+              ],
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
+              initialLabelIndex: initialIndex,
+              // stream.alarm_en == true ? 0 : 1,
+              // stream.pumpStatus[index] == 0 ? 1 : 0,
+              totalSwitches: 2,
+              labels: labelName,
+              radiusStyle: true,
+              onToggle: (value) async {
+                setState(() {
+                  initialIndex = value;
+                  if (value == 0) {
+                    status = true;
+                    // stream.alarm_en == true ? 0 : 1;
+                  } else if (value == 1) {
+                    status = false;
+                    // stream.alarm_en == true ? 0 : 1;
+                  }
+                  _alarmStatus = status;
+                });
+                // if (value == 0) {
+                //   status = true;
+                // } else if (value == 1) {
+                //   status = false;
+                // }
+                // _alarmStatus = status;
+                print('global key의 alarm Status는 : $_alarmStatus');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _highTempFormField(String title, String dic, var highTempController) {

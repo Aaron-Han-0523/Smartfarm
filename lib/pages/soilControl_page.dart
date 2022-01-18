@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:plms_start/mqtt/mqtt.dart';
+import 'package:edgeworks/mqtt/mqtt.dart';
 import 'package:dio/dio.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
@@ -191,47 +191,47 @@ class _MyWeatherState extends State<MyWeather> {
         // alignment: Alignment.center,
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-             _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
-             SizedBox(height: Get.height * 0.03),
-              Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Flexible(
-                  child: Container(
-                    height: Get.height * 0.13,
-                    width: Get.width * 0.425,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _subMonitoring(
-                            'assets/images/icon_temp.png',
-                            "내부 온도",
-                            "${controller.innerTemp.value}" + "°C",
-                            'assets/images/icon_humid.png',
-                            "내부 습도",
-                            "${controller.innerHumid.value}" + "%"),
-                      ],
-                    ),
-                    decoration: _decoration(Color(0xffFFFFFF)),
-                  ),
-                ),
-                Container(
+          _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
+          SizedBox(height: Get.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Flexible(
+                child: Container(
                   height: Get.height * 0.13,
                   width: Get.width * 0.425,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _subMonitoring(
-                          'assets/images/icon_soiltemp.png',
-                          "토양 온도",
-                          "${controller.soilTemp.value}°C",
-                          'assets/images/icon_soilhumid.png',
-                          "토양 습도",
-                          "${controller.soilHumid.value}%"),
+                          'assets/images/icon_temp.png',
+                          "내부 온도",
+                          "${controller.innerTemp.value}" + "°C",
+                          'assets/images/icon_humid.png',
+                          "내부 습도",
+                          "${controller.innerHumid.value}" + "%"),
                     ],
                   ),
                   decoration: _decoration(Color(0xffFFFFFF)),
                 ),
+              ),
+              Container(
+                height: Get.height * 0.13,
+                width: Get.width * 0.425,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _subMonitoring(
+                        'assets/images/icon_soiltemp.png',
+                        "토양 온도",
+                        "${controller.soilTemp.value}°C",
+                        'assets/images/icon_soilhumid.png',
+                        "토양 습도",
+                        "${controller.soilHumid.value}%"),
+                  ],
+                ),
+                decoration: _decoration(Color(0xffFFFFFF)),
+              ),
             ],
           ),
         ]),

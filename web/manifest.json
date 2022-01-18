@@ -1,6 +1,6 @@
 {
-    "name": "plms_start",
-    "short_name": "plms_start",
+    "name": "edgeworks",
+    "short_name": "edgeworks",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

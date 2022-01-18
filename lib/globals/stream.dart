@@ -6,7 +6,7 @@
 * last update : 2021-10-20
 * */
 
-library plms.globals;
+library edgeworks.globals;
 
 // first page
 

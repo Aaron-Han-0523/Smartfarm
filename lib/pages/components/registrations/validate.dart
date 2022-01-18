@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:plms_start/dio/login_dio.dart';
-import 'package:plms_start/globals/checkUser.dart' as plms_start;
-
+import 'package:edgeworks/dio/login_dio.dart';
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 
 /*
 * name : CheckValidate Page
@@ -12,9 +11,7 @@ import 'package:plms_start/globals/checkUser.dart' as plms_start;
 * last update : 2022-01-05
 * */
 
-
 class CheckValidate {
-
   LoginTest _loginTest = LoginTest();
 
   // 이메일 체크
@@ -22,8 +19,7 @@ class CheckValidate {
     if (value.isEmpty) {
       focusNode.requestFocus();
       return '아이디를 입력하세요.';
-    } else {
-    }
+    } else {}
   }
 
   String? currentPassword(FocusNode focusNode, String value, var controller) {
@@ -40,19 +36,18 @@ class CheckValidate {
     }
   }
 
-
   // 비밀번호 동일 확인
   String? validaterePassword(
       FocusNode focusNode, String value, var controller) {
     String pattern =
         r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,10}$';
     RegExp regExp = new RegExp(pattern);
-      if (value !=controller.text ) {
-        return 'Not Match';
-      } else if (value == controller.text && value.isNotEmpty) {
-        if (!regExp.hasMatch(value)) {
-          return '특수문자,영문,숫자 포함 8~10자 ';
-        }
+    if (value != controller.text) {
+      return 'Not Match';
+    } else if (value == controller.text && value.isNotEmpty) {
+      if (!regExp.hasMatch(value)) {
+        return '특수문자,영문,숫자 포함 8~10자 ';
       }
+    }
   }
 }

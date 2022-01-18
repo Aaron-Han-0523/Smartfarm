@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.plms_start">
+    package="com.example.edgeworks">
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
    <application
 
-        android:label="plms_start"
+        android:label="edgeworks"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         >

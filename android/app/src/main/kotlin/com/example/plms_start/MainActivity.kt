@@ -1,4 +1,4 @@
-package com.example.plms_start
+package com.example.edgeworks
 
 import io.flutter.embedding.android.FlutterActivity
 

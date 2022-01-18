@@ -1,6 +1,6 @@
 ## :flipper:Flutter
 
-> 펀치 프로젝트(PLMS) FE_Flutter 앱 코드 입니다.
+> 스마트팜 프로젝트(Edgeworks) FE_Flutter 앱 코드 입니다.
 >
 > J SoftWare
 

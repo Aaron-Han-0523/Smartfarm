@@ -7,11 +7,11 @@ import 'package:get/get.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:plms_start/dio/login_dio.dart';
-import 'package:plms_start/pages/components/registrations/validate.dart';
+import 'package:edgeworks/dio/login_dio.dart';
+import 'package:edgeworks/pages/components/registrations/validate.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:plms_start/globals/checkUser.dart' as plms_start;
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 import 'dart:convert';
 
 /*
@@ -139,8 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _firstPage() {
     return Form(
       key: formKey,
-      child: Column(
-          children: [
+      child: Column(children: [
         Padding(
           padding: const EdgeInsets.only(left: 30),
           child: Column(
@@ -161,7 +160,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ],
           ),
         ),
-        SizedBox(height : Get.height * 0.3),
+        SizedBox(height: Get.height * 0.3),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -303,8 +302,7 @@ class _SignUpPageState extends State<SignUpPage> {
         style: ElevatedButton.styleFrom(
           primary: Color(0xff4cbb8b),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
-          ),// background
+              borderRadius: BorderRadius.circular(20)), // background
         ),
         child: new Text(
           '등록',
@@ -356,9 +354,8 @@ class _SignUpPageState extends State<SignUpPage> {
       child: new ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Color(0xff4cbb8b),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)
-          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
         child: new Text(
           '취소',
@@ -383,5 +380,4 @@ class _SignUpPageState extends State<SignUpPage> {
       // helperText: helperText,
     );
   }
-
 }
