@@ -79,6 +79,7 @@ class _HomeState extends State<Home> {
       // trends innerTemp
       final getInnerTemp =
           await dio.get('$url/$userId/site/$siteId/innerTemps');
+      stream.chartData = getInnerTemp.data['data'];
       print('##### getInnerTemp: ${getInnerTemp.data['data']}');
       print(
           '##### getInnerTemp 최근 내부온도 시간: ${getInnerTemp.data['data'][0]['time_stamp']}');

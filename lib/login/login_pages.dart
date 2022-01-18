@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -210,8 +208,8 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             var uid = _idTextEditController.text;
             var pw = _pwTextEditController.text;
-            await _loginTest.loginTest(uid, pw); // Get.toNamed('/home');
-            // Get.toNamed('/home');
+            // await _loginTest.loginTest(uid, pw);
+            Get.toNamed('/home');
             // Get.toNamed('/sensor');
           },
           child: Text(
