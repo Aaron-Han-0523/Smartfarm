@@ -33,6 +33,8 @@ var alarm_high_temp = '';
 var alarm_low_temp = '';
 var watering_timer = '';
 
+List chartData = [];
+
 // setting page dropdownButton
 String sitesDropdownValue = '';
 
@@ -62,7 +64,6 @@ List motors = [];
 List motor_name = [];
 List<int> motorStatus = [];
 List<int> sideMotorStatus = [];
-
 
 List switchs = [];
 List switch_id = [];

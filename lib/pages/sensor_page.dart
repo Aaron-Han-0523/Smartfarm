@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -311,6 +311,19 @@ class MyGraph extends StatefulWidget {
 
 class _MyGraphState extends State<MyGraph> {
   @override
+  void initState() {
+    super.initState();
+    print('stream.chartData: ${stream.chartData.length}');
+    // var obj = jsonDecode(stream.chartData[0]);
+    // print('stream.chartData: ${obj}');
+    // const length = obj.length;
+    for (var i = 0; i < stream.chartData.length; i++) {
+      data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
+          double.parse(stream.chartData[i]['value'])));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -350,14 +363,22 @@ class _MyGraphState extends State<MyGraph> {
   }
 }
 
+List<_InnerTempData> data = [
+  // _InnerTempData('Jan', 35),
+  // _InnerTempData('Feb', 28),
+  // _InnerTempData('Mar', 34),
+  // _InnerTempData('Apr', 32),
+  // _InnerTempData('May', 40)
+];
+
 Widget _lineChart() {
-  List<_InnerTempData> data = [
-    _InnerTempData('Jan', 35),
-    _InnerTempData('Feb', 28),
-    _InnerTempData('Mar', 34),
-    _InnerTempData('Apr', 32),
-    _InnerTempData('May', 40)
-  ];
+  // List<_InnerTempData> data = [
+  //   _InnerTempData('Jan', 35),
+  //   _InnerTempData('Feb', 28),
+  //   _InnerTempData('Mar', 34),
+  //   _InnerTempData('Apr', 32),
+  //   _InnerTempData('May', 40)
+  // ];
 
   // List<_SalesData> subData = [
   //   _SalesData('Jan', 20),
