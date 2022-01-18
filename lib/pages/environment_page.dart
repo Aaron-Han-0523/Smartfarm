@@ -116,7 +116,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       child: Text(
                         'Farm in Earth',
                         style:
-                            TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                        TextStyle(color: Color(0xff2E8953), fontSize: 25),
                       ),
                     ),
                     Align(
@@ -158,7 +158,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             SliverList(
               // itemExtent: 3.0,
               delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                   return Container(
                       decoration: BoxDecoration(
                         color: Color(0xffF5F9FC),
@@ -208,9 +208,9 @@ class _MyWeatherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-      () => Container(
+          () => Container(
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring(),
           SizedBox(height: Get.height * 0.03),
           Row(
@@ -264,7 +264,7 @@ class _MyWeatherState extends State<MyWeather> {
 Widget _mainMonitoring() {
   final controller = Get.put(CounterController());
   return Obx(
-    () => Container(
+        () => Container(
         height: Get.height * 0.1,
         width: Get.width * 0.9,
         child: Row(
@@ -272,9 +272,9 @@ Widget _mainMonitoring() {
           children: [
             temp > 20
                 ? Image.asset('assets/images/icon_shiny.png',
-                    color: Color(0xff222222), scale: 3)
+                color: Color(0xff222222), scale: 3)
                 : Image.asset('assets/images/icon_windy.png',
-                    color: Color(0xff222222), scale: 3),
+                color: Color(0xff222222), scale: 3),
             // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
             Text("맑음/${controller.extTemp.value}°C",
                 style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
@@ -343,7 +343,7 @@ class _SideMotorState extends State<SideMotor> {
             decoration: _decoration(Color(0xff2E8953)),
             child: Theme(
               data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -359,7 +359,7 @@ class _SideMotorState extends State<SideMotor> {
                   15,
                   child: Text('측창 개폐기 제어',
                       style:
-                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                      _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                 ),
                 children: <Widget>[
                   _topBottomPadding(
@@ -367,9 +367,9 @@ class _SideMotorState extends State<SideMotor> {
                     15,
                     child: Column(
                       children: [
-                        _alltoggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                        _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
                         SizedBox(height: Get.height * 0.01),
-                        _sideControlSwitch()
+                        // _sideControlSwitch()
                       ],
                     ),
                   )
@@ -412,7 +412,7 @@ class _TopMotorState extends State<TopMotor> {
                 15,
                 child: Column(
                   children: [
-                    _alltoggleSwitch('천창(전체)', 'top', 'test', 'sid'),
+                    _allTopToggleSwitch('천창(전체)', 'top', 'test', 'sid'),
                     SizedBox(height: Get.height * 0.01),
                     _topControlSwitch()
                   ],
@@ -513,8 +513,8 @@ BoxDecoration _decorations() {
 }
 
 // 측창 개폐기 제어 전체
-int allToggleInitial = 1;
-Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
+int allSideToggleInit = 1;
+Widget _allSideToggleSwitch(String text, var positions, var userIds, var siteIds) {
   return _marginContainer(
     height: Get.height * 0.09,
     child: Row(
@@ -537,17 +537,16 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
             activeFgColor: Color(0xff222222),
             inactiveBgColor: Color(0xffFFFFFF),
             inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: allToggleInitial,
+            initialLabelIndex: allSideToggleInit,
             totalSwitches: 3,
             labels: ['전체열림', '전체정지', '전체닫힘'],
             radiusStyle: true,
             onToggle: (value) async {
-              allToggleInitial = value;
+              allSideToggleInit = value;
               String _switch = '';
 
               if (value == 0) {
                 _switch = 'open';
-                
               }
               if (value == 1) {
                 _switch = 'stop';
@@ -558,8 +557,7 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
               print('toggle value는 : $value');
               print('toggle type은 : ${value.runtimeType}');
               print('value는 : $_switch');
-              var index;
-              _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
+              _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
                   '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
             },
           ),
@@ -570,16 +568,73 @@ Widget _alltoggleSwitch(String text, var positions, var userIds, var siteIds) {
   );
 }
 
+//천장 개폐기 제어 전체
+int allTopToggleInit = 1;
+Widget _allTopToggleSwitch(String text, var positions, var userIds, var siteIds) {
+  return _marginContainer(
+    height: Get.height * 0.09,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _edgeLeftPadding(20,
+            child: Text(text,
+                style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+        _edgeRightPadding(
+          10,
+          child: ToggleSwitch(
+            fontSize: 12,
+            minWidth: 65.0,
+            cornerRadius: 80.0,
+            activeBgColors: [
+              [Color(0xffe3fbed)],
+              [Color(0xffFFD6D6)],
+              [Color(0xfff2f2f2)]
+            ],
+            activeFgColor: Color(0xff222222),
+            inactiveBgColor: Color(0xffFFFFFF),
+            inactiveFgColor: Color(0xff222222),
+            initialLabelIndex: allTopToggleInit,
+            totalSwitches: 3,
+            labels: ['전체열림', '전체정지', '전체닫힘'],
+            radiusStyle: true,
+            onToggle: (value) async {
+              allTopToggleInit = value;
+              String _switch = '';
+
+              if (value == 0) {
+                _switch = 'open';
+              }
+              if (value == 1) {
+                _switch = 'stop';
+              }
+              if (value == 2) {
+                _switch = 'close';
+              }
+              print('toggle value는 : $value');
+              print('toggle type은 : ${value.runtimeType}');
+              print('value는 : $_switch');
+              _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
+                  '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+            },
+          ),
+        )
+      ],
+    ),
+    decoration: _decorations(),
+  );
+}
+
+
+
 // 측장 개폐기 제어
 Widget _sideControlSwitch() {
   String _sideType = '';
 
-  if (stream.sideMotors[0]['motor_name'] == '측장(좌)') {
-    _sideType = '좌';
-  } else if (stream.sideMotors[0]['motor_name'] == '측장(우)') {
-    _sideType = '우';
-  }
-
+  // if (stream.sideMotors[0]['motor_name'] == '측장(좌)') {
+  //   _sideType = '좌';
+  // } else if (stream.sideMotors[0]['motor_name'] == '측장(우)') {
+  //   _sideType = '우';
+  // }
   return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -648,6 +703,8 @@ Widget _sideControlSwitch() {
 }
 
 // 천창 개폐기 제어
+int allTopToggleInitial = 1;
+
 Widget _topControlSwitch() {
   return ListView.builder(
       scrollDirection: Axis.vertical,
