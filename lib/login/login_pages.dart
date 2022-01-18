@@ -225,24 +225,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // 회원가입 폼
-  Widget _signupText() {
-    return Column(
-      children: [
-        Container(
-          // width: 1,
-          height: 3,
-          child: Icon(
-            Icons.arrow_drop_down,
-            size: 50,
-          ),
-        ),
-        Text(
-          AppLocalizations.of(context)!.signUpText,
-          style: TextStyle(fontSize: 13, color: Colors.grey),
-        ),
-      ],
-    );
-  }
+  // Widget _signupText() {
+  //   return Column(
+  //     children: [
+  //       Container(
+  //         // width: 1,
+  //         height: 3,
+  //         child: Icon(
+  //           Icons.arrow_drop_down,
+  //           size: 50,
+  //         ),
+  //       ),
+  //       Text(
+  //         AppLocalizations.of(context)!.signUpText,
+  //         style: TextStyle(fontSize: 13, color: Colors.grey),
+  //       ),
+  //     ],
+  //   );
+  // }
 
 // 비밀번호 변경 / 카카오 채널 연결
   Widget _textButton() {
@@ -287,34 +287,34 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // 로그인 에러 다이얼로그
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: new Text(AppLocalizations.of(context)!.loginDialogText),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                new ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xff71838D),
-                  ),
-                  child:
-                      new Text(AppLocalizations.of(context)!.loginDialogButton),
-                  onPressed: () {
-                    _idTextEditController.clear();
-                    _pwTextEditController.clear();
-                    Get.back();
-                  },
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
+//   void _showDialog() {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           content: new Text(AppLocalizations.of(context)!.loginDialogText),
+//           actions: <Widget>[
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 new ElevatedButton(
+//                   style: ElevatedButton.styleFrom(
+//                     primary: Color(0xff71838D),
+//                   ),
+//                   child:
+//                       new Text(AppLocalizations.of(context)!.loginDialogButton),
+//                   onPressed: () {
+//                     _idTextEditController.clear();
+//                     _pwTextEditController.clear();
+//                     Get.back();
+//                   },
+//                 ),
+//               ],
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
 }

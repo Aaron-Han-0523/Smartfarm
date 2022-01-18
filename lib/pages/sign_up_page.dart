@@ -376,7 +376,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return new InputDecoration(
       contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
       border: OutlineInputBorder(),
-
       // helperText: helperText,
     );
   }
