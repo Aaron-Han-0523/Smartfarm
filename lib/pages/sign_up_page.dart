@@ -305,7 +305,7 @@ class _SignUpPageState extends State<SignUpPage> {
               borderRadius: BorderRadius.circular(20)), // background
         ),
         child: new Text(
-          '등록',
+          '비밀번호 변경',
           style: TextStyle(
               color: Color(0xffFFFFFF),
               fontSize: 18,
