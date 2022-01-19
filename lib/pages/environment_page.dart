@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:edgeworks/mqtt/mqtt.dart';
-import 'package:edgeworks/globals/toggle.dart' as toggle;
+// import 'package:edgeworks/globals/toggle.dart' as toggle;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:dio/dio.dart';
@@ -71,7 +71,6 @@ bool _customTileExpanded = false;
 // temp
 var temp = int.parse(extTemp);
 
-
 // // getData()
 // void _getMotorData() async {
 //   // motors
@@ -101,7 +100,6 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
-
   void getStatus() async {
     String _switchStatus = await motor_1;
     print('toggle motor는 : $motor_1');
@@ -118,7 +116,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   }
 
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +124,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
       body: Container(
-        // width: Get.width * 6,
-        decoration: BoxDecoration(
-          color: Color(0xffF5F9FC),
-          borderRadius: BorderRadius.circular(40),
-        ),
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
@@ -145,7 +138,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       child: Text(
                         'Farm in Earth',
                         style:
-                        TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                            TextStyle(color: Color(0xff2E8953), fontSize: 22),
                       ),
                     ),
                     Align(
@@ -160,7 +153,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             SliverList(
               // itemExtent: 3.0,
               delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                (BuildContext context, int index) {
                   return Container(
                       decoration: BoxDecoration(
                         color: Color(0xffF5F9FC),
@@ -178,6 +171,15 @@ class _EnvironmentState extends State<EnvironmentPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: Container(
+        height: Get.height * 1 / 14,
+        decoration: BoxDecoration(
+            color: Color(0xffF5F9FC),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(40.0),
+                bottomRight: Radius.circular(40.0)),
+            border: null),
       ),
     );
   }
@@ -210,9 +212,9 @@ class _MyWeatherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-          () => Container(
+      () => Container(
         child:
-        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring(),
           SizedBox(height: Get.height * 0.03),
           Row(
@@ -266,7 +268,7 @@ class _MyWeatherState extends State<MyWeather> {
 Widget _mainMonitoring() {
   final controller = Get.put(CounterController());
   return Obx(
-        () => Container(
+    () => Container(
         height: Get.height * 0.1,
         width: Get.width * 0.9,
         child: Row(
@@ -274,9 +276,9 @@ Widget _mainMonitoring() {
           children: [
             temp > 20
                 ? Image.asset('assets/images/icon_shiny.png',
-                color: Color(0xff222222), scale: 3)
+                    color: Color(0xff222222), scale: 3)
                 : Image.asset('assets/images/icon_windy.png',
-                color: Color(0xff222222), scale: 3),
+                    color: Color(0xff222222), scale: 3),
             // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
             Text("맑음/${controller.extTemp.value}°C",
                 style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
@@ -345,7 +347,7 @@ class _SideMotorState extends State<SideMotor> {
             decoration: _decoration(Color(0xff2E8953)),
             child: Theme(
               data:
-              Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -361,7 +363,7 @@ class _SideMotorState extends State<SideMotor> {
                   15,
                   child: Text('측창 개폐기 제어',
                       style:
-                      _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                 ),
                 children: <Widget>[
                   _topBottomPadding(
@@ -514,67 +516,67 @@ BoxDecoration _decorations() {
 int allSideToggleInit = 1;
 // int allSideToggleInit = toggle.getAllSideToggle() as int;
 // int? allSideToggleInit = toggle.getAllSideToggle();
-Widget _allSideToggleSwitch(String text, var positions, var userIds, var siteIds) {
-        return _marginContainer(
-          height: Get.height * 0.09,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _edgeLeftPadding(20,
-                  child: Text(text,
-                      style: _textStyle(
-                          Color(0xff222222), FontWeight.normal, 15))),
-              _edgeRightPadding(
-                10,
-                child: ToggleSwitch(
-                  fontSize: 12,
-                  minWidth: 65.0,
-                  cornerRadius: 80.0,
-                  activeBgColors: [
-                    [Color(0xffe3fbed)],
-                    [Color(0xffFFD6D6)],
-                    [Color(0xfff2f2f2)]
-                  ],
-                  activeFgColor: Color(0xff222222),
-                  inactiveBgColor: Color(0xffFFFFFF),
-                  inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: allSideToggleInit,
-                  totalSwitches: 3,
-                  labels: ['전체열림', '전체정지', '전체닫힘'],
-                  radiusStyle: true,
-                  onToggle: (value) async {
-                    allSideToggleInit = value;
-                    String _switch = '';
-
-                    if (value == 0) {
-                      _switch = 'open';
-                    }
-                    if (value == 1) {
-                      _switch = 'stop';
-                    }
-                    if (value == 2) {
-                      _switch = 'close';
-                    }
-                    print('toggle value는 : $value');
-                    print('toggle type은 : ${value.runtimeType}');
-                    print('value는 : $_switch');
-                    _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
-                        '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-                    toggle.saveAllSideToggle(value);
-                  },
-                ),
-              )
+Widget _allSideToggleSwitch(
+    String text, var positions, var userIds, var siteIds) {
+  return _marginContainer(
+    height: Get.height * 0.09,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _edgeLeftPadding(20,
+            child: Text(text,
+                style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+        _edgeRightPadding(
+          10,
+          child: ToggleSwitch(
+            fontSize: 12,
+            minWidth: 65.0,
+            cornerRadius: 80.0,
+            activeBgColors: [
+              [Color(0xffe3fbed)],
+              [Color(0xffFFD6D6)],
+              [Color(0xfff2f2f2)]
             ],
+            activeFgColor: Color(0xff222222),
+            inactiveBgColor: Color(0xffFFFFFF),
+            inactiveFgColor: Color(0xff222222),
+            initialLabelIndex: allSideToggleInit,
+            totalSwitches: 3,
+            labels: ['전체열림', '전체정지', '전체닫힘'],
+            radiusStyle: true,
+            onToggle: (value) async {
+              allSideToggleInit = value;
+              String _switch = '';
+
+              if (value == 0) {
+                _switch = 'open';
+              }
+              if (value == 1) {
+                _switch = 'stop';
+              }
+              if (value == 2) {
+                _switch = 'close';
+              }
+              print('toggle value는 : $value');
+              print('toggle type은 : ${value.runtimeType}');
+              print('value는 : $_switch');
+              _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
+                  '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+              // toggle.saveAllSideToggle(value);
+            },
           ),
-          decoration: _decorations(),
+        )
+      ],
+    ),
+    decoration: _decorations(),
   );
 }
-
 
 //천장 개폐기 제어 전체
 int allTopToggleInit = 1;
 
-Widget _allTopToggleSwitch(String text, var positions, var userIds, var siteIds) {
+Widget _allTopToggleSwitch(
+    String text, var positions, var userIds, var siteIds) {
   return _marginContainer(
     height: Get.height * 0.09,
     child: Row(
@@ -619,10 +621,6 @@ Widget _allTopToggleSwitch(String text, var positions, var userIds, var siteIds)
               print('value는 : $_switch');
               _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
                   '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-
-
-
-
             },
           ),
         )
@@ -631,8 +629,6 @@ Widget _allTopToggleSwitch(String text, var positions, var userIds, var siteIds)
     decoration: _decorations(),
   );
 }
-
-
 
 // 측장 개폐기 제어
 Widget _sideControlSwitch() {
@@ -773,7 +769,7 @@ Widget _topControlSwitch() {
                     print(
                         '### Motor${index + 1} stream index는 : ${stream.motorStatus[index]}');
 
-                    _mqttClass.ctlSet('did', "${index+1}", 'dact', _switch,
+                    _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
                         '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                   },
                 ),

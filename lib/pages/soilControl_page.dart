@@ -101,62 +101,67 @@ class _SoilControlPageState extends State<SoilControlPage> {
   Widget build(BuildContext context) {
     // FutureBuilder listview
     return Scaffold(
-        backgroundColor: Color(0xff2E6645),
-        body: Container(
-          decoration: BoxDecoration(
+      backgroundColor: Color(0xff2E6645),
+      body: Container(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              toolbarHeight: Get.height * 0.45,
+              backgroundColor: Color(0xffF5F9FC),
+              title: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Farm in Earth',
+                        style:
+                            TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(siteDropdown,
+                          style: TextStyle(color: Colors.black, fontSize: 17)),
+                    ),
+                    SizedBox(height: Get.height * 0.05),
+                    MyWeather(),
+                  ]),
+            ),
+            SliverList(
+              // itemExtent: 3.0,
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffF5F9FC),
+                      ),
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          MyPumps(),
+                          MyValves(),
+                        ],
+                      ));
+                },
+                childCount: 1,
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: Get.height * 1 / 14,
+        decoration: BoxDecoration(
             color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                toolbarHeight: Get.height * 0.45,
-                backgroundColor: Color(0xffF5F9FC),
-                title: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Farm in Earth',
-                          style:
-                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(siteDropdown,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 17)),
-                      ),
-                      SizedBox(height: Get.height * 0.05),
-                      MyWeather(),
-                    ]),
-              ),
-              SliverList(
-                // itemExtent: 3.0,
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffF5F9FC),
-                        ),
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            MyPumps(),
-                            MyValves(),
-                          ],
-                        ));
-                  },
-                  childCount: 1,
-                ),
-              ),
-            ],
-          ),
-        ));
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(40.0),
+                bottomRight: Radius.circular(40.0)),
+            border: null),
+      ),
+    );
   }
 }
 

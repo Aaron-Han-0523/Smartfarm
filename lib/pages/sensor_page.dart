@@ -63,11 +63,12 @@ class _SensorPageState extends State<SensorPage> {
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
       body: Container(
+        // height: Get.height * 1 / 2,
         // color: Color(0xffF5F9FC),
-        decoration: BoxDecoration(
-          color: Color(0xffF5F9FC),
-          borderRadius: BorderRadius.circular(40),
-        ),
+        // decoration: BoxDecoration(
+        //   color: Color(0xffF5F9FC),
+        //   borderRadius: BorderRadius.circular(40),
+        // ),
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
@@ -104,7 +105,6 @@ class _SensorPageState extends State<SensorPage> {
                       ),
                       alignment: Alignment.center,
                       // color: Color(0xffF5F9FC),
-
                       child: Column(
                         children: [
                           MyAccordian(),
@@ -120,6 +120,15 @@ class _SensorPageState extends State<SensorPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: Container(
+        height: Get.height * 1 / 14,
+        decoration: BoxDecoration(
+            color: Color(0xffF5F9FC),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(40.0),
+                bottomRight: Radius.circular(40.0)),
+            border: null),
       ),
     );
   }
@@ -252,7 +261,6 @@ class _MyAccordian2State extends State<MyAccordian2> {
                       height:
                           (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
-                        primary: false,
                         childAspectRatio:
                             (Get.width * 0.4) / (Get.height * 1 / 9),
                         // Create a grid with 2 columns. If you change the scrollDirection to
