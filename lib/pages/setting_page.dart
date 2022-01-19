@@ -358,7 +358,7 @@ class _SettingPageState extends State<SettingPage> {
               borderRadius: BorderRadius.circular(20)), // background
         ),
         child: new Text(
-          'SET CONIG(저장)',
+          '설정 저장',
           style: TextStyle(
               color: Color(0xffFFFFFF),
               fontSize: 18,
