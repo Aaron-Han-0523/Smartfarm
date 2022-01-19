@@ -38,6 +38,7 @@ class Sensor extends StatelessWidget {
 }
 
 class SensorStatefulWidget extends StatefulWidget {
+
   const SensorStatefulWidget({Key? key}) : super(key: key);
 
   @override
@@ -57,6 +58,9 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   }
 
   TextEditingController idTextController = TextEditingController();
+
+  // drawer close global key
+  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -80,6 +84,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       // 카카오 채널 연결 drawer
+      // key: _key,
       drawer: Drawer(
         backgroundColor: Color(0xffF5F9FC),
         child: ListView(

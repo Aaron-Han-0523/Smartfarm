@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:edgeworks/dio/login_dio.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,22 +47,22 @@ class _LoginPageState extends State<LoginPage> {
     login.company = [];
     login.personalID = [];
     login.department = [];
-    _getStatuses();
+    // _getStatuses();
     print('flutter login????????????');
     super.initState();
   }
 
-  Future<bool> _getStatuses() async {
-    Map<Permission, PermissionStatus> statuses =
-        await [Permission.storage, Permission.camera].request();
-
-    if (await Permission.camera.isGranted &&
-        await Permission.storage.isGranted) {
-      return Future.value(true);
-    } else {
-      return Future.value(false);
-    }
-  }
+  // Future<bool> _getStatuses() async {
+  //   Map<Permission, PermissionStatus> statuses =
+  //       await [Permission.storage, Permission.camera].request();
+  //
+  //   if (await Permission.camera.isGranted &&
+  //       await Permission.storage.isGranted) {
+  //     return Future.value(true);
+  //   } else {
+  //     return Future.value(false);
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -208,8 +208,8 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             var uid = _idTextEditController.text;
             var pw = _pwTextEditController.text;
-            // await _loginTest.loginTest(uid, pw);
-            Get.toNamed('/home');
+            await _loginTest.loginTest(uid, pw);
+            // Get.toNamed('/home');
             // Get.toNamed('/sensor');
           },
           child: Text(
