@@ -365,15 +365,19 @@ class _SettingPageState extends State<SettingPage> {
               fontWeight: FontWeight.w500),
         ),
         onPressed: () async {
+          _updateData(_alarmStatus, _highTextEditController.text,
+              _lowTextEditController.text, _setTimer);
           _mqttClass.setConfig(
               _alarmStatus,
               _highTextEditController.text,
               _lowTextEditController.text,
               _setTimer,
               '/sf/e0000001/req/cfg',
-              '/sf/e0000001/req/cfg');
-          _updateData(_alarmStatus, _highTextEditController.text,
-              _lowTextEditController.text, _setTimer);
+              '/sf/e0000001/req/cfg').then((value) => Get.defaultDialog(
+              backgroundColor: Colors.white,
+              title: '설정 완료',
+              middleText: '설정이 완료 되었습니다.',
+              textCancel: 'Cancel'));
           print('hi!!!!!!!!!!!');
         },
       ),
@@ -381,7 +385,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   // var timerDropdownValue = '${stream.watering_timer}';
-  var timerDropdownValue = '30';
+  var timerDropdownValue = '0';
   Widget _timerDropDownButtons(var name) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -418,6 +422,7 @@ class _SettingPageState extends State<SettingPage> {
                 });
               },
               items: <String>[
+                '0',
                 '30',
                 '60',
                 '90',
