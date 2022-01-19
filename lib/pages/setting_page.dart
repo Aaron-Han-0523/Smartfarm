@@ -380,7 +380,8 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  var timerDropdownValue = '${stream.watering_timer}';
+  // var timerDropdownValue = '${stream.watering_timer}';
+  var timerDropdownValue = '30';
   Widget _timerDropDownButtons(var name) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -400,7 +401,7 @@ class _SettingPageState extends State<SettingPage> {
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: DropdownButton<String>(
-              value: '90',
+              value: timerDropdownValue,
               icon: const Icon(Icons.arrow_drop_down,
                   color: Colors.black, size: 30),
               style: const TextStyle(color: Colors.black54),
