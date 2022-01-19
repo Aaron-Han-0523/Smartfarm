@@ -96,13 +96,13 @@ class _CCTVPageState extends State<CCTVPage> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   'Farm in Earth',
-                  style: TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                  style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
                 ),
               ),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(stream.sitesDropdownValue,
-                    style: TextStyle(color: Colors.black, fontSize: 18)),
+                    style: TextStyle(color: Colors.black, fontSize: 17)),
               ),
             ]),
           ),

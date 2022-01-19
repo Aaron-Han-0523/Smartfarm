@@ -3,8 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:edgeworks/mqtt/mqtt.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:edgeworks/globals/toggle.dart' as toggle;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:dio/dio.dart';
@@ -72,8 +71,6 @@ bool _customTileExpanded = false;
 // temp
 var temp = int.parse(extTemp);
 
-// shared preference
-final prefs = SharedPreferences.getInstance();
 
 // // getData()
 // void _getMotorData() async {
@@ -148,13 +145,13 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       child: Text(
                         'Farm in Earth',
                         style:
-                        TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                        TextStyle(color: Color(0xff2E8953), fontSize: 22),
                       ),
                     ),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(siteDropdown,
-                          style: TextStyle(color: Colors.black, fontSize: 18)),
+                          style: TextStyle(color: Colors.black, fontSize: 17)),
                     ),
                     SizedBox(height: Get.height * 0.05),
                     MyWeather(),
@@ -519,59 +516,64 @@ BoxDecoration _decorations() {
 
 // 측창 개폐기 제어 전체
 int allSideToggleInit = 1;
+// int allSideToggleInit = toggle.getAllSideToggle() as int;
+// int? allSideToggleInit = toggle.getAllSideToggle();
 Widget _allSideToggleSwitch(String text, var positions, var userIds, var siteIds) {
-  return _marginContainer(
-    height: Get.height * 0.09,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _edgeLeftPadding(20,
-            child: Text(text,
-                style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
-        _edgeRightPadding(
-          10,
-          child: ToggleSwitch(
-            fontSize: 12,
-            minWidth: 65.0,
-            cornerRadius: 80.0,
-            activeBgColors: [
-              [Color(0xffe3fbed)],
-              [Color(0xffFFD6D6)],
-              [Color(0xfff2f2f2)]
-            ],
-            activeFgColor: Color(0xff222222),
-            inactiveBgColor: Color(0xffFFFFFF),
-            inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: allSideToggleInit,
-            totalSwitches: 3,
-            labels: ['전체열림', '전체정지', '전체닫힘'],
-            radiusStyle: true,
-            onToggle: (value) async {
-              allSideToggleInit = value;
-              String _switch = '';
+        return _marginContainer(
+          height: Get.height * 0.09,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _edgeLeftPadding(20,
+                  child: Text(text,
+                      style: _textStyle(
+                          Color(0xff222222), FontWeight.normal, 15))),
+              _edgeRightPadding(
+                10,
+                child: ToggleSwitch(
+                  fontSize: 12,
+                  minWidth: 65.0,
+                  cornerRadius: 80.0,
+                  activeBgColors: [
+                    [Color(0xffe3fbed)],
+                    [Color(0xffFFD6D6)],
+                    [Color(0xfff2f2f2)]
+                  ],
+                  activeFgColor: Color(0xff222222),
+                  inactiveBgColor: Color(0xffFFFFFF),
+                  inactiveFgColor: Color(0xff222222),
+                  initialLabelIndex: allSideToggleInit,
+                  totalSwitches: 3,
+                  labels: ['전체열림', '전체정지', '전체닫힘'],
+                  radiusStyle: true,
+                  onToggle: (value) async {
+                    allSideToggleInit = value;
+                    String _switch = '';
 
-              if (value == 0) {
-                _switch = 'open';
-              }
-              if (value == 1) {
-                _switch = 'stop';
-              }
-              if (value == 2) {
-                _switch = 'close';
-              }
-              print('toggle value는 : $value');
-              print('toggle type은 : ${value.runtimeType}');
-              print('value는 : $_switch');
-              _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
-                  '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-            },
+                    if (value == 0) {
+                      _switch = 'open';
+                    }
+                    if (value == 1) {
+                      _switch = 'stop';
+                    }
+                    if (value == 2) {
+                      _switch = 'close';
+                    }
+                    print('toggle value는 : $value');
+                    print('toggle type은 : ${value.runtimeType}');
+                    print('value는 : $_switch');
+                    _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
+                        '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                    toggle.saveAllSideToggle(value);
+                  },
+                ),
+              )
+            ],
           ),
-        )
-      ],
-    ),
-    decoration: _decorations(),
+          decoration: _decorations(),
   );
 }
+
 
 //천장 개폐기 제어 전체
 int allTopToggleInit = 1;
@@ -621,6 +623,10 @@ Widget _allTopToggleSwitch(String text, var positions, var userIds, var siteIds)
               print('value는 : $_switch');
               _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
                   '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+
+
+
+
             },
           ),
         )

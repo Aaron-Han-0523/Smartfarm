@@ -121,14 +121,14 @@ class _SoilControlPageState extends State<SoilControlPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                              TextStyle(color: Color(0xff2E8953), fontSize: 25),
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 18)),
+                                TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.05),
                       MyWeather(),
