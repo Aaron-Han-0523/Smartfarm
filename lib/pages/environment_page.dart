@@ -370,7 +370,6 @@ class _SideMotorState extends State<SideMotor> {
                     child: Column(
                       children: [
                         _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
-                        SizedBox(height: Get.height * 0.01),
                         _sideControlSwitch()
                       ],
                     ),
@@ -415,7 +414,6 @@ class _TopMotorState extends State<TopMotor> {
                 child: Column(
                   children: [
                     _allTopToggleSwitch('천창(전체)', 'top', 'test', 'sid'),
-                    SizedBox(height: Get.height * 0.01),
                     _topControlSwitch()
                   ],
                 ),
@@ -462,13 +460,11 @@ class _EtcMotorState extends State<EtcMotor> {
                       '환풍기 (#1)',
                       status8,
                     ),
-                    SizedBox(height: Get.height * 0.01),
                     _toggleSwitch2(
                       context,
                       '환풍기 (#2)',
                       status9,
                     ),
-                    SizedBox(height: Get.height * 0.01),
                     _toggleSwitch2(
                       context,
                       '외부 제어 (#1)',
@@ -858,7 +854,7 @@ Padding _topBottomPadding(double top, double bottom, {child}) {
 
 Container _marginContainer({child, dynamic height, decoration}) {
   return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
     height: height,
     child: child,
     decoration: decoration,
