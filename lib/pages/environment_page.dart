@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:edgeworks/mqtt/mqtt.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -71,6 +72,9 @@ bool _customTileExpanded = false;
 // temp
 var temp = int.parse(extTemp);
 
+// shared preference
+final prefs = SharedPreferences.getInstance();
+
 // // getData()
 // void _getMotorData() async {
 //   // motors
@@ -100,6 +104,7 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
+
   void getStatus() async {
     String _switchStatus = await motor_1;
     print('toggle motor는 : $motor_1');
@@ -369,7 +374,7 @@ class _SideMotorState extends State<SideMotor> {
                       children: [
                         _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
                         SizedBox(height: Get.height * 0.01),
-                        // _sideControlSwitch()
+                        _sideControlSwitch()
                       ],
                     ),
                   )
@@ -570,6 +575,7 @@ Widget _allSideToggleSwitch(String text, var positions, var userIds, var siteIds
 
 //천장 개폐기 제어 전체
 int allTopToggleInit = 1;
+
 Widget _allTopToggleSwitch(String text, var positions, var userIds, var siteIds) {
   return _marginContainer(
     height: Get.height * 0.09,
@@ -663,7 +669,7 @@ Widget _sideControlSwitch() {
                   activeFgColor: Color(0xff222222),
                   inactiveBgColor: Color(0xffFFFFFF),
                   inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: stream.motorStatus[index + 4],
+                  initialLabelIndex: stream.motorStatus[index],
                   totalSwitches: 3,
                   labels: ['열림', '정지', '닫힘'],
                   radiusStyle: true,
@@ -734,7 +740,7 @@ Widget _topControlSwitch() {
                   activeFgColor: Color(0xff222222),
                   inactiveBgColor: Color(0xffFFFFFF),
                   inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: stream.sideMotorStatus[index],
+                  initialLabelIndex: stream.motorStatus[index],
                   totalSwitches: 3,
                   labels: ['열림', '정지', '닫힘'],
                   radiusStyle: true,
@@ -743,15 +749,15 @@ Widget _topControlSwitch() {
 
                     if (value == 0) {
                       _switch = 'open';
-                      stream.sideMotorStatus[index] = 0;
+                      stream.motorStatus[index] = 0;
                     }
                     if (value == 1) {
                       _switch = 'stop';
-                      stream.sideMotorStatus[index] = 1;
+                      stream.motorStatus[index] = 1;
                     }
                     if (value == 2) {
                       _switch = 'close';
-                      stream.sideMotorStatus[index] = 2;
+                      stream.motorStatus[index] = 2;
                     }
                     print('toggle value는 : $value');
                     print('toggle motor는 : $motor_1');
@@ -761,9 +767,9 @@ Widget _topControlSwitch() {
                         '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                     print('### Motor${index + 1} value는 : $_switch');
                     print(
-                        '### Motor${index + 1} stream index는 : ${stream.sideMotorStatus[index]}');
+                        '### Motor${index + 1} stream index는 : ${stream.motorStatus[index]}');
 
-                    _mqttClass.ctlSet('did', "${index + 5}", 'dact', _switch,
+                    _mqttClass.ctlSet('did', "${index+1}", 'dact', _switch,
                         '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                   },
                 ),
