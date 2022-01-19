@@ -141,7 +141,7 @@ class _SignUpPageState extends State<SignUpPage> {
       key: formKey,
       child: Column(children: [
         Padding(
-          padding: const EdgeInsets.only(left: 30),
+          padding: const EdgeInsets.only(left: 10),
           child: Column(
             children: [
               _textField('아이디', _idTextEditController),
@@ -176,10 +176,14 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _textField(String title, var controller) {
     return Row(
       children: [
-        SizedBox(
+        Container(
+          padding: EdgeInsets.only(bottom: 12),
           width: Get.width * 1 / 3.9,
-          child: Text(title),
+          child: Text(title,
+              style: TextStyle(fontSize: 15),
+              textAlign: TextAlign.right),
         ),
+        SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
@@ -204,10 +208,14 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _currentPwField(String title, var controller) {
     return Row(
       children: [
-        SizedBox(
+        Container(
+          padding: EdgeInsets.only(bottom: 12),
           width: Get.width * 1 / 3.9,
-          child: Text(title),
+          child: Text(title,
+              style: TextStyle(fontSize: 15),
+              textAlign: TextAlign.right),
         ),
+        SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
@@ -242,7 +250,13 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _repwtextField(String title, var controller) {
     return Row(
       children: [
-        SizedBox(width: Get.width * 1 / 3.9, child: Text(title)),
+        Container(
+            padding: EdgeInsets.only(bottom: 12),
+            width: Get.width * 1 / 3.9,
+            child: Text(title,
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.right)),
+        SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
@@ -269,7 +283,13 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _pwFormField(String title, var controller) {
     return Row(
       children: [
-        SizedBox(width: Get.width * 1 / 3.9, child: Text(title)),
+        Container(
+          padding: EdgeInsets.only(bottom: 12),
+            width: Get.width * 1 / 3.9,
+            child: Text(title,
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.right)),
+        SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,
           height: Get.height * 2.1 / 25,
