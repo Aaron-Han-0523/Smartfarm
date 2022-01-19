@@ -645,6 +645,7 @@ Widget _sideControlSwitch() {
   // }
   return ListView.builder(
       scrollDirection: Axis.vertical,
+      primary: false,
       shrinkWrap: true,
       itemCount: sideMotors.length,
       itemBuilder: (BuildContext context, var index) {
@@ -716,6 +717,7 @@ int allTopToggleInitial = 1;
 Widget _topControlSwitch() {
   return ListView.builder(
       scrollDirection: Axis.vertical,
+      primary: false,
       shrinkWrap: true,
       itemCount: topMotors.length,
       itemBuilder: (BuildContext context, var index) {

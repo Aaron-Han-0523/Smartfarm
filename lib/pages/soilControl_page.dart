@@ -283,6 +283,7 @@ class _MyPumpsState extends State<MyPumps> {
                   15,
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
+                      primary: false,
                       shrinkWrap: true,
                       itemCount: stream.pumpStatus.length,
                       itemBuilder: (BuildContext context, var index) {
@@ -341,6 +342,7 @@ class _MyValvesState extends State<MyValves> {
                   15,
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
+                      primary: false,
                       shrinkWrap: true,
                       itemCount: stream.valveStatus.length,
                       itemBuilder: (BuildContext context, var index) {

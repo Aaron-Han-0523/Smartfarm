@@ -252,6 +252,7 @@ class _MyAccordian2State extends State<MyAccordian2> {
                       height:
                           (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
+                        primary: false,
                         childAspectRatio:
                             (Get.width * 0.4) / (Get.height * 1 / 9),
                         // Create a grid with 2 columns. If you change the scrollDirection to
