@@ -62,6 +62,8 @@ List<dynamic> sideMotors = [];
 List<dynamic> topMotors = [];
 List motors = [];
 List motor_name = [];
+List side_motor_name = [];
+List motor_status = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6];
 List<int> motorStatus = [];
 List<int> sideMotorStatus = [];
 

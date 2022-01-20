@@ -3,7 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:edgeworks/mqtt/mqtt.dart';
-// import 'package:edgeworks/globals/toggle.dart' as toggle;
+import 'package:edgeworks/globals/toggle.dart' as toggle;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:dio/dio.dart';
@@ -61,6 +62,11 @@ bool status8 = true;
 bool status9 = true;
 bool status10 = true;
 bool status11 = true;
+
+int? getToggleStatus;
+int? getTopToggleStatus;
+int? allSideToggleInit;
+int? allTopToggleInit;
 
 //graph visibility
 bool _graph = true;
@@ -437,6 +443,35 @@ class EtcMotor extends StatefulWidget {
 }
 
 class _EtcMotorState extends State<EtcMotor> {
+
+  //shared preferences all side toggle status
+  Future<Null> getSideSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getToggleStatus = prefs.getInt('allSideValue') ?? 0;;
+    print('## get all side value : $getToggleStatus');
+    setState(() {
+      allSideToggleInit = getToggleStatus;
+    });
+  }
+
+  //shared preferences top toggle status
+  Future<Null> getTopSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;;
+    print('## get all side value : $getTopToggleStatus');
+    setState(() {
+      allTopToggleInit = getTopToggleStatus;
+    });
+  }
+
+  void initState() {
+    super.initState();
+    getToggleStatus;
+    getTopToggleStatus;
+    getSideSharedPrefs();
+    getTopSharedPrefs();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _fromLTRBPadding(
@@ -513,9 +548,7 @@ BoxDecoration _decorations() {
 }
 
 // 측창 개폐기 제어 전체
-int allSideToggleInit = 1;
-// int allSideToggleInit = toggle.getAllSideToggle() as int;
-// int? allSideToggleInit = toggle.getAllSideToggle();
+// int allSideToggleInit = 1;
 Widget _allSideToggleSwitch(
     String text, var positions, var userIds, var siteIds) {
   return _marginContainer(
@@ -540,7 +573,7 @@ Widget _allSideToggleSwitch(
             activeFgColor: Color(0xff222222),
             inactiveBgColor: Color(0xffFFFFFF),
             inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: allSideToggleInit,
+            initialLabelIndex: getToggleStatus,
             totalSwitches: 3,
             labels: ['전체열림', '전체정지', '전체닫힘'],
             radiusStyle: true,
@@ -562,7 +595,7 @@ Widget _allSideToggleSwitch(
               print('value는 : $_switch');
               _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
                   '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-              // toggle.saveAllSideToggle(value);
+              toggle.saveAllSideToggle(value);
             },
           ),
         )
@@ -573,8 +606,7 @@ Widget _allSideToggleSwitch(
 }
 
 //천장 개폐기 제어 전체
-int allTopToggleInit = 1;
-
+// int allTopToggleInit = 1;
 Widget _allTopToggleSwitch(
     String text, var positions, var userIds, var siteIds) {
   return _marginContainer(
@@ -599,7 +631,7 @@ Widget _allTopToggleSwitch(
             activeFgColor: Color(0xff222222),
             inactiveBgColor: Color(0xffFFFFFF),
             inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: allTopToggleInit,
+            initialLabelIndex: getTopToggleStatus,
             totalSwitches: 3,
             labels: ['전체열림', '전체정지', '전체닫힘'],
             radiusStyle: true,
@@ -630,15 +662,28 @@ Widget _allTopToggleSwitch(
   );
 }
 
+Future<void> _updateMotorData(var motor_name, var motor_type,
+    var motor_action, var update_motor_type) async {
+  var params = {
+    'motor_name': motor_name,
+    'motor_type': motor_type,
+    'motor_action': motor_action,
+  };
+  var response =
+  await dio.put('$url/$userId/site/$siteId/controls/$update_motor_type/motors', data: params);
+  print('### 모터 타입 변경 완료 : $response');
+}
+
 // 측장 개폐기 제어
 Widget _sideControlSwitch() {
-  String _sideType = '';
+  print('## motor id 확인 : ${stream.motor_status}'); // matt 상 모터 상태가 옴
 
-  // if (stream.sideMotors[0]['motor_name'] == '측장(좌)') {
-  //   _sideType = '좌';
-  // } else if (stream.sideMotors[0]['motor_name'] == '측장(우)') {
-  //   _sideType = '우';
+  // for (var i = 0; i < stream.sideMotors.length; i++) {
+  //   var sideMotorName = stream.sideMotors[i]['motor_name'];
+  //   stream.side_motor_name.add(sideMotorName);
+  //   print('## homePage motor name : ${stream.side_motor_name}');
   // }
+
   return ListView.builder(
       scrollDirection: Axis.vertical,
       primary: false,
@@ -651,7 +696,7 @@ Widget _sideControlSwitch() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _edgeLeftPadding(20,
-                  child: Text("${stream.sideMotors[0]['motor_name']}",
+                  child: Text("${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
               _edgeRightPadding(
@@ -687,16 +732,17 @@ Widget _sideControlSwitch() {
                       _switch = 'close';
                       stream.motorStatus[index] = 2;
                     }
-                    print('toggle value는 : $value');
-                    print('toggle motor는 : $motor_1');
-
                     print('### Motor${index + 1} toggle value는 : $value');
                     print(
                         '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                     print('### Motor${index + 1} value는 : $_switch');
-
+                    print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
+                    // MQTT 통신
                     _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
                         '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                    // DB 업데이트
+                    _updateMotorData("${stream.side_motor_name[index]}", "side", "$value", "side");
+
                   },
                 ),
               )
@@ -723,7 +769,7 @@ Widget _topControlSwitch() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _edgeLeftPadding(20,
-                  child: Text("천창 (#${index + 1})",
+                  child: Text("${stream.motor_name[index]})", //DB에 있는 motor_name 반영
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
               _edgeRightPadding(

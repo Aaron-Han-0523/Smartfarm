@@ -111,7 +111,7 @@ class _HomeState extends State<Home> {
       }
       print('##### homePage GET CCTV Url List: ${stream.cctv_url}');
 
-      // motors
+      // side motor name 가져오기
       final getSideMotors =
           await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
@@ -121,9 +121,15 @@ class _HomeState extends State<Home> {
       // stream.motor_name = [];
       for (var i = 0; i < stream.sideMotors.length; i++) {
         var sideMotorName = stream.sideMotors[i]['motor_name'];
-        stream.motor_name.add(sideMotorName);
-        print('## homePage motor name : ${stream.motor_name}');
+        stream.side_motor_name.add(sideMotorName);
+        print('## homePage motor name : ${stream.side_motor_name}');
       }
+
+      //side motor 상태 가져오기
+
+
+      // side motors id 가져오기
+
 
       // 천창
       final getTopMotors =
