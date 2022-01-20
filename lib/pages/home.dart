@@ -235,7 +235,7 @@ class _HomeState extends State<Home> {
         print('##### homePage sensorId LIST: ${stream.sensor_id}');
       }
     }
-    Get.offNamed('/sensor');
+    Get.offAllNamed('/sensor');
   }
 
   @override

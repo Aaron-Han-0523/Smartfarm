@@ -80,104 +80,115 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   // var trap = 0;
   var siteDropdown =
       stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // 카카오 채널 연결 drawer
-      // key: _key,
-      drawer: Drawer(
-        backgroundColor: Color(0xffF5F9FC),
-        child: ListView(
-          children: [
-            Container(
-              height: Get.height * 0.08,
-              child: DrawerHeader(
-                child: Text(
-                  "더보기",
-                  style: TextStyle(color: Color(0xff318A55), fontSize: 20),
+    return WillPopScope( // 뒤로가기 버튼 제어
+      onWillPop: () async {
+        if (_key.currentState!.isDrawerOpen) {
+          Navigator.of(context).pop();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        // 카카오 채널 연결 drawer
+        key: _key,
+        drawer: Drawer(
+          backgroundColor: Color(0xffF5F9FC),
+          child: ListView(
+            children: [
+              Container(
+                height: Get.height * 0.08,
+                child: DrawerHeader(
+                  child: Text(
+                    "더보기",
+                    style: TextStyle(color: Color(0xff318A55), fontSize: 20),
+                  ),
+                  decoration: BoxDecoration(color: Color(0xffF5F9FC)),
                 ),
-                decoration: BoxDecoration(color: Color(0xffF5F9FC)),
+              ),
+              ListTile(
+                  leading:
+                      Image.asset('assets/images/kakao_channel.png', scale: 3),
+                  title: Text('카카오 채널 연결'),
+                  onTap: _launchURL),
+            ],
+          ),
+        ),
+        backgroundColor: Color(0xff2E6645),
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Color(0xff222222)),
+          elevation: 0.0,
+          backgroundColor: Color(0xffF5F9FC),
+          // 타이틀
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: InkWell(
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Image.asset('assets/images/icon_setting.png', scale: 3),
+                  foregroundColor: Colors.teal,
+                ),
+                onTap: () {
+                  Get.toNamed('/setting');
+                },
               ),
             ),
-            ListTile(
-                leading:
-                    Image.asset('assets/images/kakao_channel.png', scale: 3),
-                title: Text('카카오 채널 연결'),
-                onTap: _launchURL),
           ],
         ),
-      ),
-      backgroundColor: Color(0xff2E6645),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Color(0xff222222)),
-        elevation: 0.0,
-        backgroundColor: Color(0xffF5F9FC),
-        // 타이틀
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: InkWell(
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Image.asset('assets/images/icon_setting.png', scale: 3),
-                foregroundColor: Colors.teal,
+        body: bodySteam(),
+        bottomNavigationBar: ConvexAppBar(
+          elevation: 0.0,
+          items: [
+            TabItem(
+              icon: Image.asset(
+                "assets/images/icon_sensor.png",
+                color:
+                    _selectedIndex == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
+                scale: 3,
               ),
-              onTap: () {
-                Get.toNamed('/setting');
-              },
+              // title: '센서',
             ),
-          ),
-        ],
-      ),
-      body: bodySteam(),
-      bottomNavigationBar: ConvexAppBar(
-        elevation: 0.0,
-        items: [
-          TabItem(
-            icon: Image.asset(
-              "assets/images/icon_sensor.png",
-              color:
-                  _selectedIndex == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
-              scale: 3,
+            TabItem(
+              icon: Image.asset(
+                "assets/images/icon_env.png",
+                color:
+                    _selectedIndex == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
+                scale: 3,
+              ),
+              // title: '환경제어',
             ),
-            // title: '센서',
-          ),
-          TabItem(
-            icon: Image.asset(
-              "assets/images/icon_env.png",
-              color:
-                  _selectedIndex == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
-              scale: 3,
+            TabItem(
+              icon: Image.asset(
+                "assets/images/icon_soil.png",
+                color:
+                    _selectedIndex == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
+                scale: 3,
+              ),
+              // title: '토양제어',
             ),
-            // title: '환경제어',
-          ),
-          TabItem(
-            icon: Image.asset(
-              "assets/images/icon_soil.png",
-              color:
-                  _selectedIndex == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
-              scale: 3,
+            TabItem(
+              icon: Image.asset(
+                "assets/images/icon_cctv.png",
+                color:
+                    _selectedIndex == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
+                scale: 3,
+              ),
+              // title: '',
             ),
-            // title: '토양제어',
-          ),
-          TabItem(
-            icon: Image.asset(
-              "assets/images/icon_cctv.png",
-              color:
-                  _selectedIndex == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
-              scale: 3,
-            ),
-            // title: '',
-          ),
-        ],
-        // currentIndex: _selectedIndex,
-        // selectedItemColor: Colors.black,
-        // unselectedItemColor: Colors.white,
-        backgroundColor: Color(0xff2E6645),
-        onTap: _onItemTapped,
-        top: 0,
-        color: Color(0xffFFFFFF),
-        // activeColor: Color(0xff222222),
+          ],
+          // currentIndex: _selectedIndex,
+          // selectedItemColor: Colors.black,
+          // unselectedItemColor: Colors.white,
+          backgroundColor: Color(0xff2E6645),
+          onTap: _onItemTapped,
+          top: 0,
+          color: Color(0xffFFFFFF),
+          // activeColor: Color(0xff222222),
+        ),
       ),
     );
   }
