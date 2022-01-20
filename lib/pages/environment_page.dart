@@ -129,64 +129,88 @@ class _EnvironmentState extends State<EnvironmentPage> {
     // final controller = Get.put(CounterController());
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
-      body: Container(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              toolbarHeight: Get.height * 0.45,
-              backgroundColor: Color(0xffF5F9FC),
-              title: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Farm in Earth',
-                        style:
-                            TextStyle(color: Color(0xff2E8953), fontSize: 22),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: true,
+                toolbarHeight: Get.height * 0.45,
+                backgroundColor: Color(0xffF5F9FC),
+                title: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Farm in Earth',
+                          style:
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                        ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(siteDropdown,
-                          style: TextStyle(color: Colors.black, fontSize: 17)),
-                    ),
-                    SizedBox(height: Get.height * 0.05),
-                    MyWeather(),
-                  ]),
-            ),
-            SliverList(
-              // itemExtent: 3.0,
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xffF5F9FC),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(siteDropdown,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 17)),
                       ),
-                      child: Column(
-                        children: [
-                          SideMotor(),
-                          TopMotor(),
-                          EtcMotor(),
-                        ],
-                      ));
-                },
-                childCount: 1,
+                      SizedBox(height: Get.height * 0.05),
+                      MyWeather(),
+                    ]),
+              ),
+              SliverList(
+                // itemExtent: 3.0,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xffF5F9FC),
+                        ),
+                        child: Column(
+                          children: [
+                            SideMotor(),
+                            TopMotor(),
+                            EtcMotor(),
+                          ],
+                        ));
+                  },
+                  childCount: 1,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            // height: Get.height * 1 / 14,
+            // width: Get.width,
+            child: Container(
+              height: Get.height * 1 / 30,
+              width: Get.width,
+              // color: Color(0xff2E8953),
+
+              // decoration: BoxDecoration(
+              //     color: Color(0xffF5F9FC),
+              //     borderRadius: BorderRadius.only(
+              //         bottomLeft: Radius.circular(40.0),
+              //         bottomRight: Radius.circular(40.0)),
+              //     border: null),
+              child: Image.asset(
+                'assets/images/image_bottombar.png',
+                fit: BoxFit.fill,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        height: Get.height * 1 / 14,
-        decoration: BoxDecoration(
-            color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0)),
-            border: null),
-      ),
+      // bottomNavigationBar: Container(
+      //   height: Get.height * 1 / 14,
+      //   decoration: BoxDecoration(
+      //       color: Color(0xffF5F9FC),
+      //       borderRadius: BorderRadius.only(
+      //           bottomLeft: Radius.circular(40.0),
+      //           bottomRight: Radius.circular(40.0)),
+      //       border: null),
+      // ),
     );
   }
 }
@@ -443,11 +467,11 @@ class EtcMotor extends StatefulWidget {
 }
 
 class _EtcMotorState extends State<EtcMotor> {
-
   //shared preferences all side toggle status
   Future<Null> getSideSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    getToggleStatus = prefs.getInt('allSideValue') ?? 0;;
+    getToggleStatus = prefs.getInt('allSideValue') ?? 0;
+    ;
     print('## get all side value : $getToggleStatus');
     setState(() {
       allSideToggleInit = getToggleStatus;
@@ -457,7 +481,8 @@ class _EtcMotorState extends State<EtcMotor> {
   //shared preferences top toggle status
   Future<Null> getTopSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;;
+    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
+    ;
     print('## get all side value : $getTopToggleStatus');
     setState(() {
       allTopToggleInit = getTopToggleStatus;
@@ -662,15 +687,16 @@ Widget _allTopToggleSwitch(
   );
 }
 
-Future<void> _updateMotorData(var motor_name, var motor_type,
-    var motor_action, var update_motor_type) async {
+Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
+    var update_motor_type) async {
   var params = {
     'motor_name': motor_name,
     'motor_type': motor_type,
     'motor_action': motor_action,
   };
-  var response =
-  await dio.put('$url/$userId/site/$siteId/controls/$update_motor_type/motors', data: params);
+  var response = await dio.put(
+      '$url/$userId/site/$siteId/controls/$update_motor_type/motors',
+      data: params);
   print('### 모터 타입 변경 완료 : $response');
 }
 
@@ -696,7 +722,8 @@ Widget _sideControlSwitch() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _edgeLeftPadding(20,
-                  child: Text("${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
+                  child: Text(
+                      "${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
               _edgeRightPadding(
@@ -736,13 +763,14 @@ Widget _sideControlSwitch() {
                     print(
                         '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                     print('### Motor${index + 1} value는 : $_switch');
-                    print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
+                    print(
+                        '### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
                     // MQTT 통신
                     _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
                         '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                     // DB 업데이트
-                    _updateMotorData("${stream.side_motor_name[index]}", "side", "$value", "side");
-
+                    _updateMotorData("${stream.side_motor_name[index]}", "side",
+                        "$value", "side");
                   },
                 ),
               )
@@ -769,7 +797,8 @@ Widget _topControlSwitch() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _edgeLeftPadding(20,
-                  child: Text("${stream.motor_name[index]})", //DB에 있는 motor_name 반영
+                  child: Text(
+                      "${stream.motor_name[index]})", //DB에 있는 motor_name 반영
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
               _edgeRightPadding(

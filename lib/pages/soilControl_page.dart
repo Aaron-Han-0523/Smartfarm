@@ -102,65 +102,89 @@ class _SoilControlPageState extends State<SoilControlPage> {
     // FutureBuilder listview
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
-      body: Container(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              toolbarHeight: Get.height * 0.45,
-              backgroundColor: Color(0xffF5F9FC),
-              title: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Farm in Earth',
-                        style:
-                            TextStyle(color: Color(0xff2E8953), fontSize: 22),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: true,
+                toolbarHeight: Get.height * 0.45,
+                backgroundColor: Color(0xffF5F9FC),
+                title: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Farm in Earth',
+                          style:
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                        ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(siteDropdown,
-                          style: TextStyle(color: Colors.black, fontSize: 17)),
-                    ),
-                    SizedBox(height: Get.height * 0.05),
-                    MyWeather(),
-                  ]),
-            ),
-            SliverList(
-              // itemExtent: 3.0,
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xffF5F9FC),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(siteDropdown,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 17)),
                       ),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          MyPumps(),
-                          MyValves(),
-                        ],
-                      ));
-                },
-                childCount: 1,
+                      SizedBox(height: Get.height * 0.05),
+                      MyWeather(),
+                    ]),
+              ),
+              SliverList(
+                // itemExtent: 3.0,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xffF5F9FC),
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            MyPumps(),
+                            MyValves(),
+                          ],
+                        ));
+                  },
+                  childCount: 1,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            // height: Get.height * 1 / 14,
+            // width: Get.width,
+            child: Container(
+              height: Get.height * 1 / 30,
+              width: Get.width,
+              // color: Color(0xff2E8953),
+
+              // decoration: BoxDecoration(
+              //     color: Color(0xffF5F9FC),
+              //     borderRadius: BorderRadius.only(
+              //         bottomLeft: Radius.circular(40.0),
+              //         bottomRight: Radius.circular(40.0)),
+              //     border: null),
+              child: Image.asset(
+                'assets/images/image_bottombar.png',
+                fit: BoxFit.fill,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        height: Get.height * 1 / 14,
-        decoration: BoxDecoration(
-            color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0)),
-            border: null),
-      ),
+      // bottomNavigationBar: Container(
+      //   height: Get.height * 1 / 14,
+      //   decoration: BoxDecoration(
+      //       color: Color(0xffF5F9FC),
+      //       borderRadius: BorderRadius.only(
+      //           bottomLeft: Radius.circular(40.0),
+      //           bottomRight: Radius.circular(40.0)),
+      //       border: null),
+      // ),
     );
   }
 }

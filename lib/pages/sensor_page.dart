@@ -61,50 +61,38 @@ class _SensorPageState extends State<SensorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff2E6645),
-      body: Container(
-        // height: Get.height * 1 / 2,
-        // color: Color(0xffF5F9FC),
-        // decoration: BoxDecoration(
-        //   color: Color(0xffF5F9FC),
-        //   borderRadius: BorderRadius.circular(40),
-        // ),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              toolbarHeight: Get.height * 0.14,
-              backgroundColor: Color(0xffF5F9FC),
-              title: Column(children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Farm in Earth',
-                    style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
+      // backgroundColor: Color(0xff2E6645),
+      body: Stack(
+        // fit: StackFit.expand,
+        // clipBehavior: Clip.none,
+        children: [
+          CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: true,
+                toolbarHeight: Get.height * 0.14,
+                backgroundColor: Color(0xffF5F9FC),
+                title: Column(children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Farm in Earth',
+                      style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                    ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(siteDropdown,
-                      style: TextStyle(color: Colors.black, fontSize: 17)),
-                ),
-              ]),
-            ),
-            SliverList(
-              // itemExtent: 3.0,
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Container(
-                    // color: Colors.red,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xffF5F9FC),
-                        // borderRadius: BorderRadius.only(
-                        //     bottomLeft: Radius.circular(10),
-                        //     bottomRight: Radius.circular(10)),
-                      ),
-                      alignment: Alignment.center,
-                      // color: Color(0xffF5F9FC),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(siteDropdown,
+                        style: TextStyle(color: Colors.black, fontSize: 17)),
+                  ),
+                ]),
+              ),
+              SliverList(
+                // itemExtent: 3.0,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Container(
+                      // color: Colors.red,
                       child: Column(
                         children: [
                           MyAccordian(),
@@ -112,24 +100,50 @@ class _SensorPageState extends State<SensorPage> {
                           MyGraph(),
                         ],
                       ),
-                    ),
-                  );
-                },
-                childCount: 1,
+                    );
+                  },
+                  childCount: 1,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            // height: Get.height * 1 / 14,
+            // width: Get.width,
+            child: Container(
+              height: Get.height * 1 / 30,
+              width: Get.width,
+              // color: Color(0xff2E8953),
+
+              // decoration: BoxDecoration(
+              //     color: Color(0xffF5F9FC),
+              //     borderRadius: BorderRadius.only(
+              //         bottomLeft: Radius.circular(40.0),
+              //         bottomRight: Radius.circular(40.0)),
+              //     border: null),
+              child: Image.asset(
+                'assets/images/image_bottombar.png',
+                fit: BoxFit.fill,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        height: Get.height * 1 / 14,
-        decoration: BoxDecoration(
-            color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0)),
-            border: null),
-      ),
+
+      // bottomNavigationBar: Container(
+      //   height: Get.height * 1 / 14,
+      //   // decoration: BoxDecoration(
+      //   //     color: Color(0xffF5F9FC),
+      //   //     borderRadius: BorderRadius.only(
+      //   //         bottomLeft: Radius.circular(40.0),
+      //   //         bottomRight: Radius.circular(40.0)),
+      //   //     border: null,),
+      //   child: Image.asset(
+      //     'assets/images/image_bottombar.png',
+      //     fit: BoxFit.fill,
+      //   ),
+      // ),
     );
   }
 }
@@ -397,27 +411,25 @@ Widget _lineChart() {
   //   _SalesData('May', 28)
   // ];
 
-  return Container(
-    color: Colors.white,
-    child: SfCartesianChart(
-        primaryXAxis: CategoryAxis(),
-        series: <ChartSeries<_InnerTempData, String>>[
-          LineSeries<_InnerTempData, String>(
-              dataSource: data,
-              xValueMapper: (_InnerTempData sales, _) => sales.dateTime,
-              yValueMapper: (_InnerTempData sales, _) => sales.tempValue,
-              name: 'InnerTemp',
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false)),
-          // LineSeries<_SalesData, String>(
-          //     dataSource: subData,
-          //     xValueMapper: (_SalesData sales, _) => sales.year,
-          //     yValueMapper: (_SalesData sales, _) => sales.sales,
-          //     name: 'Sales',
-          //     // Enable data label
-          //     dataLabelSettings: DataLabelSettings(isVisible: false))
-        ]),
-  );
+  return SfCartesianChart(
+      backgroundColor: Colors.white,
+      primaryXAxis: CategoryAxis(),
+      series: <ChartSeries<_InnerTempData, String>>[
+        LineSeries<_InnerTempData, String>(
+            dataSource: data,
+            xValueMapper: (_InnerTempData sales, _) => sales.dateTime,
+            yValueMapper: (_InnerTempData sales, _) => sales.tempValue,
+            name: 'InnerTemp',
+            // Enable data label
+            dataLabelSettings: DataLabelSettings(isVisible: false)),
+        // LineSeries<_SalesData, String>(
+        //     dataSource: subData,
+        //     xValueMapper: (_SalesData sales, _) => sales.year,
+        //     yValueMapper: (_SalesData sales, _) => sales.sales,
+        //     name: 'Sales',
+        //     // Enable data label
+        //     dataLabelSettings: DataLabelSettings(isVisible: false))
+      ]);
 }
 
 class _InnerTempData {

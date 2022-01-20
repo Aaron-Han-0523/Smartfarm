@@ -86,45 +86,68 @@ class _CCTVPageState extends State<CCTVPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
-      body: Container(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              toolbarHeight: Get.height * 0.14,
-              backgroundColor: Color(0xffF5F9FC),
-              title: Column(children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Farm in Earth',
-                    style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                toolbarHeight: Get.height * 0.14,
+                backgroundColor: Color(0xffF5F9FC),
+                title: Column(children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Farm in Earth',
+                      style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                    ),
                   ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(stream.sitesDropdownValue,
+                        style: TextStyle(color: Colors.black, fontSize: 17)),
+                  ),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return SingleChildScrollView(
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffF5F9FC),
+                          ),
+                          alignment: Alignment.center,
+                          child: _cctvBuilder()),
+                    );
+                  },
+                  childCount: 1,
                 ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(stream.sitesDropdownValue,
-                      style: TextStyle(color: Colors.black, fontSize: 17)),
-                ),
-              ]),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return SingleChildScrollView(
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffF5F9FC),
-                        ),
-                        alignment: Alignment.center,
-                        child: _cctvBuilder()),
-                  );
-                },
-                childCount: 1,
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            // height: Get.height * 1 / 14,
+            // width: Get.width,
+            child: Container(
+              height: Get.height * 1 / 30,
+              width: Get.width,
+              // color: Color(0xff2E8953),
+
+              // decoration: BoxDecoration(
+              //     color: Color(0xffF5F9FC),
+              //     borderRadius: BorderRadius.only(
+              //         bottomLeft: Radius.circular(40.0),
+              //         bottomRight: Radius.circular(40.0)),
+              //     border: null),
+              child: Image.asset(
+                'assets/images/image_bottombar.png',
+                fit: BoxFit.fill,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         height: Get.height * 1 / 14,
