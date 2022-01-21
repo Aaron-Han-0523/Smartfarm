@@ -47,7 +47,7 @@ var motor_6 = stream.motor_6;
 
 List sideMotors = stream.sideMotors;
 List topMotors = stream.topMotors;
-List motor_name = stream.motor_name;
+List motor_name = stream.top_motor_name;
 List switchId = stream.switch_id;
 
 // visibility
@@ -67,9 +67,6 @@ int? getToggleStatus;
 int? getTopToggleStatus;
 int? allSideToggleInit;
 int? allTopToggleInit;
-
-//graph visibility
-bool _graph = true;
 
 // expanded tile
 bool _customTileExpanded = false;
@@ -106,6 +103,7 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
+
   void getStatus() async {
     String _switchStatus = await motor_1;
     print('toggle motor는 : $motor_1');
@@ -119,6 +117,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
 
   void initState() {
     super.initState();
+    print("motor name은 : ${stream.side_motor_name}");
   }
 
   var siteDropdown =
@@ -702,12 +701,29 @@ Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
 
 // 측장 개폐기 제어
 Widget _sideControlSwitch() {
-  print('## motor id 확인 : ${stream.motor_status}'); // matt 상 모터 상태가 옴
+  print('## motor name 확인 : ${stream.motor_id}'); // matt 상 모터 상태가 옴
+  print('## motor id 확인 : ${stream.side_motor_id}'); // matt 상 모터 상태가 옴
 
+  // if (stream.motor_id.any((element) => stream.side_motor_id.contains(element))) {
+  //   print('side!!!!!!!!!!!!!!!!!!! ');
+  // }else {
+  //   print('side3!!!!!!!!!!!!!!!!!!!');
+  //
+  // }
+
+  // mqtt motor id와 DB에 저장된 motor id가 같은지 비교
   // for (var i = 0; i < stream.sideMotors.length; i++) {
-  //   var sideMotorName = stream.sideMotors[i]['motor_name'];
-  //   stream.side_motor_name.add(sideMotorName);
-  //   print('## homePage motor name : ${stream.side_motor_name}');
+  //   print('side!!!!!!!!!!!!!!!!!!!');
+  //   // print('side2!!!!!!!!!!!!!!!!!!! : ${stream.motor_id[i]}');
+  //   if (stream.motor_id[i] == stream.side_motor_id.contains(stream.motor_id)) {
+  //     print('side3!!!!!!!!!!!!!!!!!!!');
+  //
+  //     // stream.motor_id[i] ==
+  //     // print('## [environment page] sid motor name 확인: ${stream.side_motor_name[i]}');
+  //     return stream.side_motor_name[i];
+  //   }
+  //   // print('side3!!!!!!!!!!!!!!!!!!!');
+  //
   // }
 
   return ListView.builder(
@@ -715,7 +731,7 @@ Widget _sideControlSwitch() {
       primary: false,
       shrinkWrap: true,
       itemCount: sideMotors.length,
-      itemBuilder: (BuildContext context, var index) {
+      itemBuilder: (BuildContext context, int index) {
         return _marginContainer(
           height: Get.height * 0.09,
           child: Row(
@@ -740,7 +756,8 @@ Widget _sideControlSwitch() {
                   activeFgColor: Color(0xff222222),
                   inactiveBgColor: Color(0xffFFFFFF),
                   inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: stream.motorStatus[index],
+                  initialLabelIndex: stream.sideMotorStatus[index],
+                  // stream.topMotors[index],
                   totalSwitches: 3,
                   labels: ['열림', '정지', '닫힘'],
                   radiusStyle: true,
@@ -749,22 +766,20 @@ Widget _sideControlSwitch() {
 
                     if (value == 0) {
                       _switch = 'open';
-                      stream.motorStatus[index] = 0;
+                      stream.topMotors[index] = 0;
                     }
                     if (value == 1) {
                       _switch = 'stop';
-                      stream.motorStatus[index] = 1;
+                      stream.topMotors[index] = 1;
                     }
                     if (value == 2) {
                       _switch = 'close';
-                      stream.motorStatus[index] = 2;
+                      stream.topMotors[index] = 2;
                     }
                     print('### Motor${index + 1} toggle value는 : $value');
-                    print(
-                        '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
+                    print('### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                     print('### Motor${index + 1} value는 : $_switch');
-                    print(
-                        '### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
+                    print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
                     // MQTT 통신
                     _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
                         '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
@@ -798,7 +813,7 @@ Widget _topControlSwitch() {
             children: [
               _edgeLeftPadding(20,
                   child: Text(
-                      "${stream.motor_name[index]})", //DB에 있는 motor_name 반영
+                      "${stream.top_motor_name[index]})", //DB에 있는 motor_name 반영
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
               _edgeRightPadding(
@@ -815,7 +830,8 @@ Widget _topControlSwitch() {
                   activeFgColor: Color(0xff222222),
                   inactiveBgColor: Color(0xffFFFFFF),
                   inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: stream.motorStatus[index],
+                  initialLabelIndex: 1,
+                  // stream.topMotors[index],
                   totalSwitches: 3,
                   labels: ['열림', '정지', '닫힘'],
                   radiusStyle: true,
@@ -824,15 +840,15 @@ Widget _topControlSwitch() {
 
                     if (value == 0) {
                       _switch = 'open';
-                      stream.motorStatus[index] = 0;
+                      stream.topMotors[index] = 0;
                     }
                     if (value == 1) {
                       _switch = 'stop';
-                      stream.motorStatus[index] = 1;
+                      stream.topMotors[index] = 1;
                     }
                     if (value == 2) {
                       _switch = 'close';
-                      stream.motorStatus[index] = 2;
+                      stream.topMotors[index] = 2;
                     }
                     print('toggle value는 : $value');
                     print('toggle motor는 : $motor_1');
@@ -842,7 +858,7 @@ Widget _topControlSwitch() {
                         '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                     print('### Motor${index + 1} value는 : $_switch');
                     print(
-                        '### Motor${index + 1} stream index는 : ${stream.motorStatus[index]}');
+                        '### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
 
                     _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
                         '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');

@@ -60,12 +60,27 @@ List sensorStatus = []; // pump1's on/off, pump2's on/off
 // environment control page
 List<dynamic> sideMotors = [];
 List<dynamic> topMotors = [];
+
 List motors = [];
-List motor_name = [];
+
+List top_motor_name = []; // DB에 저장된 motor name 측창(전)
 List side_motor_name = [];
 List motor_status = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6];
-List<int> motorStatus = [];
-List<int> sideMotorStatus = [];
+
+// mqtt의 motor_id key 담기
+List motor_id = [];
+// DB에 저장된 side motor id 담기
+List side_motor_id = [];
+// DB에 저장된 top motor id 담기
+List top_motor_id = [];
+
+// mqtt 상에 motor 상태 값 담기
+List<int> mqttTopMotorStatus = [];
+List<int> mqttSideMotorStatus = [];
+
+//DB에서 motor 상태 불러오기
+List<dynamic> topMotorStatus = [];
+List<dynamic> sideMotorStatus = [];
 
 List switchs = [];
 List switch_id = [];

@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
     // environment page
     stream.sideMotors = [];
     stream.topMotors = [];
-    stream.motor_name = [];
+    stream.top_motor_name = [];
 
     // soilControl page
     stream.pumps = [];
@@ -59,8 +59,9 @@ class _HomeState extends State<Home> {
 
     stream.pumpStatus = [];
     stream.valveStatus = [];
-    stream.motorStatus = [];
-    stream.sideMotorStatus = [];
+    stream.mqttTopMotorStatus = [];
+    stream.mqttSideMotorStatus = [];
+
 
     getData();
     super.initState();
@@ -111,40 +112,45 @@ class _HomeState extends State<Home> {
       }
       print('##### homePage GET CCTV Url List: ${stream.cctv_url}');
 
-      // side motor name 가져오기
-      final getSideMotors =
-          await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+      //----------motor----------------------------------------------
+      // ## side motor -----------
+      final getSideMotors = await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
       print('##### homePage GET sideMotors list : ${stream.sideMotors}');
-      print(
-          '##### homePage sideMotors List length : ${stream.sideMotors.length}');
-      // stream.motor_name = [];
-      for (var i = 0; i < stream.sideMotors.length; i++) {
-        var sideMotorName = stream.sideMotors[i]['motor_name'];
-        stream.side_motor_name.add(sideMotorName);
-        print('## homePage motor name : ${stream.side_motor_name}');
-      }
+      print('##### homePage sideMotors List length : ${stream.sideMotors.length}');
 
-      //side motor 상태 가져오기
+      // side motor name 가져오기
+      stream.side_motor_name  = stream.sideMotors.map((e) => e["motor_name"].toString()).toList();
+      print('## [homepage] side motor name 가져오기: ${stream.side_motor_name}');
 
+      // DB에서 side motor 상태 가져오기
+      stream.sideMotorStatus = stream.sideMotors.map((e) => e["motor_action"].toString()).toList();
+      print('## [homepage] side motor status 가져오기: ${stream.sideMotorStatus}');
 
-      // side motors id 가져오기
+      // DB에서 side motors id 가져오기
+      // for문으로 가져오지 않은 이유? 앱을 새로 실행할 때마다 for문이 돌면서 값을 지속적으로 추가시키는 문제 발생
+      stream.side_motor_id  = stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
+      print('## [homepage] side motor id 가져오기: ${stream.side_motor_id}');
 
-
-      // 천창
-      final getTopMotors =
-          await dio.get('$url/$userId/site/$siteId/controls/top/motors');
+      // ## top motor --------
+      final getTopMotors = await dio.get('$url/$userId/site/$siteId/controls/top/motors');
       stream.topMotors = getTopMotors.data['data'];
       print('##### homePage GET topMotors list : ${stream.topMotors}');
-      print(
-          '##### homePage topMotors List length : ${stream.topMotors.length}');
-      stream.motor_name = [];
-      for (var i = 0; i < stream.topMotors.length; i++) {
-        var topMotorName = stream.topMotors[i]['motor_name'];
-        stream.motor_name.add(topMotorName);
-      }
+      print('##### homePage topMotors List length : ${stream.topMotors.length}');
 
-      stream.motorStatus = [
+      // DB에서 top motor name 가져오기
+      stream.top_motor_name  = stream.topMotors.map((e) => e["motor_name"].toString()).toList();
+      print('## [homepage] top motor name 가져오기: ${stream.top_motor_name}');
+
+      // DB에서 top motor id 가져오기
+      stream.top_motor_id  = stream.topMotors.map((e) => e["motor_id"].toString()).toList();
+      print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
+
+      // DB에서 top motor 상태 가져오기
+      stream.topMotorStatus = stream.topMotors.map((e) => e["motor_action"].toString()).toList();
+      print('## [homepage] top motor status 가져오기: ${stream.topMotorStatus}');
+
+      stream.mqttTopMotorStatus = [
         stream.motor_1 == 'open'
             ? 0
             : stream.motor_1 == 'stop'
@@ -169,7 +175,7 @@ class _HomeState extends State<Home> {
         stream.pump_2 == 'on' ? 1 : 0,
       ];
 
-      stream.sideMotorStatus = [
+      stream.mqttSideMotorStatus = [
         stream.motor_4 == 'open'
             ? 0
             : stream.motor_4 == 'stop'
@@ -186,7 +192,7 @@ class _HomeState extends State<Home> {
                 ? 1
                 : 2,
       ];
-      print('motorStatus: ${stream.motorStatus}');
+      print('motorStatus: ${stream.mqttTopMotorStatus}');
 
       // pumps
       final getPumps =

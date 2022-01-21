@@ -437,17 +437,17 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
               _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
                   '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
 
-              // var pumpId = 'pump_${index + 1}';
-              // var data = {
-              //   'uid': userId,
-              //   'sid': siteId,
-              //   'pump_id': pumpId,
-              //   'pump_action': value,
-              // };
-              // final putPumps = await dio.put(
-              //     '$url/$userId/site/$siteId/controls/pumps/$pumpId',
-              //     data: data);
-              // print(putPumps);
+              var pumpId = 'pump_${index + 1}';
+              var data = {
+                'uid': userId,
+                'sid': siteId,
+                'pump_id': pumpId,
+                'pump_action': value,
+              };
+              final putPumps = await dio.put(
+                  '$url/$userId/site/$siteId/controls/pumps/$pumpId',
+                  data: data);
+              print(putPumps);
             },
           ),
         ),
