@@ -50,6 +50,8 @@ List topMotors = stream.topMotors;
 List motor_name = stream.top_motor_name;
 List switchId = stream.switch_id;
 
+List sideStatus = stream.sideMotorStatus;
+List topStatus = stream.topMotorStatus;
 // visibility
 bool status1 = true;
 bool status2 = true;
@@ -74,26 +76,29 @@ bool _customTileExpanded = false;
 // temp
 var temp = int.parse(extTemp);
 
-// // getData()
-// void _getMotorData() async {
-//   // motors
-//   final getMotor = await dio.get('$url/$userId/site/$siteId/controls/motors');
-//   stream.motors = getMotor.data;
-//   print('motor list : ${stream.motors}');
-//   print('motor length : ${stream.motors.length}');
-//   stream.motor_name = [];
-//   for (var i = 0; i < stream.motors.length; i++) {
-//     var motorName = stream.motors[i]['motor_name'];
-//     stream.motor_name.add(motorName);
-//   }
+Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
+    var update_motor_type) async {
+  var params = {
+    'motor_name': motor_name,
+    'motor_type': motor_type,
+    'motor_action': motor_action,
+  };
+  var response = await dio.put(
+      '$url/$userId/site/$siteId/controls/$update_motor_type/motors',
+      data: params);
+  print('### 모터 타입 변경 완료 : $response');
+}
 
-//   List<bool> motorStatus = [
-//     stream.pump_1 == 'on' ? true : false,
-//     stream.pump_2 == 'on' ? true : false
-//   ];
-//   print('motorStatus: $motorStatus');
-//   stream.motorStatus = motorStatus;
-// }
+Future<void> _updateAllMotorData(var motor_action,
+    var update_motor_type) async {
+  var params = {
+    'motor_action': motor_action,
+  };
+  var response = await dio.put(
+      '$url/$userId/site/$siteId/controls/$update_motor_type/motors',
+      data: params);
+  print('### 사이드 전체 모터 타입 변경 완료 : $response');
+}
 
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
@@ -104,20 +109,8 @@ class EnvironmentPage extends StatefulWidget {
 
 class _EnvironmentState extends State<EnvironmentPage> {
 
-  void getStatus() async {
-    String _switchStatus = await motor_1;
-    print('toggle motor는 : $motor_1');
-
-    setState(() {
-      if (_switchStatus == 'open') {
-      } else if (_switchStatus == 'stop') {
-      } else if (_switchStatus == 'close') {}
-    });
-  }
-
   void initState() {
     super.initState();
-    print("motor name은 : ${stream.side_motor_name}");
   }
 
   var siteDropdown =
@@ -212,6 +205,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
       // ),
     );
   }
+
 }
 
 // 날씨
@@ -378,6 +372,7 @@ class _SideMotorState extends State<SideMotor> {
               data:
                   Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
+                initiallyExpanded: true,
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
                 trailing: Icon(_customTileExpanded
@@ -414,6 +409,152 @@ class _SideMotorState extends State<SideMotor> {
       ],
     );
   }
+  Widget _allSideToggleSwitch(
+      String text, var positions, var userIds, var siteIds) {
+    return _marginContainer(
+      height: Get.height * 0.09,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _edgeLeftPadding(20,
+              child: Text(text,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+          _edgeRightPadding(
+            10,
+            child: ToggleSwitch(
+              fontSize: 12,
+              minWidth: 65.0,
+              cornerRadius: 80.0,
+              activeBgColors: [
+                [Color(0xffe3fbed)],
+                [Color(0xffFFD6D6)],
+                [Color(0xfff2f2f2)]
+              ],
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
+              initialLabelIndex: getToggleStatus,
+              totalSwitches: 3,
+              labels: ['전체열림', '전체정지', '전체닫힘'],
+              radiusStyle: true,
+              onToggle: (value) async {
+                getToggleStatus = value;
+                String _switch = '';
+
+                if (value == 0) {
+                  setState(() {
+                    for(int i = 0; i<sideStatus.length;i++ ,){
+                      sideStatus[i]=0;
+
+                    };
+                  });
+                  _switch = 'open';
+                }
+                if (value == 1) {
+                  _switch = 'stop';
+                  setState(() {
+                    for(int i = 0; i<sideStatus.length;i++ ,){
+                      sideStatus[i]=value;
+                    };
+                  });
+                }
+                if (value == 2) {
+                  _switch = 'close';
+                  setState(() {
+                    for(int i = 0; i<sideStatus.length;i++ ,){
+                      sideStatus[i]=value;
+                    };
+                  });
+                }
+                print('toggle value는 : $value');
+                print('toggle type은 : ${value.runtimeType}');
+                print('value는 : $_switch');
+                // mqtt
+                _mqttClass.allSet('did', stream.sideMotorId.length, 'dact', _switch,
+                    '/sf/e0000001/req/motor', '/sf/e0000001/req/motor', stream.sideMotorId);
+                // DB 변동
+                _updateAllMotorData(value, "side");
+                // shared preferences
+                toggle.saveAllSideToggle(value);
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decorations(),
+    );
+  }
+
+  Widget _sideControlSwitch() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        primary: false,
+        shrinkWrap: true,
+        itemCount: sideMotors.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _marginContainer(
+            height: Get.height * 0.09,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _edgeLeftPadding(20,
+                    child: Text(
+                        "${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
+                        style: _textStyle(
+                            Color(0xff222222), FontWeight.normal, 15))),
+                _edgeRightPadding(
+                  10,
+                  child: ToggleSwitch(
+                    fontSize: 12,
+                    minWidth: 60.0,
+                    cornerRadius: 80.0,
+                    activeBgColors: [
+                      [Color(0xffe3fbed)],
+                      [Color(0xffFFD6D6)],
+                      [Color(0xfff2f2f2)]
+                    ],
+                    activeFgColor: Color(0xff222222),
+                    inactiveBgColor: Color(0xffFFFFFF),
+                    inactiveFgColor: Color(0xff222222),
+                    initialLabelIndex: sideStatus[index],
+                    // stream.topMotors[index],
+                    totalSwitches: 3,
+                    labels: ['열림', '정지', '닫힘'],
+                    radiusStyle: true,
+                    onToggle: (value) async {
+                      String _switch = '';
+
+                      if (value == 0) {
+                        _switch = 'open';
+                        // stream.topMotors[index] = 0;
+                      }
+                      if (value == 1) {
+                        _switch = 'stop';
+                        // stream.topMotors[index] = 1;
+                      }
+                      if (value == 2) {
+                        _switch = 'close';
+                        // stream.topMotors[index] = 2;
+                      }
+                      print('### Motor${index + 1} toggle value는 : $value');
+                      print('### Motor${index + 1} toggle type은 : ${value.runtimeType}');
+                      print('### Motor${index + 1} value는 : $_switch');
+                      print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
+                      // MQTT 통신
+                      _mqttClass.ctlSet('did', "${stream.sideMotorId[index]}", 'dact', _switch,
+                          '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                      // DB 업데이트
+                      _updateMotorData("${stream.side_motor_name[index]}", "side",
+                          "$value", "side");
+                    },
+                  ),
+                )
+              ],
+            ),
+            decoration: _decorations(),
+          );
+        });
+  }
 }
 
 class TopMotor extends StatefulWidget {
@@ -424,6 +565,37 @@ class TopMotor extends StatefulWidget {
 }
 
 class _TopMotorState extends State<TopMotor> {
+  //shared preferences all side toggle status
+  Future<Null> getSideSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getToggleStatus = prefs.getInt('allSideValue') ?? 0;
+    ;
+    print('## get all side value : $getToggleStatus');
+    setState(() {
+      allSideToggleInit = getToggleStatus;
+    });
+  }
+
+  //shared preferences top toggle status
+  Future<Null> getTopSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
+    ;
+    print('## get all top value : $getTopToggleStatus');
+    setState(() {
+      allTopToggleInit = getTopToggleStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToggleStatus;
+    getTopToggleStatus;
+    getSideSharedPrefs();
+    getTopSharedPrefs();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _fromLTRBPadding(
@@ -456,6 +628,153 @@ class _TopMotorState extends State<TopMotor> {
       ),
     );
   }
+  //천장 개폐기 제어 전체
+  Widget _allTopToggleSwitch(
+      String text, var positions, var userIds, var siteIds) {
+    return _marginContainer(
+      height: Get.height * 0.09,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _edgeLeftPadding(20,
+              child: Text(text,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+          _edgeRightPadding(
+            10,
+            child: ToggleSwitch(
+              fontSize: 12,
+              minWidth: 65.0,
+              cornerRadius: 80.0,
+              activeBgColors: [
+                [Color(0xffe3fbed)],
+                [Color(0xffFFD6D6)],
+                [Color(0xfff2f2f2)]
+              ],
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
+              initialLabelIndex: getTopToggleStatus, // 상태 반영 안돼서 확인 필요함
+              totalSwitches: 3,
+              labels: ['전체열림', '전체정지', '전체닫힘'],
+              radiusStyle: true,
+              onToggle: (value) async {
+                getTopToggleStatus = value;
+                String _switch = '';
+
+                if (value == 0) {
+                  setState(() {
+                    for(int i = 0; i<topStatus.length;i++ ,){
+                      topStatus[i]=0;
+
+                    };
+                  });
+                  _switch = 'open';
+                }
+                if (value == 1) {
+                  _switch = 'stop';
+                  setState(() {
+                    for(int i = 0; i<topStatus.length;i++ ,){
+                      topStatus[i]=value;
+                    };
+                  });
+                }
+                if (value == 2) {
+                  _switch = 'close';
+                  setState(() {
+                    for(int i = 0; i<topStatus.length;i++ ,){
+                      topStatus[i]=value;
+                    };
+                  });
+                }
+                print('toggle value는 : $value');
+                print('toggle type은 : ${value.runtimeType}');
+                print('value는 : $_switch');
+                // mqtt
+                _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
+                    '/sf/e0000001/req/motor', '/sf/e0000001/req/motor', stream.topMotorId);
+                // DB 변동
+                _updateAllMotorData(value, "top");
+                // shared preferencs
+                toggle.saveAllTopToggle(value);
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decorations(),
+    );
+  }
+  // 천창 개폐기 제어
+  Widget _topControlSwitch() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        primary: false,
+        shrinkWrap: true,
+        itemCount: topMotors.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _marginContainer(
+            height: Get.height * 0.09,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _edgeLeftPadding(20,
+                    child: Text(
+                        "${stream.top_motor_name[index]})", //DB에 있는 motor_name 반영
+                        style: _textStyle(
+                            Color(0xff222222), FontWeight.normal, 15))),
+                _edgeRightPadding(
+                  10,
+                  child: ToggleSwitch(
+                    fontSize: 12,
+                    minWidth: 60.0,
+                    cornerRadius: 80.0,
+                    activeBgColors: [
+                      [Color(0xffe3fbed)],
+                      [Color(0xffFFD6D6)],
+                      [Color(0xfff2f2f2)]
+                    ],
+                    activeFgColor: Color(0xff222222),
+                    inactiveBgColor: Color(0xffFFFFFF),
+                    inactiveFgColor: Color(0xff222222),
+                    initialLabelIndex: stream.topMotorStatus[index],
+                    // stream.topMotors[index],
+                    totalSwitches: 3,
+                    labels: ['열림', '정지', '닫힘'],
+                    radiusStyle: true,
+                    onToggle: (value) async {
+                      String _switch = '';
+
+                      if (value == 0) {
+                        _switch = 'open';
+                        // stream.topMotors[index] = 0;
+                      }
+                      if (value == 1) {
+                        _switch = 'stop';
+                        // stream.topMotors[index] = 1;
+                      }
+                      if (value == 2) {
+                        _switch = 'close';
+                        // stream.topMotors[index] = 2;
+                      }
+                      print('### Motor${index + 1} toggle value는 : $value');
+                      print('### Motor${index + 1} toggle type은 : ${value.runtimeType}');
+                      print('### Motor${index + 1} value는 : $_switch');
+                      print('### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
+                      // mqtt 업데이트
+                      _mqttClass.ctlSet('did', "${stream.topMotorId[index]}", 'dact', _switch,
+                          '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                      // DB 업데이트
+                      _updateMotorData("${stream.top_motor_name[index]}", "top",
+                          "$value", "top");
+                    },
+                  ),
+                )
+              ],
+            ),
+            decoration: _decorations(),
+          );
+        });
+  }
 }
 
 class EtcMotor extends StatefulWidget {
@@ -466,34 +785,9 @@ class EtcMotor extends StatefulWidget {
 }
 
 class _EtcMotorState extends State<EtcMotor> {
-  //shared preferences all side toggle status
-  Future<Null> getSideSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    getToggleStatus = prefs.getInt('allSideValue') ?? 0;
-    ;
-    print('## get all side value : $getToggleStatus');
-    setState(() {
-      allSideToggleInit = getToggleStatus;
-    });
-  }
-
-  //shared preferences top toggle status
-  Future<Null> getTopSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
-    ;
-    print('## get all side value : $getTopToggleStatus');
-    setState(() {
-      allTopToggleInit = getTopToggleStatus;
-    });
-  }
 
   void initState() {
     super.initState();
-    getToggleStatus;
-    getTopToggleStatus;
-    getSideSharedPrefs();
-    getTopSharedPrefs();
   }
 
   @override
@@ -516,20 +810,7 @@ class _EtcMotorState extends State<EtcMotor> {
                 15,
                 child: Column(
                   children: [
-                    _toggleSwitch2(
-                      context,
-                      '환풍기 (#1)',
-                      status8,
-                    ),
-                    _toggleSwitch2(
-                      context,
-                      '환풍기 (#2)',
-                      status9,
-                    ),
-                    _toggleSwitch2(
-                      context,
-                      '외부 제어 (#1)',
-                      status10,
+                    _etcSwitch(
                     ),
                   ],
                 ),
@@ -571,166 +852,14 @@ BoxDecoration _decorations() {
   );
 }
 
-// 측창 개폐기 제어 전체
-// int allSideToggleInit = 1;
-Widget _allSideToggleSwitch(
-    String text, var positions, var userIds, var siteIds) {
-  return _marginContainer(
-    height: Get.height * 0.09,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _edgeLeftPadding(20,
-            child: Text(text,
-                style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
-        _edgeRightPadding(
-          10,
-          child: ToggleSwitch(
-            fontSize: 12,
-            minWidth: 65.0,
-            cornerRadius: 80.0,
-            activeBgColors: [
-              [Color(0xffe3fbed)],
-              [Color(0xffFFD6D6)],
-              [Color(0xfff2f2f2)]
-            ],
-            activeFgColor: Color(0xff222222),
-            inactiveBgColor: Color(0xffFFFFFF),
-            inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: getToggleStatus,
-            totalSwitches: 3,
-            labels: ['전체열림', '전체정지', '전체닫힘'],
-            radiusStyle: true,
-            onToggle: (value) async {
-              allSideToggleInit = value;
-              String _switch = '';
 
-              if (value == 0) {
-                _switch = 'open';
-              }
-              if (value == 1) {
-                _switch = 'stop';
-              }
-              if (value == 2) {
-                _switch = 'close';
-              }
-              print('toggle value는 : $value');
-              print('toggle type은 : ${value.runtimeType}');
-              print('value는 : $_switch');
-              _mqttClass.allSet('did', sideMotors.length, 'dact', _switch,
-                  '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-              toggle.saveAllSideToggle(value);
-            },
-          ),
-        )
-      ],
-    ),
-    decoration: _decorations(),
-  );
-}
-
-//천장 개폐기 제어 전체
-// int allTopToggleInit = 1;
-Widget _allTopToggleSwitch(
-    String text, var positions, var userIds, var siteIds) {
-  return _marginContainer(
-    height: Get.height * 0.09,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _edgeLeftPadding(20,
-            child: Text(text,
-                style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
-        _edgeRightPadding(
-          10,
-          child: ToggleSwitch(
-            fontSize: 12,
-            minWidth: 65.0,
-            cornerRadius: 80.0,
-            activeBgColors: [
-              [Color(0xffe3fbed)],
-              [Color(0xffFFD6D6)],
-              [Color(0xfff2f2f2)]
-            ],
-            activeFgColor: Color(0xff222222),
-            inactiveBgColor: Color(0xffFFFFFF),
-            inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: getTopToggleStatus,
-            totalSwitches: 3,
-            labels: ['전체열림', '전체정지', '전체닫힘'],
-            radiusStyle: true,
-            onToggle: (value) async {
-              allTopToggleInit = value;
-              String _switch = '';
-
-              if (value == 0) {
-                _switch = 'open';
-              }
-              if (value == 1) {
-                _switch = 'stop';
-              }
-              if (value == 2) {
-                _switch = 'close';
-              }
-              print('toggle value는 : $value');
-              print('toggle type은 : ${value.runtimeType}');
-              print('value는 : $_switch');
-              _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
-                  '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-            },
-          ),
-        )
-      ],
-    ),
-    decoration: _decorations(),
-  );
-}
-
-Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
-    var update_motor_type) async {
-  var params = {
-    'motor_name': motor_name,
-    'motor_type': motor_type,
-    'motor_action': motor_action,
-  };
-  var response = await dio.put(
-      '$url/$userId/site/$siteId/controls/$update_motor_type/motors',
-      data: params);
-  print('### 모터 타입 변경 완료 : $response');
-}
-
-// 측장 개폐기 제어
-Widget _sideControlSwitch() {
-  print('## motor name 확인 : ${stream.motor_id}'); // matt 상 모터 상태가 옴
-  print('## motor id 확인 : ${stream.side_motor_id}'); // matt 상 모터 상태가 옴
-
-  // if (stream.motor_id.any((element) => stream.side_motor_id.contains(element))) {
-  //   print('side!!!!!!!!!!!!!!!!!!! ');
-  // }else {
-  //   print('side3!!!!!!!!!!!!!!!!!!!');
-  //
-  // }
-
-  // mqtt motor id와 DB에 저장된 motor id가 같은지 비교
-  // for (var i = 0; i < stream.sideMotors.length; i++) {
-  //   print('side!!!!!!!!!!!!!!!!!!!');
-  //   // print('side2!!!!!!!!!!!!!!!!!!! : ${stream.motor_id[i]}');
-  //   if (stream.motor_id[i] == stream.side_motor_id.contains(stream.motor_id)) {
-  //     print('side3!!!!!!!!!!!!!!!!!!!');
-  //
-  //     // stream.motor_id[i] ==
-  //     // print('## [environment page] sid motor name 확인: ${stream.side_motor_name[i]}');
-  //     return stream.side_motor_name[i];
-  //   }
-  //   // print('side3!!!!!!!!!!!!!!!!!!!');
-  //
-  // }
-
+// ##### 기타제어
+Widget _etcSwitch() {
   return ListView.builder(
-      scrollDirection: Axis.vertical,
-      primary: false,
-      shrinkWrap: true,
-      itemCount: sideMotors.length,
+    scrollDirection: Axis.vertical,
+    primary: false,
+    shrinkWrap: true,
+    itemCount: stream.etcMotors.length,
       itemBuilder: (BuildContext context, int index) {
         return _marginContainer(
           height: Get.height * 0.09,
@@ -738,8 +867,7 @@ Widget _sideControlSwitch() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _edgeLeftPadding(20,
-                  child: Text(
-                      "${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
+                  child: Text("${stream.etc_motor_name[index]}",
                       style: _textStyle(
                           Color(0xff222222), FontWeight.normal, 15))),
               _edgeRightPadding(
@@ -750,118 +878,32 @@ Widget _sideControlSwitch() {
                   cornerRadius: 80.0,
                   activeBgColors: [
                     [Color(0xffe3fbed)],
-                    [Color(0xffFFD6D6)],
                     [Color(0xfff2f2f2)]
                   ],
                   activeFgColor: Color(0xff222222),
                   inactiveBgColor: Color(0xffFFFFFF),
                   inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: stream.sideMotorStatus[index],
-                  // stream.topMotors[index],
-                  totalSwitches: 3,
-                  labels: ['열림', '정지', '닫힘'],
+                  initialLabelIndex: stream.etcMotorStatus[index],
+                  // statusIndex == 0 ? 1 : 0,
+                  totalSwitches: 2,
+                  labels: ['ON', 'OFF'],
                   radiusStyle: true,
                   onToggle: (value) async {
                     String _switch = '';
 
                     if (value == 0) {
                       _switch = 'open';
-                      stream.topMotors[index] = 0;
                     }
                     if (value == 1) {
                       _switch = 'stop';
-                      stream.topMotors[index] = 1;
-                    }
-                    if (value == 2) {
-                      _switch = 'close';
-                      stream.topMotors[index] = 2;
-                    }
-                    print('### Motor${index + 1} toggle value는 : $value');
-                    print('### Motor${index + 1} toggle type은 : ${value.runtimeType}');
-                    print('### Motor${index + 1} value는 : $_switch');
-                    print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
-                    // MQTT 통신
-                    _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
-                        '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-                    // DB 업데이트
-                    _updateMotorData("${stream.side_motor_name[index]}", "side",
-                        "$value", "side");
-                  },
-                ),
-              )
-            ],
-          ),
-          decoration: _decorations(),
-        );
-      });
-}
-
-// 천창 개폐기 제어
-int allTopToggleInitial = 1;
-
-Widget _topControlSwitch() {
-  return ListView.builder(
-      scrollDirection: Axis.vertical,
-      primary: false,
-      shrinkWrap: true,
-      itemCount: topMotors.length,
-      itemBuilder: (BuildContext context, var index) {
-        return _marginContainer(
-          height: Get.height * 0.09,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _edgeLeftPadding(20,
-                  child: Text(
-                      "${stream.top_motor_name[index]})", //DB에 있는 motor_name 반영
-                      style: _textStyle(
-                          Color(0xff222222), FontWeight.normal, 15))),
-              _edgeRightPadding(
-                10,
-                child: ToggleSwitch(
-                  fontSize: 12,
-                  minWidth: 60.0,
-                  cornerRadius: 80.0,
-                  activeBgColors: [
-                    [Color(0xffe3fbed)],
-                    [Color(0xffFFD6D6)],
-                    [Color(0xfff2f2f2)]
-                  ],
-                  activeFgColor: Color(0xff222222),
-                  inactiveBgColor: Color(0xffFFFFFF),
-                  inactiveFgColor: Color(0xff222222),
-                  initialLabelIndex: 1,
-                  // stream.topMotors[index],
-                  totalSwitches: 3,
-                  labels: ['열림', '정지', '닫힘'],
-                  radiusStyle: true,
-                  onToggle: (value) async {
-                    String _switch = '';
-
-                    if (value == 0) {
-                      _switch = 'open';
-                      stream.topMotors[index] = 0;
-                    }
-                    if (value == 1) {
-                      _switch = 'stop';
-                      stream.topMotors[index] = 1;
-                    }
-                    if (value == 2) {
-                      _switch = 'close';
-                      stream.topMotors[index] = 2;
                     }
                     print('toggle value는 : $value');
-                    print('toggle motor는 : $motor_1');
-
-                    print('### Motor${index + 1} toggle value는 : $value');
-                    print(
-                        '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
-                    print('### Motor${index + 1} value는 : $_switch');
-                    print(
-                        '### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
-
-                    _mqttClass.ctlSet('did', "${index + 1}", 'dact', _switch,
-                        '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                    print('toggle type은 : ${value.runtimeType}');
+                    print('value는 : $_switch');
+                    // _mqttClass.ctlSet('did', '1', 'dact', _switch,
+                    //     '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                    _updateMotorData("${stream.etc_motor_name[index]}", "etc",
+                        "$value", "etc");
                   },
                 ),
               )
@@ -869,57 +911,7 @@ Widget _topControlSwitch() {
           ),
           decoration: _decorations(),
         );
-      });
-}
-
-//기타제어
-Widget _toggleSwitch2(BuildContext context, String text, bool visibles) {
-  return _marginContainer(
-    height: Get.height * 0.09,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _edgeLeftPadding(20,
-            child: Text(text,
-                style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
-        _edgeRightPadding(
-          10,
-          child: ToggleSwitch(
-            fontSize: 12,
-            minWidth: 60.0,
-            cornerRadius: 80.0,
-            activeBgColors: [
-              [Color(0xffe3fbed)],
-              [Color(0xfff2f2f2)]
-            ],
-            activeFgColor: Color(0xff222222),
-            inactiveBgColor: Color(0xffFFFFFF),
-            inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: 1,
-            // statusIndex == 0 ? 1 : 0,
-            totalSwitches: 2,
-            labels: ['ON', 'OFF'],
-            radiusStyle: true,
-            onToggle: (value) async {
-              String _switch = '';
-
-              if (value == 0) {
-                _switch = 'open';
-              }
-              if (value == 1) {
-                _switch = 'stop';
-              }
-              print('toggle value는 : $value');
-              print('toggle type은 : ${value.runtimeType}');
-              print('value는 : $_switch');
-              // _mqttClass.ctlSet('did', '1', 'dact', _switch,
-              //     '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-            },
-          ),
-        )
-      ],
-    ),
-    decoration: _decorations(),
+      }
   );
 }
 
@@ -950,52 +942,3 @@ Container _marginContainer({child, dynamic height, decoration}) {
   );
 }
 
-// 그래프
-Widget _lineChart(bool _visibles) {
-  List<_SalesData> data = [
-    _SalesData('Jan', 35),
-    _SalesData('Feb', 28),
-    _SalesData('Mar', 34),
-    _SalesData('Apr', 32),
-    _SalesData('May', 40)
-  ];
-
-  List<_SalesData> subData = [
-    _SalesData('Jan', 20),
-    _SalesData('Feb', 50),
-    _SalesData('Mar', 30),
-    _SalesData('Apr', 40),
-    _SalesData('May', 28)
-  ];
-
-  return Visibility(
-    visible: _visibles,
-    child: Padding(
-      padding: EdgeInsets.all(15),
-      child: SfCartesianChart(
-          backgroundColor: Color(0xffFFFFFF),
-          primaryXAxis: CategoryAxis(),
-          series: <ChartSeries<_SalesData, String>>[
-            LineSeries<_SalesData, String>(
-                dataSource: data,
-                xValueMapper: (_SalesData sales, _) => sales.year,
-                yValueMapper: (_SalesData sales, _) => sales.sales,
-                name: 'Sales',
-                dataLabelSettings: DataLabelSettings(isVisible: false)),
-            LineSeries<_SalesData, String>(
-                dataSource: subData,
-                xValueMapper: (_SalesData sales, _) => sales.year,
-                yValueMapper: (_SalesData sales, _) => sales.sales,
-                name: 'Sales',
-                dataLabelSettings: DataLabelSettings(isVisible: false))
-          ]),
-    ),
-  );
-}
-
-class _SalesData {
-  _SalesData(this.year, this.sales);
-
-  final String year;
-  final double sales;
-}

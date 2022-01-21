@@ -48,10 +48,10 @@ List cctv_url = [];
 // soilControl page
 List pumps = [];
 List pump_name = [];
-List<int> pumpStatus = [];
+List<int> pumpStatus = []; // DB에 저장된 pump status 가져오기
 List valves = [];
 List valve_name = [];
-List<int> valveStatus = [];
+List<int> valveStatus = []; // DB에 저장된 valve status 가져오기
 
 List sensors = [];
 List sensor_id = []; // pump1, pump2
@@ -60,27 +60,35 @@ List sensorStatus = []; // pump1's on/off, pump2's on/off
 // environment control page
 List<dynamic> sideMotors = [];
 List<dynamic> topMotors = [];
+List<dynamic> etcMotors = [];
 
-List motors = [];
+// List motors = [];
 
-List top_motor_name = []; // DB에 저장된 motor name 측창(전)
+// DB에 저장된 motor name 측창(전)
+List top_motor_name = [];
 List side_motor_name = [];
-List motor_status = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6];
+List etc_motor_name = [];
 
 // mqtt의 motor_id key 담기
 List motor_id = [];
 // DB에 저장된 side motor id 담기
 List side_motor_id = [];
+// mqtt 통신을 위한 DB에 저장된 motor_id값 파싱
+List sideMotorId = [];
+
 // DB에 저장된 top motor id 담기
 List top_motor_id = [];
+// mqtt 통신을 위한 DB에 저장된 motor_id값 파싱
+List topMotorId = [];
 
 // mqtt 상에 motor 상태 값 담기
 List<int> mqttTopMotorStatus = [];
 List<int> mqttSideMotorStatus = [];
 
 //DB에서 motor 상태 불러오기
-List topMotorStatus = [];
-List sideMotorStatus = [];
+List<int> topMotorStatus = [];
+List<int> sideMotorStatus = [];
+List<int> etcMotorStatus = [];
 
 List switchs = [];
 List switch_id = [];

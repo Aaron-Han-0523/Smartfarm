@@ -17,7 +17,7 @@ import '../globals/stream.dart' as stream;
 * description : get Data
 * writer : sherry
 * create date : 2022-01-10
-* last update : 2022-01-17
+* last update : 2022-01-21
 * */
 
 // APIs
@@ -133,14 +133,22 @@ class _HomeState extends State<Home> {
 
       // DB에서 side motor 상태 가져오기
       stream.sideMotorStatus =
-          stream.sideMotors.map((e) => e["motor_action"].toString()).toList();
+          stream.sideMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
       print('## [homepage] side motor status 가져오기: ${stream.sideMotorStatus}');
 
       // DB에서 side motors id 가져오기
       // for문으로 가져오지 않은 이유? 앱을 새로 실행할 때마다 for문이 돌면서 값을 지속적으로 추가시키는 문제 발생
-      stream.side_motor_id =
-          stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
-      print('## [homepage] side motor id 가져오기: ${stream.side_motor_id}');
+      // stream.side_motor_id =
+      //     stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
+      // print('## [homepage] side motor id 가져오기: ${stream.side_motor_id}');
+
+      for (var i = 0; i < stream.sideMotors.length; i++) {
+        // stream.sideMotorId.clear();
+        var sideMotorName = (stream.sideMotors[i]['motor_id']).toString();
+      var sideMotorId = sideMotorName.substring(6);
+      stream.sideMotorId.add(sideMotorId);
+      print('## [homepage] side motor id 가져오기: ${stream.sideMotorId}');
+    }
 
       // ## top motor --------
       final getTopMotors =
@@ -156,94 +164,60 @@ class _HomeState extends State<Home> {
       print('## [homepage] top motor name 가져오기: ${stream.top_motor_name}');
 
       // DB에서 top motor id 가져오기
-      stream.top_motor_id =
-          stream.topMotors.map((e) => e["motor_id"].toString()).toList();
-      print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
+      // stream.top_motor_id =
+      //     stream.topMotors.map((e) => e["motor_id"].toString()).toList();
+      // print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
+      for (var i = 0; i < stream.topMotors.length; i++) {
+        // stream.sideMotorId.clear();
+        var topMotor = (stream.topMotors[i]['motor_id']).toString();
+        var topMotorId = topMotor.substring(6);
+        stream.topMotorId.add(topMotorId);
+        print('## [homepage] top motor id 가져오기: ${stream.topMotorId}');
+      }
 
       // DB에서 top motor 상태 가져오기
       stream.topMotorStatus =
-          stream.topMotors.map((e) => e["motor_action"].toString()).toList();
+      stream.topMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
       print('## [homepage] top motor status 가져오기: ${stream.topMotorStatus}');
 
-      stream.mqttTopMotorStatus = [
-        stream.motor_1 == 'open'
-            ? 0
-            : stream.motor_1 == 'stop'
-            ? 1
-            : 2,
-        stream.motor_2 == 'open'
-            ? 0
-            : stream.motor_2 == 'stop'
-            ? 1
-            : 2,
-        stream.motor_3 == 'open'
-            ? 0
-            : stream.motor_3 == 'stop'
-            ? 1
-            : 2,
-        // stream.motor_4 == 'open' ? 0 : stream.motor_4 == 'stop' ? 1 : 2,
-        // stream.motor_5 == 'open' ? 0 : stream.motor_5 == 'stop' ? 1 : 2,
-        // stream.motor_6 == 'open' ? 0 : stream.motor_6 == 'stop' ? 1 : 2,
-        // stream.motor_6 == 'open' ? 1 : 0, // motor 7개
-        stream.pump_1 == 'on' ? 1 : 0,
-        stream.pump_1 == 'on' ? 1 : 0, // on/off pump ㅇㅇ
-        stream.pump_2 == 'on' ? 1 : 0,
-      ];
+      // ## etc 상태 가져오기
+      final getEtcMotors =
+      await dio.get('$url/$userId/site/$siteId/controls/etc/motors');
+      stream.etcMotors = getEtcMotors.data['data'];
+      // DB에서 etc motor name 가져오기
+      stream.etc_motor_name =
+          stream.etcMotors.map((e) => e["motor_name"].toString()).toList();
+      print('## [homepage] etc motor name 가져오기: ${stream.etc_motor_name}');
+      // DB에서 etc motor 상태 가져오기
+      stream.etcMotorStatus =
+          stream.etcMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
+      print('## [homepage] etc motor status 가져오기: ${stream.etcMotorStatus}');
 
-      stream.mqttSideMotorStatus = [
-        stream.motor_4 == 'open'
-            ? 0
-            : stream.motor_4 == 'stop'
-            ? 1
-            : 2,
-        stream.motor_5 == 'open'
-            ? 0
-            : stream.motor_5 == 'stop'
-            ? 1
-            : 2,
-        stream.motor_6 == 'open'
-            ? 0
-            : stream.motor_6 == 'stop'
-            ? 1
-            : 2,
-      ];
-      print('motorStatus: ${stream.mqttTopMotorStatus}');
-
-      // pumps
+      //----------pumps----------------------------------------------
       final getPumps =
       await dio.get('$url/$userId/site/$siteId/controls/pumps');
       stream.pumps = getPumps.data;
       print('##### homePage GET Pumps LIST: ${stream.pumps}');
       print('##### homePage Pumps LIST length: ${stream.pumps.length}');
-      stream.pump_name = [];
-      for (var i = 0; i < stream.pumps.length; i++) {
-        var pumpName = stream.pumps[i]['pump_name'];
-        stream.pump_name.add(pumpName);
-      }
 
-      stream.pumpStatus = [
-        stream.pump_1 == 'on' ? 0 : 1,
-        stream.pump_2 == 'on' ? 0 : 1,
-      ];
-      print('pumpStatus: ${stream.pumpStatus}');
+      // DB에서 pump 상태 가져오기
+      stream.pumpStatus =
+          stream.pumps.map((e) => int.parse(e["pump_action"].toString())).toList();
+      print('## [homepage] pump status 가져오기: ${stream.pumpStatus}');
 
-      // valves
+
+      //----------valves----------------------------------------------
       final getValves =
       await dio.get('$url/$userId/site/$siteId/controls/valves');
       stream.valves = getValves.data;
       print('##### homePage GET Valves LIST: ${stream.valves}');
       print('##### homePage GET Valves LIST length: ${stream.valves.length}');
-      stream.valve_name = [];
-      for (var i = 0; i < stream.valves.length; i++) {
-        var valveName = stream.valves[i]['cctv_url'];
-        stream.valve_name.add(valveName);
-      }
 
-      stream.valveStatus = [
-        stream.valve_1 == 'open' ? 0 : 1,
-        // stream.valve_2 == 'on' ? 0 : 1,
-      ];
-      print('valveStatus: ${stream.valveStatus}');
+      // DB에서 pump 상태 가져오기
+      stream.valveStatus =
+          stream.valves.map((e) => int.parse(e["valve_action"].toString())).toList();
+      print('## [homepage] valve status 가져오기: ${stream.pumpStatus}');
+
 
       // get pump1, pump2 = sensorId
       final getSensorId = await dio.get('$url/$userId/site/$siteId/sensors');
