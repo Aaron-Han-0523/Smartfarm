@@ -138,10 +138,11 @@ class _HomeState extends State<Home> {
 
       // DB에서 side motors id 가져오기
       // for문으로 가져오지 않은 이유? 앱을 새로 실행할 때마다 for문이 돌면서 값을 지속적으로 추가시키는 문제 발생
-      // stream.side_motor_id =
-      //     stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
-      // print('## [homepage] side motor id 가져오기: ${stream.side_motor_id}');
+      stream.side_motor_id =
+          stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
+      print('## [homepage] side motor id 가져오기: ${stream.side_motor_id}');
 
+      // mqtt로 보낼 id 값 파싱
       for (var i = 0; i < stream.sideMotors.length; i++) {
         // stream.sideMotorId.clear();
         var sideMotorName = (stream.sideMotors[i]['motor_id']).toString();
@@ -164,9 +165,11 @@ class _HomeState extends State<Home> {
       print('## [homepage] top motor name 가져오기: ${stream.top_motor_name}');
 
       // DB에서 top motor id 가져오기
-      // stream.top_motor_id =
-      //     stream.topMotors.map((e) => e["motor_id"].toString()).toList();
-      // print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
+      stream.top_motor_id =
+          stream.topMotors.map((e) => e["motor_id"].toString()).toList();
+      print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
+
+      // mqtt로 보낼 id 값 파싱
       for (var i = 0; i < stream.topMotors.length; i++) {
         // stream.sideMotorId.clear();
         var topMotor = (stream.topMotors[i]['motor_id']).toString();
@@ -192,6 +195,21 @@ class _HomeState extends State<Home> {
       stream.etcMotorStatus =
           stream.etcMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
       print('## [homepage] etc motor status 가져오기: ${stream.etcMotorStatus}');
+
+      // DB에서 etc motor id 가져오기
+      stream.etcMotorId =
+          stream.etcMotors.map((e) => e["motor_id"].toString()).toList();
+      print('## [homepage] etc motor id 가져오기: ${stream.etcMotorId}');
+
+      // for (var i = 0; i < stream.etcMotors.length; i++) {
+      //   // stream.sideMotorId.clear();
+      //   var etcMotor = (stream.etcMotors[i]['motor_id']).toString();
+      //   var etcMotorId = etcMotor.substring(6);
+      //   stream.etcMotorId.add(etcMotorId);
+      //   stream.etcMotorId.clear();
+      //
+      //   print('## [homepage] etc motor id 가져오기: ${stream.etcMotorId}');
+      // }
 
       //----------pumps----------------------------------------------
       final getPumps =

@@ -73,13 +73,13 @@ List etc_motor_name = [];
 List motor_id = [];
 // DB에 저장된 side motor id 담기
 List side_motor_id = [];
-// mqtt 통신을 위한 DB에 저장된 motor_id값 파싱
-List sideMotorId = [];
-
 // DB에 저장된 top motor id 담기
 List top_motor_id = [];
+
 // mqtt 통신을 위한 DB에 저장된 motor_id값 파싱
 List topMotorId = [];
+List sideMotorId = [];
+List etcMotorId = [];
 
 // mqtt 상에 motor 상태 값 담기
 List<int> mqttTopMotorStatus = [];

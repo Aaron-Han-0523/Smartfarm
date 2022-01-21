@@ -77,14 +77,14 @@ bool _customTileExpanded = false;
 var temp = int.parse(extTemp);
 
 Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
-    var update_motor_type) async {
+    var update_motor_type, var motor_id) async {
   var params = {
     'motor_name': motor_name,
     'motor_type': motor_type,
     'motor_action': motor_action,
   };
   var response = await dio.put(
-      '$url/$userId/site/$siteId/controls/$update_motor_type/motors',
+      '$url/$userId/site/$siteId/controls/$update_motor_type/motors/$motor_id',
       data: params);
   print('### 모터 타입 변경 완료 : $response');
 }
@@ -545,7 +545,8 @@ class _SideMotorState extends State<SideMotor> {
                           '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                       // DB 업데이트
                       _updateMotorData("${stream.side_motor_name[index]}", "side",
-                          "$value", "side");
+                          "$value", "side", "${stream.side_motor_id[index]}"); // update를 하면 이름도 전부 update 됨 -> 해결 필요
+
                     },
                   ),
                 )
@@ -765,7 +766,7 @@ class _TopMotorState extends State<TopMotor> {
                           '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                       // DB 업데이트
                       _updateMotorData("${stream.top_motor_name[index]}", "top",
-                          "$value", "top");
+                          "$value", "top", "${stream.top_motor_id[index]}");
                     },
                   ),
                 )
@@ -903,7 +904,7 @@ Widget _etcSwitch() {
                     // _mqttClass.ctlSet('did', '1', 'dact', _switch,
                     //     '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
                     _updateMotorData("${stream.etc_motor_name[index]}", "etc",
-                        "$value", "etc");
+                        "$value", "etc", "${stream.etcMotorId[index]}");
                   },
                 ),
               )
