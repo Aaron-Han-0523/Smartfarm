@@ -415,7 +415,8 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
             activeFgColor: Color(0xff222222),
             inactiveBgColor: Color(0xffFFFFFF),
             inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: streamStatus[index] == 1 ? 1 : 0,
+            initialLabelIndex: stream.pumpStatus[index],
+            // streamStatus[index] == 1 ? 1 : 0,
             totalSwitches: 2,
             labels: ['ON', 'OFF'],
             radiusStyle: true,
@@ -487,7 +488,7 @@ Widget _switchToggle2(var index, var text, var streamStatus, var action) {
             inactiveFgColor: Color(0xff222222),
             initialLabelIndex: streamStatus[index] == 0 ? 0 : 1,
             totalSwitches: 2,
-            labels: ['OPEN', 'CLOSE'],
+            labels: ['열림', '닫힘'],
             radiusStyle: true,
             onToggle: (value) async {
               String switchStatus = '';
@@ -509,17 +510,17 @@ Widget _switchToggle2(var index, var text, var streamStatus, var action) {
               _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
                   '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
 
-              // var valveId = 'valve_${index + 1}';
-              // var data = {
-              //   'uid': userId,
-              //   'sid': siteId,
-              //   'valve_id': valveId,
-              //   'valve_action': value,
-              // };
-              // final putValves = await dio.put(
-              //     '$url/$userId/site/$siteId/controls/valves/$valveId',
-              //     data: data);
-              // print(putValves);
+              var valveId = 'valve_${index + 1}';
+              var data = {
+                'uid': userId,
+                'sid': siteId,
+                'valve_id': valveId,
+                'valve_action': value,
+              };
+              final putValves = await dio.put(
+                  '$url/$userId/site/$siteId/controls/valves/$valveId',
+                  data: data);
+              print(putValves);
             },
           ),
         ),
