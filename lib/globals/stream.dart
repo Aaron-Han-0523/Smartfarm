@@ -79,8 +79,8 @@ List<int> mqttTopMotorStatus = [];
 List<int> mqttSideMotorStatus = [];
 
 //DB에서 motor 상태 불러오기
-List<dynamic> topMotorStatus = [];
-List<dynamic> sideMotorStatus = [];
+List topMotorStatus = [];
+List sideMotorStatus = [];
 
 List switchs = [];
 List switch_id = [];

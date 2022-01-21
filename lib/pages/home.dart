@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
       print('##### homePage GET CCTV Url List: ${stream.cctv_url}');
 
       //----------motor----------------------------------------------
-      // ## side motor -----------
+      // ## side motor
       final getSideMotors = await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
       print('##### homePage GET sideMotors list : ${stream.sideMotors}');
@@ -146,7 +146,7 @@ class _HomeState extends State<Home> {
       stream.top_motor_id  = stream.topMotors.map((e) => e["motor_id"].toString()).toList();
       print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
 
-      // DB에서 top motor 상태 가져오기
+      // DB에서 side motor 상태 가져오기
       stream.topMotorStatus = stream.topMotors.map((e) => e["motor_action"].toString()).toList();
       print('## [homepage] top motor status 가져오기: ${stream.topMotorStatus}');
 
