@@ -2,6 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'dart:convert';
+
+import '../globals/siteConfig.dart' as sites;
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../globals/stream.dart' as stream;
@@ -62,7 +68,6 @@ class _HomeState extends State<Home> {
     stream.mqttTopMotorStatus = [];
     stream.mqttSideMotorStatus = [];
 
-
     getData();
     super.initState();
   }
@@ -74,12 +79,12 @@ class _HomeState extends State<Home> {
       var fcmtoken = stream.fcmtoken;
       var data = {'uid': userId, 'fcmtoken': fcmtoken};
       final postToken =
-          await dio.put('$api/farm/$userId/pushAlarm', data: data);
+      await dio.put('$api/farm/$userId/pushAlarm', data: data);
       print('##### postToken: $postToken');
 
       // trends innerTemp
       final getInnerTemp =
-          await dio.get('$url/$userId/site/$siteId/innerTemps');
+      await dio.get('$url/$userId/site/$siteId/innerTemps');
       stream.chartData = getInnerTemp.data['data'];
       print('##### getInnerTemp: ${getInnerTemp.data['data']}');
       print(
@@ -113,59 +118,69 @@ class _HomeState extends State<Home> {
       print('##### homePage GET CCTV Url List: ${stream.cctv_url}');
 
       //----------motor----------------------------------------------
-      // ## side motor
-      final getSideMotors = await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+      // ## side motor -----------
+      final getSideMotors =
+      await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
       print('##### homePage GET sideMotors list : ${stream.sideMotors}');
-      print('##### homePage sideMotors List length : ${stream.sideMotors.length}');
+      print(
+          '##### homePage sideMotors List length : ${stream.sideMotors.length}');
 
       // side motor name 가져오기
-      stream.side_motor_name  = stream.sideMotors.map((e) => e["motor_name"].toString()).toList();
+      stream.side_motor_name =
+          stream.sideMotors.map((e) => e["motor_name"].toString()).toList();
       print('## [homepage] side motor name 가져오기: ${stream.side_motor_name}');
 
       // DB에서 side motor 상태 가져오기
-      stream.sideMotorStatus = stream.sideMotors.map((e) => e["motor_action"].toString()).toList();
+      stream.sideMotorStatus =
+          stream.sideMotors.map((e) => e["motor_action"].toString()).toList();
       print('## [homepage] side motor status 가져오기: ${stream.sideMotorStatus}');
 
       // DB에서 side motors id 가져오기
       // for문으로 가져오지 않은 이유? 앱을 새로 실행할 때마다 for문이 돌면서 값을 지속적으로 추가시키는 문제 발생
-      stream.side_motor_id  = stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
+      stream.side_motor_id =
+          stream.sideMotors.map((e) => e["motor_id"].toString()).toList();
       print('## [homepage] side motor id 가져오기: ${stream.side_motor_id}');
 
       // ## top motor --------
-      final getTopMotors = await dio.get('$url/$userId/site/$siteId/controls/top/motors');
+      final getTopMotors =
+      await dio.get('$url/$userId/site/$siteId/controls/top/motors');
       stream.topMotors = getTopMotors.data['data'];
       print('##### homePage GET topMotors list : ${stream.topMotors}');
-      print('##### homePage topMotors List length : ${stream.topMotors.length}');
+      print(
+          '##### homePage topMotors List length : ${stream.topMotors.length}');
 
       // DB에서 top motor name 가져오기
-      stream.top_motor_name  = stream.topMotors.map((e) => e["motor_name"].toString()).toList();
+      stream.top_motor_name =
+          stream.topMotors.map((e) => e["motor_name"].toString()).toList();
       print('## [homepage] top motor name 가져오기: ${stream.top_motor_name}');
 
       // DB에서 top motor id 가져오기
-      stream.top_motor_id  = stream.topMotors.map((e) => e["motor_id"].toString()).toList();
+      stream.top_motor_id =
+          stream.topMotors.map((e) => e["motor_id"].toString()).toList();
       print('## [homepage] top motor id 가져오기: ${stream.top_motor_id}');
 
-      // DB에서 side motor 상태 가져오기
-      stream.topMotorStatus = stream.topMotors.map((e) => e["motor_action"].toString()).toList();
+      // DB에서 top motor 상태 가져오기
+      stream.topMotorStatus =
+          stream.topMotors.map((e) => e["motor_action"].toString()).toList();
       print('## [homepage] top motor status 가져오기: ${stream.topMotorStatus}');
 
       stream.mqttTopMotorStatus = [
         stream.motor_1 == 'open'
             ? 0
             : stream.motor_1 == 'stop'
-                ? 1
-                : 2,
+            ? 1
+            : 2,
         stream.motor_2 == 'open'
             ? 0
             : stream.motor_2 == 'stop'
-                ? 1
-                : 2,
+            ? 1
+            : 2,
         stream.motor_3 == 'open'
             ? 0
             : stream.motor_3 == 'stop'
-                ? 1
-                : 2,
+            ? 1
+            : 2,
         // stream.motor_4 == 'open' ? 0 : stream.motor_4 == 'stop' ? 1 : 2,
         // stream.motor_5 == 'open' ? 0 : stream.motor_5 == 'stop' ? 1 : 2,
         // stream.motor_6 == 'open' ? 0 : stream.motor_6 == 'stop' ? 1 : 2,
@@ -179,24 +194,24 @@ class _HomeState extends State<Home> {
         stream.motor_4 == 'open'
             ? 0
             : stream.motor_4 == 'stop'
-                ? 1
-                : 2,
+            ? 1
+            : 2,
         stream.motor_5 == 'open'
             ? 0
             : stream.motor_5 == 'stop'
-                ? 1
-                : 2,
+            ? 1
+            : 2,
         stream.motor_6 == 'open'
             ? 0
             : stream.motor_6 == 'stop'
-                ? 1
-                : 2,
+            ? 1
+            : 2,
       ];
       print('motorStatus: ${stream.mqttTopMotorStatus}');
 
       // pumps
       final getPumps =
-          await dio.get('$url/$userId/site/$siteId/controls/pumps');
+      await dio.get('$url/$userId/site/$siteId/controls/pumps');
       stream.pumps = getPumps.data;
       print('##### homePage GET Pumps LIST: ${stream.pumps}');
       print('##### homePage Pumps LIST length: ${stream.pumps.length}');
@@ -214,7 +229,7 @@ class _HomeState extends State<Home> {
 
       // valves
       final getValves =
-          await dio.get('$url/$userId/site/$siteId/controls/valves');
+      await dio.get('$url/$userId/site/$siteId/controls/valves');
       stream.valves = getValves.data;
       print('##### homePage GET Valves LIST: ${stream.valves}');
       print('##### homePage GET Valves LIST length: ${stream.valves.length}');
@@ -246,12 +261,84 @@ class _HomeState extends State<Home> {
         }
         print('##### homePage sensorId LIST: ${stream.sensor_id}');
       }
+      connect();
     }
-    Get.offAllNamed('/sensor');
+
+    return true;
+  }
+
+  String statusText = "Status Text";
+  bool isConnected = false;
+  final MqttServerClient client =
+  MqttServerClient('broker.mqttdashboard.com', '');
+
+  connect() async {
+    isConnected = await mqttConnect('test');
+  }
+
+  _disconnect() {
+    client.disconnect();
+  }
+
+  Future<bool> mqttConnect(String uniqueId) async {
+    client.logging(on: true);
+    client.port = 1883;
+    client.secure = false;
+    // client.onConnected = onConnected;
+    // client.onDisconnected = onDisconnected;
+    // client.pongCallback = pong;
+
+    final MqttConnectMessage connMess =
+    MqttConnectMessage().withClientIdentifier(uniqueId).startClean();
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    print(connMess);
+    client.connectionMessage = connMess;
+    await client.connect();
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      print("Connected to AWS Successfully!");
+    } else {
+      return false;
+    }
+    print('!!!!!!!!!!!!!!!!!!hiiiiiiiiiiii!!!!!!!!!!!');
+    const topic = '/sf/e0000001/res/cfg';
+    client.subscribe(topic, MqttQos.atMostOnce);
+    const pubTopic = '/sf/e0000001/req/cfg';
+    final builder = MqttClientPayloadBuilder();
+    builder.addString('{"rt" : "get"}');
+    // builder.addString('open');
+    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
+
+    client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      final mqttReceivedMessages = c;
+      // print('img width = ${mqttReceivedMessages}');
+      // print('img width = ${mqttReceivedMessages.runtimeType}');
+      // print('img width = ${mqttReceivedMessages![0]}');
+      final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
+
+      // print('recMess = ${recMess}');
+      // print('recMess = ${recMess.runtimeType}');
+      // print('recMess = ${recMess}');
+      var streamData =
+      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      var streamDatas = jsonDecode(streamData);
+      print('!!!!!!!!!!!!!!');
+      print('streamDatas = ${streamDatas}');
+      sites.status_alarm = streamDatas['alarm_en'] as bool;
+      sites.low_temp = streamDatas['alarm_low_temp'].toString();
+      sites.high_temp = streamDatas['alarm_high_temp'].toString();
+      sites.set_timer = streamDatas['watering_timer'].toString();
+      sites.site_name = streamDatas['sname'].toString();
+      // trap = 1;
+      // }
+      print('stream.temp_1 = ${stream.temp_1}');
+      _disconnect();
+      Get.toNamed('/sensor');
+    });
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(opacity: 1);
+    return Opacity(opacity: 0);
   }
 }
