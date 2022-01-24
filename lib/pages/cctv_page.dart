@@ -65,6 +65,10 @@ class _CCTVPageState extends State<CCTVPage> {
   // visibiliby
   List<bool> _visibility = [true, true, true];
 
+  //회사명 가져오기
+  var siteDropdown =
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
   @override
   void initState() {
     _getData();
@@ -104,7 +108,7 @@ class _CCTVPageState extends State<CCTVPage> {
                   ),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text(stream.sitesDropdownValue,
+                    child: Text(siteDropdown,
                         style: TextStyle(color: Colors.black, fontSize: 17)),
                   ),
                 ]),
@@ -148,15 +152,6 @@ class _CCTVPageState extends State<CCTVPage> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        height: Get.height * 1 / 14,
-        decoration: BoxDecoration(
-            color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0)),
-            border: null),
       ),
     );
   }

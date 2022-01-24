@@ -50,11 +50,12 @@ class _SettingPageState extends State<SettingPage> {
 
   // TextEditing Controller
   final _highTextEditController =
-      TextEditingController(text: siteConfig.high_temp);
+      TextEditingController(text: siteConfig.high_temp==''?null:siteConfig.high_temp);
   final _lowTextEditController =
-      TextEditingController(text: siteConfig.low_temp);
+      TextEditingController(text: siteConfig.low_temp==''?null:siteConfig.low_temp);
 
   //global key
+  bool status = false;
   var _setTimer = siteConfig.set_timer;
   bool _alarmStatus = siteConfig.status_alarm;
   var _lowTemp = siteConfig.low_temp;
@@ -179,7 +180,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  bool status = false;
+  // bool status = false;
   List<String> labelName = ['ON', 'OFF'];
   var selectedLabel = '';
   int initialIndex = siteConfig.status_alarm == true ? 0 : 1;
@@ -275,7 +276,11 @@ class _SettingPageState extends State<SettingPage> {
             width: Get.width * 0.35,
             height: Get.height * 0.06,
             child: TextFormField(
+              enabled: status,
               controller: highTempController,
+              // status==false?highTempController=='':highTempController,
+    // highTempController
+    // status==false?siteConfig.high_temp=='':siteConfig.high_temp
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
                 hintStyle: TextStyle(
@@ -324,6 +329,7 @@ class _SettingPageState extends State<SettingPage> {
             width: Get.width * 0.35,
             height: Get.height * 0.06,
             child: TextFormField(
+              enabled: status,
               controller: lowTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
