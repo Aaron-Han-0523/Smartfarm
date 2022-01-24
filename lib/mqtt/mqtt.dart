@@ -68,7 +68,7 @@ class MqttClass {
 
   //MQTT MOTOR & PUMP CTRL - publish
   Future<dynamic> allSet(var did, var len, var dact, String dactValue,
-      var subscibeTopic, var publishTopic) async {
+      var subscibeTopic, var publishTopic, var motorTypeId) async {
     client.logging(on: true);
     client.port = 1883;
     client.secure = false;
@@ -93,7 +93,7 @@ class MqttClass {
     for (int i = 0; i < len; i++) {
       builder.clear();
       builder.addString(
-          '{"rt" : "set", "$did" : ${i + 1}, "$dact" : "$dactValue"}');
+          '{"rt" : "set", "$did" : ${motorTypeId[i]}, "$dact" : "$dactValue"}');
 
       client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
       // client.publishMessage(publishTopic, MqttQos.atLeastOnce, builder.payload!);
