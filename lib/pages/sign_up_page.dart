@@ -4,15 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:flutter_dropdown_search/flutter_dropdown_search.dart';
 import 'package:get/get.dart';
-import 'package:group_radio_button/group_radio_button.dart';
-import 'package:http/http.dart' as http;
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:edgeworks/dio/login_dio.dart';
 import 'package:edgeworks/pages/components/registrations/validate.dart';
-
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
-import 'dart:convert';
 
 /*
 * name : change password
@@ -180,8 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
           padding: EdgeInsets.only(bottom: 12),
           width: Get.width * 1 / 3.9,
           child: Text(title,
-              style: TextStyle(fontSize: 15),
-              textAlign: TextAlign.right),
+              style: TextStyle(fontSize: 15), textAlign: TextAlign.right),
         ),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
@@ -212,8 +205,7 @@ class _SignUpPageState extends State<SignUpPage> {
           padding: EdgeInsets.only(bottom: 12),
           width: Get.width * 1 / 3.9,
           child: Text(title,
-              style: TextStyle(fontSize: 15),
-              textAlign: TextAlign.right),
+              style: TextStyle(fontSize: 15), textAlign: TextAlign.right),
         ),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
@@ -254,8 +246,7 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: EdgeInsets.only(bottom: 12),
             width: Get.width * 1 / 3.9,
             child: Text(title,
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.right)),
+                style: TextStyle(fontSize: 15), textAlign: TextAlign.right)),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,
@@ -284,11 +275,10 @@ class _SignUpPageState extends State<SignUpPage> {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.only(bottom: 12),
+            padding: EdgeInsets.only(bottom: 12),
             width: Get.width * 1 / 3.9,
             child: Text(title,
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.right)),
+                style: TextStyle(fontSize: 15), textAlign: TextAlign.right)),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,

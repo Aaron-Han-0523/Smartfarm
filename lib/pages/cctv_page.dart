@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:chewie/chewie.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
@@ -149,15 +147,15 @@ class _CCTVPageState extends State<CCTVPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: Get.height * 1 / 14,
-        decoration: BoxDecoration(
-            color: Color(0xffF5F9FC),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0)),
-            border: null),
-      ),
+      // bottomNavigationBar: Container(
+      //   height: Get.height * 1 / 14,
+      //   decoration: BoxDecoration(
+      //       color: Color(0xffF5F9FC),
+      //       borderRadius: BorderRadius.only(
+      //           bottomLeft: Radius.circular(40.0),
+      //           bottomRight: Radius.circular(40.0)),
+      //       border: null),
+      // ),
     );
   }
 
