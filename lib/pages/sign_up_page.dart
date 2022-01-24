@@ -180,8 +180,7 @@ class _SignUpPageState extends State<SignUpPage> {
           padding: EdgeInsets.only(bottom: 12),
           width: Get.width * 1 / 3.9,
           child: Text(title,
-              style: TextStyle(fontSize: 15),
-              textAlign: TextAlign.right),
+              style: TextStyle(fontSize: 15), textAlign: TextAlign.right),
         ),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
@@ -212,8 +211,7 @@ class _SignUpPageState extends State<SignUpPage> {
           padding: EdgeInsets.only(bottom: 12),
           width: Get.width * 1 / 3.9,
           child: Text(title,
-              style: TextStyle(fontSize: 15),
-              textAlign: TextAlign.right),
+              style: TextStyle(fontSize: 15), textAlign: TextAlign.right),
         ),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
@@ -254,8 +252,7 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: EdgeInsets.only(bottom: 12),
             width: Get.width * 1 / 3.9,
             child: Text(title,
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.right)),
+                style: TextStyle(fontSize: 15), textAlign: TextAlign.right)),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,
@@ -284,11 +281,10 @@ class _SignUpPageState extends State<SignUpPage> {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.only(bottom: 12),
+            padding: EdgeInsets.only(bottom: 12),
             width: Get.width * 1 / 3.9,
             child: Text(title,
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.right)),
+                style: TextStyle(fontSize: 15), textAlign: TextAlign.right)),
         SizedBox(width: Get.width * 0.05),
         SizedBox(
           width: Get.width * 2.8 / 5,

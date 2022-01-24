@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import "package:ndialog/ndialog.dart";
 
 //https://github.com/0015/ThatProject/blob/master/ESP32_MQTT/2_Flutter_MQTT_Client_App/mqtt_esp32cam_viewer_full_version/lib/main.dart
 //https://www.youtube.com/watch?v=aY7i0xnQW54
