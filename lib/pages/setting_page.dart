@@ -46,6 +46,8 @@ class _SettingPageState extends State<SettingPage> {
   // TextEditing Controller
   final _highTextEditController =
       TextEditingController(text: siteConfig.high_temp==''?null:siteConfig.high_temp);
+  final _nullTextEditingController =
+      TextEditingController(text: ' ');
   final _lowTextEditController =
       TextEditingController(text: siteConfig.low_temp==''?null:siteConfig.low_temp);
 
@@ -177,6 +179,7 @@ class _SettingPageState extends State<SettingPage> {
   List<String> labelName = ['ON', 'OFF'];
   var selectedLabel = '';
   int initialIndex = siteConfig.status_alarm == true ? 0 : 1;
+  int? toggleValue;
 
   Widget _swichWidget(String name) {
     return Container(
@@ -227,6 +230,7 @@ class _SettingPageState extends State<SettingPage> {
                     print(value);
                     print(status);
                   }
+                  toggleValue = value;
                   _alarmStatus = status;
                 });
                 print('global key의 alarm Status는 : $_alarmStatus');
@@ -260,10 +264,8 @@ class _SettingPageState extends State<SettingPage> {
             height: Get.height * 0.06,
             child: TextFormField(
               enabled: status,
-              controller: highTempController,
-              // status==false?highTempController=='':highTempController,
+              controller: toggleValue==0 ? highTempController : _nullTextEditingController,
     // highTempController
-    // status==false?siteConfig.high_temp=='':siteConfig.high_temp
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
                 hintStyle: TextStyle(
@@ -313,7 +315,8 @@ class _SettingPageState extends State<SettingPage> {
             height: Get.height * 0.06,
             child: TextFormField(
               enabled: status,
-              controller: lowTempController,
+              controller: toggleValue==0 ? lowTempController : _nullTextEditingController,
+              // lowTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
                 hintStyle: TextStyle(

@@ -413,7 +413,7 @@ class _SideMotorState extends State<SideMotor> {
                 if (value == 0) {
                   setState(() {
                     for(int i = 0; i<sideStatus.length;i++ ,){
-                      sideStatus[i]=0;
+                      sideStatus[i]=value;
 
                     };
                   });
