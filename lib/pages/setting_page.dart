@@ -491,7 +491,9 @@ class _SettingPageState extends State<SettingPage> {
                   sitesDropdownValue = newValue!;
                   print('$name : $newValue');
                   stream.sitesDropdownValue = sitesDropdownValue;
-                  showAlertDialog(context, sitesDropdownValue);
+                  if (newValue != stream.siteNames[0]) {
+                    showAlertDialog(context, sitesDropdownValue);
+                  }
                   // getSiteId(sitesDropdownValue);
                 });
               },
