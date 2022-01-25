@@ -13,7 +13,7 @@ import 'components/getx_controller/controller.dart';
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24    
-* last update : 2022-01-17
+* last update : 2022-01-25
 * */
 
 // globalKey
@@ -136,12 +136,11 @@ class _SoilControlPageState extends State<SoilControlPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
+                      height: Get.height,
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
                         ),
-                        alignment: Alignment.center,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             MyPumps(),
                             MyValves(),
