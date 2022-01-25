@@ -265,11 +265,7 @@ Widget _mainMonitoring() {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            temp > 20
-                ? Image.asset('assets/images/icon_shiny.png',
-                    color: Color(0xff222222), scale: 3)
-                : Image.asset('assets/images/icon_windy.png',
-                    color: Color(0xff222222), scale: 3),
+            controller.getWeather(stream.exttemp_1),
             // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
             Text("맑음/${controller.extTemp.value}°C",
                 style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),

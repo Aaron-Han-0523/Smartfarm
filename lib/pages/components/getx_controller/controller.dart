@@ -17,6 +17,16 @@ class CounterController extends GetxController {
   var extHumid = ''.obs;
   var soilHumid = ''.obs;
 
+  getWeather(var streamExtTemp_1) {
+    var extTemp = streamExtTemp_1; // 외부온도
+    var temp = int.parse(extTemp);
+    return temp > 20
+        ? Image.asset('assets/images/icon_shiny.png',
+            color: Color(0xff222222), scale: 3)
+        : Image.asset('assets/images/icon_windy.png',
+            color: Color(0xff222222), scale: 3);
+  }
+
   //Api's
   var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
@@ -120,10 +130,24 @@ class CounterController extends GetxController {
 
       // trap = 1;
       // }
+
+
       print('stream.temp_1 = ${stream.temp_1}');
       print('innerTemp = ${innerTemp}');
     });
 
     return true;
   }
+
+  // 날씨 데이터에 따라 이미지지 변화
+  // getWearther() {
+  //   var temp = int.parse(stream.exttemp_1);
+  //
+  //   temp > 20
+  //       ? Image.asset('assets/images/icon_shiny.png',
+  //       color: Color(0xff222222), scale: 3)
+  //       : Image.asset('assets/images/icon_windy.png',
+  //       color: Color(0xff222222), scale: 3);
+  // }
+
 }

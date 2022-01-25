@@ -529,16 +529,14 @@ Widget _switchToggle2(var index, var text, var streamStatus, var action) {
   );
 }
 
+
 Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
-  return Container(
+  final controller = Get.put(CounterController());
+  return  Container(
     height: Get.height * 0.1,
     width: Get.width * 0.9,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      temp > 20
-          ? Image.asset('assets/images/icon_shiny.png',
-              color: Color(0xff222222), scale: 3)
-          : Image.asset('assets/images/icon_windy.png',
-              color: Color(0xff222222), scale: 3),
+      controller.getWeather(stream.exttemp_1),
       Text(" $weather/$temperNumber°C ",
           style: TextStyle(
               fontSize: 16,
