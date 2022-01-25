@@ -56,7 +56,7 @@ class _SensorPageState extends State<SensorPage> {
   // }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue; //${stream.siteNames[0]}
 
   @override
   Widget build(BuildContext context) {

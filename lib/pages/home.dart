@@ -24,7 +24,8 @@ import '../globals/stream.dart' as stream;
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = '${stream.siteId}';
+// var siteId = '${stream.siteId}';
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(
@@ -75,20 +76,20 @@ class _HomeState extends State<Home> {
   // getData
   Future<dynamic> getData() async {
     if (mounted) {
-      // Site Id 가져오기
-      final getSiteId =
-      await dio.get('$url/$userId/sites');
-      stream.siteId = getSiteId.data[0]["sid"];
+      // // Site Id 가져오기
+      // final getSiteId =
+      // await dio.get('$url/$userId/sites');
+      // stream.siteId = getSiteId.data[0]["sid"];
       print('##### [homepage] Site Id는  : ${stream.siteId}');
       // Site Id 전체 가져와서 담기
       final getSiteIds =
         await dio.get('$url/$userId/sites');
       stream.siteInfo = getSiteIds.data;
       print('##### [homepage] Site Info는  : ${stream.siteInfo}');
-      // side ids 가져오기
-      stream.siteIds =
-          stream.siteInfo.map((e) => e["sid"].toString()).toList();
-      print('## [homepage] Site Ids는 가져오기: ${stream.siteIds}');
+      // Site names 가져오기
+      stream.siteNames =
+          stream.siteInfo.map((e) => e["site_name"].toString()).toList();
+      print('## [homepage] Site Ids는 가져오기: ${stream.siteNames}');
 
 
       // put fcm token

@@ -21,7 +21,7 @@ List cctv_url = stream.cctv_url;
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = '${stream.siteId}';
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(
@@ -65,7 +65,7 @@ class _CCTVPageState extends State<CCTVPage> {
 
   //회사명 가져오기
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
+  stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
 
   @override
   void initState() {

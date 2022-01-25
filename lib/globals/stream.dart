@@ -12,6 +12,8 @@ library edgeworks.globals;
 var siteId = '';
 List siteInfo = [];
 List<String> siteIds = [];
+List<String> siteNames = [];
+
 
 // first page
 

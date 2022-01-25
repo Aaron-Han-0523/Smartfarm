@@ -28,7 +28,7 @@ var dio = Dio();
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = '${stream.siteId}';
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // globalKey
 var innerTemp = stream.temp_1; // 내부온도
@@ -100,7 +100,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {

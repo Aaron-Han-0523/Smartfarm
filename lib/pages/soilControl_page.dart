@@ -37,7 +37,7 @@ List sensorId = stream.sensor_id;
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = '${stream.siteId}';
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(
@@ -95,7 +95,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
   }
 
   var siteDropdown =
-      stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {

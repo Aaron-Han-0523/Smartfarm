@@ -18,7 +18,7 @@ class CounterController extends GetxController {
   var soilHumid = ''.obs;
 
   //Api's
-  var siteId = '${stream.siteId}';
+  var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
   connect() async {
     isConnected = await mqttConnect('test');

@@ -21,7 +21,7 @@ import 'package:edgeworks/globals/siteConfig.dart' as siteConfig;
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = '${stream.siteId}';
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
 Dio dio = Dio();
@@ -448,7 +448,16 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   String sitesDropdownValue =
-      stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
+
+  // site name에 맞는 site id 가져오기
+  Future<dynamic> getSiteId(var siteName) async{
+    final getSiteId =
+    await dio.get('$url/$userId/sites/$siteName');
+    stream.siteId = getSiteId.data;
+    Get.offAllNamed('/home');
+    print('##### [SettingPage] Site Id는  : ${stream.siteId}');
+  }
 
   Widget _sitesDropDownButtons(var name) {
     return Container(
@@ -482,9 +491,11 @@ class _SettingPageState extends State<SettingPage> {
                   sitesDropdownValue = newValue!;
                   print('$name : $newValue');
                   stream.sitesDropdownValue = sitesDropdownValue;
+                  showAlertDialog(context, sitesDropdownValue);
+                  // getSiteId(sitesDropdownValue);
                 });
               },
-              items: stream.siteIds
+              items: stream.siteNames
               //    <String>[
               //   'EdgeWorks',
               //   'Jsoftware',
@@ -511,6 +522,38 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ],
       ),
+    );
+  }
+  // 사이트 설정 완료 후 확인 알림
+  showAlertDialog(BuildContext context, var siteName) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("취소"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("확인"),
+      onPressed:  () {
+        getSiteId(siteName);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("사이트 설정 확인"),
+      content: Text("사이트 설정을 하시겠습니까?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
