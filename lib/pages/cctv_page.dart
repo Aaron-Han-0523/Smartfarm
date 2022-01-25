@@ -10,7 +10,7 @@ import '../globals/stream.dart' as stream;
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2022-01-14
+* last update : 2022-01-25
 * */
 
 // global
@@ -21,7 +21,7 @@ List cctv_url = stream.cctv_url;
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = 'sid';
+var siteId = '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(
@@ -135,14 +135,6 @@ class _CCTVPageState extends State<CCTVPage> {
             child: Container(
               height: Get.height * 1 / 30,
               width: Get.width,
-              // color: Color(0xff2E8953),
-
-              // decoration: BoxDecoration(
-              //     color: Color(0xffF5F9FC),
-              //     borderRadius: BorderRadius.only(
-              //         bottomLeft: Radius.circular(40.0),
-              //         bottomRight: Radius.circular(40.0)),
-              //     border: null),
               child: Image.asset(
                 'assets/images/image_bottombar.png',
                 fit: BoxFit.fill,

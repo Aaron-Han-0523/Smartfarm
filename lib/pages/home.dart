@@ -17,14 +17,14 @@ import '../globals/stream.dart' as stream;
 * description : get Data
 * writer : sherry
 * create date : 2022-01-10
-* last update : 2022-01-21
+* last update : 2022-01-25
 * */
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = 'sid';
+var siteId = '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(
@@ -75,6 +75,12 @@ class _HomeState extends State<Home> {
   // getData
   Future<dynamic> getData() async {
     if (mounted) {
+      // Site Id 가져오기
+      final getSiteId =
+      await dio.get('$url/$userId/sites');
+      stream.siteId = getSiteId.data[0]["sid"];
+      print('##### [homepage] Site Id는  : ${stream.siteId}');
+
       // put fcm token
       var fcmtoken = stream.fcmtoken;
       var data = {'uid': userId, 'fcmtoken': fcmtoken};
@@ -292,9 +298,9 @@ class _HomeState extends State<Home> {
       return false;
     }
     print('!!!!!!!!!!!!!!!!!!hiiiiiiiiiiii!!!!!!!!!!!');
-    const topic = '/sf/e0000001/res/cfg';
+    var topic = '/sf/$siteId/res/cfg';
     client.subscribe(topic, MqttQos.atMostOnce);
-    const pubTopic = '/sf/e0000001/req/cfg';
+    var pubTopic = '/sf/$siteId/req/cfg';
     final builder = MqttClientPayloadBuilder();
     builder.addString('{"rt" : "get"}');
     // builder.addString('open');
@@ -302,14 +308,8 @@ class _HomeState extends State<Home> {
 
     client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final mqttReceivedMessages = c;
-      // print('img width = ${mqttReceivedMessages}');
-      // print('img width = ${mqttReceivedMessages.runtimeType}');
-      // print('img width = ${mqttReceivedMessages![0]}');
       final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
 
-      // print('recMess = ${recMess}');
-      // print('recMess = ${recMess.runtimeType}');
-      // print('recMess = ${recMess}');
       var streamData =
       MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       var streamDatas = jsonDecode(streamData);
@@ -324,7 +324,7 @@ class _HomeState extends State<Home> {
       // }
       print('stream.temp_1 = ${stream.temp_1}');
       _disconnect();
-      Get.toNamed('/sensor');
+      Get.offAllNamed('/sensor'); // 카카오 채널 drawer 뒤로가기 제어를 위해 offallnamed라고 설정해야함
     });
     return true;
   }

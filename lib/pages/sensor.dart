@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'dart:convert';
 import 'package:edgeworks/pages/cctv_page.dart';
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../globals/stream.dart' as stream;
 import '../pages/environment_page.dart';
 import 'components/getx_controller/controller.dart';
 import 'sensor_page.dart';
 import 'soilControl_page.dart';
-import 'dart:async';
 
 /*
 * name : Home
 * description : home page
-* writer : john
-* create date : 2021-09-30
-* last update : 2021-09-30
+* writer : walter
+* create date : 2021-12-28
+* last update : 2022-01-25
 * */
 
 class Sensor extends StatelessWidget {

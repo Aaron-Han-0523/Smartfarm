@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:mqtt_client/mqtt_client.dart';
 import 'package:edgeworks/dio/logout_dio.dart';
 import 'package:edgeworks/mqtt/mqtt.dart';
 import 'package:edgeworks/pages/components/getx_controller/controller.dart';
-import 'package:edgeworks/pages/soilControl_page.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:edgeworks/globals/siteConfig.dart' as siteConfig;
@@ -19,16 +15,15 @@ import 'package:edgeworks/globals/siteConfig.dart' as siteConfig;
 * description : setting page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-14
+* last update : 2021-01-25
 * */
 
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = 'sid';
+var siteId = '${stream.siteId}';
 
 // dio APIs
-
 Dio dio = Dio();
 
 class SettingPage extends StatefulWidget {
@@ -42,7 +37,7 @@ class _SettingPageState extends State<SettingPage> {
   // real time data
   final realTimeController = Get.put(CounterController());
 
-  // logout API
+  // logout class
   Logout _logout = Logout();
 
   // MQTT class
@@ -66,8 +61,6 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   void initState() {
-    print('저장된 global key의 alarm Status는 : $_alarmStatus');
-    print('저장된 global key의 stream alarm은 : ${stream.alarm_en}');
     // realTimeController.getConfig();
     _mqttClass.getSiteConfig();
   }
@@ -79,6 +72,7 @@ class _SettingPageState extends State<SettingPage> {
     super.dispose();
   }
 
+  // Update DB function
   Future<void> _updateData(var site_set_alarm_enable, var site_set_alarm_high,
       var site_set_alarm_low, var site_set_alarm_timer) async {
     var params = {
@@ -90,7 +84,6 @@ class _SettingPageState extends State<SettingPage> {
     var response =
         await dio.put('$url/$userId/site/$siteId/settings', data: params);
     // var response = await dio.get('$api/$userId/site/$siteId/settings');
-    print('!!!!!!!!!!!!!!!!!');
     print(response);
   }
 
@@ -186,12 +179,10 @@ class _SettingPageState extends State<SettingPage> {
   int initialIndex = siteConfig.status_alarm == true ? 0 : 1;
 
   Widget _swichWidget(String name) {
-    // int initialIndex = stream.alarm_en == true ? 0 : 1;
     return Container(
       color: Color(0xffFFFFFF),
       height: Get.height * 0.08,
       width: Get.width,
-      // decoration: _decoration(Color(0xffFFFFFF)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -229,23 +220,15 @@ class _SettingPageState extends State<SettingPage> {
                   initialIndex = value;
                   if (value == 0) {
                     status = true;
-                    // stream.alarm_en == true ? 0 : 1;
                     print(value);
                     print(status);
                   } else if (value == 1) {
                     status = false;
-                    // stream.alarm_en == true ? 0 : 1;
                     print(value);
                     print(status);
                   }
                   _alarmStatus = status;
                 });
-                // if (value == 0) {
-                //   status = true;
-                // } else if (value == 1) {
-                //   status = false;
-                // }
-                // _alarmStatus = status;
                 print('global key의 alarm Status는 : $_alarmStatus');
               },
             ),
@@ -385,20 +368,18 @@ class _SettingPageState extends State<SettingPage> {
                   _highTextEditController.text,
                   _lowTextEditController.text,
                   _setTimer,
-                  '/sf/e0000001/req/cfg',
-                  '/sf/e0000001/req/cfg')
+                  '/sf/$siteId/req/cfg',
+                  '/sf/$siteId/req/cfg')
               .then((value) => Get.defaultDialog(
                   backgroundColor: Colors.white,
                   title: '설정 완료',
                   middleText: '설정이 완료 되었습니다.',
                   textCancel: '확인'));
-          print('hi!!!!!!!!!!!');
-        },
+          },
       ),
     );
   }
 
-  // var timerDropdownValue = '${stream.watering_timer}';
   var timerDropdownValue = siteConfig.set_timer;
   Widget _timerDropDownButtons(var name) {
     return Container(
@@ -425,7 +406,6 @@ class _SettingPageState extends State<SettingPage> {
               style: const TextStyle(color: Colors.black54),
               underline: Container(
                 height: 2,
-                // width: 30,
                 color: Colors.black26,
               ),
               onChanged: (value) {
@@ -461,20 +441,6 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ],
       ),
-    );
-  }
-
-  // decoration (with box shadow)
-  BoxDecoration _decoration(dynamic color) {
-    return BoxDecoration(
-      color: color,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          blurRadius: 2,
-          offset: Offset(3, 5), // changes position of shadow
-        ),
-      ],
     );
   }
 

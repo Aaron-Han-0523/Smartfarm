@@ -13,7 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:edgeworks/pages/home.dart';
 import 'package:edgeworks/pages/setting_page.dart';
-import 'package:edgeworks/pages/sign_up_page.dart';
+import 'package:edgeworks/pages/changepw_page.dart';
 import 'login/login_pages.dart';
 import 'pages/mqtt.dart';
 import 'pages/sensor.dart';
@@ -25,14 +25,14 @@ import '../globals/stream.dart' as stream;
 * description : This is a start page. code for fcm push notification.
 * writer : Sherry
 * create date : 2022-01-10
-* last update : 2022-01-17
+* last update : 2022-01-25
 * */
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = 'sid';
+var siteId = '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(

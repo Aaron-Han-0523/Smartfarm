@@ -8,6 +8,9 @@
 
 library edgeworks.globals;
 
+// site id
+var siteId = '';
+
 // first page
 
 var temp_1 = '';

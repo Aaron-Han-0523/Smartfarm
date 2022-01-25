@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:edgeworks/mqtt/mqtt.dart';
 import 'package:edgeworks/globals/toggle.dart' as toggle;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:dio/dio.dart';
 
@@ -17,19 +15,20 @@ import 'components/getx_controller/controller.dart';
 * description : Environment Control Page
 * writer : mark
 * create date : 2021-12-24
-* last update : 2021-01-10
+* last update : 2021-01-25
 * */
 
 // MQTT class
 MqttClass _mqttClass = MqttClass();
 
+// Dio
+var dio = Dio();
+
 //Api's
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = 'sid';
-
-var dio = Dio();
+var siteId = '${stream.siteId}';
 
 // globalKey
 var innerTemp = stream.temp_1; // 내부온도
@@ -52,18 +51,6 @@ List switchId = stream.switch_id;
 
 List sideStatus = stream.sideMotorStatus;
 List topStatus = stream.topMotorStatus;
-// visibility
-bool status1 = true;
-bool status2 = true;
-bool status3 = true;
-bool status4 = true;
-bool status5 = true;
-bool status6 = true;
-bool status7 = true;
-bool status8 = true;
-bool status9 = true;
-bool status10 = true;
-bool status11 = true;
 
 int? getToggleStatus;
 int? getTopToggleStatus;
@@ -76,6 +63,7 @@ bool _customTileExpanded = false;
 // temp
 var temp = int.parse(extTemp);
 
+// Update DB function
 Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
     var update_motor_type, var motor_id) async {
   var params = {
@@ -118,7 +106,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.put(CounterController());
     return Scaffold(
       backgroundColor: Color(0xff2E6645),
       body: Stack(
@@ -178,14 +165,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
             child: Container(
               height: Get.height * 1 / 30,
               width: Get.width,
-              // color: Color(0xff2E8953),
-
-              // decoration: BoxDecoration(
-              //     color: Color(0xffF5F9FC),
-              //     borderRadius: BorderRadius.only(
-              //         bottomLeft: Radius.circular(40.0),
-              //         bottomRight: Radius.circular(40.0)),
-              //     border: null),
               child: Image.asset(
                 'assets/images/image_bottombar.png',
                 fit: BoxFit.fill,
@@ -194,15 +173,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
           ),
         ],
       ),
-      // bottomNavigationBar: Container(
-      //   height: Get.height * 1 / 14,
-      //   decoration: BoxDecoration(
-      //       color: Color(0xffF5F9FC),
-      //       borderRadius: BorderRadius.only(
-      //           bottomLeft: Radius.circular(40.0),
-      //           bottomRight: Radius.circular(40.0)),
-      //       border: null),
-      // ),
     );
   }
 
@@ -403,7 +373,6 @@ class _SideMotorState extends State<SideMotor> {
                 ],
               ),
             ),
-            //  decoration: _decoration(Color(0xff2E8953)),
           ),
         ),
       ],
@@ -471,7 +440,7 @@ class _SideMotorState extends State<SideMotor> {
                 print('value는 : $_switch');
                 // mqtt
                 _mqttClass.allSet('did', stream.sideMotorId.length, 'dact', _switch,
-                    '/sf/e0000001/req/motor', '/sf/e0000001/req/motor', stream.sideMotorId);
+                    '/sf/$siteId/req/motor', '/sf/$siteId/req/motor', stream.sideMotorId);
                 // DB 변동
                 _updateAllMotorData(value, "side");
                 // shared preferences
@@ -542,7 +511,7 @@ class _SideMotorState extends State<SideMotor> {
                       print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
                       // MQTT 통신
                       _mqttClass.ctlSet('did', "${stream.sideMotorId[index]}", 'dact', _switch,
-                          '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                          '/sf/$siteId/req/motor', '/sf/$siteId/req/motor');
                       // DB 업데이트
                       _updateMotorData("${stream.side_motor_name[index]}", "side",
                           "$value", "side", "${stream.side_motor_id[index]}"); // update를 하면 이름도 전부 update 됨 -> 해결 필요
@@ -692,7 +661,7 @@ class _TopMotorState extends State<TopMotor> {
                 print('value는 : $_switch');
                 // mqtt
                 _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
-                    '/sf/e0000001/req/motor', '/sf/e0000001/req/motor', stream.topMotorId);
+                    '/sf/$siteId/req/motor', '/sf/$siteId/req/motor', stream.topMotorId);
                 // DB 변동
                 _updateAllMotorData(value, "top");
                 // shared preferencs
@@ -763,7 +732,7 @@ class _TopMotorState extends State<TopMotor> {
                       print('### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
                       // mqtt 업데이트
                       _mqttClass.ctlSet('did', "${stream.topMotorId[index]}", 'dact', _switch,
-                          '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
+                          '/sf/$siteId/req/motor', '/sf/$siteId/req/motor');
                       // DB 업데이트
                       _updateMotorData("${stream.top_motor_name[index]}", "top",
                           "$value", "top", "${stream.top_motor_id[index]}");

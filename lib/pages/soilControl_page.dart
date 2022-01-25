@@ -37,7 +37,7 @@ List sensor_id = stream.sensor_id;
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = 'test';
-var siteId = 'sid';
+var siteId = '${stream.siteId}';
 
 // dio APIs
 var options = BaseOptions(
@@ -436,7 +436,7 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
               print('### $action${index + 1} value는 : $switchStatus');
 
               _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
-                  '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
+                  '/sf/$siteId/req/$action', '/sf/$siteId/req/$action');
 
               var pumpId = 'pump_${index + 1}';
               var data = {
@@ -508,7 +508,7 @@ Widget _switchToggle2(var index, var text, var streamStatus, var action) {
                   '### $action${index + 1} $action Status는 : ${streamStatus[index]}');
 
               _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
-                  '/sf/e0000001/req/$action', '/sf/e0000001/req/$action');
+                  '/sf/$siteId/req/$action', '/sf/$siteId/req/$action');
 
               var valveId = 'valve_${index + 1}';
               var data = {

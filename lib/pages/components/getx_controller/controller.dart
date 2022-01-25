@@ -17,6 +17,9 @@ class CounterController extends GetxController {
   var extHumid = ''.obs;
   var soilHumid = ''.obs;
 
+  //Api's
+  var siteId = '${stream.siteId}';
+
   connect() async {
     isConnected = await mqttConnect('test');
   }
@@ -45,7 +48,7 @@ class CounterController extends GetxController {
     } else {
       return false;
     }
-    const topic = '/sf/e0000001/data';
+    var topic = '/sf/$siteId/data';
     client.subscribe(topic, MqttQos.atMostOnce);
     client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final mqttReceivedMessages = c;
