@@ -27,11 +27,11 @@ var pump_1 = stream.pump_1; // pump_1의 on/off
 var pump_2 = stream.pump_2; // pump_2의 on/off
 
 List pumps = stream.pumps;
-List pump_name = stream.pump_name;
+List pumpName = stream.pump_name;
 List valves = stream.valves;
-List valve_name = stream.valve_name;
+List valveName = stream.valve_name;
 
-List sensor_id = stream.sensor_id;
+List sensorId = stream.sensor_id;
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
