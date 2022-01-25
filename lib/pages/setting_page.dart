@@ -264,7 +264,7 @@ class _SettingPageState extends State<SettingPage> {
             height: Get.height * 0.06,
             child: TextFormField(
               enabled: status,
-              controller: toggleValue==0 ? highTempController : _nullTextEditingController,
+              controller: toggleValue==1 ? _nullTextEditingController : highTempController,
     // highTempController
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
@@ -315,7 +315,7 @@ class _SettingPageState extends State<SettingPage> {
             height: Get.height * 0.06,
             child: TextFormField(
               enabled: status,
-              controller: toggleValue==0 ? lowTempController : _nullTextEditingController,
+              controller: toggleValue==1 ? _nullTextEditingController : lowTempController,
               // lowTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
