@@ -46,7 +46,7 @@ var motor_6 = stream.motor_6;
 
 List sideMotors = stream.sideMotors;
 List topMotors = stream.topMotors;
-List motor_name = stream.top_motor_name;
+List motorName = stream.top_motor_name;
 List switchId = stream.switch_id;
 
 List sideStatus = stream.sideMotorStatus;
@@ -64,26 +64,25 @@ bool _customTileExpanded = false;
 var temp = int.parse(extTemp);
 
 // Update DB function
-Future<void> _updateMotorData(var motor_name, var motor_type, var motor_action,
-    var update_motor_type, var motor_id) async {
+Future<void> _updateMotorData(var motorName, var motorType, var motorAction,
+    var updateMotorType, var motorId) async {
   var params = {
-    'motor_name': motor_name,
-    'motor_type': motor_type,
-    'motor_action': motor_action,
+    'motor_name': motorName,
+    'motor_type': motorType,
+    'motor_action': motorAction,
   };
   var response = await dio.put(
-      '$url/$userId/site/$siteId/controls/$update_motor_type/motors/$motor_id',
+      '$url/$userId/site/$siteId/controls/$updateMotorType/motors/$motorId',
       data: params);
   print('### 모터 타입 변경 완료 : $response');
 }
 
-Future<void> _updateAllMotorData(var motor_action,
-    var update_motor_type) async {
+Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
   var params = {
-    'motor_action': motor_action,
+    'motor_action': motorAction,
   };
   var response = await dio.put(
-      '$url/$userId/site/$siteId/controls/$update_motor_type/motors',
+      '$url/$userId/site/$siteId/controls/$updateMotorType/motors',
       data: params);
   print('### 사이드 전체 모터 타입 변경 완료 : $response');
 }
@@ -96,7 +95,6 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
-
   void initState() {
     super.initState();
   }
@@ -142,6 +140,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
+                      height: Get.height,
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
                         ),
@@ -175,7 +174,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
       ),
     );
   }
-
 }
 
 // 날씨
@@ -378,6 +376,7 @@ class _SideMotorState extends State<SideMotor> {
       ],
     );
   }
+
   Widget _allSideToggleSwitch(
       String text, var positions, var userIds, var siteIds) {
     return _marginContainer(
@@ -412,35 +411,40 @@ class _SideMotorState extends State<SideMotor> {
 
                 if (value == 0) {
                   setState(() {
-                    for(int i = 0; i<sideStatus.length;i++ ,){
-                      sideStatus[i]=value;
-
-                    };
+                    for (int i = 0; i < sideStatus.length; i++,) {
+                      sideStatus[i] = value;
+                    }
                   });
                   _switch = 'open';
                 }
                 if (value == 1) {
                   _switch = 'stop';
                   setState(() {
-                    for(int i = 0; i<sideStatus.length;i++ ,){
-                      sideStatus[i]=value;
-                    };
+                    for (int i = 0; i < sideStatus.length; i++,) {
+                      sideStatus[i] = value;
+                    }
                   });
                 }
                 if (value == 2) {
                   _switch = 'close';
                   setState(() {
-                    for(int i = 0; i<sideStatus.length;i++ ,){
-                      sideStatus[i]=value;
-                    };
+                    for (int i = 0; i < sideStatus.length; i++,) {
+                      sideStatus[i] = value;
+                    }
                   });
                 }
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
                 print('value는 : $_switch');
                 // mqtt
-                _mqttClass.allSet('did', stream.sideMotorId.length, 'dact', _switch,
-                    '/sf/$siteId/req/motor', '/sf/$siteId/req/motor', stream.sideMotorId);
+                _mqttClass.allSet(
+                    'did',
+                    stream.sideMotorId.length,
+                    'dact',
+                    _switch,
+                    '/sf/$siteId/req/motor',
+                    '/sf/$siteId/req/motor',
+                    stream.sideMotorId);
                 // DB 변동
                 _updateAllMotorData(value, "side");
                 // shared preferences
@@ -506,16 +510,26 @@ class _SideMotorState extends State<SideMotor> {
                         // stream.topMotors[index] = 2;
                       }
                       print('### Motor${index + 1} toggle value는 : $value');
-                      print('### Motor${index + 1} toggle type은 : ${value.runtimeType}');
+                      print(
+                          '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                       print('### Motor${index + 1} value는 : $_switch');
-                      print('### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
+                      print(
+                          '### Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
                       // MQTT 통신
-                      _mqttClass.ctlSet('did', "${stream.sideMotorId[index]}", 'dact', _switch,
-                          '/sf/$siteId/req/motor', '/sf/$siteId/req/motor');
+                      _mqttClass.ctlSet(
+                          'did',
+                          "${stream.sideMotorId[index]}",
+                          'dact',
+                          _switch,
+                          '/sf/$siteId/req/motor',
+                          '/sf/$siteId/req/motor');
                       // DB 업데이트
-                      _updateMotorData("${stream.side_motor_name[index]}", "side",
-                          "$value", "side", "${stream.side_motor_id[index]}"); // update를 하면 이름도 전부 update 됨 -> 해결 필요
-
+                      _updateMotorData(
+                          "${stream.side_motor_name[index]}",
+                          "side",
+                          "$value",
+                          "side",
+                          "${stream.side_motor_id[index]}"); // update를 하면 이름도 전부 update 됨 -> 해결 필요
                     },
                   ),
                 )
@@ -539,7 +553,6 @@ class _TopMotorState extends State<TopMotor> {
   Future<Null> getSideSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getToggleStatus = prefs.getInt('allSideValue') ?? 0;
-    ;
     print('## get all side value : $getToggleStatus');
     setState(() {
       allSideToggleInit = getToggleStatus;
@@ -550,7 +563,6 @@ class _TopMotorState extends State<TopMotor> {
   Future<Null> getTopSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
-    ;
     print('## get all top value : $getTopToggleStatus');
     setState(() {
       allTopToggleInit = getTopToggleStatus;
@@ -598,6 +610,7 @@ class _TopMotorState extends State<TopMotor> {
       ),
     );
   }
+
   //천장 개폐기 제어 전체
   Widget _allTopToggleSwitch(
       String text, var positions, var userIds, var siteIds) {
@@ -633,35 +646,40 @@ class _TopMotorState extends State<TopMotor> {
 
                 if (value == 0) {
                   setState(() {
-                    for(int i = 0; i<topStatus.length;i++ ,){
-                      topStatus[i]=0;
-
-                    };
+                    for (int i = 0; i < topStatus.length; i++,) {
+                      topStatus[i] = 0;
+                    }
                   });
                   _switch = 'open';
                 }
                 if (value == 1) {
                   _switch = 'stop';
                   setState(() {
-                    for(int i = 0; i<topStatus.length;i++ ,){
-                      topStatus[i]=value;
-                    };
+                    for (int i = 0; i < topStatus.length; i++,) {
+                      topStatus[i] = value;
+                    }
                   });
                 }
                 if (value == 2) {
                   _switch = 'close';
                   setState(() {
-                    for(int i = 0; i<topStatus.length;i++ ,){
-                      topStatus[i]=value;
-                    };
+                    for (int i = 0; i < topStatus.length; i++,) {
+                      topStatus[i] = value;
+                    }
                   });
                 }
                 print('toggle value는 : $value');
                 print('toggle type은 : ${value.runtimeType}');
                 print('value는 : $_switch');
                 // mqtt
-                _mqttClass.allSet('did', topMotors.length, 'dact', _switch,
-                    '/sf/$siteId/req/motor', '/sf/$siteId/req/motor', stream.topMotorId);
+                _mqttClass.allSet(
+                    'did',
+                    topMotors.length,
+                    'dact',
+                    _switch,
+                    '/sf/$siteId/req/motor',
+                    '/sf/$siteId/req/motor',
+                    stream.topMotorId);
                 // DB 변동
                 _updateAllMotorData(value, "top");
                 // shared preferencs
@@ -674,6 +692,7 @@ class _TopMotorState extends State<TopMotor> {
       decoration: _decorations(),
     );
   }
+
   // 천창 개폐기 제어
   Widget _topControlSwitch() {
     return ListView.builder(
@@ -727,12 +746,19 @@ class _TopMotorState extends State<TopMotor> {
                         // stream.topMotors[index] = 2;
                       }
                       print('### Motor${index + 1} toggle value는 : $value');
-                      print('### Motor${index + 1} toggle type은 : ${value.runtimeType}');
+                      print(
+                          '### Motor${index + 1} toggle type은 : ${value.runtimeType}');
                       print('### Motor${index + 1} value는 : $_switch');
-                      print('### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
+                      print(
+                          '### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
                       // mqtt 업데이트
-                      _mqttClass.ctlSet('did', "${stream.topMotorId[index]}", 'dact', _switch,
-                          '/sf/$siteId/req/motor', '/sf/$siteId/req/motor');
+                      _mqttClass.ctlSet(
+                          'did',
+                          "${stream.topMotorId[index]}",
+                          'dact',
+                          _switch,
+                          '/sf/$siteId/req/motor',
+                          '/sf/$siteId/req/motor');
                       // DB 업데이트
                       _updateMotorData("${stream.top_motor_name[index]}", "top",
                           "$value", "top", "${stream.top_motor_id[index]}");
@@ -755,7 +781,6 @@ class EtcMotor extends StatefulWidget {
 }
 
 class _EtcMotorState extends State<EtcMotor> {
-
   void initState() {
     super.initState();
   }
@@ -780,8 +805,7 @@ class _EtcMotorState extends State<EtcMotor> {
                 15,
                 child: Column(
                   children: [
-                    _etcSwitch(
-                    ),
+                    _etcSwitch(),
                   ],
                 ),
               )
@@ -822,14 +846,13 @@ BoxDecoration _decorations() {
   );
 }
 
-
 // ##### 기타제어
 Widget _etcSwitch() {
   return ListView.builder(
-    scrollDirection: Axis.vertical,
-    primary: false,
-    shrinkWrap: true,
-    itemCount: stream.etcMotors.length,
+      scrollDirection: Axis.vertical,
+      primary: false,
+      shrinkWrap: true,
+      itemCount: stream.etcMotors.length,
       itemBuilder: (BuildContext context, int index) {
         return _marginContainer(
           height: Get.height * 0.09,
@@ -881,8 +904,7 @@ Widget _etcSwitch() {
           ),
           decoration: _decorations(),
         );
-      }
-  );
+      });
 }
 
 // padding widget
@@ -911,4 +933,3 @@ Container _marginContainer({child, dynamic height, decoration}) {
     decoration: decoration,
   );
 }
-
