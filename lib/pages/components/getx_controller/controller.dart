@@ -24,7 +24,22 @@ class CounterController extends GetxController {
         ? Image.asset('assets/images/icon_shiny.png',
             color: Color(0xff222222), scale: 3)
         : Image.asset('assets/images/icon_windy.png',
-            color: Color(0xff222222), scale: 3);
+            color: Color(0xff222222), scale: 15);
+  }
+
+  getWeatherStatus(var streamExtTemp_1){
+    var extTemp = streamExtTemp_1; // 외부온도
+    var temp = int.parse(extTemp);
+    return temp > 20
+        ? Text('맑음/$streamExtTemp_1°C',
+        style: _textStyle(Color(0xff222222), FontWeight.w600, 16))
+        : Text('흐림/$streamExtTemp_1°C',
+        style: _textStyle(Color(0xff222222), FontWeight.w600, 16));
+  }
+
+  // text
+  TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
+    return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
   }
 
   //Api's

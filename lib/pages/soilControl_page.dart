@@ -537,11 +537,7 @@ Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
     width: Get.width * 0.9,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       controller.getWeather(stream.exttemp_1),
-      Text(" $weather/$temperNumber°C ",
-          style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Color(0xff222222))),
+      controller.getWeatherStatus(stream.exttemp_1),
       Text(" 토양 전도도 $soilNumber cm/μs",
           style: TextStyle(
               fontSize: 16,

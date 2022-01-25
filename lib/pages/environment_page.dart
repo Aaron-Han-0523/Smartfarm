@@ -258,8 +258,7 @@ class _MyWeatherState extends State<MyWeather> {
 // 현재 상태 모니터링
 Widget _mainMonitoring() {
   final controller = Get.put(CounterController());
-  return Obx(
-    () => Container(
+  return Container(
         height: Get.height * 0.1,
         width: Get.width * 0.9,
         child: Row(
@@ -267,8 +266,7 @@ Widget _mainMonitoring() {
           children: [
             controller.getWeather(stream.exttemp_1),
             // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
-            Text("맑음/${controller.extTemp.value}°C",
-                style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
+            controller.getWeatherStatus(stream.exttemp_1),
             Image.asset('assets/images/icon_env_arrow_up.png',
                 color: Color(0xffffd5185), scale: 3),
             Text("07:32",
@@ -279,8 +277,7 @@ Widget _mainMonitoring() {
                 style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
           ],
         ),
-        decoration: _decoration(Color(0xffFFFFFF))),
-  );
+        decoration: _decoration(Color(0xffFFFFFF)));
 }
 
 // 내/외부 모니터링
