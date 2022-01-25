@@ -65,7 +65,7 @@ class _CCTVPageState extends State<CCTVPage> {
 
   //회사명 가져오기
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+  stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
 
   @override
   void initState() {

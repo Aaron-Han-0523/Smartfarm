@@ -80,6 +80,16 @@ class _HomeState extends State<Home> {
       await dio.get('$url/$userId/sites');
       stream.siteId = getSiteId.data[0]["sid"];
       print('##### [homepage] Site Id는  : ${stream.siteId}');
+      // Site Id 전체 가져와서 담기
+      final getSiteIds =
+        await dio.get('$url/$userId/sites');
+      stream.siteInfo = getSiteIds.data;
+      print('##### [homepage] Site Info는  : ${stream.siteInfo}');
+      // side ids 가져오기
+      stream.siteIds =
+          stream.siteInfo.map((e) => e["sid"].toString()).toList();
+      print('## [homepage] Site Ids는 가져오기: ${stream.siteIds}');
+
 
       // put fcm token
       var fcmtoken = stream.fcmtoken;

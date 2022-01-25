@@ -448,7 +448,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   String sitesDropdownValue =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? '${stream.siteId}' : stream.sitesDropdownValue;
 
   Widget _sitesDropDownButtons(var name) {
     return Container(
@@ -484,16 +484,18 @@ class _SettingPageState extends State<SettingPage> {
                   stream.sitesDropdownValue = sitesDropdownValue;
                 });
               },
-              items: <String>[
-                'EdgeWorks',
-                'Jsoftware',
-                'smartFarm',
-                'Project',
-                'Nodejs',
-                'Flutter',
-                'MySQL',
-                'AWS'
-              ].map<DropdownMenuItem<String>>((String value) {
+              items: stream.siteIds
+              //    <String>[
+              //   'EdgeWorks',
+              //   'Jsoftware',
+              //   'smartFarm',
+              //   'Project',
+              //   'Nodejs',
+              //   'Flutter',
+              //   'MySQL',
+              //   'AWS'
+              // ]
+                  .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(
