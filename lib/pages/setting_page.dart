@@ -488,13 +488,15 @@ class _SettingPageState extends State<SettingPage> {
               ),
               onChanged: (String? newValue) {
                 setState(() {
-                  sitesDropdownValue = newValue!;
-                  print('$name : $newValue');
-                  stream.sitesDropdownValue = sitesDropdownValue;
-                  if (newValue != stream.siteNames[0]) {
+                  if (newValue != stream.sitesDropdownValue) {
+                    sitesDropdownValue = newValue!;
+                    stream.sitesDropdownValue = sitesDropdownValue;
                     showAlertDialog(context, sitesDropdownValue);
                   }
-                  // getSiteId(sitesDropdownValue);
+                  // print('## 1번째 sitesDropdownValue 확인 : $name : ${stream.sitesDropdownValue}');
+                  sitesDropdownValue = newValue!;
+                  print('## new value 확인 : $name : $newValue');
+                  stream.sitesDropdownValue = sitesDropdownValue;
                 });
               },
               items: stream.siteNames
