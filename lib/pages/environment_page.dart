@@ -95,8 +95,30 @@ class EnvironmentPage extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<EnvironmentPage> {
+  //shared preferences all side toggle status
+  Future<Null> getSideSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getToggleStatus = prefs.getInt('allSideValue') ?? 0;
+    print('## get all side value : $getToggleStatus');
+    setState(() {
+      allSideToggleInit = getToggleStatus;
+    });
+  }
+
+  //shared preferences top toggle status
+  Future<Null> getTopSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
+    print('## get all top value : $getTopToggleStatus');
+    setState(() {
+      allTopToggleInit = getTopToggleStatus;
+    });
+  }
+
   void initState() {
     super.initState();
+    getSideSharedPrefs();
+    getTopSharedPrefs();
   }
 
   var siteDropdown =
@@ -541,33 +563,10 @@ class TopMotor extends StatefulWidget {
 }
 
 class _TopMotorState extends State<TopMotor> {
-  //shared preferences all side toggle status
-  Future<Null> getSideSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    getToggleStatus = prefs.getInt('allSideValue') ?? 0;
-    print('## get all side value : $getToggleStatus');
-    setState(() {
-      allSideToggleInit = getToggleStatus;
-    });
-  }
-
-  //shared preferences top toggle status
-  Future<Null> getTopSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
-    print('## get all top value : $getTopToggleStatus');
-    setState(() {
-      allTopToggleInit = getTopToggleStatus;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    getToggleStatus;
-    getTopToggleStatus;
-    getSideSharedPrefs();
-    getTopSharedPrefs();
   }
 
   @override
