@@ -105,7 +105,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff2E6645),
+      // backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -140,19 +140,14 @@ class _EnvironmentState extends State<EnvironmentPage> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return Container(
-                        constraints: BoxConstraints(
-                          maxWidth: double.infinity
-                        ),
-                          decoration: BoxDecoration(
-                            color: Color(0xffF5F9FC),
-                          ),
-                          child: Column(
-                            children: [
-                              SideMotor(),
-                              TopMotor(),
-                              EtcMotor(),
-                            ],
-                          ));
+                            child: Column(
+                              children: [
+                                SideMotor(),
+                                TopMotor(),
+                                EtcMotor(),
+                              ],
+                            ),
+                          );
                     },
                     childCount: 1,
                   ),

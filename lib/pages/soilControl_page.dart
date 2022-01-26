@@ -101,7 +101,6 @@ class _SoilControlPageState extends State<SoilControlPage> {
   Widget build(BuildContext context) {
     // FutureBuilder listview
     return Scaffold(
-      backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -136,12 +135,6 @@ class _SoilControlPageState extends State<SoilControlPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
-                        constraints: BoxConstraints(
-                            maxWidth: double.infinity
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xffF5F9FC),
-                        ),
                         child: Column(
                           children: [
                             MyPumps(),
