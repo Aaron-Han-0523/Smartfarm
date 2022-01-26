@@ -513,14 +513,17 @@ class _SideMotorState extends State<SideMotor> {
 
                       if (value == 0) {
                         _switch = 'open';
+                        sideStatus[index] = value;
                         // stream.topMotors[index] = 0;
                       }
                       if (value == 1) {
                         _switch = 'stop';
+                        sideStatus[index] = value;
                         // stream.topMotors[index] = 1;
                       }
                       if (value == 2) {
                         _switch = 'close';
+                        sideStatus[index] = value;
                         // stream.topMotors[index] = 2;
                       }
                       print('### Motor${index + 1} toggle value는 : $value');
@@ -726,15 +729,15 @@ class _TopMotorState extends State<TopMotor> {
 
                       if (value == 0) {
                         _switch = 'open';
-                        // stream.topMotors[index] = 0;
+                        stream.topMotors[index] = value;
                       }
                       if (value == 1) {
                         _switch = 'stop';
-                        // stream.topMotors[index] = 1;
+                        stream.topMotors[index] = value;
                       }
                       if (value == 2) {
                         _switch = 'close';
-                        // stream.topMotors[index] = 2;
+                        stream.topMotors[index] = value;
                       }
                       print('### Motor${index + 1} toggle value는 : $value');
                       print(
