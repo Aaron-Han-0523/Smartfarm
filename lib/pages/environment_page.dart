@@ -136,25 +136,27 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     ]),
               ),
               SliverList(
-                // itemExtent: 3.0,
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Container(
-                      height: Get.height,
-                        decoration: BoxDecoration(
-                          color: Color(0xffF5F9FC),
+                  // itemExtent: 3.0,
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Container(
+                        constraints: BoxConstraints(
+                          maxWidth: double.infinity
                         ),
-                        child: Column(
-                          children: [
-                            SideMotor(),
-                            TopMotor(),
-                            EtcMotor(),
-                          ],
-                        ));
-                  },
-                  childCount: 1,
+                          decoration: BoxDecoration(
+                            color: Color(0xffF5F9FC),
+                          ),
+                          child: Column(
+                            children: [
+                              SideMotor(),
+                              TopMotor(),
+                              EtcMotor(),
+                            ],
+                          ));
+                    },
+                    childCount: 1,
+                  ),
                 ),
-              ),
             ],
           ),
           Positioned(
