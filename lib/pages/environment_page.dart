@@ -239,7 +239,7 @@ class _MyWeatherState extends State<MyWeather> {
                         // "${controller.soilTemp.value}°C",
                         "남동향",
                         'assets/images/icon_windsp.png',
-                        "풍속",
+                        "  풍속",
                         // "${controller.soilHumid.value}%"),
                         "12.5m/s"),
                   ],
@@ -289,31 +289,21 @@ Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 15, right: 5),
-                  child: Image.asset(icon, color: Color(0xff222222), scale: 5)),
-              Padding(
-                padding: EdgeInsets.only(left: 5, right: 20),
-                child: Text(mainText,
-                    style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
-              ),
+              Image.asset(icon, color: Color(0xff222222), scale: 5),
+              Text(mainText,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               Text(_mainText,
                   style: _textStyle(Color(0xff222222), FontWeight.w600, 15)),
             ],
           ),
           Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                  padding: EdgeInsets.only(left: 15, right: 5),
-                  child: Image.asset(_icon, color: Color(0xff222222), scale: 5)),
-              Padding(
-                padding: EdgeInsets.only(left: 5, right: 20),
-                child: Text(subText,
-                    style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
-              ),
+              Image.asset(_icon, color: Color(0xff222222), scale: 5),
+              Text(subText,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               Text(_subText,
                   style: _textStyle(Color(0xff222222), FontWeight.w600, 15)),
             ],
