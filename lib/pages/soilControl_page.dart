@@ -136,7 +136,9 @@ class _SoilControlPageState extends State<SoilControlPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
-                      height: Get.height,
+                        constraints: BoxConstraints(
+                            maxWidth: double.infinity
+                        ),
                         decoration: BoxDecoration(
                           color: Color(0xffF5F9FC),
                         ),
