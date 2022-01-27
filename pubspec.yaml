@@ -35,6 +35,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons:
+
+flutter_icons:
+  android: true
+  image_path : "icon/smartfarm_appstore_icon.png"
+
 flutter:
   generate: true
   uses-material-design: true

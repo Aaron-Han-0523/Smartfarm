@@ -103,12 +103,20 @@ class LoginTest {
 
     var jsonBody = getUid.data;
 
+    if (jsonBody != null) {
       if (jsonBody[0]["uid"] == uid) {
-        print('##### [login_dio page] id 조회 응답은: ${jsonBody[0]["uid"]}');
         return uidStatus = true;
-      } else if (jsonBody == null) {
+      } else {
         return uidStatus = false;
+      }
     }
+
+    //   if (jsonBody[0]["uid"] == uid) {
+    //     print('##### [login_dio page] id 조회 응답은: ${jsonBody[0]["uid"]}');
+    //     return uidStatus = true;
+    //   } else{
+    //     return uidStatus = false;
+    // }
   }
 
   // pw 일치 확인
