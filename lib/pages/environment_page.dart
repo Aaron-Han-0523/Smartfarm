@@ -174,6 +174,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
+                      color: Color(0xffF5F9FC),
                       child: Column(
                         children: [
                           SideMotor(),
@@ -317,7 +318,7 @@ Widget _mainMonitoring() {
 Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
     dynamic _icon, String subText, String _subText) {
   return Container(
-      height: Get.height * 0.07,
+      height: Get.height * 0.09,
       width: Get.width * 0.425,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

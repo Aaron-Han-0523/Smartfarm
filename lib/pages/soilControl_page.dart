@@ -136,12 +136,13 @@ class _SoilControlPageState extends State<SoilControlPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
+                        color: Color(0xffF5F9FC),
                         child: Column(
-                      children: [
-                        MyPumps(),
-                        MyValves(),
-                      ],
-                    ));
+                          children: [
+                            MyPumps(),
+                            MyValves(),
+                          ],
+                        ));
                   },
                   childCount: 1,
                 ),

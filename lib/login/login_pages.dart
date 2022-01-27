@@ -208,8 +208,8 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             var uid = _idTextEditController.text;
             var pw = _pwTextEditController.text;
-            await _loginTest.loginTest(uid, pw);
-            // Get.toNamed('/home');
+            // await _loginTest.loginTest(uid, pw);
+            Get.toNamed('/home');
             // Get.toNamed('/sensor');
           },
           child: Text(

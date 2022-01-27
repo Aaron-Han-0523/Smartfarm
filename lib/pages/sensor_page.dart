@@ -98,7 +98,7 @@ class _SensorPageState extends State<SensorPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
-                      // color: Colors.red,
+                      color: Color(0xffF5F9FC),
                       child: Column(
                         children: [
                           MyAccordian(),
