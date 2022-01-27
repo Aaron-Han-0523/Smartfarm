@@ -55,8 +55,9 @@ class _SensorPageState extends State<SensorPage> {
   //   super.dispose();
   // }
 
-  var siteDropdown =
-      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue; //${stream.siteNames[0]}
+  var siteDropdown = stream.sitesDropdownValue == ''
+      ? '${stream.siteNames[0]}'
+      : stream.sitesDropdownValue; //${stream.siteNames[0]}
 
   @override
   Widget build(BuildContext context) {
@@ -70,22 +71,27 @@ class _SensorPageState extends State<SensorPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.14,
+                toolbarHeight: Get.height * 0.07,
                 backgroundColor: Color(0xffF5F9FC),
-                title: Column(children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Farm in Earth',
-                      style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(siteDropdown,
-                        style: TextStyle(color: Colors.black, fontSize: 17)),
-                  ),
-                ]),
+                title: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Farm in Earth',
+                          style:
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(siteDropdown,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 17)),
+                      ),
+                      SizedBox(height: Get.height * 0.02),
+                    ]),
               ),
               SliverList(
                 // itemExtent: 3.0,

@@ -64,8 +64,9 @@ class _CCTVPageState extends State<CCTVPage> {
   List<bool> _visibility = [true, true, true];
 
   //회사명 가져오기
-  var siteDropdown =
-  stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
+  var siteDropdown = stream.sitesDropdownValue == ''
+      ? '${stream.siteNames[0]}'
+      : stream.sitesDropdownValue;
 
   @override
   void initState() {
@@ -94,22 +95,27 @@ class _CCTVPageState extends State<CCTVPage> {
             slivers: [
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.14,
+                toolbarHeight: Get.height * 0.07,
                 backgroundColor: Color(0xffF5F9FC),
-                title: Column(children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Farm in Earth',
-                      style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(siteDropdown,
-                        style: TextStyle(color: Colors.black, fontSize: 17)),
-                  ),
-                ]),
+                title: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Farm in Earth',
+                          style:
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(siteDropdown,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 17)),
+                      ),
+                      SizedBox(height: Get.height * 0.02),
+                    ]),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
