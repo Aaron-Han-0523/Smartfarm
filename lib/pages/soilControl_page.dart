@@ -108,7 +108,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.27,
+                toolbarHeight: Get.height * 0.29,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

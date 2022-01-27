@@ -95,7 +95,7 @@ class _CCTVPageState extends State<CCTVPage> {
             slivers: [
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.07,
+                toolbarHeight: Get.height * 0.08,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -114,7 +114,7 @@ class _CCTVPageState extends State<CCTVPage> {
                             style:
                                 TextStyle(color: Colors.black, fontSize: 17)),
                       ),
-                      SizedBox(height: Get.height * 0.02),
+                      SizedBox(height: Get.height * 0.01),
                     ]),
               ),
               SliverList(

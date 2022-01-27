@@ -146,7 +146,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.27,
+                toolbarHeight: Get.height * 0.29,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -317,7 +317,7 @@ Widget _mainMonitoring() {
 Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
     dynamic _icon, String subText, String _subText) {
   return Container(
-      height: Get.height * 0.09,
+      height: Get.height * 0.07,
       width: Get.width * 0.425,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -71,7 +71,7 @@ class _SensorPageState extends State<SensorPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.07,
+                toolbarHeight: Get.height * 0.08,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -90,7 +90,7 @@ class _SensorPageState extends State<SensorPage> {
                             style:
                                 TextStyle(color: Colors.black, fontSize: 17)),
                       ),
-                      SizedBox(height: Get.height * 0.02),
+                      SizedBox(height: Get.height * 0.01),
                     ]),
               ),
               SliverList(
