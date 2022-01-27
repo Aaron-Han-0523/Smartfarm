@@ -24,7 +24,12 @@ var userId = 'test';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
-Dio dio = Dio();
+var options = BaseOptions(
+  baseUrl: '$url',
+  connectTimeout: 5000,
+  receiveTimeout: 3000,
+);
+Dio dio = Dio(options);
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -451,12 +456,13 @@ class _SettingPageState extends State<SettingPage> {
       stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
 
   // site name에 맞는 site id 가져오기
-  Future<dynamic> getSiteId(var siteName) async{
+  Future<dynamic> getSiteId(var siteNames) async{
+    print('##### [SettingPage] siteNames는  : ${siteNames}');
     final getSiteId =
-    await dio.get('$url/$userId/sites/$siteName');
+    await dio.post('$url/$userId/sites/$siteNames');
     stream.siteId = getSiteId.data;
-    Get.offAllNamed('/home');
     print('##### [SettingPage] Site Id는  : ${stream.siteId}');
+    Get.offAllNamed('/home');
   }
 
   Widget _sitesDropDownButtons(var name) {
@@ -487,29 +493,11 @@ class _SettingPageState extends State<SettingPage> {
                 color: Colors.black26,
               ),
               onChanged: (String? newValue) {
-                setState(() {
-                  if (newValue != stream.sitesDropdownValue) {
-                    sitesDropdownValue = newValue!;
-                    stream.sitesDropdownValue = sitesDropdownValue;
-                    showAlertDialog(context, sitesDropdownValue);
-                  }
-                  // print('## 1번째 sitesDropdownValue 확인 : $name : ${stream.sitesDropdownValue}');
-                  sitesDropdownValue = newValue!;
-                  print('## new value 확인 : $name : $newValue');
-                  stream.sitesDropdownValue = sitesDropdownValue;
-                });
+                if(newValue != sitesDropdownValue){
+                  showAlertDialog(context, newValue);
+                }
               },
               items: stream.siteNames
-              //    <String>[
-              //   'EdgeWorks',
-              //   'Jsoftware',
-              //   'smartFarm',
-              //   'Project',
-              //   'Nodejs',
-              //   'Flutter',
-              //   'MySQL',
-              //   'AWS'
-              // ]
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -529,18 +517,23 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
   // 사이트 설정 완료 후 확인 알림
-  showAlertDialog(BuildContext context, var siteName) {
+  showAlertDialog(BuildContext context, var siteName)  {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("취소"),
       onPressed:  () {
-        Navigator.pop(context);
+        Get.back();
       },
     );
     Widget continueButton = FlatButton(
       child: Text("확인"),
       onPressed:  () {
-        getSiteId(siteName);
+        // nameStatus == true;
+        setState(() {
+          stream.sitesDropdownValue=siteName;
+          print("siteName은 $siteName");
+          getSiteId(stream.sitesDropdownValue);
+        });
       },
     );
     // set up the AlertDialog
