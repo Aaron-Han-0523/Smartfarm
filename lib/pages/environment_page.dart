@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -367,36 +369,39 @@ class _SideMotorState extends State<SideMotor> {
             child: Theme(
               data:
                   Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                initiallyExpanded: true,
-                iconColor: Colors.white,
-                collapsedIconColor: Colors.white,
-                trailing: Icon(_customTileExpanded
-                    ? Icons.keyboard_arrow_up_rounded
-                    : Icons.keyboard_arrow_down_rounded),
-                onExpansionChanged: (bool expanded) {
-                  setState(() {
-                    _customTileExpanded = expanded;
-                  });
-                },
-                title: _edgeLeftPadding(
-                  15,
-                  child: Text('측창 개폐기 제어',
-                      style:
-                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+              child: IgnorePointer(
+                ignoring: stream.sideMotors.length == 0 ? true : false,
+                child: ExpansionTile(
+                  initiallyExpanded: true,
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  trailing: Icon(_customTileExpanded
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded),
+                  onExpansionChanged: (bool expanded) {
+                    setState(() {
+                      _customTileExpanded = expanded;
+                    });
+                  },
+                  title: _edgeLeftPadding(
+                    15,
+                    child: Text('측창 개폐기 제어',
+                        style:
+                            _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                  ),
+                  children: <Widget>[
+                    _topBottomPadding(
+                      15,
+                      15,
+                      child: Column(
+                        children: [
+                          _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                          _sideControlSwitch()
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                children: <Widget>[
-                  _topBottomPadding(
-                    15,
-                    15,
-                    child: Column(
-                      children: [
-                        _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
-                        _sideControlSwitch()
-                      ],
-                    ),
-                  )
-                ],
               ),
             ),
           ),
@@ -404,6 +409,8 @@ class _SideMotorState extends State<SideMotor> {
       ],
     );
   }
+
+  var textSizedBox = Get.width * 1 / 5;
 
   Widget _allSideToggleSwitch(
       String text, var positions, var userIds, var siteIds) {
@@ -413,8 +420,12 @@ class _SideMotorState extends State<SideMotor> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _edgeLeftPadding(20,
-              child: Text(text,
-                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+              child: SizedBox(
+                width: textSizedBox,
+                child: Text(text,
+                    style:
+                        _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+              )),
           _edgeRightPadding(
             10,
             child: ToggleSwitch(
@@ -486,6 +497,8 @@ class _SideMotorState extends State<SideMotor> {
     );
   }
 
+  var overflows = TextOverflow.ellipsis;
+
   Widget _sideControlSwitch() {
     return ListView.builder(
         scrollDirection: Axis.vertical,
@@ -499,10 +512,22 @@ class _SideMotorState extends State<SideMotor> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _edgeLeftPadding(20,
-                    child: Text(
-                        "${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
-                        style: _textStyle(
-                            Color(0xff222222), FontWeight.normal, 15))),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          // overflows = TextOverflow.values as TextOverflow;
+                        });
+                      },
+                      child: SizedBox(
+                        width: textSizedBox,
+                        child: Text(
+                          "${stream.side_motor_name[index]}", //${stream.sideMotors[0]['motor_name']
+                          style: _textStyle(
+                              Color(0xff222222), FontWeight.normal, 15),
+                          overflow: overflows,
+                        ),
+                      ),
+                    )),
                 _edgeRightPadding(
                   10,
                   child: ToggleSwitch(
@@ -591,26 +616,29 @@ class _TopMotorState extends State<TopMotor> {
       child: Container(
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            iconColor: Colors.white,
-            collapsedIconColor: Colors.white,
-            title: _edgeLeftPadding(
-              15,
-              child: Text('천창 개폐기 제어',
-                  style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+          child: IgnorePointer(
+            ignoring: stream.topMotors.length == 0 ? true : false,
+            child: ExpansionTile(
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: _edgeLeftPadding(
+                15,
+                child: Text('천창 개폐기 제어',
+                    style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+              ),
+              children: <Widget>[
+                _topBottomPadding(
+                  15,
+                  15,
+                  child: Column(
+                    children: [
+                      _allTopToggleSwitch('천창(전체)', 'top', 'test', 'sid'),
+                      _topControlSwitch()
+                    ],
+                  ),
+                )
+              ],
             ),
-            children: <Widget>[
-              _topBottomPadding(
-                15,
-                15,
-                child: Column(
-                  children: [
-                    _allTopToggleSwitch('천창(전체)', 'top', 'test', 'sid'),
-                    _topControlSwitch()
-                  ],
-                ),
-              )
-            ],
           ),
         ),
         decoration: _decoration(Color(0xff2E8953)),
@@ -798,25 +826,28 @@ class _EtcMotorState extends State<EtcMotor> {
       child: Container(
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            iconColor: Colors.white,
-            collapsedIconColor: Colors.white,
-            title: _edgeLeftPadding(
-              15,
-              child: Text('기타제어',
-                  style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+          child: IgnorePointer(
+            ignoring: stream.etcMotors.length == 0 ? true : false,
+            child: ExpansionTile(
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: _edgeLeftPadding(
+                15,
+                child: Text('기타제어',
+                    style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+              ),
+              children: <Widget>[
+                _topBottomPadding(
+                  15,
+                  15,
+                  child: Column(
+                    children: [
+                      _etcSwitch(),
+                    ],
+                  ),
+                )
+              ],
             ),
-            children: <Widget>[
-              _topBottomPadding(
-                15,
-                15,
-                child: Column(
-                  children: [
-                    _etcSwitch(),
-                  ],
-                ),
-              )
-            ],
           ),
         ),
         decoration: _decoration(Color(0xff2E8953)),

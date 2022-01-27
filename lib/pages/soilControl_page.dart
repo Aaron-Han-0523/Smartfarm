@@ -55,8 +55,7 @@ var temp = int.parse(extTemp);
 MqttClass _mqttClass = MqttClass();
 String statusText = "Status Text";
 bool isConnected = false;
-final MqttServerClient client =
-    MqttServerClient('14.46.231.48', '');
+final MqttServerClient client = MqttServerClient('14.46.231.48', '');
 
 // decoration (with box shadow)
 BoxDecoration _decoration(dynamic color) {
@@ -288,36 +287,42 @@ class _MyPumpsState extends State<MyPumps> {
           decoration: _decoration(Color(0xff2E8953)),
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              initiallyExpanded: true,
-              title: _edgeLeftPadding(
-                15,
-                child: Text('관수 펌프 제어',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xffFFFFFF))),
+            child: IgnorePointer(
+              ignoring: stream.pumps.length == 0 ? true : false,
+              child: ExpansionTile(
+                initiallyExpanded: true,
+                title: _edgeLeftPadding(
+                  15,
+                  child: Text('관수 펌프 제어',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xffFFFFFF))),
+                ),
+                textColor: Colors.white,
+                collapsedTextColor: Colors.white,
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                // tilePadding: EdgeInsets.all(8.0),
+                children: <Widget>[
+                  _topBottomPadding(
+                    15,
+                    15,
+                    child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: stream.pumpStatus.length,
+                        itemBuilder: (BuildContext context, var index) {
+                          return _switchToggle(
+                              index,
+                              '${stream.pump_name[index]}',
+                              stream.pumpStatus,
+                              'pump');
+                        }),
+                  )
+                ],
               ),
-              textColor: Colors.white,
-              collapsedTextColor: Colors.white,
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              // tilePadding: EdgeInsets.all(8.0),
-              children: <Widget>[
-                _topBottomPadding(
-                  15,
-                  15,
-                  child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: stream.pumpStatus.length,
-                      itemBuilder: (BuildContext context, var index) {
-                        return _switchToggle(
-                            index, '${stream.pump_name[index]}', stream.pumpStatus, 'pump');
-                      }),
-                )
-              ],
             ),
           ),
         ),
@@ -348,35 +353,41 @@ class _MyValvesState extends State<MyValves> {
           decoration: _decoration(Color(0xff2E8953)),
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              title: _edgeLeftPadding(
-                15,
-                child: Text('밸브 제어',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xffFFFFFF))),
+            child: IgnorePointer(
+              ignoring: stream.valves.length == 0 ? true : false,
+              child: ExpansionTile(
+                title: _edgeLeftPadding(
+                  15,
+                  child: Text('밸브 제어',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xffFFFFFF))),
+                ),
+                textColor: Colors.white,
+                collapsedTextColor: Colors.white,
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                // tilePadding: EdgeInsets.all(8.0),
+                children: <Widget>[
+                  _topBottomPadding(
+                    15,
+                    15,
+                    child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: stream.valveStatus.length,
+                        itemBuilder: (BuildContext context, var index) {
+                          return _switchToggle2(
+                              index,
+                              '${stream.valve_name[index]}',
+                              stream.valveStatus,
+                              'valve');
+                        }),
+                  )
+                ],
               ),
-              textColor: Colors.white,
-              collapsedTextColor: Colors.white,
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              // tilePadding: EdgeInsets.all(8.0),
-              children: <Widget>[
-                _topBottomPadding(
-                  15,
-                  15,
-                  child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: stream.valveStatus.length,
-                      itemBuilder: (BuildContext context, var index) {
-                        return _switchToggle2(
-                            index, '${stream.valve_name[index]}', stream.valveStatus, 'valve');
-                      }),
-                )
-              ],
             ),
           ),
         ),
