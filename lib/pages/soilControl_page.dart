@@ -314,7 +314,7 @@ class _MyPumpsState extends State<MyPumps> {
                       itemCount: stream.pumpStatus.length,
                       itemBuilder: (BuildContext context, var index) {
                         return _switchToggle(
-                            index, '펌프', stream.pumpStatus, 'pump');
+                            index, '${stream.pump_name[index]}', stream.pumpStatus, 'pump');
                       }),
                 )
               ],
@@ -373,7 +373,7 @@ class _MyValvesState extends State<MyValves> {
                       itemCount: stream.valveStatus.length,
                       itemBuilder: (BuildContext context, var index) {
                         return _switchToggle2(
-                            index, '밸브', stream.valveStatus, 'valve');
+                            index, '${stream.valve_name[index]}', stream.valveStatus, 'valve');
                       }),
                 )
               ],
@@ -393,7 +393,7 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
       children: <Widget>[
         _edgeLeftPadding(
           20,
-          child: Text("$text (#${index + 1})",
+          child: Text(text,
               style: TextStyle(
                   color: Color(0xff222222),
                   fontSize: 15,
@@ -464,7 +464,7 @@ Widget _switchToggle2(var index, var text, var streamStatus, var action) {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(left: 20),
-          child: Text("$text (#${index + 1})",
+          child: Text(text,
               style: TextStyle(
                   color: Color(0xff222222),
                   fontSize: 15,

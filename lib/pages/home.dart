@@ -244,18 +244,10 @@ class _HomeState extends State<Home> {
           .toList();
       print('## [homepage] pump status 가져오기: ${stream.pumpStatus}');
 
-      //----------valves----------------------------------------------
-      final getValves =
-          await dio.get('$url/$userId/site/$siteId/controls/valves');
-      stream.valves = getValves.data;
-      print('##### homePage GET Valves LIST: ${stream.valves}');
-      print('##### homePage GET Valves LIST length: ${stream.valves.length}');
-
-      // DB에서 pump 상태 가져오기
-      stream.valveStatus = stream.valves
-          .map((e) => int.parse(e["valve_action"].toString()))
-          .toList();
-      print('## [homepage] valve status 가져오기: ${stream.pumpStatus}');
+      // DB에서 pump name 가져오기
+      stream.pump_name =
+          stream.pumps.map((e) => e["pump_name"].toString()).toList();
+      print('## [homepage] pump name 가져오기: ${stream.pump_name}');
 
       // get pump1, pump2 = sensorId
       final getSensorId = await dio.get('$url/$userId/site/$siteId/sensors');
@@ -273,6 +265,25 @@ class _HomeState extends State<Home> {
         }
         print('##### homePage sensorId LIST: ${stream.sensor_id}');
       }
+
+      //----------valves----------------------------------------------
+      final getValves =
+          await dio.get('$url/$userId/site/$siteId/controls/valves');
+      stream.valves = getValves.data;
+      print('##### homePage GET Valves LIST: ${stream.valves}');
+      print('##### homePage GET Valves LIST length: ${stream.valves.length}');
+
+      // DB에서 valve 상태 가져오기
+      stream.valveStatus = stream.valves
+          .map((e) => int.parse(e["valve_action"].toString()))
+          .toList();
+      print('## [homepage] valve status 가져오기: ${stream.pumpStatus}');
+
+      // DB에서 valve name 가져오기
+      stream.valve_name =
+          stream.valves.map((e) => e["valve_name"].toString()).toList();
+      print('## [homepage] valve name 가져오기: ${stream.valve_name}');
+
       connect();
     }
 
