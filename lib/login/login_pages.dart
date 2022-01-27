@@ -5,6 +5,8 @@ import 'package:edgeworks/dio/login_dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../globals/login.dart' as login;
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+
 // import 'package:google_fonts/google_fonts.dart';
 
 /*
@@ -40,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     print('##### [checkUser Page] 저장된 user id는 : $userId');
     setState(() {
       _idTextEditController.text = userId;
+      edgeworks.checkUserId = userId;
     });
     return userId;
   }
@@ -220,8 +223,8 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             var uid = _idTextEditController.text;
             var pw = _pwTextEditController.text;
-            // await _loginTest.loginTest(uid, pw);
-            Get.toNamed('/home');
+            await _loginTest.loginTest(uid, pw);
+            // Get.toNamed('/home');
             // Get.toNamed('/sensor');
           },
           child: Text(

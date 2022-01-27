@@ -9,13 +9,14 @@ import 'package:dio/dio.dart';
 
 import '../globals/stream.dart' as stream;
 import 'components/getx_controller/controller.dart';
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
 * name : Environment Page
 * description : Environment Control Page
 * writer : mark
 * create date : 2021-12-24
-* last update : 2021-01-25
+* last update : 2021-01-27
 * */
 
 // MQTT class
@@ -27,7 +28,7 @@ var dio = Dio();
 //Api's
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = 'test';
+var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // globalKey

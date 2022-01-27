@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 * */
 
 String checkUserKey = '';
+String checkUserId = '';
 var cookies = '';
 
 // id/pw 저장

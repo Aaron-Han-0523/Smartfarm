@@ -4,13 +4,14 @@ import 'package:get/get.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
 * name : CCTV Page
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2022-01-25
+* last update : 2022-01-27
 * */
 
 // global
@@ -20,7 +21,7 @@ List cctv_url = stream.cctv_url;
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = 'test';
+var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs

@@ -9,18 +9,19 @@ import 'package:edgeworks/pages/components/getx_controller/controller.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:edgeworks/globals/siteConfig.dart' as siteConfig;
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
 * name : Setting Page
 * description : setting page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-25
+* last update : 2021-01-27
 * */
 
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = 'test';
+var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs

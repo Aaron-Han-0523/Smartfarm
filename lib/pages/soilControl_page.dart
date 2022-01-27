@@ -7,6 +7,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../globals/stream.dart' as stream;
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'components/getx_controller/controller.dart';
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
 * name : Soil Control Page
@@ -36,7 +37,7 @@ List sensorId = stream.sensor_id;
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = 'test';
+var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs

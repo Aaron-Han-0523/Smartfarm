@@ -19,6 +19,7 @@ import 'pages/mqtt.dart';
 import 'pages/sensor.dart';
 import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
+import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
 * name : main
@@ -31,7 +32,7 @@ import '../globals/stream.dart' as stream;
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = 'test';
+var userId = '${edgeworks.checkUserId}';
 var siteId = '${stream.siteId}';
 
 // dio APIs
