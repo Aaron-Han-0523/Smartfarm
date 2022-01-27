@@ -82,8 +82,7 @@ class _HomeState extends State<Home> {
       // stream.siteId = getSiteId.data[0]["sid"];
       print('##### [homepage] Site Id는  : ${stream.siteId}');
       // Site Id 전체 가져와서 담기
-      final getSiteIds =
-        await dio.get('$url/$userId/sites');
+      final getSiteIds = await dio.get('$url/$userId/sites');
       stream.siteInfo = getSiteIds.data;
       print('##### [homepage] Site Info는  : ${stream.siteInfo}');
       // Site names 가져오기
@@ -91,36 +90,37 @@ class _HomeState extends State<Home> {
           stream.siteInfo.map((e) => e["site_name"].toString()).toList();
       print('## [homepage] Site Ids는 가져오기: ${stream.siteNames}');
 
-
       // put fcm token
       var fcmtoken = stream.fcmtoken;
       var data = {'uid': userId, 'fcmtoken': fcmtoken};
       final postToken =
-      await dio.put('$api/farm/$userId/pushAlarm', data: data);
+          await dio.put('$api/farm/$userId/pushAlarm', data: data);
       print('##### postToken: $postToken');
 
       // trends innerTemp
       final getInnerTemp =
-      await dio.get('$url/$userId/site/$siteId/innerTemps');
+          await dio.get('$url/$userId/site/$siteId/innerTemps');
       stream.chartData = getInnerTemp.data['data'];
-      print('##### getInnerTemp: ${getInnerTemp.data['data']}');
-      print(
-          '##### getInnerTemp 최근 내부온도 시간: ${getInnerTemp.data['data'][0]['time_stamp']}');
+      if (stream.chartData.length != 0) {
+        print('##### getInnerTemp: ${getInnerTemp.data['data']}');
+        print(
+            '##### getInnerTemp 최근 내부온도 시간: ${getInnerTemp.data['data'][0]['time_stamp']}');
 
-      var date = getInnerTemp.data['data'][0]['time_stamp'];
-      var yyyyMMddE = date.substring(0, 10);
-      yyyyMMddE = yyyyMMddE.replaceAll('-', '');
-      yyyyMMddE = DateFormat('yyyy년 MM월 dd일')
-          .format(DateTime.parse(yyyyMMddE))
-          .toString();
-      var hhMMss = date.substring(11, 19);
-      print('yyyy년 MM월 dd일 (E): $yyyyMMddE');
-      print('hh시 MM분 ss초: $hhMMss');
-      print(
-          '##### getInnerTemp 최근 내부온도 온도: ${getInnerTemp.data['data'][0]['value']}');
+        var date = getInnerTemp.data['data'][0]['time_stamp'];
+        var yyyyMMddE = date.substring(0, 10);
+        yyyyMMddE = yyyyMMddE.replaceAll('-', '');
+        yyyyMMddE = DateFormat('yyyy년 MM월 dd일')
+            .format(DateTime.parse(yyyyMMddE))
+            .toString();
+        var hhMMss = date.substring(11, 19);
+        print('yyyy년 MM월 dd일 (E): $yyyyMMddE');
+        print('hh시 MM분 ss초: $hhMMss');
+        print(
+            '##### getInnerTemp 최근 내부온도 온도: ${getInnerTemp.data['data'][0]['value']}');
 
-      int innerTempLength = getInnerTemp.data['data'].length;
-      print('innerTempLength: $innerTempLength');
+        int innerTempLength = getInnerTemp.data['data'].length;
+        print('innerTempLength: $innerTempLength');
+      }
 
       // cctvs
       final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
@@ -137,7 +137,7 @@ class _HomeState extends State<Home> {
       //----------motor----------------------------------------------
       // ## side motor -----------
       final getSideMotors =
-      await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+          await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       stream.sideMotors = getSideMotors.data['data'];
       print('##### homePage GET sideMotors list : ${stream.sideMotors}');
       print(
@@ -149,8 +149,9 @@ class _HomeState extends State<Home> {
       print('## [homepage] side motor name 가져오기: ${stream.side_motor_name}');
 
       // DB에서 side motor 상태 가져오기
-      stream.sideMotorStatus =
-          stream.sideMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
+      stream.sideMotorStatus = stream.sideMotors
+          .map((e) => int.parse(e["motor_action"].toString()))
+          .toList();
       print('## [homepage] side motor status 가져오기: ${stream.sideMotorStatus}');
 
       // DB에서 side motors id 가져오기
@@ -163,14 +164,14 @@ class _HomeState extends State<Home> {
       for (var i = 0; i < stream.sideMotors.length; i++) {
         // stream.sideMotorId.clear();
         var sideMotorName = (stream.sideMotors[i]['motor_id']).toString();
-      var sideMotorId = sideMotorName.substring(6);
-      stream.sideMotorId.add(sideMotorId);
-      print('## [homepage] side motor id 가져오기: ${stream.sideMotorId}');
-    }
+        var sideMotorId = sideMotorName.substring(6);
+        stream.sideMotorId.add(sideMotorId);
+        print('## [homepage] side motor id 가져오기: ${stream.sideMotorId}');
+      }
 
       // ## top motor --------
       final getTopMotors =
-      await dio.get('$url/$userId/site/$siteId/controls/top/motors');
+          await dio.get('$url/$userId/site/$siteId/controls/top/motors');
       stream.topMotors = getTopMotors.data['data'];
       print('##### homePage GET topMotors list : ${stream.topMotors}');
       print(
@@ -196,13 +197,14 @@ class _HomeState extends State<Home> {
       }
 
       // DB에서 top motor 상태 가져오기
-      stream.topMotorStatus =
-      stream.topMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
+      stream.topMotorStatus = stream.topMotors
+          .map((e) => int.parse(e["motor_action"].toString()))
+          .toList();
       print('## [homepage] top motor status 가져오기: ${stream.topMotorStatus}');
 
       // ## etc 상태 가져오기
       final getEtcMotors =
-      await dio.get('$url/$userId/site/$siteId/controls/actuators');
+          await dio.get('$url/$userId/site/$siteId/controls/actuators');
       stream.etcMotors = getEtcMotors.data;
       // DB에서 etc motor name 가져오기
       stream.etc_motor_name =
@@ -210,8 +212,9 @@ class _HomeState extends State<Home> {
       print('## [homepage] etc motor name 가져오기: ${stream.etc_motor_name}');
       // DB에서 etc motor 상태 가져오기
       // stream.etcMotorStatus.clear();
-      stream.etcMotorStatus =
-          stream.etcMotors.map((e) => int.parse(e["actuator_action"].toString())).toList();
+      stream.etcMotorStatus = stream.etcMotors
+          .map((e) => int.parse(e["actuator_action"].toString()))
+          .toList();
       print('## [homepage] etc motor status 가져오기: ${stream.etcMotorStatus}');
 
       // DB에서 etc motor id 가져오기
@@ -231,29 +234,29 @@ class _HomeState extends State<Home> {
 
       //----------pumps----------------------------------------------
       final getPumps =
-      await dio.get('$url/$userId/site/$siteId/controls/pumps');
+          await dio.get('$url/$userId/site/$siteId/controls/pumps');
       stream.pumps = getPumps.data;
       print('##### homePage GET Pumps LIST: ${stream.pumps}');
       print('##### homePage Pumps LIST length: ${stream.pumps.length}');
 
       // DB에서 pump 상태 가져오기
-      stream.pumpStatus =
-          stream.pumps.map((e) => int.parse(e["pump_action"].toString())).toList();
+      stream.pumpStatus = stream.pumps
+          .map((e) => int.parse(e["pump_action"].toString()))
+          .toList();
       print('## [homepage] pump status 가져오기: ${stream.pumpStatus}');
-
 
       //----------valves----------------------------------------------
       final getValves =
-      await dio.get('$url/$userId/site/$siteId/controls/valves');
+          await dio.get('$url/$userId/site/$siteId/controls/valves');
       stream.valves = getValves.data;
       print('##### homePage GET Valves LIST: ${stream.valves}');
       print('##### homePage GET Valves LIST length: ${stream.valves.length}');
 
       // DB에서 pump 상태 가져오기
-      stream.valveStatus =
-          stream.valves.map((e) => int.parse(e["valve_action"].toString())).toList();
+      stream.valveStatus = stream.valves
+          .map((e) => int.parse(e["valve_action"].toString()))
+          .toList();
       print('## [homepage] valve status 가져오기: ${stream.pumpStatus}');
-
 
       // get pump1, pump2 = sensorId
       final getSensorId = await dio.get('$url/$userId/site/$siteId/sensors');
@@ -280,7 +283,7 @@ class _HomeState extends State<Home> {
   String statusText = "Status Text";
   bool isConnected = false;
   final MqttServerClient client =
-  MqttServerClient('broker.mqttdashboard.com', '');
+      MqttServerClient('broker.mqttdashboard.com', '');
 
   connect() async {
     isConnected = await mqttConnect('test');
@@ -299,7 +302,7 @@ class _HomeState extends State<Home> {
     // client.pongCallback = pong;
 
     final MqttConnectMessage connMess =
-    MqttConnectMessage().withClientIdentifier(uniqueId).startClean();
+        MqttConnectMessage().withClientIdentifier(uniqueId).startClean();
     print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     print(connMess);
     client.connectionMessage = connMess;
@@ -323,7 +326,7 @@ class _HomeState extends State<Home> {
       final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
 
       var streamData =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       var streamDatas = jsonDecode(streamData);
       print('!!!!!!!!!!!!!!');
       print('streamDatas = ${streamDatas}');
@@ -336,7 +339,8 @@ class _HomeState extends State<Home> {
       // }
       print('stream.temp_1 = ${stream.temp_1}');
       _disconnect();
-      Get.offAllNamed('/sensor'); // 카카오 채널 drawer 뒤로가기 제어를 위해 offallnamed라고 설정해야함
+      Get.offAllNamed(
+          '/sensor'); // 카카오 채널 drawer 뒤로가기 제어를 위해 offallnamed라고 설정해야함
     });
     return true;
   }
