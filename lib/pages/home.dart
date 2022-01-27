@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
-
 /*
 * name : Home (get Data page)
 * description : get Data
@@ -23,7 +22,7 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = '${edgeworks.checkUserId}';
+var userId = edgeworks.checkUserId;
 // var siteId = '${stream.siteId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
