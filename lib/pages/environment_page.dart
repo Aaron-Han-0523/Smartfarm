@@ -98,7 +98,6 @@ Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
   print('### 사이드 전체 모터 타입 변경 완료 : $response');
 }
 
-
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
 
@@ -133,8 +132,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
     getTopSharedPrefs();
   }
 
-  var siteDropdown =
-      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
+  var siteDropdown = stream.sitesDropdownValue == ''
+      ? '${stream.siteNames[0]}'
+      : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.45,
+                toolbarHeight: Get.height * 0.29,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -165,27 +165,28 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             style:
                                 TextStyle(color: Colors.black, fontSize: 17)),
                       ),
-                      SizedBox(height: Get.height * 0.05),
+                      SizedBox(height: Get.height * 0.02),
                       MyWeather(),
                     ]),
               ),
               SliverList(
-                  // itemExtent: 3.0,
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return Container(
-                            child: Column(
-                              children: [
-                                SideMotor(),
-                                TopMotor(),
-                                EtcMotor(),
-                              ],
-                            ),
-                          );
-                    },
-                    childCount: 1,
-                  ),
+                // itemExtent: 3.0,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Container(
+                      color: Color(0xffF5F9FC),
+                      child: Column(
+                        children: [
+                          SideMotor(),
+                          TopMotor(),
+                          EtcMotor(),
+                        ],
+                      ),
+                    );
+                  },
+                  childCount: 1,
                 ),
+              ),
             ],
           ),
           Positioned(
@@ -238,7 +239,7 @@ class _MyWeatherState extends State<MyWeather> {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring(),
-          SizedBox(height: Get.height * 0.03),
+          // SizedBox(height: Get.height * 0.03),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -258,7 +259,7 @@ class _MyWeatherState extends State<MyWeather> {
                           "${controller.innerHumid.value}" + "%"),
                     ],
                   ),
-                  decoration: _decoration(Color(0xffFFFFFF)),
+                  // decoration: _decoration(Color(0xffFFFFFF)),
                 ),
               ),
               Container(
@@ -278,7 +279,7 @@ class _MyWeatherState extends State<MyWeather> {
                         "12.5m/s"),
                   ],
                 ),
-                decoration: _decoration(Color(0xffFFFFFF)),
+                // decoration: _decoration(Color(0xffFFFFFF)),
               ),
             ],
           ),
@@ -292,32 +293,32 @@ class _MyWeatherState extends State<MyWeather> {
 Widget _mainMonitoring() {
   final controller = Get.put(CounterController());
   return Container(
-        height: Get.height * 0.1,
-        width: Get.width * 0.9,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            controller.getWeather(stream.exttemp_1),
-            // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
-            controller.getWeatherStatus(stream.exttemp_1),
-            Image.asset('assets/images/icon_env_arrow_up.png',
-                color: Color(0xffffd5185), scale: 3),
-            Text("07:32",
-                style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
-            Image.asset('assets/images/icon_env_arrow_down.png',
-                color: Color(0xfff656565), scale: 3),
-            Text("18:08",
-                style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
-          ],
-        ),
-        decoration: _decoration(Color(0xffFFFFFF)));
+      height: Get.height * 0.07,
+      width: Get.width * 0.9,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          controller.getWeather(stream.exttemp_1),
+          // temp == 20 && extHumid=='5'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40): innerHumid=='50'? ImageIcon(AssetImage('assets/images/icon_shiny.png'), color: Color(0xff222222), size: 40):,
+          controller.getWeatherStatus(stream.exttemp_1),
+          Image.asset('assets/images/icon_env_arrow_up.png',
+              color: Color(0xffffd5185), scale: 3),
+          Text("07:32",
+              style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
+          Image.asset('assets/images/icon_env_arrow_down.png',
+              color: Color(0xfff656565), scale: 3),
+          Text("18:08",
+              style: _textStyle(Color(0xff222222), FontWeight.w600, 16)),
+        ],
+      ),
+      decoration: _decoration(Color(0xffFFFFFF)));
 }
 
 // 내/외부 모니터링
 Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
     dynamic _icon, String subText, String _subText) {
   return Container(
-      height: Get.height * 0.13,
+      height: Get.height * 0.09,
       width: Get.width * 0.425,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -578,7 +579,6 @@ class TopMotor extends StatefulWidget {
 }
 
 class _TopMotorState extends State<TopMotor> {
-
   @override
   void initState() {
     super.initState();
@@ -909,8 +909,7 @@ Widget _etcSwitch() {
                         '/sf/$siteId/req/motor');
                     //DB 업데이트
                     _updateEtcMotorData(
-                        "$value",
-                        "${stream.etcMotorId[index]}");
+                        "$value", "${stream.etcMotorId[index]}");
                   },
                 ),
               )

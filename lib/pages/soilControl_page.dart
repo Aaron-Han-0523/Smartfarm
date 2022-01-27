@@ -94,8 +94,9 @@ class _SoilControlPageState extends State<SoilControlPage> {
     super.initState();
   }
 
-  var siteDropdown =
-      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
+  var siteDropdown = stream.sitesDropdownValue == ''
+      ? '${stream.siteNames[0]}'
+      : stream.sitesDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +108,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                toolbarHeight: Get.height * 0.45,
+                toolbarHeight: Get.height * 0.29,
                 backgroundColor: Color(0xffF5F9FC),
                 title: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -126,7 +127,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
                             style:
                                 TextStyle(color: Colors.black, fontSize: 17)),
                       ),
-                      SizedBox(height: Get.height * 0.05),
+                      SizedBox(height: Get.height * 0.02),
                       MyWeather(),
                     ]),
               ),
@@ -135,6 +136,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
+                        color: Color(0xffF5F9FC),
                         child: Column(
                           children: [
                             MyPumps(),
@@ -215,7 +217,7 @@ class _MyWeatherState extends State<MyWeather> {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
-          SizedBox(height: Get.height * 0.03),
+          // SizedBox(height: Get.height * 0.03),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -235,7 +237,7 @@ class _MyWeatherState extends State<MyWeather> {
                           "${controller.innerHumid.value}" + "%"),
                     ],
                   ),
-                  decoration: _decoration(Color(0xffFFFFFF)),
+                  // decoration: _decoration(Color(0xffFFFFFF)),
                 ),
               ),
               Container(
@@ -253,7 +255,7 @@ class _MyWeatherState extends State<MyWeather> {
                         "${controller.soilHumid.value}%"),
                   ],
                 ),
-                decoration: _decoration(Color(0xffFFFFFF)),
+                // decoration: _decoration(Color(0xffFFFFFF)),
               ),
             ],
           ),
@@ -524,11 +526,10 @@ Widget _switchToggle2(var index, var text, var streamStatus, var action) {
   );
 }
 
-
 Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
   final controller = Get.put(CounterController());
-  return  Container(
-    height: Get.height * 0.1,
+  return Container(
+    height: Get.height * 0.07,
     width: Get.width * 0.9,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       controller.getWeather(stream.exttemp_1),
@@ -550,7 +551,7 @@ TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
 Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
     dynamic _icon, String subText, String _subText) {
   return Container(
-      height: Get.height * 0.13,
+      height: Get.height * 0.09,
       width: Get.width * 0.425,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
