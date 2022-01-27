@@ -15,11 +15,18 @@ class CheckValidate {
   LoginTest _loginTest = LoginTest();
 
   // 이메일 체크
-  String? validateEmail(FocusNode focusNode, String value) {
+  String? validateEmail(FocusNode focusNode, String value, var controller) {
+    bool uidStatus = false;
+
     if (value.isEmpty) {
       focusNode.requestFocus();
       return '아이디를 입력하세요.';
-    } else {}
+    } else if(value.isNotEmpty) {
+      _loginTest.checkUid(controller, uidStatus);
+      if (uidStatus == false) {
+        return '아이디를 확인해주세요';
+      }
+    }
   }
 
   String? currentPassword(FocusNode focusNode, String value, var controller) {

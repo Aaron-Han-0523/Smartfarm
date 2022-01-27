@@ -30,6 +30,7 @@ class Logout {
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
+        edgeworks.deleteUserInfo();
         Get.offAllNamed('/');
         print('jsonBody는: $jsonBody');
         print('로그아웃 성공!!');

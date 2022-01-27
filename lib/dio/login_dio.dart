@@ -37,6 +37,7 @@ class LoginTest {
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
+        edgeworks.saveUserInfo(uid, pw);
         // sherry
         Get.toNamed('/home');
         // post fcm token
@@ -92,6 +93,21 @@ class LoginTest {
       //   Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: '비밀번호를 다시 입력하세요', textCancel: 'Cancel');
       //   return false;
       // }
+    }
+  }
+
+  // 사용자 id 조회
+  Future<dynamic> checkUid(String uid, bool uidStatus) async {
+
+    var getUid = await dio.get('$api/farm/$uid');
+
+    var jsonBody = getUid.data;
+
+      if (jsonBody[0]["uid"] == uid) {
+        print('##### [login_dio page] id 조회 응답은: ${jsonBody[0]["uid"]}');
+        return uidStatus = true;
+      } else if (jsonBody == null) {
+        return uidStatus = false;
     }
   }
 
@@ -153,19 +169,6 @@ class LoginTest {
           textCancel: 'Cancel');
       return false;
     }
-
-    // if (response.statusCode == 200 && edgeworks.checkUserKey.isNotEmpty) {
-    //   print('new pw는 ${jsonBody['result'][0]==1}');
-    //   if (jsonBody['result'][0] == 1) {
-    //     Get.defaultDialog(backgroundColor: Colors.white, title: '성공', middleText: '비밀번호가 변경되었습니다.', textCancel: 'Cancel').then((value) => Get.back());
-    //     return true;
-    //   } else if (jsonBody['result'][0] == 0) {
-    //     Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: '비밀번호를 확인해주세요', textCancel: 'Cancel');
-    //     return false;
-    //   }
-    // } else {
-    //   print('error');
-    // }
   }
 
   // fcm token sql로 보내기

@@ -1,24 +1,24 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-// import 'package:http/http.dart' as http;
-import 'dart:convert';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:edgeworks/dio/login_dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../globals/login.dart' as login;
-
 // import 'package:google_fonts/google_fonts.dart';
 
 /*
 * name : LoginPage
 * description : login page
-* writer : john
-* create date : 2021-09-30
-* last update : 2021-10-20
+* writer : mark
+* create date : 2021-12-28
+* last update : 2021-01-27
 * */
+
+// global
+String userId = '';
+String userPw = '';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -27,14 +27,37 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  // TextEditingController
+  // 저장된 id/pw 가져오는 로직 -> logout 처리되면 저장된 값 사라짐
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
 
-  // import
+  // 저장된 id 값 가져오기
+  Future<dynamic>getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = prefs.getString('userId') ?? '';
+    print('##### [checkUser Page] 저장된 user id는 : $userId');
+    setState(() {
+      _idTextEditController.text = userId;
+    });
+    return userId;
+  }
+
+  // 저장된 pw 값 가져오기
+  Future<dynamic>getUserPw() async {
+    final prefs = await SharedPreferences.getInstance();
+    userPw = prefs.getString('userPw') ?? '';
+    print('##### [checkUser Page] 저장된 user pw는 : $userPw');
+    setState(() {
+      _pwTextEditController.text = userPw;
+    });
+    return userPw;
+  }
+
+  // Api's
   LoginTest _loginTest = LoginTest();
-
   late double headerTopZone;
-
   var api = dotenv.env['PHONE_IP'];
 
   @override
@@ -47,22 +70,11 @@ class _LoginPageState extends State<LoginPage> {
     login.company = [];
     login.personalID = [];
     login.department = [];
-    // _getStatuses();
+    getUserId();
+    getUserPw();
     print('flutter login????????????');
     super.initState();
   }
-
-  // Future<bool> _getStatuses() async {
-  //   Map<Permission, PermissionStatus> statuses =
-  //       await [Permission.storage, Permission.camera].request();
-  //
-  //   if (await Permission.camera.isGranted &&
-  //       await Permission.storage.isGranted) {
-  //     return Future.value(true);
-  //   } else {
-  //     return Future.value(false);
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -140,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Row(children: [
             Expanded(
               child: TextFormField(
-                controller: _idTextEditController,
+                controller: _idTextEditController, // 저장된 id값이 없으면 _idcontroller id값이 있으면 저장된 값 불러오기
                 decoration: InputDecoration(
                     fillColor: Color(0xffFFFFFF),
                     filled: true,

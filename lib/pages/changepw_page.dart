@@ -2,15 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_dropdown_search/flutter_dropdown_search.dart';
 import 'package:get/get.dart';
-// import 'package:group_radio_button/group_radio_button.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:edgeworks/dio/login_dio.dart';
 import 'package:edgeworks/pages/components/registrations/validate.dart';
-
-// import 'package:dropdown_search/dropdown_search.dart';
 import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 import 'dart:convert';
 
@@ -19,8 +13,9 @@ import 'dart:convert';
 * description : change password
 * writer : mark
 * create date : 2021-01-03
-* last update : 2021-01-12
+* last update : 2021-01-27
 * */
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -56,7 +51,6 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   // get data
-
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
@@ -193,7 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.visiblePassword,
             decoration: _textDecoration(),
             validator: (value) =>
-                CheckValidate().validateEmail(_emailFocus, value!),
+                CheckValidate().validateEmail(_emailFocus, value!, _idTextEditController.text),
             onChanged: (text) {
               setState(() {});
             },
@@ -352,36 +346,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   backgroundColor: Colors.white,
                   title: '실패',
                   middleText: '현재 ID/PW를 확인해주세요',
-                  textCancel: 'Cancel');
+                  textCancel: '취소');
             }
           } else {
             print('새비밀번호 확인');
           }
-        },
-      ),
-    );
-  }
-
-  // 취소 버튼
-  Widget _cancleButton() {
-    return Container(
-      // height: Get.height * 0.06,
-      width: Get.width * 0.4,
-      child: new ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xff4cbb8b),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        ),
-        child: new Text(
-          '취소',
-          style: TextStyle(
-              color: Color(0xffFFFFFF),
-              fontSize: 15,
-              fontWeight: FontWeight.w500),
-        ),
-        onPressed: () {
-          Get.back();
         },
       ),
     );
