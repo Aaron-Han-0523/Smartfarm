@@ -77,6 +77,17 @@ Future<void> _updateMotorData(var motorName, var motorType, var motorAction,
   print('### 모터 타입 변경 완료 : $response');
 }
 
+Future<void> _updateEtcMotorData(var motorAction, var motorId) async {
+  var params = {
+    // 'motor_name': motorName,
+    'actuator_action': motorAction,
+  };
+  var response = await dio.put(
+      '$url/$userId/site/$siteId/controls/actuators/$motorId',
+      data: params);
+  print('### [environment page] etc 모터 타입 변경 완료 : $response');
+}
+
 Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
   var params = {
     'motor_action': motorAction,
@@ -86,6 +97,7 @@ Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
       data: params);
   print('### 사이드 전체 모터 타입 변경 완료 : $response');
 }
+
 
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
@@ -887,10 +899,18 @@ Widget _etcSwitch() {
                     print('toggle value는 : $value');
                     print('toggle type은 : ${value.runtimeType}');
                     print('value는 : $_switch');
-                    // _mqttClass.ctlSet('did', '1', 'dact', _switch,
-                    //     '/sf/e0000001/req/motor', '/sf/e0000001/req/motor');
-                    _updateMotorData("${stream.etc_motor_name[index]}", "etc",
-                        "$value", "etc", "${stream.etcMotorId[index]}");
+                    // MQTT 통신
+                    _mqttClass.ctlSet(
+                        'did',
+                        "${stream.etcMotorId[index]}",
+                        'dact',
+                        _switch,
+                        '/sf/$siteId/req/motor',
+                        '/sf/$siteId/req/motor');
+                    //DB 업데이트
+                    _updateEtcMotorData(
+                        "$value",
+                        "${stream.etcMotorId[index]}");
                   },
                 ),
               )

@@ -202,15 +202,16 @@ class _HomeState extends State<Home> {
 
       // ## etc 상태 가져오기
       final getEtcMotors =
-      await dio.get('$url/$userId/site/$siteId/controls/etc/motors');
-      stream.etcMotors = getEtcMotors.data['data'];
+      await dio.get('$url/$userId/site/$siteId/controls/actuators');
+      stream.etcMotors = getEtcMotors.data;
       // DB에서 etc motor name 가져오기
       stream.etc_motor_name =
-          stream.etcMotors.map((e) => e["motor_name"].toString()).toList();
+          stream.etcMotors.map((e) => e["actuator_name"].toString()).toList();
       print('## [homepage] etc motor name 가져오기: ${stream.etc_motor_name}');
       // DB에서 etc motor 상태 가져오기
+      // stream.etcMotorStatus.clear();
       stream.etcMotorStatus =
-          stream.etcMotors.map((e) => int.parse(e["motor_action"].toString())).toList();
+          stream.etcMotors.map((e) => int.parse(e["actuator_action"].toString())).toList();
       print('## [homepage] etc motor status 가져오기: ${stream.etcMotorStatus}');
 
       // DB에서 etc motor id 가져오기
