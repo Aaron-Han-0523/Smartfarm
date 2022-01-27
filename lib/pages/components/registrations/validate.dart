@@ -21,12 +21,14 @@ class CheckValidate {
     if (value.isEmpty) {
       focusNode.requestFocus();
       return '아이디를 입력하세요.';
-    } else if(value.isNotEmpty) {
-      _loginTest.checkUid(controller, uidStatus);
-      if (uidStatus == false) {
-        return '아이디를 확인해주세요';
-      }
     }
+    // else if(value.isNotEmpty) {
+    //   _loginTest.checkUid(controller, uidStatus);
+    //
+    //   if (uidStatus == false) {
+    //     return '아이디를 확인해주세요';
+    //   }
+    // }
   }
 
   String? currentPassword(FocusNode focusNode, String value, var controller) {

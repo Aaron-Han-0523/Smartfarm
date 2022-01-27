@@ -56,7 +56,7 @@ MqttClass _mqttClass = MqttClass();
 String statusText = "Status Text";
 bool isConnected = false;
 final MqttServerClient client =
-    MqttServerClient('broker.mqttdashboard.com', '');
+    MqttServerClient('14.46.231.48', '');
 
 // decoration (with box shadow)
 BoxDecoration _decoration(dynamic color) {

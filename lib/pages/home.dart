@@ -282,7 +282,7 @@ class _HomeState extends State<Home> {
   String statusText = "Status Text";
   bool isConnected = false;
   final MqttServerClient client =
-      MqttServerClient('broker.mqttdashboard.com', '');
+      MqttServerClient('14.46.231.48', '');
 
   connect() async {
     isConnected = await mqttConnect('test');

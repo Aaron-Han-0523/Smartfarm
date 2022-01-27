@@ -187,6 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.visiblePassword,
             decoration: _textDecoration(),
             validator: (value) =>
+
                 CheckValidate().validateEmail(_emailFocus, value!, _idTextEditController.text),
             onChanged: (text) {
               setState(() {});
@@ -340,13 +341,19 @@ class _SignUpPageState extends State<SignUpPage> {
                       _idTextEditController.text, _repwTextEditController.text)
                   .then((value) => formKey.currentState!.save());
               print('result는 성공2: $jsonData');
-            } else {
+            } else if (jsonData == 'false2') {
               print('result는 실패');
               Get.defaultDialog(
                   backgroundColor: Colors.white,
                   title: '실패',
-                  middleText: '현재 ID/PW를 확인해주세요',
-                  textCancel: '취소');
+                  middleText: '현재 ID확인해주세요',
+                  textCancel: '확인');
+            } else if (jsonData == 'false1') {
+              Get.defaultDialog(
+                  backgroundColor: Colors.white,
+                  title: '실패',
+                  middleText: '현재 비밀번호를 확인해주세요',
+                  textCancel: '확인');
             }
           } else {
             print('새비밀번호 확인');

@@ -9,7 +9,7 @@ class CounterController extends GetxController {
   String statusText = "Status Text";
   bool isConnected = false;
   final MqttServerClient client =
-      MqttServerClient('broker.mqttdashboard.com', '');
+      MqttServerClient('14.46.231.48', '');
   var innerTemp = ''.obs;
   var extTemp = ''.obs;
   var soilTemp = ''.obs;

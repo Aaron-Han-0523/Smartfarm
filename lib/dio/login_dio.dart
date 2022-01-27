@@ -174,7 +174,7 @@ class LoginTest {
           backgroundColor: Colors.white,
           title: '오류',
           middleText: '비밀번호를 확인해주세요',
-          textCancel: 'Cancel');
+          textCancel: '확인');
       return false;
     }
   }

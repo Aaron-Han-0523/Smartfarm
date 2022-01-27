@@ -22,7 +22,7 @@ class _MQTTPageState extends State<MQTTPage> {
   String statusText = "Status Text";
   bool isConnected = false;
   final MqttServerClient client =
-      MqttServerClient('broker.mqttdashboard.com', '');
+      MqttServerClient('14.46.231.48', '');
   TextEditingController idTextController = TextEditingController();
 
   @override
