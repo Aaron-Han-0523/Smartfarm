@@ -34,6 +34,7 @@ var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = '${edgeworks.checkUserId}';
 var siteId = '${stream.siteId}';
+bool firstFCM = true;
 
 // dio APIs
 var options = BaseOptions(
@@ -123,7 +124,7 @@ class _MyAppState extends State<MyApp> {
       alert: true, // 장치에서 알림 표시 여부
       announcement: false, // 아이폰의 경우 활성화 시 장치가 연결될 때 내용 읽음
       badge: false, // 읽지 않은 알림 있을 때 앱 아이콘 옆에 표시할 알림 여부 설정
-      provisional: false, // 임시 권한 여부 설정
+      provisional: true, // 임시 권한 여부 설정
       sound: true, // 알림 표시 시 소리 재생할지의 여부
     );
 
@@ -192,17 +193,20 @@ class _MyAppState extends State<MyApp> {
           body: notification.body,
         );
 
-        Get.dialog(AlertDialog(
-          title: Text(notification.title ?? 'title'), // 메세지 제목
-          content: Text(notification.body ?? 'body'), // 메세지 내용
-          actions: <Widget>[
-            TextButton(
-              child: Text("OK"),
-              onPressed: () async {
-                Get.back();
-              },
-            )
-          ],
+        Get.dialog(Container(
+          color: Colors.white10,
+          child: AlertDialog(
+            title: Text(notification.title ?? 'title'), // 메세지 제목
+            content: Text(notification.body ?? 'body'), // 메세지 내용
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () async {
+                  Get.back();
+                },
+              )
+            ],
+          ),
         ));
       }
     });
@@ -298,6 +302,7 @@ class _MyAppState extends State<MyApp> {
                   page: () => MQTTPage(),
                 ),
                 GetPage(
+                  opaque: false,
                   // getdata cctv, soilpage, etc
                   name: '/home',
                   page: () => Home(),
