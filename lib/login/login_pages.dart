@@ -4,17 +4,14 @@ import 'package:get/get.dart';
 import 'package:edgeworks/dio/login_dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../globals/login.dart' as login;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
-
-// import 'package:google_fonts/google_fonts.dart';
 
 /*
 * name : LoginPage
 * description : login page
 * writer : mark
 * create date : 2021-12-28
-* last update : 2021-01-27
+* last update : 2021-01-28
 * */
 
 // global
@@ -65,14 +62,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    login.authority = [];
-    login.userID = [];
-    login.password = [];
-    login.userName = [];
-    login.email = [];
-    login.company = [];
-    login.personalID = [];
-    login.department = [];
     getUserId();
     getUserPw();
     print('flutter login????????????');
@@ -237,26 +226,6 @@ class _LoginPageState extends State<LoginPage> {
     ]);
   }
 
-  // 회원가입 폼
-  // Widget _signupText() {
-  //   return Column(
-  //     children: [
-  //       Container(
-  //         // width: 1,
-  //         height: 3,
-  //         child: Icon(
-  //           Icons.arrow_drop_down,
-  //           size: 50,
-  //         ),
-  //       ),
-  //       Text(
-  //         AppLocalizations.of(context)!.signUpText,
-  //         style: TextStyle(fontSize: 13, color: Colors.grey),
-  //       ),
-  //     ],
-  //   );
-  // }
-
 // 비밀번호 변경 / 카카오 채널 연결
   Widget _textButton() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -290,44 +259,4 @@ class _LoginPageState extends State<LoginPage> {
       throw 'Could not launch $url';
     }
   }
-
-  // decoration(without box shadow)
-  BoxDecoration _decorations() {
-    return BoxDecoration(
-      color: Color(0xffFFFFFF),
-      borderRadius: BorderRadius.circular(30),
-    );
-  }
-
-// 로그인 에러 다이얼로그
-//   void _showDialog() {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           content: new Text(AppLocalizations.of(context)!.loginDialogText),
-//           actions: <Widget>[
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 new ElevatedButton(
-//                   style: ElevatedButton.styleFrom(
-//                     primary: Color(0xff71838D),
-//                   ),
-//                   child:
-//                       new Text(AppLocalizations.of(context)!.loginDialogButton),
-//                   onPressed: () {
-//                     _idTextEditController.clear();
-//                     _pwTextEditController.clear();
-//                     Get.back();
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
 }
