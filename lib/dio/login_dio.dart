@@ -38,6 +38,7 @@ class LoginTest {
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
         edgeworks.saveUserInfo(uid, pw);
+        edgeworks.checkUserId = uid;
         // sherry
         Get.toNamed('/home');
         // post fcm token
@@ -98,7 +99,6 @@ class LoginTest {
 
   // 사용자 id 조회
   Future<dynamic> checkUid(String uid, bool uidStatus) async {
-
     var getUid = await dio.get('$api/farm/$uid');
 
     var jsonBody = getUid.data;

@@ -22,7 +22,7 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
-var userId = edgeworks.checkUserId;
+var userId = '${edgeworks.checkUserId}';
 // var siteId = '${stream.siteId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
@@ -67,8 +67,11 @@ class _HomeState extends State<Home> {
     stream.valveStatus = [];
     stream.mqttTopMotorStatus = [];
     stream.mqttSideMotorStatus = [];
+    Future.delayed(const Duration(milliseconds: 500), () {
+      print(siteId);
+      getData();
+    });
 
-    getData();
     super.initState();
   }
 
@@ -80,6 +83,8 @@ class _HomeState extends State<Home> {
       // await dio.get('$url/$userId/sites');
       // stream.siteId = getSiteId.data[0]["sid"];
       print('##### [homepage] Site Id는  : ${stream.siteId}');
+      print('##### [homepage] Site Id는  : ${siteId}');
+      print('##### [homepage] Site Id는  : ${userId}');
       // Site Id 전체 가져와서 담기
       final getSiteIds = await dio.get('$url/$userId/sites');
       stream.siteInfo = getSiteIds.data;
@@ -292,8 +297,7 @@ class _HomeState extends State<Home> {
 
   String statusText = "Status Text";
   bool isConnected = false;
-  final MqttServerClient client =
-      MqttServerClient('14.46.231.48', '');
+  final MqttServerClient client = MqttServerClient('14.46.231.48', '');
 
   connect() async {
     isConnected = await mqttConnect('test');
@@ -349,13 +353,13 @@ class _HomeState extends State<Home> {
       // }
       print('stream.temp_1 = ${stream.temp_1}');
       _disconnect();
-      Get.offAllNamed(
-          '/sensor'); // 카카오 채널 drawer 뒤로가기 제어를 위해 offallnamed라고 설정해야함
+      Get.offAllNamed('/sensor');
+      // 카카오 채널 drawer 뒤로가기 제어를 위해 offallnamed라고 설정해야함
     });
+
     return true;
   }
 
-  @override
   Widget build(BuildContext context) {
     return Opacity(opacity: 0);
   }
