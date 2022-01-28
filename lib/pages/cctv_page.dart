@@ -11,12 +11,12 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2022-01-27
+* last update : 2022-01-28
 * */
 
 // global
 List cctvs = stream.cctvs;
-List cctv_url = stream.cctv_url;
+List cctvUrl = stream.cctv_url;
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
@@ -89,7 +89,7 @@ class _CCTVPageState extends State<CCTVPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff2E6645),
+      // backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -205,15 +205,4 @@ class _CCTVPageState extends State<CCTVPage> {
           );
         });
   }
-
-  // @override
-  // void dispose() async {
-  //   super.dispose();
-  //   for (final controllers in controllers) {
-  //     await controllers.dispose();
-  //   }
-  //   for (final controllers in controllers) {
-  //     controllers.dispose();
-  //   }
-  // }
 }
