@@ -578,7 +578,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       // 개별 제어 motor name 확인
                       print('### [environment page] Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
                       // MQTT 통신
-                      _connectMqtt.ctlSet(
+                      _connectMqtt.setControl(
                           'did',
                           "${motorIds[index]}",
                           'dact',
@@ -683,7 +683,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         _switch = 'stop';
                       }
                       // MQTT 통신
-                      _connectMqtt.ctlSet(
+                      _connectMqtt.setControl(
                           'did',
                           "${stream.etcMotorId[index]}",
                           'dact',

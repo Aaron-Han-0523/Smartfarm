@@ -355,7 +355,7 @@ Widget _switchToggle(var index, var text, var streamStatus, var action,
                 streamStatus[index] = 1;
               }
               var typeId = type;
-              _connectMqtt.ctlSet('did', "${index + 1}", 'dact', switchStatus,
+              _connectMqtt.setControl('did', "${index + 1}", 'dact', switchStatus,
                   '/sf/$siteId/req/$action', '/sf/$siteId/req/$action');
               var data = {
                 'uid': userId,

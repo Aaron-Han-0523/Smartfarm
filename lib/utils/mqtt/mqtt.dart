@@ -97,7 +97,7 @@ class ConnectMqtt {
     return true;
   }
 
-  Future<dynamic> ctlSet(var did, var dicValue, var dact, String dactValue,
+  Future<dynamic> setControl(var did, var dicValue, var dact, String dactValue,
       var subscibeTopic, var publishTopic) async {
     client.logging(on: true);
     client.port = clientPort;
