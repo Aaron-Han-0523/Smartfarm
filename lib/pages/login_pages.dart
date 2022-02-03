@@ -1,9 +1,13 @@
+// necessary to build app
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:edgeworks/dio/login_dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// dio
+import 'package:edgeworks/utils/dio/login_dio.dart';
+// global
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
@@ -11,8 +15,13 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : login page
 * writer : mark
 * create date : 2021-12-28
-* last update : 2021-01-28
+* last update : 2021-02-03
 * */
+
+// Api's
+LoginTest _loginTest = LoginTest();
+late double headerTopZone;
+var api = dotenv.env['PHONE_IP'];
 
 // global
 String userId = '';
@@ -36,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<dynamic>getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('userId') ?? '';
-    print('##### [checkUser Page] 저장된 user id는 : $userId');
     setState(() {
       _idTextEditController.text = userId;
       edgeworks.checkUserId = userId;
@@ -48,23 +56,16 @@ class _LoginPageState extends State<LoginPage> {
   Future<dynamic>getUserPw() async {
     final prefs = await SharedPreferences.getInstance();
     userPw = prefs.getString('userPw') ?? '';
-    print('##### [checkUser Page] 저장된 user pw는 : $userPw');
     setState(() {
       _pwTextEditController.text = userPw;
     });
     return userPw;
   }
 
-  // Api's
-  LoginTest _loginTest = LoginTest();
-  late double headerTopZone;
-  var api = dotenv.env['PHONE_IP'];
-
   @override
   void initState() {
     getUserId();
     getUserPw();
-    print('flutter login????????????');
     super.initState();
   }
 
@@ -102,7 +103,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-        ));
+        )
+    );
   }
 
   // 배경화면
@@ -214,7 +216,6 @@ class _LoginPageState extends State<LoginPage> {
             var pw = _pwTextEditController.text;
             await _loginTest.loginTest(uid, pw);
             // Get.toNamed('/home');
-            // Get.toNamed('/sensor');
           },
           child: Text(
             '로그인',

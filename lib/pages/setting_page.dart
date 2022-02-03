@@ -1,24 +1,32 @@
-import 'package:dio/dio.dart';
-// import 'package:flutter/cupertino.dart';
+// necessary to build app
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:edgeworks/dio/logout_dio.dart';
-import 'package:edgeworks/mqtt/mqtt.dart';
-import 'package:edgeworks/pages/components/getx_controller/controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+// dio
+import 'package:dio/dio.dart';
+import 'package:edgeworks/utils/dio/logout_dio.dart';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// mqtt
+import 'package:edgeworks/utils/mqtt/mqtt.dart';
+// getX controller
+import 'package:edgeworks/utils/getX_controller/controller.dart';
+// global
 import '../globals/stream.dart' as stream;
 import 'package:edgeworks/globals/siteConfig.dart' as siteConfig;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/globals/toggle.dart' as toggle;
 
 /*
 * name : Setting Page
 * description : setting page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2021-01-27
+* last update : 2021-02-03
 * */
 
+// Api's
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = '${edgeworks.checkUserId}';
@@ -31,6 +39,16 @@ var options = BaseOptions(
   receiveTimeout: 3000,
 );
 Dio dio = Dio(options);
+
+// siteDropdown button global variable
+String sitesDropdownValue =
+stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
+
+// siteDropdown button global variable
+var siteDropdown =
+stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
+
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -47,7 +65,7 @@ class _SettingPageState extends State<SettingPage> {
   Logout _logout = Logout();
 
   // MQTT class
-  MqttClass _mqttClass = MqttClass();
+  ConnectMqtt _connectMqtt = ConnectMqtt();
 
   // TextEditing Controller
   final _highTextEditController =
@@ -61,16 +79,24 @@ class _SettingPageState extends State<SettingPage> {
   bool status = false;
   var _setTimer = siteConfig.set_timer;
   bool _alarmStatus = siteConfig.status_alarm;
-  var _lowTemp = siteConfig.low_temp;
-  var _highTemp = siteConfig.high_temp;
-  var _waterTimer = stream.watering_timer;
-  var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
+  // [Function] get alarm toggle value
+  int? alarmToggleValue;
+  getAlarmToggle() async {
+    final prefs = await SharedPreferences.getInstance();
+    alarmToggleValue = prefs.getInt('alarmToggleValue') ?? 0;
+    print('[global/toggle page] get all side value : $alarmToggleValue');
+    setState(() {
+      alarmToggleValue;
+    });
+    return alarmToggleValue;
+  }
 
   @override
   void initState() {
     // realTimeController.getConfig();
-    _mqttClass.getSiteConfig();
+    getAlarmToggle();
+    _connectMqtt.getSiteConfig();
   }
 
   @override
@@ -91,8 +117,9 @@ class _SettingPageState extends State<SettingPage> {
     };
     var response =
         await dio.put('$url/$userId/site/$siteId/settings', data: params);
-    // var response = await dio.get('$api/$userId/site/$siteId/settings');
-    print(response);
+    print('[setting page] 경보 알림 설정 결과 : $response');
+    // 경보 알림 설정이 변경 되었을 경우 : 1
+    // 경보 알림 설정 변경이 이미 되어있는 경우 : 0
   }
 
   @override
@@ -130,7 +157,7 @@ class _SettingPageState extends State<SettingPage> {
           ),
           Align(
             alignment: Alignment.topLeft,
-            child: Text(siteDropdown,
+            child: Text(sitesDropdownValue,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -181,7 +208,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  // bool status = false;
+  // 경보 활성화 widget
   List<String> labelName = ['ON', 'OFF'];
   var selectedLabel = '';
   int initialIndex = siteConfig.status_alarm == true ? 0 : 1;
@@ -218,7 +245,7 @@ class _SettingPageState extends State<SettingPage> {
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: initialIndex,
+              initialLabelIndex: alarmToggleValue,
               // stream.alarm_en == true ? 0 : 1,
               // stream.pumpStatus[index] == 0 ? 1 : 0,
               totalSwitches: 2,
@@ -226,20 +253,17 @@ class _SettingPageState extends State<SettingPage> {
               radiusStyle: true,
               onToggle: (value) async {
                 setState(() {
-                  initialIndex = value;
+                  alarmToggleValue = value;
                   if (value == 0) {
                     status = true;
-                    print(value);
-                    print(status);
                   } else if (value == 1) {
                     status = false;
-                    print(value);
-                    print(status);
                   }
-                  toggleValue = value;
+                  // toggleValue = value;
                   _alarmStatus = status;
+                  // shared preferences toggle
+                  toggle.saveAlarmToggle(value);
                 });
-                print('global key의 alarm Status는 : $_alarmStatus');
               },
             ),
           ),
@@ -248,6 +272,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  // 고온 경보 widget
   Widget _highTempFormField(String title, String dic, var highTempController) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -269,8 +294,8 @@ class _SettingPageState extends State<SettingPage> {
             width: Get.width * 0.35,
             height: Get.height * 0.06,
             child: TextFormField(
-              enabled: status,
-              controller: toggleValue==1 ? _nullTextEditingController : highTempController,
+              enabled: alarmToggleValue == 0 ? true : false,
+              controller: alarmToggleValue==1 ? _nullTextEditingController : highTempController,
     // highTempController
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
@@ -278,15 +303,6 @@ class _SettingPageState extends State<SettingPage> {
                     fontSize: 13,
                     fontWeight: FontWeight.normal,
                     color: Colors.black38),
-                // border: OutlineInputBorder(),
-                // suffixIcon: IconButton(
-                //   icon: const Icon(Icons.subdirectory_arrow_left),
-                //   onPressed: () {
-                //     _highTemp = highTempController.text;
-                //     print('high temp 는? $_highTemp');
-                //     // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                //   }
-                // )
               ),
               onChanged: (text) {
                 // setState(() {});
@@ -299,6 +315,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  // 저온 경보 widget
   Widget _lowTempFormField(String title, String dic, var lowTempController) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -320,8 +337,8 @@ class _SettingPageState extends State<SettingPage> {
             width: Get.width * 0.35,
             height: Get.height * 0.06,
             child: TextFormField(
-              enabled: status,
-              controller: toggleValue==1 ? _nullTextEditingController : lowTempController,
+              enabled: alarmToggleValue == 0 ? true : false,
+              controller: alarmToggleValue==1 ? _nullTextEditingController : lowTempController,
               // lowTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
@@ -329,15 +346,6 @@ class _SettingPageState extends State<SettingPage> {
                     fontSize: 13,
                     fontWeight: FontWeight.normal,
                     color: Colors.black38),
-                // border: OutlineInputBorder(),
-                // suffixIcon: IconButton(
-                //     icon: const Icon(Icons.subdirectory_arrow_left),
-                //     onPressed: () {
-                //       _lowTemp = lowTempController.text;
-                //       print('low temp 는? $_lowTemp');
-                //       // _mqttClass.configSet(dic, controller.text, '/sf/e0000001/req/cfg', '/sf/e0000001/req/cfg');
-                //     }
-                // )
               ),
               onChanged: (text) {
                 // setState(() {});
@@ -359,7 +367,8 @@ class _SettingPageState extends State<SettingPage> {
         style: ElevatedButton.styleFrom(
           primary: Color(0xff4cbb8b),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)), // background
+              borderRadius: BorderRadius.circular(20)
+          ), // background
         ),
         child: new Text(
           '설정 저장',
@@ -371,7 +380,7 @@ class _SettingPageState extends State<SettingPage> {
         onPressed: () async {
           _updateData(_alarmStatus, _highTextEditController.text,
               _lowTextEditController.text, _setTimer);
-          _mqttClass
+          _connectMqtt
               .setConfig(
                   _alarmStatus,
                   _highTextEditController.text,
@@ -389,6 +398,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  // 타이머 시간 설정 widget
   var timerDropdownValue = siteConfig.set_timer;
   Widget _timerDropDownButtons(var name) {
     return Container(
@@ -421,7 +431,6 @@ class _SettingPageState extends State<SettingPage> {
                 setState(() {
                   timerDropdownValue = value!.toString();
                   _setTimer = value;
-                  print('타이머 시간은 : $name : $_setTimer');
                 });
               },
               items: <String>[
@@ -453,9 +462,6 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  String sitesDropdownValue =
-      stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
-
   // site name에 맞는 site id 가져오기
   Future<dynamic> getSiteId(var siteNames) async{
     print('##### [SettingPage] siteNames는  : ${siteNames}');
@@ -466,6 +472,7 @@ class _SettingPageState extends State<SettingPage> {
     Get.offAllNamed('/home');
   }
 
+  // 사이트 설정 widget
   Widget _sitesDropDownButtons(var name) {
     return Container(
       color: Color(0xffFFFFFF),
@@ -517,6 +524,7 @@ class _SettingPageState extends State<SettingPage> {
       ),
     );
   }
+
   // 사이트 설정 완료 후 확인 알림
   showAlertDialog(BuildContext context, var siteName)  {
     // set up the buttons
@@ -529,10 +537,9 @@ class _SettingPageState extends State<SettingPage> {
     Widget continueButton = FlatButton(
       child: Text("확인"),
       onPressed:  () {
-        // nameStatus == true;
         setState(() {
           stream.sitesDropdownValue=siteName;
-          print("siteName은 $siteName");
+          print("[setting page] siteName은 $siteName");
           getSiteId(stream.sitesDropdownValue);
         });
       },

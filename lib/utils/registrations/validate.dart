@@ -1,43 +1,33 @@
+// necessary to build app
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:edgeworks/dio/login_dio.dart';
-import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
+
 
 /*
 * name : CheckValidate Page
 * description : Validate page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2022-01-05
+* last update : 2022-02-03
 * */
 
 class CheckValidate {
-  LoginTest _loginTest = LoginTest();
 
-  // 이메일 체크
+  // 이메일 확인
   String? validateEmail(FocusNode focusNode, String value, var controller) {
-    bool uidStatus = false;
-
     if (value.isEmpty) {
       focusNode.requestFocus();
       return '아이디를 입력하세요.';
     }
-    // else if(value.isNotEmpty) {
-    //   _loginTest.checkUid(controller, uidStatus);
-    //
-    //   if (uidStatus == false) {
-    //     return '아이디를 확인해주세요';
-    //   }
-    // }
   }
 
+  // 현재 비밀번호 확인
   String? currentPassword(FocusNode focusNode, String value, var controller) {
     if (value.isEmpty && value != controller.text) {
       return '비밀번호를 입력하세요';
     }
   }
 
-  // 새 비밀번호
+  // 새 비밀번호 확인
   String? validatePassword(FocusNode focusNode, String value, var controller) {
     if (value.isEmpty && value != controller.text) {
       focusNode.requestFocus();

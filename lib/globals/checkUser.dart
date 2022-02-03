@@ -1,4 +1,5 @@
 library edgeworks.keys;
+// necessary to build app
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*
@@ -22,9 +23,6 @@ saveUserInfo(String uid, String pw) async {
 
   String userId = prefs.getString('userId') ?? '';
   String userPw = prefs.getString('userPw') ?? '';
-
-  print('##### [checkUser Page] 저장된 user id는 : $userId');
-  print('##### [checkUser Page] 저장된 user pw는 : $userPw');
 }
 
 // 로그아웃 시 저장된 모든 키 삭제
@@ -39,14 +37,12 @@ deleteUserInfo() async {
 getUserId() async {
   final prefs = await SharedPreferences.getInstance();
   var userId = prefs.getString('userId') ?? '';
-  print('##### [checkUser Page] 저장된 user id는 : $userId');
   return userId;
 }
 // 저장된 pw 가져오기
 getUserPw() async {
   final prefs = await SharedPreferences.getInstance();
   var userPw = prefs.getString('userPw') ?? '';
-  print('##### [checkUser Page] 저장된 user pw는 : $userPw');
   return userPw;
 }
 

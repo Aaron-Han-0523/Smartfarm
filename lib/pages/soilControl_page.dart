@@ -1,12 +1,18 @@
+// necessary to build app
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:edgeworks/mqtt/mqtt.dart';
-import 'package:dio/dio.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../globals/stream.dart' as stream;
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// mqtt
+import 'package:edgeworks/utils/mqtt/mqtt.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'components/getx_controller/controller.dart';
+// dio
+import 'package:dio/dio.dart';
+// getX controller
+import '../utils/getX_controller/controller.dart';
+// global
+import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
@@ -14,7 +20,7 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24    
-* last update : 2022-01-25
+* last update : 2022-02-03
 * */
 
 // globalKey
@@ -52,34 +58,10 @@ Dio dio = Dio(options);
 var temp = int.parse(extTemp);
 
 // MQTT
-MqttClass _mqttClass = MqttClass();
+ConnectMqtt _connectMqtt = ConnectMqtt();
 String statusText = "Status Text";
 bool isConnected = false;
 final MqttServerClient client = MqttServerClient('14.46.231.48', '');
-
-// decoration (with box shadow)
-BoxDecoration _decoration(dynamic color) {
-  return BoxDecoration(
-    color: color,
-    // color: Color(0xffFFFFFF),
-    borderRadius: BorderRadius.circular(20),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        blurRadius: 2,
-        offset: Offset(3, 5), // changes position of shadow
-      ),
-    ],
-  );
-}
-
-// decoration(without box shadow)
-BoxDecoration _decorations() {
-  return BoxDecoration(
-    color: Color(0xffFFFFFF),
-    borderRadius: BorderRadius.circular(20),
-  );
-}
 
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);
@@ -94,6 +76,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
     super.initState();
   }
 
+  // siteDropdown button global variable
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
       : stream.sitesDropdownValue;
@@ -128,7 +111,7 @@ class _SoilControlPageState extends State<SoilControlPage> {
                                 TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.02),
-                      MyWeather(),
+                      _weather(),
                     ]),
               ),
               SliverList(
@@ -139,8 +122,8 @@ class _SoilControlPageState extends State<SoilControlPage> {
                         color: Color(0xffF5F9FC),
                         child: Column(
                           children: [
-                            MyPumps(),
-                            MyValves(),
+                            _pumpsControl(),
+                            _valvesControl(),
                           ],
                         ));
                   },
@@ -151,19 +134,9 @@ class _SoilControlPageState extends State<SoilControlPage> {
           ),
           Positioned(
             bottom: 0,
-            // height: Get.height * 1 / 14,
-            // width: Get.width,
             child: Container(
               height: Get.height * 1 / 30,
               width: Get.width,
-              // color: Color(0xff2E8953),
-
-              // decoration: BoxDecoration(
-              //     color: Color(0xffF5F9FC),
-              //     borderRadius: BorderRadius.only(
-              //         bottomLeft: Radius.circular(40.0),
-              //         bottomRight: Radius.circular(40.0)),
-              //     border: null),
               child: Image.asset(
                 'assets/images/image_bottombar.png',
                 fit: BoxFit.fill,
@@ -172,52 +145,17 @@ class _SoilControlPageState extends State<SoilControlPage> {
           ),
         ],
       ),
-      // bottomNavigationBar: Container(
-      //   height: Get.height * 1 / 14,
-      //   decoration: BoxDecoration(
-      //       color: Color(0xffF5F9FC),
-      //       borderRadius: BorderRadius.only(
-      //           bottomLeft: Radius.circular(40.0),
-      //           bottomRight: Radius.circular(40.0)),
-      //       border: null),
-      // ),
     );
   }
-}
 
-// 날씨
-class MyWeather extends StatefulWidget {
-  const MyWeather({Key? key}) : super(key: key);
-
-  @override
-  State<MyWeather> createState() => _MyWeatherState();
-}
-
-class _MyWeatherState extends State<MyWeather> {
-  @override
-  void initState() {
-    var innerTemp = stream.temp_1; // 내부온도
-    var extTemp = stream.exttemp_1; // 외부온도
-    var soilTemp = stream.soiltemp_1; // 토양온도
-    var innerHumid = stream.humid_1; // 내부습도
-    var extHumid = stream.humid_1; // 외부습도
-    var soilHumid = stream.soilhumid_1; // 토양습도
-    print("innerTemp");
-    print(innerTemp);
-    print(stream.temp_1);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  // 날씨 위젯
+  Widget _weather() {
     final controller = Get.put(CounterController());
     return Obx(
       () => Container(
-        // alignment: Alignment.center,
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring("맑음", "${controller.extTemp.value}", "7860"),
-          // SizedBox(height: Get.height * 0.03),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -237,7 +175,6 @@ class _MyWeatherState extends State<MyWeather> {
                           "${controller.innerHumid.value}" + "%"),
                     ],
                   ),
-                  // decoration: _decoration(Color(0xffFFFFFF)),
                 ),
               ),
               Container(
@@ -255,7 +192,6 @@ class _MyWeatherState extends State<MyWeather> {
                         "${controller.soilHumid.value}%"),
                   ],
                 ),
-                // decoration: _decoration(Color(0xffFFFFFF)),
               ),
             ],
           ),
@@ -263,24 +199,9 @@ class _MyWeatherState extends State<MyWeather> {
       ),
     );
   }
-}
 
-// 관수 펌프 제어
-class MyPumps extends StatefulWidget {
-  const MyPumps({Key? key}) : super(key: key);
-
-  @override
-  State<MyPumps> createState() => _MyPumpsState();
-}
-
-class _MyPumpsState extends State<MyPumps> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  // 펌프 제어
+  Widget _pumpsControl() {
     return Column(children: [
       _fromLTRBPadding(
         child: Container(
@@ -318,7 +239,11 @@ class _MyPumpsState extends State<MyPumps> {
                               index,
                               '${stream.pump_name[index]}',
                               stream.pumpStatus,
-                              'pump');
+                              'pump',
+                              'pump_${index + 1}',
+                              'pump_id',
+                              'pump_action',
+                              '$url/$userId/site/$siteId/controls/pumps/pump_${index + 1}');
                         }),
                   )
                 ],
@@ -329,24 +254,9 @@ class _MyPumpsState extends State<MyPumps> {
       ),
     ]);
   }
-}
 
-// 밸브 제어
-class MyValves extends StatefulWidget {
-  const MyValves({Key? key}) : super(key: key);
-
-  @override
-  State<MyValves> createState() => _MyValvesState();
-}
-
-class _MyValvesState extends State<MyValves> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  // 밸브 제어
+  Widget _valvesControl() {
     return Column(children: [
       _fromLTRBPadding(
         child: Container(
@@ -379,11 +289,15 @@ class _MyValvesState extends State<MyValves> {
                         shrinkWrap: true,
                         itemCount: stream.valveStatus.length,
                         itemBuilder: (BuildContext context, var index) {
-                          return _switchToggle2(
+                          return _switchToggle(
                               index,
                               '${stream.valve_name[index]}',
                               stream.valveStatus,
-                              'valve');
+                              'valve',
+                              'valve_${index + 1}',
+                              'valve_id',
+                              'valve_action',
+                              '$url/$userId/site/$siteId/controls/valves/valve_${index + 1}');
                         }),
                   )
                 ],
@@ -396,7 +310,9 @@ class _MyValvesState extends State<MyValves> {
   }
 }
 
-Widget _switchToggle(var index, var text, var streamStatus, var action) {
+// 펌프/밸브 토글 상태 제어
+Widget _switchToggle(var index, var text, var streamStatus, var action,
+    var type, var typeIdText, var typeActionText, var putUrl) {
   return _marginContainer(
     height: Get.height * 0.09,
     child: Row(
@@ -423,7 +339,7 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
             activeFgColor: Color(0xff222222),
             inactiveBgColor: Color(0xffFFFFFF),
             inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: stream.pumpStatus[index],
+            initialLabelIndex: streamStatus[index],
             // streamStatus[index] == 1 ? 1 : 0,
             totalSwitches: 2,
             labels: ['ON', 'OFF'],
@@ -438,25 +354,18 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
                 switchStatus = 'off';
                 streamStatus[index] = 1;
               }
-              print('### $action${index + 1} toggle value는 : $value');
-              print(
-                  '### $action${index + 1} toggle type은 : ${value.runtimeType}');
-              print('### $action${index + 1} value는 : $switchStatus');
-
-              _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
+              var typeId = type;
+              _connectMqtt.ctlSet('did', "${index + 1}", 'dact', switchStatus,
                   '/sf/$siteId/req/$action', '/sf/$siteId/req/$action');
-
-              var pumpId = 'pump_${index + 1}';
               var data = {
                 'uid': userId,
                 'sid': siteId,
-                'pump_id': pumpId,
-                'pump_action': value,
+                typeIdText: typeId,
+                typeActionText: value,
               };
-              final putPumps = await dio.put(
-                  '$url/$userId/site/$siteId/controls/pumps/$pumpId',
-                  data: data);
-              print(putPumps);
+              final putType = await dio.put(putUrl, data: data);
+              print('[soilControl page] 성공 여부 확인 $putType');
+              // 데이터 업데이트 시 결과1/ 업데이트가 이미 되어있는 상태일 경우 0
             },
           ),
         ),
@@ -466,78 +375,7 @@ Widget _switchToggle(var index, var text, var streamStatus, var action) {
   );
 }
 
-Widget _switchToggle2(var index, var text, var streamStatus, var action) {
-  return Container(
-    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-    height: Get.height * 0.09,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Text(text,
-              style: TextStyle(
-                  color: Color(0xff222222),
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal)),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: ToggleSwitch(
-            fontSize: 12,
-            minWidth: 60.0,
-            cornerRadius: 80.0,
-            activeBgColors: [
-              [Color(0xffe3fbed)],
-              [Color(0xfff2f2f2)]
-            ],
-            activeFgColor: Color(0xff222222),
-            inactiveBgColor: Color(0xffFFFFFF),
-            inactiveFgColor: Color(0xff222222),
-            initialLabelIndex: streamStatus[index] == 0 ? 0 : 1,
-            totalSwitches: 2,
-            labels: ['열림', '닫힘'],
-            radiusStyle: true,
-            onToggle: (value) async {
-              String switchStatus = '';
-
-              if (value == 0) {
-                switchStatus = 'open';
-                streamStatus[index] = 0;
-              } else if (value == 1) {
-                switchStatus = 'close';
-                streamStatus[index] = 1;
-              }
-              print('### $action${index + 1} toggle value는 : $value');
-              print(
-                  '### $action${index + 1} toggle type은 : ${value.runtimeType}');
-              print('### $action${index + 1} value는 : $switchStatus');
-              print(
-                  '### $action${index + 1} $action Status는 : ${streamStatus[index]}');
-
-              _mqttClass.ctlSet('did', "${index + 1}", 'dact', switchStatus,
-                  '/sf/$siteId/req/$action', '/sf/$siteId/req/$action');
-
-              var valveId = 'valve_${index + 1}';
-              var data = {
-                'uid': userId,
-                'sid': siteId,
-                'valve_id': valveId,
-                'valve_action': value,
-              };
-              final putValves = await dio.put(
-                  '$url/$userId/site/$siteId/controls/valves/$valveId',
-                  data: data);
-              print(putValves);
-            },
-          ),
-        ),
-      ],
-    ),
-    decoration: _decorations(),
-  );
-}
-
+// 모니터링
 Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
   final controller = Get.put(CounterController());
   return Container(
@@ -556,10 +394,7 @@ Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
   );
 }
 
-TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
-  return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
-}
-
+// 내부/토양 모니터링
 Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
     dynamic _icon, String subText, String _subText) {
   return Container(
@@ -593,7 +428,35 @@ Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
       decoration: _decoration(Color(0xffFFFFFF)));
 }
 
-// padding widget
+// TextStyle widget
+TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
+  return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
+}
+
+// BoxDecoration (with box shadow)
+BoxDecoration _decoration(dynamic color) {
+  return BoxDecoration(
+    color: color,
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 2,
+        offset: Offset(3, 5), // changes position of shadow
+      ),
+    ],
+  );
+}
+
+// BoxDecoration widget (without box shadow)
+BoxDecoration _decorations() {
+  return BoxDecoration(
+    color: Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(20),
+  );
+}
+
+// Padding widget
 Padding _fromLTRBPadding({child}) {
   return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
 }

@@ -1,9 +1,20 @@
+// necessary to build app
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/globals/stream.dart' as stream;
+import 'dart:convert';
+// mqtt
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:flutter/material.dart';
-import 'dart:convert';
+// global
+import '/globals/stream.dart' as stream;
+
+//Api's
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
+
+// mqtt
+int clientPort = 1883;
+var setTopic = '/sf/$siteId/data';
+
 
 class CounterController extends GetxController {
   String statusText = "Status Text";
@@ -42,9 +53,6 @@ class CounterController extends GetxController {
     return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
   }
 
-  //Api's
-  var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
-
   connect() async {
     isConnected = await mqttConnect('test');
   }
@@ -58,7 +66,7 @@ class CounterController extends GetxController {
 
     client.logging(on: true);
     // client.keepAlivePeriod = 20;
-    client.port = 1883;
+    client.port = clientPort;
     client.secure = false;
     // client.onConnected = onConnected;
     // client.onDisconnected = onDisconnected;
@@ -69,53 +77,19 @@ class CounterController extends GetxController {
     client.connectionMessage = connMess;
     await client.connect();
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print("Connected to AWS Successfully!");
+      print("Connected to Successfully!");
     } else {
       return false;
     }
-    var topic = '/sf/$siteId/data';
+    var topic = setTopic;
     client.subscribe(topic, MqttQos.atMostOnce);
     client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final mqttReceivedMessages = c;
-      // print('img width = ${mqttReceivedMessages}');
-      // print('img width = ${mqttReceivedMessages.runtimeType}');
-      // print('img width = ${mqttReceivedMessages![0]}');
       final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
 
-      // print('recMess = ${recMess}');
-      // print('recMess = ${recMess.runtimeType}');
-      // print('recMess = ${recMess}');
       var streamData =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       var streamDatas = jsonDecode(streamData);
-
-      // Mqtt 상에서 motor id 추출을 위해 map으로 묶고, key 추출
-      var data = jsonDecode(streamData);
-      Map map = data;
-      var map_key = map.keys;
-      print("##### Data의 key는 : $map_key");
-
-      // motor_id가 아닌 것은 삭제
-      map.remove('s');
-      map.remove('t');
-      map.remove('temp_1');
-      map.remove('humid_1');
-      map.remove('exttemp_1');
-      map.remove('soiltemp_1');
-      map.remove('soilhumid_1');
-      map.remove('soiltemp_2');
-      map.remove('soilhumid_1');
-      map.remove('soilhumid_2');
-      map.remove('valve_1');
-      map.remove('pump_1');
-      map.remove('pump_2');
-      // motor_id만 저장된 data를 리스트로 변환
-      print("##### motor_id만 추출 : ${map_key.toList()}");
-
-      // 추출한 motor_id를 stream 폴더에 motor_id 리스트에 넣어줌
-      stream.motor_id = map_key.toList();
-      print("##### 저장된 motor_id 리스트 가져오기 : ${stream.motor_id}");
-      print('!!!!!!!!!!!!!!');
 
       innerTemp.value = streamDatas['temp_1'].toString();
       extTemp.value = streamDatas['exttemp_1'].toString();
@@ -139,22 +113,11 @@ class CounterController extends GetxController {
       stream.motor_4 = streamDatas['motor_4'].toString();
       stream.motor_5 = streamDatas['motor_5'].toString();
       stream.motor_6 = streamDatas['motor_6'].toString();
-
-      // motor_id global key로 저장
-      // stream.motor_id =
-
-      // trap = 1;
-      // }
-
-
-      print('stream.temp_1 = ${stream.temp_1}');
-      print('innerTemp = ${innerTemp}');
     });
-
     return true;
   }
 
-  // 날씨 데이터에 따라 이미지지 변화
+  // 날씨 데이터에 따라 이미지 변화
   // getWearther() {
   //   var temp = int.parse(stream.exttemp_1);
   //

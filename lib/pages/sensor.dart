@@ -1,20 +1,25 @@
+// necessary to build app
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:get/get.dart';
-import 'package:edgeworks/pages/cctv_page.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../globals/stream.dart' as stream;
-import '../pages/environment_page.dart';
-import 'components/getx_controller/controller.dart';
+// getX controller
+import '../utils/getX_controller/controller.dart';
+// import pages
+import 'package:edgeworks/pages/cctv_page.dart';
 import 'sensor_page.dart';
 import 'soilControl_page.dart';
+// global
+import '../globals/stream.dart' as stream;
+import '../pages/environment_page.dart';
+
 
 /*
 * name : Home
 * description : home page
 * writer : walter
 * create date : 2021-12-28
-* last update : 2022-01-25
+* last update : 2022-02-03
 * */
 
 class Sensor extends StatelessWidget {

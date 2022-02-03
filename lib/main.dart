@@ -1,23 +1,24 @@
+// necessary to build app
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:get/get.dart';
-
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 // 파이어페이스
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+// import pages
 import 'package:edgeworks/pages/home.dart';
 import 'package:edgeworks/pages/setting_page.dart';
 import 'package:edgeworks/pages/changepw_page.dart';
-import 'login/login_pages.dart';
-import 'pages/mqtt.dart';
 import 'pages/sensor.dart';
+// dio
+import 'pages/login_pages.dart';
 import 'package:dio/dio.dart';
+// global
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
@@ -26,7 +27,7 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : This is a start page. code for fcm push notification.
 * writer : Sherry
 * create date : 2022-01-10
-* last update : 2022-01-25
+* last update : 2022-02-03
 * */
 
 // APIs
@@ -60,7 +61,7 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 // 푸시알림 백그라운드 설정
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print("Handling a background message: ${message.messageId}");
+  print(" [main page] Handling a background message: ${message.messageId}");
 }
 
 // Create a [AndroidNotificationChannel] for heads up notifications
@@ -68,9 +69,7 @@ late AndroidNotificationChannel channel;
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/config/.env');
-  print('flutter test run app!!!!!!!!!!!!!');
   runApp(MyApp());
-  print('flutter Main end!!!!!!!!!!!!!');
 }
 
 class Splash extends StatelessWidget {
@@ -102,7 +101,7 @@ class _MyAppState extends State<MyApp> {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   void activateNotification() async {
-    print('##### FCM START #####');
+    print('##### [main page] FCM START #####');
 
     // 푸시알림 fcm 초기화해야 사용할 수 있음
     await Firebase.initializeApp();
@@ -113,7 +112,7 @@ class _MyAppState extends State<MyApp> {
     // fcm get token
     _messaging.getToken().then((fcmtoken) async {
       stream.fcmtoken = fcmtoken!;
-      print('##### Get fcmtoken: ${stream.fcmtoken}');
+      print('##### [main page] Get fcmtoken: ${stream.fcmtoken}');
     });
 
     // 권한 설정 여부
@@ -130,7 +129,7 @@ class _MyAppState extends State<MyApp> {
 
     // 푸시알림 앱 최초 실행 시 권한 설정 경우에 따른 코드
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("User granted permission");
+      print("[main page] User granted permission");
 
       // 출력된 푸쉬 알림을 탭했을 때 동작 처리를 위해 콜백을 등록해준다
       flutterLocalNotificationsPlugin.initialize(
@@ -169,9 +168,9 @@ class _MyAppState extends State<MyApp> {
       }
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      print('[main page] User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      print('[main page] User declined or has not accepted permission');
     }
 
     // 푸시알림 앱 실행 시
@@ -184,9 +183,9 @@ class _MyAppState extends State<MyApp> {
       print('Got a message whilst in the foreground!');
 
       if (notification != null && android != null) {
-        print('Message also contained a notification: $notification');
+        print('[main page] Message also contained a notification: $notification');
         print(// 타이틀: 메시지 제목; 바디: 메시지 내용;
-            'Message title: ${notification.title}, body: ${notification.body}');
+            '[main page] Message title: ${notification.title}, body: ${notification.body}');
 
         PushNotification pushNotification = PushNotification(
           title: notification.title,
@@ -297,10 +296,6 @@ class _MyAppState extends State<MyApp> {
                     page: () => SettingPage(),
                     // transition: Transition.upToDown,
                     opaque: false),
-                GetPage(
-                  name: '/mqtt',
-                  page: () => MQTTPage(),
-                ),
                 GetPage(
                   opaque: false,
                   // getdata cctv, soilpage, etc

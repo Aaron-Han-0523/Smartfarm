@@ -1,8 +1,12 @@
+// necessary to build app
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// dio
 import 'package:dio/dio.dart';
+// global
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
@@ -37,14 +41,14 @@ void _getData() async {
   // cctvs
   final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
   stream.cctvs = getCctvs.data;
-  print('##### cctvPage GET CCTV List from stream: ${stream.cctvs}');
-  print('##### cctvPage GET CCTV List length: ${stream.cctvs.length}');
+  print('##### [cctvPage] GET CCTV List from stream: ${stream.cctvs}');
+  print('##### [cctvPage] GET CCTV List length: ${stream.cctvs.length}');
   stream.cctv_url = [];
   for (var i = 0; i < stream.cctvs.length; i++) {
     var cctvUrl = stream.cctvs[i]['cctv_url'];
     stream.cctv_url.add(cctvUrl);
   }
-  print('##### cctvPage GET CCTV Url List: ${stream.cctv_url}');
+  print('##### [cctvPage] GET CCTV Url List: ${stream.cctv_url}');
 }
 
 class CCTVPage extends StatefulWidget {

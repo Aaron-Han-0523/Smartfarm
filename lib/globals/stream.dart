@@ -14,9 +14,6 @@ List siteInfo = [];
 List<String> siteIds = [];
 List<String> siteNames = [];
 
-
-// first page
-
 var temp_1 = '';
 var humid_1 = '';
 var exttemp_1 = '';

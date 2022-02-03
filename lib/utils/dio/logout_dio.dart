@@ -1,14 +1,20 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get_core/src/get_main.dart';
+// necessary to build app
 import 'package:get/get_navigation/src/extension_navigation.dart';
+// dio
+import 'package:dio/dio.dart';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// getX
+import 'package:get/get_core/src/get_main.dart';
+//global
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+
 /*
 * name : logout API
 * description : logout Api page
 * writer : mark
 * create date : 2022-01-06
-* last update : 2022-01-06
+* last update : 2022-02-03
 * */
 
 class Logout {
@@ -25,23 +31,18 @@ class Logout {
     var response = await dio.post('$api/farm/logout', options: options);
 
     Map jsonBody = response.data;
-
     var jsonData = jsonBody['result'].toString();
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
         edgeworks.deleteUserInfo();
         Get.offAllNamed('/');
-        print('jsonBody는: $jsonBody');
-        print('로그아웃 성공!!');
+        print('[logout_dio page] 로그아웃 성공');
       } else if (jsonData == 'false') {
-        print('로그인을 하세요!!');
-        print('jsondata는 : $jsonData');
+        print('[logout_dio page] 로그인 필요');
       } else {
-        print('에러!!');
       }
     } else {
-      print('통신 에러');
     }
   }
 }

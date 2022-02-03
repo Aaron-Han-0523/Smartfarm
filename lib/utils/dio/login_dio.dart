@@ -1,21 +1,29 @@
-import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
-import 'package:dio/dio.dart';
-import '../globals/stream.dart' as stream;
+// necessary to build app
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+// dio
+import 'package:dio/dio.dart';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// global
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
+import 'package:edgeworks/globals/stream.dart' as stream;
+
 
 /*
 * name : login API & change password
 * description : login api
 * writer : mark
 * create date : 2022-01-03
-* last update : 2022-01-05
+* last update : 2022-02-03
 * */
 
 class LoginTest {
+  // env
   var api = dotenv.env['PHONE_IP'];
+
+  // Dio
   Dio dio = new Dio();
 
   Future<dynamic> loginTest(String uid, String pw) async {
@@ -27,40 +35,27 @@ class LoginTest {
     var response = await dio.post('$api/farm/login', data: params);
 
     Map jsonBody = response.data;
-
     var jsonData = jsonBody['result'].toString();
-    // var cookies = response.headers['set-cookie'];
-    // // var data = cookies![0].split()
-    // print('header!!!!!!!!!!!!!!!!');
-    // print(cookies![0].split('Path')[0]);
-    // edgeworks.cookies = cookies[0].split('Path')[0];
 
     if (response.statusCode == 200) {
       if (jsonData == 'true') {
         edgeworks.saveUserInfo(uid, pw);
         edgeworks.checkUserId = uid;
-        // sherry
         Get.toNamed('/home');
         // post fcm token
         postFcmToken(uid, stream.fcmtoken);
-
+        // cookies
         var cookies = response.headers['set-cookie'];
         // var data = cookies![0].split()
-        print('header!!!!!!!!!!!!!!!!');
         print(cookies![0].split('Path')[0]);
         edgeworks.cookies = cookies[0].split('Path')[0];
-
-        print('jsonBody는: $jsonBody');
-        print('password는: ${jsonBody['results']['password']}');
       } else if (jsonData == 'false') {
-        print('ID/PW를 확인해주세요');
         Get.defaultDialog(
             backgroundColor: Colors.white,
             title: '오류',
             middleText: 'ID/PW를 확인해주세요',
             textCancel: 'Cancel');
       } else {
-        print('ID/PW를 입력해주세요');
         Get.defaultDialog(
             backgroundColor: Colors.white,
             title: '오류',
@@ -68,7 +63,7 @@ class LoginTest {
             textCancel: 'Cancel');
       }
     } else {
-      print('통신 에러');
+      print('[login_dio page] 통신 에러');
     }
   }
 
@@ -80,20 +75,12 @@ class LoginTest {
     };
 
     var response = await dio.post('$api/farm/login', data: params);
-
     Map jsonBody = response.data;
 
     if (response.statusCode == 200) {
       if (jsonBody['result'] == true) {
-        print('jsonBody는: $jsonBody');
         edgeworks.checkUserKey = jsonBody['result'].toString();
-        // _checkValidate.validatePassword;
-        // return true;
       }
-      // else if (jsonBody['result'] == false) {
-      //   Get.defaultDialog(backgroundColor: Colors.white, title: '오류', middleText: '비밀번호를 다시 입력하세요', textCancel: 'Cancel');
-      //   return false;
-      // }
     }
   }
 
@@ -110,13 +97,6 @@ class LoginTest {
         return uidStatus = false;
       }
     }
-
-    //   if (jsonBody[0]["uid"] == uid) {
-    //     print('##### [login_dio page] id 조회 응답은: ${jsonBody[0]["uid"]}');
-    //     return uidStatus = true;
-    //   } else{
-    //     return uidStatus = false;
-    // }
   }
 
   // pw 일치 확인
@@ -129,12 +109,10 @@ class LoginTest {
 
     var jsonBody = response.data;
 
-    print('응답은 : ${jsonBody['results']['uid']}');
-
     var jsonData = jsonBody['result'].toString();
     if (jsonData == 'true') {
       edgeworks.checkUserKey = jsonData;
-      print('result는 성공 : ${edgeworks.checkUserKey}');
+      print('[login_dio page] result는 성공 : ${edgeworks.checkUserKey}');
     } else if ((jsonBody['results'][0]['uid']) != uid) {
       Get.defaultDialog(
           backgroundColor: Colors.white,
@@ -142,7 +120,7 @@ class LoginTest {
           middleText: 'ID를 확인해주세요',
           textCancel: 'Cancel');
     } else {
-      print('result는 실패');
+      print('[login_dio page] result는 실패');
       Get.defaultDialog(
           backgroundColor: Colors.white,
           title: '실패',
@@ -184,6 +162,5 @@ class LoginTest {
     var fcmtoken = stream.fcmtoken;
     var data = {'uid': userId, 'fcmtoken': fcmtoken};
     final postToken = await dio.put('$api/farm/$userId/pushAlarm', data: data);
-    print('##### postToken: $postToken');
   }
 }

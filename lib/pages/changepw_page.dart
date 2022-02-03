@@ -1,20 +1,32 @@
-import 'package:dio/dio.dart';
+// necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:edgeworks/dio/login_dio.dart';
-import 'package:edgeworks/pages/components/registrations/validate.dart';
-import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
-import 'dart:convert';
+// env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// dio
+import 'package:dio/dio.dart';
+import 'package:edgeworks/utils/dio/login_dio.dart';
+// check login validate page
+import 'package:edgeworks/utils/registrations/validate.dart';
+
 
 /*
 * name : change password
 * description : change password
 * writer : mark
 * create date : 2021-01-03
-* last update : 2021-01-27
+* last update : 2021-02-03
 * */
+
+// Api's
+// var api = dotenv.env['PHONE_IP'];
+LoginTest _loginTest = LoginTest();
+var api = dotenv.env['PHONE_IP'];
+
+// Dio
+Dio dio = new Dio();
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -24,10 +36,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  // var api = dotenv.env['PHONE_IP'];
-  LoginTest _loginTest = LoginTest();
-  var api = dotenv.env['PHONE_IP'];
-  Dio dio = new Dio();
 
   @override
   void initState() {
@@ -65,7 +73,8 @@ class _SignUpPageState extends State<SignUpPage> {
   // int authoritylen = (authorityList.length - 1);
   List<String> deptList = [];
   int count = 0;
-  // TextEditingController _controller = TextEditingController();
+
+  // TextEditingController
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
   final _currentPwTextEditController = TextEditingController();
@@ -75,6 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _nameTextEditController = TextEditingController();
   final _personalTextEditController = TextEditingController();
 
+  // FocusNode
   FocusNode _emailFocus = new FocusNode();
   FocusNode _passwordFocus = new FocusNode();
   FocusNode _repasswordFocus = new FocusNode();
@@ -329,20 +339,16 @@ class _SignUpPageState extends State<SignUpPage> {
                 data: {
                   'password': _currentPwTextEditController.text,
                 });
-            print('비밀번호는 : ${_currentPwTextEditController.text}');
-            print('ID는 : ${_idTextEditController.text}');
+            print('[changePw page] 아이디 확인 : ${_idTextEditController.text}');
 
             Map jsonBody = response.data;
             var jsonData = jsonBody['result'].toString();
             if (jsonData == 'true') {
-              print('result는 성공: $jsonData');
               _loginTest
                   .updatePW(
                       _idTextEditController.text, _repwTextEditController.text)
                   .then((value) => formKey.currentState!.save());
-              print('result는 성공2: $jsonData');
             } else if (jsonData == 'false2') {
-              print('result는 실패');
               Get.defaultDialog(
                   backgroundColor: Colors.white,
                   title: '실패',
@@ -356,19 +362,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   textCancel: '확인');
             }
           } else {
-            print('새비밀번호 확인');
+            print('[changePw page] 새비밀번호 확인 필요');
           }
         },
       ),
     );
   }
 
-  // textform decoration
+  // TextForm Decoration widget
   InputDecoration _textFormDecoration() {
     return new InputDecoration(
       contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
       border: OutlineInputBorder(),
-      // helperText: helperText,
     );
   }
 }

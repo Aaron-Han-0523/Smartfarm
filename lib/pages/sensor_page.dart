@@ -1,16 +1,18 @@
-import 'dart:convert';
-
+// necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+// getX controller
+import '../utils/getX_controller/controller.dart';
+// global
 import '../globals/stream.dart' as stream;
-import 'components/getx_controller/controller.dart';
+
 /*
 * name : ListOpen Page
 * description : open data page
 * writer : walter
 * create date : 2021-09-30
-* last update : 2022-01-11
+* last update : 2022-02-03
 * */
 
 // globalKey
@@ -37,35 +39,27 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-  // Timer timer = Timer.periodic(const Duration(minutes: 10), _updateDataSource);
 
-  // List<_ChartData>? chartData;
-  // late int count;
-  // ChartSeriesController? _chartSeriesController;
-
-  // void initState() {
-  //   super.initState();
-  // }
-
-  // @override
-  // void dispose() {
-  //   timer?.cancel();
-  //   chartData!.clear();
-  //   _chartSeriesController = null;
-  //   super.dispose();
-  // }
-
+  // siteDropdown button global variable
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
       : stream.sitesDropdownValue; //${stream.siteNames[0]}
+
+  @override
+  void initState() {
+    super.initState();
+    print('[sensor page] stream.chartData: ${stream.chartData.length}');
+    for (var i = 0; i < stream.chartData.length; i++) {
+      data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
+          double.parse(stream.chartData[i]['value'])));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Color(0xff2E6645),
       body: Stack(
-        // fit: StackFit.expand,
-        // clipBehavior: Clip.none,
         children: [
           CustomScrollView(
             slivers: <Widget>[
@@ -101,9 +95,9 @@ class _SensorPageState extends State<SensorPage> {
                       color: Color(0xffF5F9FC),
                       child: Column(
                         children: [
-                          MyAccordian(),
-                          MyAccordian2(),
-                          MyGraph(),
+                          _myAccordian(),
+                          _myAccordian2(),
+                          _myGraph(),
                         ],
                       ),
                     );
@@ -115,19 +109,9 @@ class _SensorPageState extends State<SensorPage> {
           ),
           Positioned(
             bottom: 0,
-            // height: Get.height * 1 / 14,
-            // width: Get.width,
             child: Container(
               height: Get.height * 1 / 30,
               width: Get.width,
-              // color: Color(0xff2E8953),
-
-              // decoration: BoxDecoration(
-              //     color: Color(0xffF5F9FC),
-              //     borderRadius: BorderRadius.only(
-              //         bottomLeft: Radius.circular(40.0),
-              //         bottomRight: Radius.circular(40.0)),
-              //     border: null),
               child: Image.asset(
                 'assets/images/image_bottombar.png',
                 fit: BoxFit.fill,
@@ -136,37 +120,13 @@ class _SensorPageState extends State<SensorPage> {
           ),
         ],
       ),
-
-      // bottomNavigationBar: Container(
-      //   height: Get.height * 1 / 14,
-      //   // decoration: BoxDecoration(
-      //   //     color: Color(0xffF5F9FC),
-      //   //     borderRadius: BorderRadius.only(
-      //   //         bottomLeft: Radius.circular(40.0),
-      //   //         bottomRight: Radius.circular(40.0)),
-      //   //     border: null,),
-      //   child: Image.asset(
-      //     'assets/images/image_bottombar.png',
-      //     fit: BoxFit.fill,
-      //   ),
-      // ),
     );
   }
-}
 
-class MyAccordian extends StatefulWidget {
-  const MyAccordian({Key? key}) : super(key: key);
-
-  @override
-  State<MyAccordian> createState() => _MyAccordianState();
-}
-
-class _MyAccordianState extends State<MyAccordian> {
-  final controller = Get.put(CounterController());
-  @override
-  Widget build(BuildContext context) {
+  // 외부 환경 위젯
+  Widget _myAccordian() {
     return Obx(
-      () => Column(
+          () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -233,21 +193,11 @@ class _MyAccordianState extends State<MyAccordian> {
       ),
     );
   }
-}
 
-class MyAccordian2 extends StatefulWidget {
-  const MyAccordian2({Key? key}) : super(key: key);
-
-  @override
-  State<MyAccordian2> createState() => _MyAccordian2State();
-}
-
-class _MyAccordian2State extends State<MyAccordian2> {
-  // final controller = Get.put(CounterController());
-  @override
-  Widget build(BuildContext context) {
+  // 내부 환경 위젯
+  Widget _myAccordian2() {
     return Obx(
-      () => Column(
+          () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -279,48 +229,18 @@ class _MyAccordian2State extends State<MyAccordian2> {
                     SizedBox(
                       width: Get.width,
                       height:
-                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+                      (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
                         primary: false,
                         childAspectRatio:
-                            (Get.width * 0.4) / (Get.height * 1 / 9),
-                        // Create a grid with 2 columns. If you change the scrollDirection to
-                        // horizontal, this produces 2 rows.
+                        (Get.width * 0.4) / (Get.height * 1 / 9),
                         crossAxisCount: 2,
-                        // Generate 100 widgets that display their index in the List.
-
                         children: List.generate(innerData.length, (index) {
                           return _cards(innerData[index], innerCon[index].value,
                               true, 'assets/images/icon_temp.png');
                         }),
                       ),
                     ),
-                    // SizedBox(height: Get.height * 0.01),
-                    // Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //     children: [
-                    //       _cards('내부 온도', controller.innerTemp.value, true,
-                    //           'assets/images/icon_temp.png'),
-                    //       _cards('내부 습도', controller.innerHumid.value, true,
-                    //           'assets/images/icon_humid.png')
-                    //     ]),
-                    // SizedBox(height: Get.height * 0.01),
-                    // Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //     children: [
-                    //       _cards('토양 온도', controller.soilTemp.value, true,
-                    //           'assets/images/icon_soiltemp.png'),
-                    //       _cards('토양 습도', controller.soilHumid.value, true,
-                    //           'assets/images/icon_soilhumid.png')
-                    //     ]),
-                    // SizedBox(height: Get.height * 0.01),
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: 5, bottom: 5),
-                    //   child: Row(children: [
-                    //     _cards('토양 건조도', '12.5', true,
-                    //         'assets/images/icon_soilele.png'),
-                    //   ]),
-                    // ),
                   ],
                 ),
               ),
@@ -330,31 +250,10 @@ class _MyAccordian2State extends State<MyAccordian2> {
       ),
     );
   }
-}
 
-class MyGraph extends StatefulWidget {
-  const MyGraph({Key? key}) : super(key: key);
-
+  // 그래프 위젯
   @override
-  State<MyGraph> createState() => _MyGraphState();
-}
-
-class _MyGraphState extends State<MyGraph> {
-  @override
-  void initState() {
-    super.initState();
-    print('stream.chartData: ${stream.chartData.length}');
-    // var obj = jsonDecode(stream.chartData[0]);
-    // print('stream.chartData: ${obj}');
-    // const length = obj.length;
-    for (var i = 0; i < stream.chartData.length; i++) {
-      data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
-          double.parse(stream.chartData[i]['value'])));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _myGraph() {
     return Column(
       children: <Widget>[
         _fromLTRBPadding(
@@ -362,7 +261,7 @@ class _MyGraphState extends State<MyGraph> {
             decoration: _decorations(),
             child: Theme(
               data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -391,8 +290,11 @@ class _MyGraphState extends State<MyGraph> {
       ],
     );
   }
+
+
 }
 
+// 그래프 데이터 관련
 List<_InnerTempData> data = [
   // _InnerTempData('Jan', 35),
   // _InnerTempData('Feb', 28),
@@ -451,7 +353,6 @@ Widget _cards(var title, var subtitle, bool visibles, String assets) {
   return Visibility(
     visible: visibles,
     child: Container(
-      // alignment: Alignment.center,
       margin: EdgeInsets.only(left: 7, right: 7, bottom: 10),
       height: Get.height * 1 / 9,
       width: Get.width * 0.4,
@@ -482,6 +383,7 @@ Widget _cards(var title, var subtitle, bool visibles, String assets) {
   );
 }
 
+// BoxDecoration 위젯 (shadow 미적용)
 BoxDecoration _decoration() {
   return BoxDecoration(
     color: Colors.white,
@@ -489,6 +391,7 @@ BoxDecoration _decoration() {
   );
 }
 
+// BoxDecoration 위젯 (shadow 적용)
 BoxDecoration _decorations() {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(20),
@@ -503,13 +406,9 @@ BoxDecoration _decorations() {
   );
 }
 
-// padding widget
+// padding 위젯
 Padding _fromLTRBPadding({child}) {
   return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
-}
-
-Padding _edgeTopPadding(double top, {child}) {
-  return Padding(padding: new EdgeInsets.only(top: top), child: child);
 }
 
 Padding _leftRightPadding({child}) {
