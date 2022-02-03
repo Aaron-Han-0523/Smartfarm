@@ -183,7 +183,8 @@ class _MyAppState extends State<MyApp> {
       print('Got a message whilst in the foreground!');
 
       if (notification != null && android != null) {
-        print('[main page] Message also contained a notification: $notification');
+        print(
+            '[main page] Message also contained a notification: $notification');
         print(// 타이틀: 메시지 제목; 바디: 메시지 내용;
             '[main page] Message title: ${notification.title}, body: ${notification.body}');
 

@@ -38,8 +38,8 @@ var setPubTopic = '/sf/$siteId/req/cfg';
 // dio APIs
 var options = BaseOptions(
   baseUrl: '$url',
-  connectTimeout: 60*1000,
-  receiveTimeout: 60*1000,
+  connectTimeout: 10 * 1000,
+  receiveTimeout: 10 * 1000,
 );
 Dio dio = Dio(options);
 
@@ -126,7 +126,8 @@ class _HomeState extends State<Home> {
             .format(DateTime.parse(yyyyMMddE))
             .toString();
         var hhMMss = date.substring(11, 19);
-        print('##### [homepage] getInnerTemp 최근 내부온도 온도: ${getInnerTemp.data['data'][0]['value']}');
+        print(
+            '##### [homepage] getInnerTemp 최근 내부온도 온도: ${getInnerTemp.data['data'][0]['value']}');
 
         int innerTempLength = getInnerTemp.data['data'].length;
         print('[homepage] innerTempLength: $innerTempLength');

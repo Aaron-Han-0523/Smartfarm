@@ -39,7 +39,6 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-
   // siteDropdown button global variable
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
@@ -58,7 +57,6 @@ class _SensorPageState extends State<SensorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -126,7 +124,7 @@ class _SensorPageState extends State<SensorPage> {
   // 외부 환경 위젯
   Widget _myAccordian() {
     return Obx(
-          () => Column(
+      () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -197,7 +195,7 @@ class _SensorPageState extends State<SensorPage> {
   // 내부 환경 위젯
   Widget _myAccordian2() {
     return Obx(
-          () => Column(
+      () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -229,11 +227,11 @@ class _SensorPageState extends State<SensorPage> {
                     SizedBox(
                       width: Get.width,
                       height:
-                      (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
                         primary: false,
                         childAspectRatio:
-                        (Get.width * 0.4) / (Get.height * 1 / 9),
+                            (Get.width * 0.4) / (Get.height * 1 / 9),
                         crossAxisCount: 2,
                         children: List.generate(innerData.length, (index) {
                           return _cards(innerData[index], innerCon[index].value,
@@ -261,7 +259,7 @@ class _SensorPageState extends State<SensorPage> {
             decoration: _decorations(),
             child: Theme(
               data:
-              Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -290,8 +288,6 @@ class _SensorPageState extends State<SensorPage> {
       ],
     );
   }
-
-
 }
 
 // 그래프 데이터 관련

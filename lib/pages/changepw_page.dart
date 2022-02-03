@@ -10,7 +10,6 @@ import 'package:edgeworks/utils/dio/login_dio.dart';
 // check login validate page
 import 'package:edgeworks/utils/registrations/validate.dart';
 
-
 /*
 * name : change password
 * description : change password
@@ -27,7 +26,6 @@ var api = dotenv.env['PHONE_IP'];
 // Dio
 Dio dio = new Dio();
 
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -36,7 +34,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-
   @override
   void initState() {
     readFile();
@@ -139,7 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // first page
+  // Form
   Widget _firstPage() {
     return Form(
       key: formKey,
@@ -196,9 +193,8 @@ class _SignUpPageState extends State<SignUpPage> {
             focusNode: _emailFocus,
             keyboardType: TextInputType.visiblePassword,
             decoration: _textDecoration(),
-            validator: (value) =>
-
-                CheckValidate().validateEmail(_emailFocus, value!, _idTextEditController.text),
+            validator: (value) => CheckValidate()
+                .validateEmail(_emailFocus, value!, _idTextEditController.text),
             onChanged: (text) {
               setState(() {});
             },
@@ -240,7 +236,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // text decoration
+  // InputText Decoration widget
   InputDecoration _textDecoration() {
     return new InputDecoration(
       contentPadding: EdgeInsets.fromLTRB(10, 16, 0, 0),
@@ -249,7 +245,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // check password
+  // 새 비밀번호 확인
   Widget _repwtextField(String title, var controller) {
     return Row(
       children: [

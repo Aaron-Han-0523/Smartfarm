@@ -35,14 +35,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   // TextEditingController
   // 저장된 id/pw 가져오는 로직 -> logout 처리되면 저장된 값 사라짐
   final _idTextEditController = TextEditingController();
   final _pwTextEditController = TextEditingController();
 
   // 저장된 id 값 가져오기
-  Future<dynamic>getUserId() async {
+  Future<dynamic> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('userId') ?? '';
     setState(() {
@@ -53,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // 저장된 pw 값 가져오기
-  Future<dynamic>getUserPw() async {
+  Future<dynamic> getUserPw() async {
     final prefs = await SharedPreferences.getInstance();
     userPw = prefs.getString('userPw') ?? '';
     setState(() {
@@ -81,7 +80,6 @@ class _LoginPageState extends State<LoginPage> {
     headerTopZone = Get.mediaQuery.padding.top;
     return Scaffold(
         backgroundColor: Color(0xffF5F9FC),
-        // resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Stack(
             children: [
@@ -146,7 +144,8 @@ class _LoginPageState extends State<LoginPage> {
           child: Row(children: [
             Expanded(
               child: TextFormField(
-                controller: _idTextEditController, // 저장된 id값이 없으면 _idcontroller id값이 있으면 저장된 값 불러오기
+                controller:
+                    _idTextEditController, // 저장된 id값이 없으면 _idcontroller id값이 있으면 저장된 값 불러오기
                 decoration: InputDecoration(
                     fillColor: Color(0xffFFFFFF),
                     filled: true,

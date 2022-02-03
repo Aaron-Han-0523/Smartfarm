@@ -41,14 +41,13 @@ var options = BaseOptions(
 Dio dio = Dio(options);
 
 // siteDropdown button global variable
-String sitesDropdownValue =
-stream.sitesDropdownValue == '' ? '${stream.siteNames[0]}' : stream.sitesDropdownValue;
+String sitesDropdownValue = stream.sitesDropdownValue == ''
+    ? '${stream.siteNames[0]}'
+    : stream.sitesDropdownValue;
 
 // siteDropdown button global variable
 var siteDropdown =
-stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
-
-
+    stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -68,12 +67,11 @@ class _SettingPageState extends State<SettingPage> {
   ConnectMqtt _connectMqtt = ConnectMqtt();
 
   // TextEditing Controller
-  final _highTextEditController =
-      TextEditingController(text: siteConfig.high_temp==''?null:siteConfig.high_temp);
-  final _nullTextEditingController =
-      TextEditingController(text: ' ');
-  final _lowTextEditController =
-      TextEditingController(text: siteConfig.low_temp==''?null:siteConfig.low_temp);
+  final _highTextEditController = TextEditingController(
+      text: siteConfig.high_temp == '' ? null : siteConfig.high_temp);
+  final _nullTextEditingController = TextEditingController(text: ' ');
+  final _lowTextEditController = TextEditingController(
+      text: siteConfig.low_temp == '' ? null : siteConfig.low_temp);
 
   //global key
   bool status = false;
@@ -295,8 +293,10 @@ class _SettingPageState extends State<SettingPage> {
             height: Get.height * 0.06,
             child: TextFormField(
               enabled: alarmToggleValue == 0 ? true : false,
-              controller: alarmToggleValue==1 ? _nullTextEditingController : highTempController,
-    // highTempController
+              controller: alarmToggleValue == 1
+                  ? _nullTextEditingController
+                  : highTempController,
+              // highTempController
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
                 hintStyle: TextStyle(
@@ -338,7 +338,9 @@ class _SettingPageState extends State<SettingPage> {
             height: Get.height * 0.06,
             child: TextFormField(
               enabled: alarmToggleValue == 0 ? true : false,
-              controller: alarmToggleValue==1 ? _nullTextEditingController : lowTempController,
+              controller: alarmToggleValue == 1
+                  ? _nullTextEditingController
+                  : lowTempController,
               // lowTempController,
               decoration: InputDecoration(
                 hintText: ' 온도를 입력하세요',
@@ -367,8 +369,7 @@ class _SettingPageState extends State<SettingPage> {
         style: ElevatedButton.styleFrom(
           primary: Color(0xff4cbb8b),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
-          ), // background
+              borderRadius: BorderRadius.circular(20)), // background
         ),
         child: new Text(
           '설정 저장',
@@ -393,7 +394,7 @@ class _SettingPageState extends State<SettingPage> {
                   title: '설정 완료',
                   middleText: '설정이 완료 되었습니다.',
                   textCancel: '확인'));
-          },
+        },
       ),
     );
   }
@@ -463,10 +464,9 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   // site name에 맞는 site id 가져오기
-  Future<dynamic> getSiteId(var siteNames) async{
+  Future<dynamic> getSiteId(var siteNames) async {
     print('##### [SettingPage] siteNames는  : ${siteNames}');
-    final getSiteId =
-    await dio.post('$url/$userId/sites/$siteNames');
+    final getSiteId = await dio.post('$url/$userId/sites/$siteNames');
     stream.siteId = getSiteId.data;
     print('##### [SettingPage] Site Id는  : ${stream.siteId}');
     Get.offAllNamed('/home');
@@ -501,7 +501,7 @@ class _SettingPageState extends State<SettingPage> {
                 color: Colors.black26,
               ),
               onChanged: (String? newValue) {
-                if(newValue != sitesDropdownValue){
+                if (newValue != sitesDropdownValue) {
                   showAlertDialog(context, newValue);
                 }
               },
@@ -526,19 +526,19 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   // 사이트 설정 완료 후 확인 알림
-  showAlertDialog(BuildContext context, var siteName)  {
+  showAlertDialog(BuildContext context, var siteName) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("취소"),
-      onPressed:  () {
+      onPressed: () {
         Get.back();
       },
     );
     Widget continueButton = FlatButton(
       child: Text("확인"),
-      onPressed:  () {
+      onPressed: () {
         setState(() {
-          stream.sitesDropdownValue=siteName;
+          stream.sitesDropdownValue = siteName;
           print("[setting page] siteName은 $siteName");
           getSiteId(stream.sitesDropdownValue);
         });

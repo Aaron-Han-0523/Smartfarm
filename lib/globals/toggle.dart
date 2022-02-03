@@ -1,4 +1,5 @@
 library edgeworks.toggle;
+
 // necessary to build app
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,5 +32,3 @@ getAllSideToggle() async {
   print('[global/toggle page] get all side value : $allSideToggleValue');
   return allSideToggleValue;
 }
-
-

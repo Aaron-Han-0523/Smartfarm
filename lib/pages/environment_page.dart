@@ -31,7 +31,6 @@ ConnectMqtt _connectMqtt = ConnectMqtt();
 // Dio
 var dio = Dio();
 
-
 //Api's
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
@@ -138,6 +137,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
     getTopSharedPrefs();
   }
 
+  // siteDropdown button global variable
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
       : stream.sitesDropdownValue;
@@ -145,7 +145,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -162,14 +161,14 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                          TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                            TextStyle(color: Colors.black, fontSize: 17)),
+                                TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.02),
                       _weather(context)
@@ -178,7 +177,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                     return Container(
                       color: Color(0xffF5F9FC),
                       child: Column(
@@ -285,7 +284,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             decoration: _decoration(Color(0xff2E8953)),
             child: Theme(
               data:
-              Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: IgnorePointer(
                 ignoring: motors.length == 0 ? true : false,
                 child: ExpansionTile(
@@ -304,7 +303,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     15,
                     child: Text(mainName,
                         style:
-                        _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                            _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                   ),
                   children: <Widget>[
                     _topBottomPadding(
@@ -349,7 +348,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 width: Get.width * 1 / 5,
                 child: Text(text,
                     style:
-                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+                        _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               )),
           _edgeRightPadding(
             10,
@@ -440,7 +439,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 width: Get.width * 1 / 5,
                 child: Text(text,
                     style:
-                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+                        _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               )),
           _edgeRightPadding(
             10,
@@ -529,8 +528,8 @@ class _EnvironmentState extends State<EnvironmentPage> {
                       width: textSizedBox,
                       child: ExpandableText(
                         "${motorName[index]}", //${stream.sideMotors[0]['motor_name']
-                        style:
-                        _textStyle(Color(0xff222222), FontWeight.normal, 15),
+                        style: _textStyle(
+                            Color(0xff222222), FontWeight.normal, 15),
                         maxLines: 2,
                         // expanded: true,
                         expandText: ' ',
@@ -576,7 +575,8 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         // stream.topMotors[index] = 2;
                       }
                       // 개별 제어 motor name 확인
-                      print('### [environment page] Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
+                      print(
+                          '### [environment page] Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
                       // MQTT 통신
                       _connectMqtt.setControl(
                           'did',
@@ -586,12 +586,8 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           '/sf/$siteIds/req/motor',
                           '/sf/$siteIds/req/motor');
                       // DB 업데이트
-                      _updateMotorData(
-                          "${motorName[index]}",
-                          "side",
-                          "$value",
-                          "side",
-                          "${motorIds2[index]}");
+                      _updateMotorData("${motorName[index]}", "side", "$value",
+                          "side", "${motorIds2[index]}");
                     },
                   ),
                 )
@@ -692,8 +688,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           '/sf/$siteId/req/motor');
                       //DB 업데이트
                       _updateEtcMotorData(
-                          "$value",
-                          "${stream.etcMotorId[index]}");
+                          "$value", "${stream.etcMotorId[index]}");
                     },
                   ),
                 )
@@ -705,12 +700,12 @@ class _EnvironmentState extends State<EnvironmentPage> {
   }
 
   // 날씨
-  Widget _weather (BuildContext context) {
+  Widget _weather(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-          () => Container(
+      () => Container(
         child:
-        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring(),
           // SizedBox(height: Get.height * 0.03),
           Row(

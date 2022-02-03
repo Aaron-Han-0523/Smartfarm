@@ -1,7 +1,6 @@
 // necessary to build app
 import 'package:flutter/material.dart';
 
-
 /*
 * name : CheckValidate Page
 * description : Validate page
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 * */
 
 class CheckValidate {
-
   // 이메일 확인
   String? validateEmail(FocusNode focusNode, String value, var controller) {
     if (value.isEmpty) {

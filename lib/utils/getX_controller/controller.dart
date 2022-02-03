@@ -15,12 +15,10 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 int clientPort = 1883;
 var setTopic = '/sf/$siteId/data';
 
-
 class CounterController extends GetxController {
   String statusText = "Status Text";
   bool isConnected = false;
-  final MqttServerClient client =
-      MqttServerClient('14.46.231.48', '');
+  final MqttServerClient client = MqttServerClient('14.46.231.48', '');
   var innerTemp = ''.obs;
   var extTemp = ''.obs;
   var soilTemp = ''.obs;
@@ -38,14 +36,14 @@ class CounterController extends GetxController {
             color: Color(0xff222222), scale: 15);
   }
 
-  getWeatherStatus(var streamExtTemp_1){
+  getWeatherStatus(var streamExtTemp_1) {
     var extTemp = streamExtTemp_1; // 외부온도
     var temp = int.parse(extTemp);
     return temp > 20
         ? Text('맑음/$streamExtTemp_1°C',
-        style: _textStyle(Color(0xff222222), FontWeight.w600, 16))
+            style: _textStyle(Color(0xff222222), FontWeight.w600, 16))
         : Text('흐림/$streamExtTemp_1°C',
-        style: _textStyle(Color(0xff222222), FontWeight.w600, 16));
+            style: _textStyle(Color(0xff222222), FontWeight.w600, 16));
   }
 
   // text

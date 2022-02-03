@@ -40,9 +40,7 @@ class Logout {
         print('[logout_dio page] 로그아웃 성공');
       } else if (jsonData == 'false') {
         print('[logout_dio page] 로그인 필요');
-      } else {
-      }
-    } else {
-    }
+      } else {}
+    } else {}
   }
 }

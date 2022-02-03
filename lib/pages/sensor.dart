@@ -13,7 +13,6 @@ import 'soilControl_page.dart';
 import '../globals/stream.dart' as stream;
 import '../pages/environment_page.dart';
 
-
 /*
 * name : Home
 * description : home page
@@ -25,7 +24,7 @@ import '../pages/environment_page.dart';
 class Sensor extends StatelessWidget {
   const Sensor({Key? key}) : super(key: key);
 
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'FarmInUs';
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,6 @@ class Sensor extends StatelessWidget {
 }
 
 class SensorStatefulWidget extends StatefulWidget {
-
   const SensorStatefulWidget({Key? key}) : super(key: key);
 
   @override
@@ -56,14 +54,16 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
 
     super.initState();
   }
-
+  // TextEditingController
   TextEditingController idTextController = TextEditingController();
 
   // drawer close global key
   GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  // siteDropdown button global variable
+  var siteDropdown =
+  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
   List<Widget> _widgetOptions = <Widget>[
     SensorPage(),
     EnvironmentPage(),
@@ -77,14 +77,10 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     });
   }
 
-  // var trap = 0;
-  var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
-
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope( // 뒤로가기 버튼 제어
+    return WillPopScope(
+      // 뒤로가기 버튼 제어
       onWillPop: () async {
         if (_key.currentState!.isDrawerOpen) {
           Navigator.of(context).pop();
@@ -129,7 +125,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
               child: InkWell(
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Image.asset('assets/images/icon_setting.png', scale: 3),
+                  child:
+                      Image.asset('assets/images/icon_setting.png', scale: 3),
                   foregroundColor: Colors.teal,
                 ),
                 onTap: () {

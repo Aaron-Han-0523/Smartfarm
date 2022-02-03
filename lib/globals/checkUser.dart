@@ -1,11 +1,12 @@
 library edgeworks.keys;
+
 // necessary to build app
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*
 * name : check user
 * description : check user page.
-* writer : walter
+* writer : mark
 * create date : 2021-12-28
 * last update : 2021-01-27
 * */
@@ -39,11 +40,10 @@ getUserId() async {
   var userId = prefs.getString('userId') ?? '';
   return userId;
 }
+
 // 저장된 pw 가져오기
 getUserPw() async {
   final prefs = await SharedPreferences.getInstance();
   var userPw = prefs.getString('userPw') ?? '';
   return userPw;
 }
-
-

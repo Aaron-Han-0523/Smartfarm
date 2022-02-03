@@ -7,7 +7,6 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:edgeworks/globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
-
 /*
 * name : MQTT class
 * description : MQTT class
@@ -25,9 +24,7 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // mqtt
 int clientPort = 1883;
-final MqttServerClient client =
-MqttServerClient('14.46.231.48', '');
-
+final MqttServerClient client = MqttServerClient('14.46.231.48', '');
 
 class ConnectMqtt {
   // MQTT
