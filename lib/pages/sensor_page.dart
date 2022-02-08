@@ -1,5 +1,6 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 // getX controller
@@ -52,6 +53,10 @@ class _SensorPageState extends State<SensorPage> {
       data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
           double.parse(stream.chartData[i]['value'])));
     }
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   @override

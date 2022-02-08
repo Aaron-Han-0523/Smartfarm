@@ -38,8 +38,8 @@ var setPubTopic = '/sf/$siteId/req/cfg';
 // dio APIs
 var options = BaseOptions(
   baseUrl: '$url',
-  connectTimeout: 10 * 1000,
-  receiveTimeout: 10 * 1000,
+  connectTimeout: 60 * 1000,
+  receiveTimeout: 60 * 1000,
 );
 Dio dio = Dio(options);
 

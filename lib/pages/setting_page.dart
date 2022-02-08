@@ -1,5 +1,6 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -95,6 +96,10 @@ class _SettingPageState extends State<SettingPage> {
     // realTimeController.getConfig();
     getAlarmToggle();
     _connectMqtt.getSiteConfig();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   @override

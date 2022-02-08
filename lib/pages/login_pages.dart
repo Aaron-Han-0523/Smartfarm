@@ -1,5 +1,6 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,6 +66,10 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     getUserId();
     getUserPw();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
   }
 

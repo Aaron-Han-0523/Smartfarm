@@ -1,5 +1,6 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -135,6 +136,10 @@ class _EnvironmentState extends State<EnvironmentPage> {
     super.initState();
     getSideSharedPrefs();
     getTopSharedPrefs();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   // siteDropdown button global variable

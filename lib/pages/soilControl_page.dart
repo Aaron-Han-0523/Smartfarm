@@ -1,5 +1,6 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 // env
@@ -73,6 +74,10 @@ class SoilControlPage extends StatefulWidget {
 class _SoilControlPageState extends State<SoilControlPage> {
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
   }
 

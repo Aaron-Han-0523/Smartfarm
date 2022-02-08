@@ -37,6 +37,10 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     readFile();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
   }
 

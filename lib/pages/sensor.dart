@@ -1,6 +1,7 @@
 // necessary to build app
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 // getX controller
@@ -49,6 +50,10 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   @override
   void initState() {
     controller.connect();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     // _connect();
     // });
 

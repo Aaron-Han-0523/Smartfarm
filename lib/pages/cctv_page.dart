@@ -1,7 +1,9 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // dio
@@ -9,6 +11,8 @@ import 'package:dio/dio.dart';
 // global
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+
+import 'cctvEX.dart';
 
 /*
 * name : CCTV Page
@@ -57,8 +61,10 @@ class CCTVPage extends StatefulWidget {
 }
 
 class _CCTVPageState extends State<CCTVPage> {
-  late List<VlcPlayerController> controllers;
-  late VlcPlayerController vlcPlayerController;
+  late  List<VlcPlayerController> controllers;
+  late  List<VlcPlayerController> controllers2;
+
+  // late VlcPlayerController vlcPlayerController;
   List<String> urls = [
     'rtsp://admin:dbslzhs123%21%40%23@14.46.231.48:60554/Streaming/Channels/101',
     'rtsp://admin:dbslzhs123%21%40%23@14.46.231.48:60554/Streaming/Channels/101',
@@ -67,33 +73,57 @@ class _CCTVPageState extends State<CCTVPage> {
 
   // visibiliby
   List<bool> _visibility = [true, true, true];
+  // controller variable
+  var controller;
+  var controller2;
 
   //회사명 가져오기
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
       : stream.sitesDropdownValue;
 
+
   @override
   void initState() {
     _getData();
     super.initState();
-    controllers = <VlcPlayerController>[];
+
+      controllers = <VlcPlayerController>[];
+      for (var i = 0; i < urls.length; i++) {
+        controller = VlcPlayerController.network(
+          urls[i],
+          // hwAcc: HwAcc.FULL,
+          autoPlay: true,
+          options: VlcPlayerOptions(),
+        );
+        controllers.add(controller);
+      }
+    // 전체화면 controller
+    controllers2 = <VlcPlayerController>[];
     for (var i = 0; i < urls.length; i++) {
-      var controller = VlcPlayerController.network(
+      controller2 = VlcPlayerController.network(
         urls[i],
-        // hwAcc: HwAcc.FULL,
         autoPlay: true,
-        // options: VlcPlayerOptions(),
+        options: VlcPlayerOptions(),
       );
-      controllers.add(controller);
+      controllers2.add(controller2);
     }
+
+
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   double _ratio = 16 / 9;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -110,21 +140,21 @@ class _CCTVPageState extends State<CCTVPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                          TextStyle(color: Color(0xff2E8953), fontSize: 22),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 17)),
+                            TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.01),
                     ]),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                     return SingleChildScrollView(
                       child: Container(
                           decoration: BoxDecoration(
@@ -157,6 +187,8 @@ class _CCTVPageState extends State<CCTVPage> {
     );
   }
 
+  bool isFullScreen = false;
+
   Widget _cctvBuilder() {
     return ListView.builder(
         scrollDirection: Axis.vertical,
@@ -177,11 +209,64 @@ class _CCTVPageState extends State<CCTVPage> {
                         children: [
                           Text("CCTV #" + "${index + 1}"),
                           IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                                  // controllers[index].enterFullScreen();
-                                });
+                              onPressed: () async {
+                                SystemChrome.setPreferredOrientations([
+                                  DeviceOrientation.landscapeLeft,
+                                  DeviceOrientation.landscapeRight,
+                                ]);
+                                // await Get.to(PageTransition());
+
+                                // await  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                //   return PageTransition(controllers[index]);
+                                // }));
+
+                                // await Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => PageTransition(
+                                //     controllers: controlCctv,
+                                //   )),
+                                //   // cctv 인자로 controller index를 받기
+                                // );
+
+                                // 전체 화면 페이지
+                                await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                                  return Scaffold(
+                                    appBar: AppBar(
+                                      title: Text("전체화면"),
+                                      leading: IconButton(
+                                        icon: Icon(Icons.arrow_back_rounded),
+                                        onPressed: () {
+                                          // Get.back();
+                                          // Get.offAll(CCTVPage());
+                                          Get.back();
+                                        }
+                                      ),
+                                    ),
+                                    body: VlcPlayer(
+                                        controller: controllers2[index],
+                                        aspectRatio: 16/9
+                                    ),
+                                  );
+                                })).then((value) => SystemChrome.setPreferredOrientations([
+                                  DeviceOrientation.portraitUp,
+                                ]));
+
+                                // setState(()  async {
+                                //   // isFullScreen = !isFullScreen;
+                                //   // if (isFullScreen) {
+                                //   //   SystemChrome.setPreferredOrientations([
+                                //   //     DeviceOrientation.landscapeRight,
+                                //   //     DeviceOrientation.landscapeLeft,
+                                //   //   ]);
+                                //   //
+                                //   // } else {
+                                //   //   SystemChrome.setPreferredOrientations([
+                                //   //     DeviceOrientation.portraitUp,
+                                //   //   ]);
+                                //   // }
+                                //   // 카메라를 움직이는 버튼이나 일단 풀스크린전환
+                                //   // controllers[index].enterFullScreen();
+                                // });
                               },
                               icon: Icon(Icons.control_camera)),
                         ],
