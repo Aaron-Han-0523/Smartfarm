@@ -1,9 +1,9 @@
 // necessary to build app
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // dio
@@ -19,7 +19,7 @@ import 'cctvEX.dart';
 * description : CCTV Page
 * writer : sherry
 * create date : 2021-12-28
-* last update : 2022-01-28
+* last update : 2022-02-09
 * */
 
 // global
@@ -56,6 +56,8 @@ void _getData() async {
 }
 
 class CCTVPage extends StatefulWidget {
+  CCTVPage({Key? key}) : super(key: key);
+
   @override
   _CCTVPageState createState() => _CCTVPageState();
 }
@@ -85,8 +87,13 @@ class _CCTVPageState extends State<CCTVPage> {
 
   @override
   void initState() {
-    _getData();
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
+    setState(() {
+      _getData();
 
       controllers = <VlcPlayerController>[];
       for (var i = 0; i < urls.length; i++) {
@@ -98,7 +105,41 @@ class _CCTVPageState extends State<CCTVPage> {
         );
         controllers.add(controller);
       }
-    // 전체화면 controller
+      // 전체화면 controller
+      controllers2 = <VlcPlayerController>[];
+      for (var i = 0; i < urls.length; i++) {
+        controller2 = VlcPlayerController.network(
+          urls[i],
+          autoPlay: true,
+          options: VlcPlayerOptions(),
+        );
+        controllers2.add(controller2);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    // ]);
+  }
+
+  // refresh function
+  _refresh(dynamic value) => setState(() {
+
+    controllers = <VlcPlayerController>[];
+    for (var i = 0; i < urls.length; i++) {
+      controller = VlcPlayerController.network(
+        urls[i],
+        // hwAcc: HwAcc.FULL,
+        autoPlay: true,
+        options: VlcPlayerOptions(),
+      );
+      controllers.add(controller);
+    }
+
     controllers2 = <VlcPlayerController>[];
     for (var i = 0; i < urls.length; i++) {
       controller2 = VlcPlayerController.network(
@@ -108,17 +149,7 @@ class _CCTVPageState extends State<CCTVPage> {
       );
       controllers2.add(controller2);
     }
-
-
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
-  }
+  });
 
   double _ratio = 16 / 9;
   @override
@@ -210,47 +241,95 @@ class _CCTVPageState extends State<CCTVPage> {
                           Text("CCTV #" + "${index + 1}"),
                           IconButton(
                               onPressed: () async {
-                                SystemChrome.setPreferredOrientations([
-                                  DeviceOrientation.landscapeLeft,
-                                  DeviceOrientation.landscapeRight,
-                                ]);
-                                // await Get.to(PageTransition());
+                                // await SystemChrome.setPreferredOrientations([
+                                //   DeviceOrientation.landscapeLeft,
+                                //   DeviceOrientation.landscapeRight,
+                                // ]);
+                                // setState(()  {
+                                //    Get.to(PageTransition(),
+                                //       arguments: controllers2[index]);
+                                //
+                                //   // Navigator.push(
+                                //   //   context,
+                                //   //   MaterialPageRoute(builder: (context) => PageTransition(
+                                //   //     controllers: controllers2[index],
+                                //   //   )),
+                                //   //   // cctv 인자로 controller index를 받기
+                                //   // );
+                                //
+                                // });
+                                // await SystemChrome.setPreferredOrientations([
+                                //   DeviceOrientation.portraitDown,
+                                //   DeviceOrientation.portraitUp,
+                                // ]);
 
                                 // await  Navigator.push(context, MaterialPageRoute(builder: (context) {
                                 //   return PageTransition(controllers[index]);
                                 // }));
-
+                                SystemChrome.setPreferredOrientations([
+                                  DeviceOrientation.landscapeLeft,
+                                  DeviceOrientation.landscapeRight,
+                                ]);
                                 // await Navigator.push(
                                 //   context,
                                 //   MaterialPageRoute(builder: (context) => PageTransition(
-                                //     controllers: controlCctv,
+                                //     controllers: controllers2[index],
                                 //   )),
-                                //   // cctv 인자로 controller index를 받기
-                                // );
+                                // ).then(_refresh);
+                                // await Navigator.of(context,rootNavigator: true)
+                                //     .push(
+                                //   MaterialPageRoute(builder: (context) => PageTransition(
+                                //     controllers: controllers2[index],
+                                //   )),
+                                // ).then(_refresh);
+
+                                await Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute<bool>(
+                                    fullscreenDialog: true,
+                                    builder: (BuildContext context) => PageTransition(
+                                      controllers: controllers2[index],
+                                    ),
+                                  ),
+                                ).then(_refresh);
+
+                                // await Navigator.of(context,rootNavigator:true)
+                                //     .pushReplacement(MaterialPageRoute(builder: (context) =>
+                                //     PageTransition(
+                                //       controllers: controllers2[index],
+                                //     )
+                                // )).then(_refresh);
+
+                                 // SystemChrome.setPreferredOrientations([
+                                 //   DeviceOrientation.portraitUp,
+                                 // ]);
 
                                 // 전체 화면 페이지
-                                await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                                  return Scaffold(
-                                    appBar: AppBar(
-                                      title: Text("전체화면"),
-                                      leading: IconButton(
-                                        icon: Icon(Icons.arrow_back_rounded),
-                                        onPressed: () {
-                                          // Get.back();
-                                          // Get.offAll(CCTVPage());
-                                          Get.back();
-                                        }
-                                      ),
-                                    ),
-                                    body: VlcPlayer(
-                                        controller: controllers2[index],
-                                        aspectRatio: 16/9
-                                    ),
-                                  );
-                                })).then((value) => SystemChrome.setPreferredOrientations([
-                                  DeviceOrientation.portraitUp,
-                                ]));
-
+                                // await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                                //   return Scaffold(
+                                //     appBar: AppBar(
+                                //       title: Text("전체화면"),
+                                //       leading: IconButton(
+                                //         icon: Icon(Icons.arrow_back_rounded),
+                                //         onPressed: () {
+                                //           setState(() {
+                                //             // Get.offAllNamed('/cctv');
+                                //             // Get.toNamed('/cctv');
+                                //             // Get.back();
+                                //             Navigator.pop(context);
+                                //             // SystemChrome.setPreferredOrientations([
+                                //             //   DeviceOrientation.portraitDown,
+                                //             //   DeviceOrientation.portraitUp,
+                                //             // ]);
+                                //           });
+                                //         }
+                                //       ),
+                                //     ),
+                                //     body: VlcPlayer(
+                                //         controller: controllers2[index],
+                                //         aspectRatio: 16/9
+                                //     ),
+                                //   );
+                                // }));
                                 // setState(()  async {
                                 //   // isFullScreen = !isFullScreen;
                                 //   // if (isFullScreen) {

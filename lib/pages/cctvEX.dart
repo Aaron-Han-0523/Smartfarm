@@ -1,6 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
+import 'cctv_page.dart';
 
 
 // class PageTransition extends StatelessWidget {
@@ -42,13 +47,22 @@ class PageTransition extends StatefulWidget {
 }
 
 class _PageTransitionState extends State<PageTransition> {
-  late VlcPlayerController controller;
   var controllers;
+  CCTVPage _cctvPage = CCTVPage();
   _PageTransitionState(this. controllers);  //constructor
 
   @override
   void initState() {
     super.initState();
+    _cctvPage;
+    setState(() {
+      // controllers;
+      Get.arguments;
+      // SystemChrome.setPreferredOrientations([
+      //   DeviceOrientation.landscapeLeft,
+      //   DeviceOrientation.landscapeRight,
+      // ]);
+    });
     // controller = VlcPlayerController.network(
     //   'rtsp://admin:dbslzhs123%21%40%23@14.46.231.48:60554/Streaming/Channels/101',
     //   autoPlay: true,
@@ -59,27 +73,67 @@ class _PageTransitionState extends State<PageTransition> {
     //   autoPlay: true,
     //   options: VlcPlayerOptions(),
     // );
-    print('저장된 cctv 확인 : $controllers');
 
   }
 
   @override
   void dispose() {
     super.dispose();
-    // controllers.dispose();
   }
 
+  @override
+  void didUpdateWidget(PageTransition oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // setState(() {});
+  }
+
+
   // appbar 생성해서 전체화면 만들어야 함
-  // Get.offAllback 사용해서 페이지 이동하기
+  // Get.offAllback 사용해서 페이지 이동하기 -> 안됨 cctv 페이지 자체를 호출하게 되면 tabbar와 appbar가 깨짐
+  // tab bar와 appbar는 sensor 페이지에 있기 때문에 해당 컨테이너를 불러오지 못함
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            onPressed: () async {
+              // Get.back();
+              // setState(() {
+              //   CCTVPage();
+              //   SystemChrome.setPreferredOrientations([
+              //     DeviceOrientation.portraitUp,
+              //   ]);
+              //   Navigator.pop(context);
+              //
+              // });
+              // Navigator.of(context, rootNavigator: true).push(
+              //   MaterialPageRoute(builder: (_) =>
+              //       CCTVPage())
+              // );
+              // Navigator.pushAndRemoveUntil(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (BuildContext context) =>
+              //             CCTVPage()),
+              //         (Route<dynamic> route) => false);
+
+              Navigator.of(context, rootNavigator: false).push(
+                CupertinoPageRoute<bool>(
+                  fullscreenDialog: true,
+                  builder: (BuildContext context) => CCTVPage(),
+                ),
+              );
+            },
+          ),
+        ),
         body: VlcPlayer(
-            controller: controllers,
+            controller:
+            controllers,
+            // Get.arguments,
             aspectRatio: 1.88
         ),
-      ),
-    );
+      );
   }
+
 }

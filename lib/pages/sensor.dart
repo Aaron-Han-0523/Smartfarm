@@ -1,4 +1,5 @@
 // necessary to build app
+import 'package:edgeworks/pages/cctvEX.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/services.dart';
@@ -56,7 +57,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     ]);
     // _connect();
     // });
-
     super.initState();
   }
   // TextEditingController
@@ -64,6 +64,12 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
 
   // drawer close global key
   GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+
+  final _page1 = GlobalKey<NavigatorState>();
+  final _page2 = GlobalKey<NavigatorState>();
+  final _page3 = GlobalKey<NavigatorState>();
+  final _page4 = GlobalKey<NavigatorState>();
+  final _page5 = GlobalKey<NavigatorState>();
 
   // siteDropdown button global variable
   var siteDropdown =
@@ -142,55 +148,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
           ],
         ),
         body: bodySteam(),
-        bottomNavigationBar: ConvexAppBar(
-          elevation: 0.0,
-          items: [
-            TabItem(
-              icon: Image.asset(
-                "assets/images/icon_sensor.png",
-                color:
-                    _selectedIndex == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
-                scale: 3,
-              ),
-              // title: '센서',
-            ),
-            TabItem(
-              icon: Image.asset(
-                "assets/images/icon_env.png",
-                color:
-                    _selectedIndex == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
-                scale: 3,
-              ),
-              // title: '환경제어',
-            ),
-            TabItem(
-              icon: Image.asset(
-                "assets/images/icon_soil.png",
-                color:
-                    _selectedIndex == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
-                scale: 3,
-              ),
-              // title: '토양제어',
-            ),
-            TabItem(
-              icon: Image.asset(
-                "assets/images/icon_cctv.png",
-                color:
-                    _selectedIndex == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
-                scale: 3,
-              ),
-              // title: '',
-            ),
-          ],
-          // currentIndex: _selectedIndex,
-          // selectedItemColor: Colors.black,
-          // unselectedItemColor: Colors.white,
-          backgroundColor: Color(0xff2E6645),
-          onTap: _onItemTapped,
-          top: 0,
-          color: Color(0xffFFFFFF),
-          // activeColor: Color(0xff222222),
-        ),
+        bottomNavigationBar: bottomBar(_selectedIndex)
       ),
     );
   }
@@ -212,11 +170,98 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             );
           else {
             return Center(
-              child: _widgetOptions.elementAt(_selectedIndex),
+              // child: _widgetOptions.elementAt(_selectedIndex),
+             child :  IndexedStack(
+                index: _selectedIndex,
+                children: <Widget>[
+                  Navigator(
+                    key: _page1,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => SensorPage(),
+                    ),
+                  ),
+                  Navigator(
+                    key: _page2,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => EnvironmentPage(),
+                    ),
+                  ),
+                  Navigator(
+                    key: _page3,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => SoilControlPage(),
+                    ),
+                  ),
+                  Navigator(
+                    key: _page4,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => CCTVPage(),
+                    ),
+                  ),
+                ],
+              ),
             );
           }
         },
       ),
+    );
+  }
+
+  // bottom bar
+  Widget bottomBar(int index) {
+    print('화면 번호 index : $index');
+    return ConvexAppBar(
+      elevation: 0.0,
+      initialActiveIndex: index,
+      items: [
+        TabItem(
+          icon: Image.asset(
+            "assets/images/icon_sensor.png",
+            color:
+            index == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
+            scale: 3,
+          ),
+          // title: '센서',
+        ),
+        TabItem(
+          icon: Image.asset(
+            "assets/images/icon_env.png",
+            color:
+            index == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
+            scale: 3,
+          ),
+          // title: '환경제어',
+        ),
+        TabItem(
+          icon: Image.asset(
+            "assets/images/icon_soil.png",
+            color:
+            index == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
+            scale: 3,
+          ),
+          // title: '토양제어',
+        ),
+        TabItem(
+          icon: Image.asset(
+            "assets/images/icon_cctv.png",
+            color:
+            index == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
+            scale: 3,
+          ),
+          // title: '',
+        ),
+      ],
+      // selectedItemColor: Colors.black,
+      // unselectedItemColor: Colors.white,
+      backgroundColor: Color(0xff2E6645),
+      onTap: _onItemTapped,
+      top: 0,
+      color: Color(0xffFFFFFF),
+      // activeColor: Color(0xff222222),
     );
   }
 

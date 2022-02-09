@@ -1,5 +1,6 @@
 // necessary to build app
 import 'dart:io';
+import 'package:edgeworks/pages/cctv_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -302,6 +303,12 @@ class _MyAppState extends State<MyApp> {
                   // getdata cctv, soilpage, etc
                   name: '/home',
                   page: () => Home(),
+                ),
+                GetPage(
+                  opaque: false,
+                  // getdata cctv, soilpage, etc
+                  name: '/cctv',
+                  page: () => CCTVPage(),
                 ),
               ],
             );
