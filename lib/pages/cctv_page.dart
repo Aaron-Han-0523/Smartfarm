@@ -1,18 +1,26 @@
+// fullscreen 작업 진행 중 -------------------------------->
+
 // necessary to build app
+import 'package:edgeworks/utils/getX_controller/controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // dio
 import 'package:dio/dio.dart';
+
 // global
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
-import 'cctvEX.dart';
+// pages
+import 'package:edgeworks/pages/fullScreenCctv_page.dart';
+import 'fullScreenCctv_page.dart';
 
 /*
 * name : CCTV Page
@@ -25,6 +33,7 @@ import 'cctvEX.dart';
 // global
 List cctvs = stream.cctvs;
 List cctvUrl = stream.cctv_url;
+var vlcController;
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
@@ -79,6 +88,9 @@ class _CCTVPageState extends State<CCTVPage> {
   var controller;
   var controller2;
 
+  final getXcontroller = Get.put(CounterController());
+
+
   //회사명 가져오기
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
@@ -88,6 +100,7 @@ class _CCTVPageState extends State<CCTVPage> {
   @override
   void initState() {
     super.initState();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -128,7 +141,7 @@ class _CCTVPageState extends State<CCTVPage> {
 
   // refresh function
   _refresh(dynamic value) => setState(() {
-
+    controllers.remove(value);
     controllers = <VlcPlayerController>[];
     for (var i = 0; i < urls.length; i++) {
       controller = VlcPlayerController.network(
@@ -139,7 +152,7 @@ class _CCTVPageState extends State<CCTVPage> {
       );
       controllers.add(controller);
     }
-
+    controllers.remove(value);
     controllers2 = <VlcPlayerController>[];
     for (var i = 0; i < urls.length; i++) {
       controller2 = VlcPlayerController.network(
@@ -241,48 +254,10 @@ class _CCTVPageState extends State<CCTVPage> {
                           Text("CCTV #" + "${index + 1}"),
                           IconButton(
                               onPressed: () async {
-                                // await SystemChrome.setPreferredOrientations([
-                                //   DeviceOrientation.landscapeLeft,
-                                //   DeviceOrientation.landscapeRight,
-                                // ]);
-                                // setState(()  {
-                                //    Get.to(PageTransition(),
-                                //       arguments: controllers2[index]);
-                                //
-                                //   // Navigator.push(
-                                //   //   context,
-                                //   //   MaterialPageRoute(builder: (context) => PageTransition(
-                                //   //     controllers: controllers2[index],
-                                //   //   )),
-                                //   //   // cctv 인자로 controller index를 받기
-                                //   // );
-                                //
-                                // });
-                                // await SystemChrome.setPreferredOrientations([
-                                //   DeviceOrientation.portraitDown,
-                                //   DeviceOrientation.portraitUp,
-                                // ]);
-
-                                // await  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                //   return PageTransition(controllers[index]);
-                                // }));
                                 SystemChrome.setPreferredOrientations([
                                   DeviceOrientation.landscapeLeft,
                                   DeviceOrientation.landscapeRight,
                                 ]);
-                                // await Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) => PageTransition(
-                                //     controllers: controllers2[index],
-                                //   )),
-                                // ).then(_refresh);
-                                // await Navigator.of(context,rootNavigator: true)
-                                //     .push(
-                                //   MaterialPageRoute(builder: (context) => PageTransition(
-                                //     controllers: controllers2[index],
-                                //   )),
-                                // ).then(_refresh);
-
                                 await Navigator.of(context, rootNavigator: true).push(
                                   CupertinoPageRoute<bool>(
                                     fullscreenDialog: true,
@@ -292,60 +267,9 @@ class _CCTVPageState extends State<CCTVPage> {
                                   ),
                                 ).then(_refresh);
 
-                                // await Navigator.of(context,rootNavigator:true)
-                                //     .pushReplacement(MaterialPageRoute(builder: (context) =>
-                                //     PageTransition(
-                                //       controllers: controllers2[index],
-                                //     )
-                                // )).then(_refresh);
-
-                                 // SystemChrome.setPreferredOrientations([
-                                 //   DeviceOrientation.portraitUp,
-                                 // ]);
-
-                                // 전체 화면 페이지
-                                // await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                                //   return Scaffold(
-                                //     appBar: AppBar(
-                                //       title: Text("전체화면"),
-                                //       leading: IconButton(
-                                //         icon: Icon(Icons.arrow_back_rounded),
-                                //         onPressed: () {
-                                //           setState(() {
-                                //             // Get.offAllNamed('/cctv');
-                                //             // Get.toNamed('/cctv');
-                                //             // Get.back();
-                                //             Navigator.pop(context);
-                                //             // SystemChrome.setPreferredOrientations([
-                                //             //   DeviceOrientation.portraitDown,
-                                //             //   DeviceOrientation.portraitUp,
-                                //             // ]);
-                                //           });
-                                //         }
-                                //       ),
-                                //     ),
-                                //     body: VlcPlayer(
-                                //         controller: controllers2[index],
-                                //         aspectRatio: 16/9
-                                //     ),
-                                //   );
-                                // }));
-                                // setState(()  async {
-                                //   // isFullScreen = !isFullScreen;
-                                //   // if (isFullScreen) {
-                                //   //   SystemChrome.setPreferredOrientations([
-                                //   //     DeviceOrientation.landscapeRight,
-                                //   //     DeviceOrientation.landscapeLeft,
-                                //   //   ]);
-                                //   //
-                                //   // } else {
-                                //   //   SystemChrome.setPreferredOrientations([
-                                //   //     DeviceOrientation.portraitUp,
-                                //   //   ]);
-                                //   // }
-                                //   // 카메라를 움직이는 버튼이나 일단 풀스크린전환
-                                //   // controllers[index].enterFullScreen();
-                                // });
+                                SystemChrome.setPreferredOrientations([
+                                  DeviceOrientation.portraitUp,
+                                ]);
                               },
                               icon: Icon(Icons.control_camera)),
                         ],
@@ -359,6 +283,7 @@ class _CCTVPageState extends State<CCTVPage> {
                               width: MediaQuery.of(context).size.width,
                               child: VlcPlayer(
                                 controller: controllers[index],
+                                // controllers[index],
                                 aspectRatio: _ratio,
                               ),
                             ),

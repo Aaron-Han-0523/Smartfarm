@@ -1,4 +1,5 @@
 // necessary to build app
+import 'package:edgeworks/data/get_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -48,11 +49,16 @@ class _SensorPageState extends State<SensorPage> {
   @override
   void initState() {
     super.initState();
-    print('[sensor page] stream.chartData: ${stream.chartData.length}');
-    for (var i = 0; i < stream.chartData.length; i++) {
-      data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
-          double.parse(stream.chartData[i]['value'])));
-    }
+    // _getAllData.getTrendsTempData();
+    setState(() {
+      _getAllData.getTrendsTempData();
+      // print('[sensor page] stream.chartData: ${stream.chartData.length}');
+      // for (var i = 0; i < stream.chartData.length; i++) {
+      //   data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
+      //       double.parse(stream.chartData[i]['value'])));
+      // }
+
+    });
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -78,14 +84,14 @@ class _SensorPageState extends State<SensorPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                          TextStyle(color: Color(0xff2E8953), fontSize: 22),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 17)),
+                            TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.01),
                     ]),
@@ -93,7 +99,7 @@ class _SensorPageState extends State<SensorPage> {
               SliverList(
                 // itemExtent: 3.0,
                 delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                     return Container(
                       color: Color(0xffF5F9FC),
                       child: Column(
@@ -129,7 +135,7 @@ class _SensorPageState extends State<SensorPage> {
   // 외부 환경 위젯
   Widget _myAccordian() {
     return Obx(
-      () => Column(
+          () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -200,7 +206,7 @@ class _SensorPageState extends State<SensorPage> {
   // 내부 환경 위젯
   Widget _myAccordian2() {
     return Obx(
-      () => Column(
+          () => Column(
         children: <Widget>[
           _fromLTRBPadding(
             child: Container(
@@ -232,11 +238,11 @@ class _SensorPageState extends State<SensorPage> {
                     SizedBox(
                       width: Get.width,
                       height:
-                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+                      (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
                       child: GridView.count(
                         primary: false,
                         childAspectRatio:
-                            (Get.width * 0.4) / (Get.height * 1 / 9),
+                        (Get.width * 0.4) / (Get.height * 1 / 9),
                         crossAxisCount: 2,
                         children: List.generate(innerData.length, (index) {
                           return _cards(innerData[index], innerCon[index].value,
@@ -255,6 +261,7 @@ class _SensorPageState extends State<SensorPage> {
   }
 
   // 그래프 위젯
+  GetAllData _getAllData = GetAllData();
   @override
   Widget _myGraph() {
     return Column(
@@ -264,7 +271,7 @@ class _SensorPageState extends State<SensorPage> {
             decoration: _decorations(),
             child: Theme(
               data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -285,7 +292,24 @@ class _SensorPageState extends State<SensorPage> {
                     ),
                   ],
                 ),
-                children: [_lineChart()],
+                children: [
+
+                  FutureBuilder(
+                    future: _getAllData.getTrendsTempData(),
+                      builder: (BuildContext context, AsyncSnapshot  snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+    } else if (snapshot.connectionState == ConnectionState.done){
+      return _lineChart();
+    } else {
+                        return Center(
+                        child: CircularProgressIndicator(),
+                        );
+    }
+    }
+                      // child: _lineChart()
+                      )
+                ],
               ),
             ),
           ),

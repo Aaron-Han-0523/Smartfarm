@@ -166,14 +166,14 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                          TextStyle(color: Color(0xff2E8953), fontSize: 22),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 17)),
+                            TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.02),
                       _weather(context)
@@ -182,7 +182,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                     return Container(
                       color: Color(0xffF5F9FC),
                       child: Column(
@@ -289,7 +289,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
             decoration: _decoration(Color(0xff2E8953)),
             child: Theme(
               data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: IgnorePointer(
                 ignoring: motors.length == 0 ? true : false,
                 child: ExpansionTile(
@@ -308,7 +308,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                     15,
                     child: Text(mainName,
                         style:
-                            _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                        _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                   ),
                   children: <Widget>[
                     _topBottomPadding(
@@ -353,7 +353,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 width: Get.width * 1 / 5,
                 child: Text(text,
                     style:
-                        _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               )),
           _edgeRightPadding(
             10,
@@ -444,7 +444,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                 width: Get.width * 1 / 5,
                 child: Text(text,
                     style:
-                        _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               )),
           _edgeRightPadding(
             10,
@@ -708,9 +708,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
   Widget _weather(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
-      () => Container(
+          () => Container(
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           _mainMonitoring(),
           // SizedBox(height: Get.height * 0.03),
           Row(
@@ -842,6 +842,20 @@ BoxDecoration _decoration(dynamic color) {
     ],
   );
 }
+
+// 측창 개폐기 제어
+// class SideControlWidget extends StatefulWidget {
+//   const SideControlWidget({Key? key}) : super(key: key);
+//
+//   @override
+//   _EnvironmentState createState() => _EnvironmentState();
+// }
+//
+// class _EnvironmentState extends State<EnvironmentPage> {
+
+// 천창 개폐기 제어
+// 기타 제어
+
 
 // decoration(without box shadow)
 BoxDecoration _decorations() {

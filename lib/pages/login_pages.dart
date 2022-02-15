@@ -4,10 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // dio
 import 'package:edgeworks/utils/dio/login_dio.dart';
+
 // global
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
@@ -23,6 +26,7 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 LoginTest _loginTest = LoginTest();
 late double headerTopZone;
 var api = dotenv.env['PHONE_IP'];
+var kakaoChannelUrl = 'http://pf.kakao.com/_xledxfb';
 
 // global
 String userId = '';
@@ -247,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
         style: TextStyle(color: Color(0xff2E6645), fontSize: 14),
       ),
       TextButton(
-          onPressed: _launchURL,
+          onPressed: _launchKakaoURL,
           child: Text(
             '카카오 채널 연결',
             style: TextStyle(color: Color(0xff2E6645), fontSize: 14),
@@ -256,12 +260,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //카카오 채널 url launcher
-  _launchURL() async {
-    const url = 'http://pf.kakao.com/_xledxfb';
-    if (await canLaunch(url)) {
-      await launch(url);
+  _launchKakaoURL() async {
+    if (await canLaunch(kakaoChannelUrl)) {
+      await launch(kakaoChannelUrl);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $kakaoChannelUrl';
     }
   }
 }

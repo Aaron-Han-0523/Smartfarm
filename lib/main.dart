@@ -5,20 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// 파이어페이스
+
+// firebase
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-// import pages
+
+// pages
 import 'package:edgeworks/pages/home.dart';
 import 'package:edgeworks/pages/setting_page.dart';
 import 'package:edgeworks/pages/changepw_page.dart';
 import 'pages/sensor.dart';
+
 // dio
 import 'pages/login_pages.dart';
 import 'package:dio/dio.dart';
+
 // global
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;

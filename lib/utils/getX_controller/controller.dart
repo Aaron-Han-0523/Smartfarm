@@ -1,10 +1,13 @@
 // necessary to build app
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
+
 // mqtt
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+
 // global
 import '/globals/stream.dart' as stream;
 

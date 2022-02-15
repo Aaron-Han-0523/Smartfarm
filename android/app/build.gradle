@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     packagingOptions {
         // Fixes duplicate libraries build issue,
@@ -50,7 +50,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.smartfarm.edgeworks"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -63,7 +63,7 @@ android {
            storePassword keystoreProperties['storePassword']
        }
    }
-   
+
     buildTypes {
         release {
             // release 속성으로 변경

@@ -2,10 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+
 // dio
 import 'package:dio/dio.dart';
+
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // global
 import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 import 'package:edgeworks/globals/stream.dart' as stream;

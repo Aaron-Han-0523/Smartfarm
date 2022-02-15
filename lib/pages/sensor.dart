@@ -1,16 +1,18 @@
 // necessary to build app
-import 'package:edgeworks/pages/cctvEX.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 // getX controller
 import '../utils/getX_controller/controller.dart';
-// import pages
+
+// pages
 import 'package:edgeworks/pages/cctv_page.dart';
-import 'sensor_page.dart';
-import 'soilControl_page.dart';
+import 'package:edgeworks/pages/sensor_page.dart';
+import 'package:edgeworks/pages/soilControl_page.dart';
+
 // global
 import '../globals/stream.dart' as stream;
 import '../pages/environment_page.dart';
@@ -20,8 +22,12 @@ import '../pages/environment_page.dart';
 * description : home page
 * writer : walter
 * create date : 2021-12-28
-* last update : 2022-02-03
+* last update : 2022-02-14
 * */
+
+// 카카오 채널 url
+var kakaoChannelUrl = 'http://pf.kakao.com/_xledxfb';
+
 
 class Sensor extends StatelessWidget {
   const Sensor({Key? key}) : super(key: key);
@@ -51,12 +57,12 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   @override
   void initState() {
     controller.connect();
+    _widgetOptions;
+    _pageController = PageController(initialPage: _selectedIndex);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
-    // _connect();
-    // });
     super.initState();
   }
   // TextEditingController
@@ -75,6 +81,8 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   var siteDropdown =
   stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
+  PageController? _pageController;
+
   List<Widget> _widgetOptions = <Widget>[
     SensorPage(),
     EnvironmentPage(),
@@ -82,9 +90,16 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     CCTVPage(),
   ];
 
+  @override
+  void dispose() {
+    _pageController!.dispose();
+    super.dispose();
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      // _pageController!.jumpToPage(_selectedIndex);
     });
   }
 
@@ -120,7 +135,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
                   leading:
                       Image.asset('assets/images/kakao_channel.png', scale: 3),
                   title: Text('카카오 채널 연결'),
-                  onTap: _launchURL),
+                  onTap: _launchKakaoURL),
             ],
           ),
         ),
@@ -170,40 +185,44 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             );
           else {
             return Center(
-              // child: _widgetOptions.elementAt(_selectedIndex),
-             child :  IndexedStack(
-                index: _selectedIndex,
-                children: <Widget>[
-                  Navigator(
-                    key: _page1,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => SensorPage(),
-                    ),
-                  ),
-                  Navigator(
-                    key: _page2,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => EnvironmentPage(),
-                    ),
-                  ),
-                  Navigator(
-                    key: _page3,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => SoilControlPage(),
-                    ),
-                  ),
-                  Navigator(
-                    key: _page4,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => CCTVPage(),
-                    ),
-                  ),
-                ],
-              ),
+              // child: PageView(
+              //   controller: _pageController,
+              //   children: _widgetOptions
+              // ),
+              child: _widgetOptions.elementAt(_selectedIndex),
+             // child : IndexedStack(
+             //    index: _selectedIndex,
+             //    children: <Widget>[
+             //      Navigator(
+             //        key: _page1,
+             //        onGenerateRoute: (route) => MaterialPageRoute(
+             //          settings: route,
+             //          builder: (context) => SensorPage(),
+             //        ),
+             //      ),
+             //      Navigator(
+             //        key: _page2,
+             //        onGenerateRoute: (route) => MaterialPageRoute(
+             //          settings: route,
+             //          builder: (context) => EnvironmentPage(),
+             //        ),
+             //      ),
+             //      Navigator(
+             //        key: _page3,
+             //        onGenerateRoute: (route) => MaterialPageRoute(
+             //          settings: route,
+             //          builder: (context) => SoilControlPage(),
+             //        ),
+             //      ),
+             //      Navigator(
+             //        key: _page4,
+             //        onGenerateRoute: (route) => MaterialPageRoute(
+             //          settings: route,
+             //          builder: (context) => CCTVPage(),
+             //        ),
+             //      ),
+             //    ],
+             //  ),
             );
           }
         },
@@ -265,12 +284,12 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     );
   }
 
-  _launchURL() async {
-    const url = 'http://pf.kakao.com/_xledxfb';
-    if (await canLaunch(url)) {
-      await launch(url);
+  //카카오 채널 url launcher
+  _launchKakaoURL() async {
+    if (await canLaunch(kakaoChannelUrl)) {
+      await launch(kakaoChannelUrl);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $kakaoChannelUrl';
     }
   }
 }
