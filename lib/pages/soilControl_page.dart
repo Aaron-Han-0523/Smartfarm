@@ -1,5 +1,6 @@
 // necessary to build app
 import 'package:edgeworks/components/soil_con/customScrollView.dart';
+import 'package:edgeworks/utils/getX_controller/soilController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,12 +21,17 @@ class SoilControlPage extends StatefulWidget {
 }
 
 class _SoilControlPageState extends State<SoilControlPage> {
+  final controller = Get.put(SoilController());
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
+
+    controller.pumpsHttp();
+    controller.valvesHttp();
+    setState(() {});
     super.initState();
   }
 

@@ -58,66 +58,68 @@ class _SwitchTogglesState extends State<SwitchToggles> {
   Widget build(BuildContext context) {
     return _marginContainer(
       height: Get.height * 0.09,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _edgeLeftPadding(
-            20,
-            child: Text(widget.text,
-                style: TextStyle(
-                    color: Color(0xff222222),
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal)),
-          ),
-          _edgeRightPadding(
-            10,
-            child: ToggleSwitch(
-              fontSize: 12,
-              minWidth: 60.0,
-              cornerRadius: 80.0,
-              activeBgColors: [
-                [Color(0xffe3fbed)],
-                [Color(0xfff2f2f2)]
-              ],
-              activeFgColor: Color(0xff222222),
-              inactiveBgColor: Color(0xffFFFFFF),
-              inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: widget.streamStatus[widget.index],
-              // streamStatus[index] == 1 ? 1 : 0,
-              totalSwitches: 2,
-              labels: ['ON', 'OFF'],
-              radiusStyle: true,
-              onToggle: (value) async {
-                String switchStatus = '';
-
-                if (value == 0) {
-                  switchStatus = 'on';
-                  widget.streamStatus[widget.index] = 0;
-                } else if (value == 1) {
-                  switchStatus = 'off';
-                  widget.streamStatus[widget.index] = 1;
-                }
-                var typeId = widget.type;
-                _connectMqtt.setControl(
-                    'did',
-                    "${widget.index + 1}",
-                    'dact',
-                    switchStatus,
-                    '/sf/$siteId/req/${widget.action}',
-                    '/sf/$siteId/req/${widget.action}');
-                var data = {
-                  'uid': userId,
-                  'sid': siteId,
-                  widget.typeIdText: typeId,
-                  widget.typeActionText: value,
-                };
-                final putType = await dio.put(widget.putUrl, data: data);
-                print('[soilControl page] 성공 여부 확인 $putType');
-                // 데이터 업데이트 시 결과1/ 업데이트가 이미 되어있는 상태일 경우 0
-              },
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _edgeLeftPadding(
+              20,
+              child: Text(widget.text,
+                  style: TextStyle(
+                      color: Color(0xff222222),
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal)),
             ),
-          ),
-        ],
+            _edgeRightPadding(
+              10,
+              child: ToggleSwitch(
+                fontSize: 12,
+                minWidth: 60.0,
+                cornerRadius: 80.0,
+                activeBgColors: [
+                  [Color(0xffe3fbed)],
+                  [Color(0xfff2f2f2)]
+                ],
+                activeFgColor: Color(0xff222222),
+                inactiveBgColor: Color(0xffFFFFFF),
+                inactiveFgColor: Color(0xff222222),
+                initialLabelIndex: widget.streamStatus[widget.index],
+                // streamStatus[index] == 1 ? 1 : 0,
+                totalSwitches: 2,
+                labels: ['ON', 'OFF'],
+                radiusStyle: true,
+                onToggle: (value) async {
+                  String switchStatus = '';
+
+                  if (value == 0) {
+                    switchStatus = 'on';
+                    widget.streamStatus[widget.index] = 0;
+                  } else if (value == 1) {
+                    switchStatus = 'off';
+                    widget.streamStatus[widget.index] = 1;
+                  }
+                  var typeId = widget.type;
+                  _connectMqtt.setControl(
+                      'did',
+                      "${widget.index + 1}",
+                      'dact',
+                      switchStatus,
+                      '/sf/$siteId/req/${widget.action}',
+                      '/sf/$siteId/req/${widget.action}');
+                  var data = {
+                    'uid': userId,
+                    'sid': siteId,
+                    widget.typeIdText: typeId,
+                    widget.typeActionText: value,
+                  };
+                  final putType = await dio.put(widget.putUrl, data: data);
+                  print('[soilControl page] 성공 여부 확인 $putType');
+                  // 데이터 업데이트 시 결과1/ 업데이트가 이미 되어있는 상태일 경우 0
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       decoration: _decorations(),
     );
