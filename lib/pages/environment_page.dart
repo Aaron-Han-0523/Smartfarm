@@ -1,3 +1,4 @@
+
 // necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,32 +6,43 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:expandable_text/expandable_text.dart';
+
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // dio
 import 'package:dio/dio.dart';
+
 // mqtt
 import 'package:edgeworks/utils/mqtt/mqtt.dart';
+
 // getX controller
 import '../utils/getX_controller/controller.dart';
+
 // global
 import 'package:edgeworks/globals/toggle.dart' as toggle;
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+
+import '../utils/getX_controller/motorController.dart';
+
 
 /*
 * name : Environment Page
 * description : Environment Control Page
 * writer : mark
 * create date : 2021-12-24
-* last update : 2021-02-03
+* last update : 2021-01-27
 * */
 
-// MQTT
+// MQTT class
 ConnectMqtt _connectMqtt = ConnectMqtt();
 
 // Dio
 var dio = Dio();
+
+// GetX
+final getxController = Get.put(MotorController());
 
 //Api's
 var api = dotenv.env['PHONE_IP'];
@@ -65,6 +77,9 @@ bool _customTileExpanded = false;
 
 // define temp variable
 var temp = int.parse(extTemp);
+
+var textSizedBox = Get.width * 1 / 5;
+
 
 // [function] update DB - motor data
 Future<void> _updateMotorData(var motorName, var motorType, var motorAction,
@@ -104,6 +119,7 @@ Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
   print('### [environment page] 사이드 전체 모터 타입 변경 완료 : $response');
 }
 
+
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
 
@@ -116,7 +132,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   Future<Null> getSideSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getToggleStatus = prefs.getInt('allSideValue') ?? 0;
-    print('## [environment page] get all side value : $getToggleStatus');
+    print('## get all side value : $getToggleStatus');
     setState(() {
       allSideToggleInit = getToggleStatus;
     });
@@ -126,23 +142,22 @@ class _EnvironmentState extends State<EnvironmentPage> {
   Future<Null> getTopSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     getTopToggleStatus = prefs.getInt('allTopValue') ?? 0;
-    print('## [environment page] get all top value : $getTopToggleStatus');
+    print('## get all top value : $getTopToggleStatus');
     setState(() {
       allTopToggleInit = getTopToggleStatus;
     });
   }
 
+
   void initState() {
     super.initState();
+
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      getxController.getMotorsData();});
     getSideSharedPrefs();
     getTopSharedPrefs();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
   }
 
-  // siteDropdown button global variable
   var siteDropdown = stream.sitesDropdownValue == ''
       ? '${stream.siteNames[0]}'
       : stream.sitesDropdownValue;
@@ -150,6 +165,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color(0xff2E6645),
       body: Stack(
         children: [
           CustomScrollView(
@@ -176,73 +192,20 @@ class _EnvironmentState extends State<EnvironmentPage> {
                             TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.02),
-                      _weather(context)
-                      // MyWeather(),
+                      MyWeather(),
                     ]),
               ),
               SliverList(
+                // itemExtent: 3.0,
                 delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                     return Container(
                       color: Color(0xffF5F9FC),
                       child: Column(
                         children: [
-                          // 측창 개폐기 제어
-                          toggleControl(
-                              '측창 개폐기 제어',
-                              sideMotors,
-                              getToggleStatus,
-                              '측창(전체)',
-                              sideStatus,
-                              stream.sideMotorId,
-                              'side',
-                              siteId,
-                              toggle.saveAllSideToggle,
-                              _allSideToggleSwitch(
-                                  '측창(전체)',
-                                  getToggleStatus, // 로컬에 전체 제어 된 상태 저장
-                                  sideStatus,
-                                  stream.sideMotorId,
-                                  'side',
-                                  siteId,
-                                  toggle.saveAllSideToggle),
-                              controlToggleSwitch(
-                                  sideMotors,
-                                  stream.side_motor_name,
-                                  sideStatus,
-                                  stream.sideMotorId,
-                                  stream.side_motor_id,
-                                  "side",
-                                  siteId)),
-                          // 천창 개폐기 제어
-                          toggleControl(
-                              '천창 개폐기 제어',
-                              topMotors,
-                              getTopToggleStatus,
-                              '천창(전체)',
-                              topStatus,
-                              stream.topMotorId,
-                              'top',
-                              siteId,
-                              toggle.saveAllTopToggle,
-                              _allTopToggleSwitch(
-                                  '천창(전체)',
-                                  getTopToggleStatus,
-                                  topStatus,
-                                  stream.topMotorId,
-                                  'top',
-                                  siteId,
-                                  toggle.saveAllTopToggle),
-                              controlToggleSwitch(
-                                  topMotors,
-                                  stream.top_motor_name,
-                                  topStatus,
-                                  stream.topMotorId,
-                                  stream.top_motor_id,
-                                  "top",
-                                  siteId)),
-                          // TopMotor(),
-                          _etcMotor(),
+                          SideMotor(),
+                          TopMotor(),
+                          EtcMotor(),
                         ],
                       ),
                     );
@@ -269,443 +232,27 @@ class _EnvironmentState extends State<EnvironmentPage> {
       ),
     );
   }
+}
 
-  Widget toggleControl(
-      var mainName,
-      var motors,
-      var saveToggleStatus,
-      var allToggleName,
-      var motorStatus,
-      var motorIds,
-      var motorType,
-      var siteIds,
-      var setSharedToggle,
-      Widget allToggleWidget,
-      Widget toggleWidget) {
-    return Column(
-      children: [
-        _fromLTRBPadding(
-          child: Container(
-            decoration: _decoration(Color(0xff2E8953)),
-            child: Theme(
-              data:
-              Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: IgnorePointer(
-                ignoring: motors.length == 0 ? true : false,
-                child: ExpansionTile(
-                  initiallyExpanded: motors == sideMotors ? true : false,
-                  iconColor: Colors.white,
-                  collapsedIconColor: Colors.white,
-                  trailing: Icon(_customTileExpanded
-                      ? Icons.keyboard_arrow_up_rounded
-                      : Icons.keyboard_arrow_down_rounded),
-                  onExpansionChanged: (bool expanded) {
-                    setState(() {
-                      _customTileExpanded = expanded;
-                    });
-                  },
-                  title: _edgeLeftPadding(
-                    15,
-                    child: Text(mainName,
-                        style:
-                        _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
-                  ),
-                  children: <Widget>[
-                    _topBottomPadding(
-                      15,
-                      15,
-                      child: Column(
-                        children: [
-                          // 전체 제어 토글 위젯
-                          allToggleWidget,
-                          // 개별 제어 토글 위젯
-                          toggleWidget
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+// 날씨
+class MyWeather extends StatefulWidget {
+  const MyWeather({Key? key}) : super(key: key);
 
-  // 전체 토글 상태 제어 [측창]
-  Widget _allSideToggleSwitch(
-      String text,
-      var saveToggleVariable,
-      var motorStatus,
-      var motorIds,
-      var motorType,
-      var siteIds,
-      setSharedToggle // 토글 상태 로컬에 저장시켜줌
-      ) {
-    return _marginContainer(
-      height: Get.height * 0.09,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _edgeLeftPadding(20,
-              child: SizedBox(
-                width: Get.width * 1 / 5,
-                child: Text(text,
-                    style:
-                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
-              )),
-          _edgeRightPadding(
-            10,
-            child: ToggleSwitch(
-              fontSize: 12,
-              minWidth: 65.0,
-              cornerRadius: 80.0,
-              activeBgColors: [
-                [Color(0xffe3fbed)],
-                [Color(0xffFFD6D6)],
-                [Color(0xfff2f2f2)]
-              ],
-              activeFgColor: Color(0xff222222),
-              inactiveBgColor: Color(0xffFFFFFF),
-              inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: getToggleStatus,
-              totalSwitches: 3,
-              labels: ['전체열림', '전체정지', '전체닫힘'],
-              radiusStyle: true,
-              onToggle: (value) async {
-                String _switch = '';
-                setState(() {
-                  getToggleStatus = value;
-                });
-                if (value == 0) {
-                  _switch = 'open';
-                  setState(() {
-                    for (int i = 0; i < motorStatus.length; i++,) {
-                      motorStatus[i] = value;
-                    }
-                  });
-                }
-                if (value == 1) {
-                  _switch = 'stop';
-                  setState(() {
-                    for (int i = 0; i < motorStatus.length; i++,) {
-                      motorStatus[i] = value;
-                    }
-                  });
-                }
-                if (value == 2) {
-                  _switch = 'close';
-                  setState(() {
-                    for (int i = 0; i < motorStatus.length; i++,) {
-                      motorStatus[i] = value;
-                    }
-                  });
-                }
-                // mqtt
-                _connectMqtt.setAll(
-                    'did',
-                    motorIds.length,
-                    'dact',
-                    _switch,
-                    '/sf/$siteIds/req/motor',
-                    '/sf/$siteIds/req/motor',
-                    motorIds);
-                // DB 변동
-                _updateAllMotorData(value, motorType);
-                // shared preferences
-                setSharedToggle(value);
-              },
-            ),
-          )
-        ],
-      ),
-      decoration: _decorations(),
-    );
-  }
-
-  // 전체 토글 상태 제어 [측창]
-  Widget _allTopToggleSwitch(
-      String text,
-      var saveToggleStatus,
-      var motorStatus,
-      var motorIds,
-      var motorType,
-      var siteIds,
-      setSharedToggle // 토글 상태 로컬에 저장시켜줌
-      ) {
-    return _marginContainer(
-      height: Get.height * 0.09,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _edgeLeftPadding(20,
-              child: SizedBox(
-                width: Get.width * 1 / 5,
-                child: Text(text,
-                    style:
-                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
-              )),
-          _edgeRightPadding(
-            10,
-            child: ToggleSwitch(
-              fontSize: 12,
-              minWidth: 65.0,
-              cornerRadius: 80.0,
-              activeBgColors: [
-                [Color(0xffe3fbed)],
-                [Color(0xffFFD6D6)],
-                [Color(0xfff2f2f2)]
-              ],
-              activeFgColor: Color(0xff222222),
-              inactiveBgColor: Color(0xffFFFFFF),
-              inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: getTopToggleStatus,
-              totalSwitches: 3,
-              labels: ['전체열림', '전체정지', '전체닫힘'],
-              radiusStyle: true,
-              onToggle: (value) async {
-                getTopToggleStatus = value;
-                String _switch = '';
-
-                if (value == 0) {
-                  setState(() {
-                    for (int i = 0; i < motorStatus.length; i++,) {
-                      motorStatus[i] = value;
-                    }
-                  });
-                  _switch = 'open';
-                }
-                if (value == 1) {
-                  _switch = 'stop';
-                  setState(() {
-                    for (int i = 0; i < motorStatus.length; i++,) {
-                      motorStatus[i] = value;
-                    }
-                  });
-                }
-                if (value == 2) {
-                  _switch = 'close';
-                  setState(() {
-                    for (int i = 0; i < motorStatus.length; i++,) {
-                      motorStatus[i] = value;
-                    }
-                  });
-                }
-                // mqtt
-                _connectMqtt.setAll(
-                    'did',
-                    motorIds.length,
-                    'dact',
-                    _switch,
-                    '/sf/$siteIds/req/motor',
-                    '/sf/$siteIds/req/motor',
-                    motorIds);
-                // DB 변동
-                _updateAllMotorData(value, motorType);
-                // shared preferences
-                setSharedToggle(value);
-              },
-            ),
-          )
-        ],
-      ),
-      decoration: _decorations(),
-    );
-  }
-
-  // 측창/천창 토글 개별 제어
-  Widget controlToggleSwitch(var motors, var motorName, var motorStatus,
-      var motorIds, var motorIds2, var motorType, var siteIds) {
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        primary: false,
-        shrinkWrap: true,
-        itemCount: motors.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _marginContainer(
-            height: Get.height * 0.09,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _edgeLeftPadding(20,
-                    child: SizedBox(
-                      width: textSizedBox,
-                      child: ExpandableText(
-                        "${motorName[index]}", //${stream.sideMotors[0]['motor_name']
-                        style: _textStyle(
-                            Color(0xff222222), FontWeight.normal, 15),
-                        maxLines: 2,
-                        // expanded: true,
-                        expandText: ' ',
-                        // overflow: TextOverflow.fade,
-                        // softWrap: true,
-                      ),
-                    )),
-                _edgeRightPadding(
-                  10,
-                  child: ToggleSwitch(
-                    fontSize: 12,
-                    minWidth: 60.0,
-                    cornerRadius: 80.0,
-                    activeBgColors: [
-                      [Color(0xffe3fbed)],
-                      [Color(0xffFFD6D6)],
-                      [Color(0xfff2f2f2)]
-                    ],
-                    activeFgColor: Color(0xff222222),
-                    inactiveBgColor: Color(0xffFFFFFF),
-                    inactiveFgColor: Color(0xff222222),
-                    initialLabelIndex: motorStatus[index],
-                    // stream.topMotors[index],
-                    totalSwitches: 3,
-                    labels: ['열림', '정지', '닫힘'],
-                    radiusStyle: true,
-                    onToggle: (value) async {
-                      String _switch = '';
-
-                      if (value == 0) {
-                        _switch = 'open';
-                        motorStatus[index] = value;
-                        // stream.topMotors[index] = 0;
-                      }
-                      if (value == 1) {
-                        _switch = 'stop';
-                        motorStatus[index] = value;
-                        // stream.topMotors[index] = 1;
-                      }
-                      if (value == 2) {
-                        _switch = 'close';
-                        motorStatus[index] = value;
-                        // stream.topMotors[index] = 2;
-                      }
-                      // 개별 제어 motor name 확인
-                      print(
-                          '### [environment page] Motor name index 뽑기 : ${stream.sideMotors[0]['motor_name']}');
-                      // MQTT 통신
-                      _connectMqtt.setControl(
-                          'did',
-                          "${motorIds[index]}",
-                          'dact',
-                          _switch,
-                          '/sf/$siteIds/req/motor',
-                          '/sf/$siteIds/req/motor');
-                      // DB 업데이트
-                      _updateMotorData("${motorName[index]}", "side", "$value",
-                          "side", "${motorIds2[index]}");
-                    },
-                  ),
-                )
-              ],
-            ),
-            decoration: _decorations(),
-          );
-        });
-  }
-
-  // 기타제어 etc motor
   @override
-  Widget _etcMotor() {
-    return _fromLTRBPadding(
-      child: Container(
-        child: Theme(
-          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: IgnorePointer(
-            ignoring: stream.etcMotors.length == 0 ? true : false,
-            child: ExpansionTile(
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              title: _edgeLeftPadding(
-                15,
-                child: Text('기타제어',
-                    style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
-              ),
-              children: <Widget>[
-                _topBottomPadding(
-                  15,
-                  15,
-                  child: Column(
-                    children: [
-                      _etcSwitch(),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        decoration: _decoration(Color(0xff2E8953)),
-      ),
-    );
+  State<MyWeather> createState() => _MyWeatherState();
+}
+
+class _MyWeatherState extends State<MyWeather> {
+  @override
+  void initState() {
+    print("innerTemp");
+    print(innerTemp);
+    print(stream.temp_1);
+    super.initState();
   }
 
-  // 기타제어 switch
-  Widget _etcSwitch() {
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        primary: false,
-        shrinkWrap: true,
-        itemCount: stream.etcMotors.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _marginContainer(
-            height: Get.height * 0.09,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _edgeLeftPadding(20,
-                    child: Text("${stream.etc_motor_name[index]}",
-                        style: _textStyle(
-                            Color(0xff222222), FontWeight.normal, 15))),
-                _edgeRightPadding(
-                  10,
-                  child: ToggleSwitch(
-                    fontSize: 12,
-                    minWidth: 60.0,
-                    cornerRadius: 80.0,
-                    activeBgColors: [
-                      [Color(0xffe3fbed)],
-                      [Color(0xfff2f2f2)]
-                    ],
-                    activeFgColor: Color(0xff222222),
-                    inactiveBgColor: Color(0xffFFFFFF),
-                    inactiveFgColor: Color(0xff222222),
-                    initialLabelIndex: stream.etcMotorStatus[index],
-                    // statusIndex == 0 ? 1 : 0,
-                    totalSwitches: 2,
-                    labels: ['ON', 'OFF'],
-                    radiusStyle: true,
-                    onToggle: (value) async {
-                      String _switch = '';
-
-                      if (value == 0) {
-                        _switch = 'open';
-                      }
-                      if (value == 1) {
-                        _switch = 'stop';
-                      }
-                      // MQTT 통신
-                      _connectMqtt.setControl(
-                          'did',
-                          "${stream.etcMotorId[index]}",
-                          'dact',
-                          _switch,
-                          '/sf/$siteId/req/motor',
-                          '/sf/$siteId/req/motor');
-                      //DB 업데이트
-                      _updateEtcMotorData(
-                          "$value", "${stream.etcMotorId[index]}");
-                    },
-                  ),
-                )
-              ],
-            ),
-            decoration: _decorations(),
-          );
-        });
-  }
-
-  // 날씨
-  Widget _weather(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     final controller = Get.put(CounterController());
     return Obx(
           () => Container(
@@ -732,6 +279,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                           "${controller.innerHumid.value}" + "%"),
                     ],
                   ),
+                  // decoration: _decoration(Color(0xffFFFFFF)),
                 ),
               ),
               Container(
@@ -751,6 +299,7 @@ class _EnvironmentState extends State<EnvironmentPage> {
                         "12.5m/s"),
                   ],
                 ),
+                // decoration: _decoration(Color(0xffFFFFFF)),
               ),
             ],
           ),
@@ -819,10 +368,538 @@ Widget _subMonitoring(dynamic icon, String mainText, String _mainText,
       decoration: _decoration(Color(0xffFFFFFF)));
 }
 
-var textSizedBox = Get.width * 1 / 5;
-var overflows = TextOverflow.ellipsis;
+class SideMotor extends StatefulWidget {
+  const SideMotor({Key? key}) : super(key: key);
 
-// text 스타일 widget 지정
+  @override
+  _SideMotorState createState() => _SideMotorState();
+}
+
+class _SideMotorState extends State<SideMotor> {
+
+  _fetchData() async {
+    await Future.delayed(const Duration(seconds: 5), () async {
+      getxController.getMotorsData();});
+  }
+
+  void initState() {
+    // _fetchData();
+    // setState(() {
+    //   Get.put(MotorController());
+    //   Get.find<MotorController>().getMotorsData();
+    // });
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    Get.put(MotorController());
+
+    return FutureBuilder(
+      future: Get.find<MotorController>().getMotorsData(),
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Column(
+            children: [
+              _fromLTRBPadding(
+                child: Container(
+                  decoration: _decoration(Color(0xff2E8953)),
+                  child: Theme(
+                    data:
+                    Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: IgnorePointer(
+                      ignoring: getxController.sideMotorStatus.length == 0 ? true : false,
+                      child: ExpansionTile(
+                        initiallyExpanded: true,
+                        iconColor: Colors.white,
+                        collapsedIconColor: Colors.white,
+                        // custom trailing icon widget
+                        // trailing: Icon(_customTileExpanded
+                        //     ? Icons.keyboard_arrow_up_rounded
+                        //     : Icons.keyboard_arrow_down_rounded),
+                        // onExpansionChanged: (bool expanded) {
+                        //   setState(() {
+                        //     _customTileExpanded = expanded;
+                        //   });
+                        // },
+                        title: _edgeLeftPadding(
+                          15,
+                          child: Text('측창 개폐기 제어',
+                              style:
+                              _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                        ),
+                        children: <Widget>[
+                          _topBottomPadding(
+                            15,
+                            15,
+                            child: Column(
+                              children: [
+                                _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                                _sideControlSwitch()
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return Text("error");
+        }
+      }
+    );
+  }
+
+  var textSizedBox = Get.width * 1 / 5;
+
+  Widget _allSideToggleSwitch(
+      String text, var positions, var userIds, var siteIds) {
+      return _marginContainer(
+        height: Get.height * 0.09,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _edgeLeftPadding(20,
+                child: SizedBox(
+                  width: textSizedBox,
+                  child: Text(text,
+                      style:
+                      _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+                )),
+            _edgeRightPadding(
+              10,
+              child: ToggleSwitch(
+                fontSize: 12,
+                minWidth: 65.0,
+                cornerRadius: 80.0,
+                activeBgColors: [
+                  [Color(0xffe3fbed)],
+                  [Color(0xffFFD6D6)],
+                  [Color(0xfff2f2f2)]
+                ],
+                activeFgColor: Color(0xff222222),
+                inactiveBgColor: Color(0xffFFFFFF),
+                inactiveFgColor: Color(0xff222222),
+                initialLabelIndex: getToggleStatus,
+                totalSwitches: 3,
+                labels: ['전체열림', '전체정지', '전체닫힘'],
+                radiusStyle: true,
+                onToggle: (value) async {
+                  getToggleStatus = value;
+                  String _switch = '';
+
+                  if (value == 0) {
+                    _switch = 'open';
+                    setState(() {
+                      for (int i = 0; i < getxController.sideMotorStatus.length; i++,) {
+                        getxController.sideMotorStatus[i] = value!;
+                      }
+                    });
+                  }
+                  if (value == 1) {
+                    _switch = 'stop';
+                    setState(() {
+                      for (int i = 0; i < getxController.sideMotorStatus.length; i++,) {
+                        getxController.sideMotorStatus[i] = value!;
+                      }
+                    });
+                  }
+                  if (value == 2) {
+                    _switch = 'close';
+                    setState(() {
+                      for (int i = 0; i < getxController.sideMotorStatus.length; i++,) {
+                        getxController.sideMotorStatus[i] = value!;
+                      }
+                    });
+                  }
+                  print('motor id는 : ${getxController.sideMotorId}');
+                  // mqtt
+                  _connectMqtt.setAll(
+                      'did',
+                      getxController.sideMotorId.length,
+                      'dact',
+                      _switch,
+                      '/sf/$siteId/req/motor',
+                      '/sf/$siteId/req/motor',
+                      getxController.sideMotorId);
+                  // DB 변동
+                  _updateAllMotorData(value, "side");
+                  // shared preferences
+                  toggle.saveAllSideToggle(value);
+                },
+              ),
+            )
+          ],
+        ),
+        decoration: _decorations(),
+      );
+  }
+
+  // [측창] 개별 토글 제어
+  Widget _sideControlSwitch() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        primary: false,
+        shrinkWrap: true,
+        itemCount: getxController.sideMotors.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _marginContainer(
+            height: Get.height * 0.09,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _edgeLeftPadding(20,
+                    child: SizedBox(
+                      width: textSizedBox,
+                      child: ExpandableText(
+                        "${getxController.sideMotorName[index]}", //${stream.sideMotors[0]['motor_name']
+                        style: _textStyle(
+                            Color(0xff222222), FontWeight.normal, 15),
+                        maxLines: 2,
+                        // expanded: true,
+                        expandText: ' ',
+                        // overflow: TextOverflow.fade,
+                        // softWrap: true,
+                      ),
+                    )),
+                _edgeRightPadding(
+                  10,
+                  child: ToggleSwitch(
+                    fontSize: 12,
+                    minWidth: 60.0,
+                    cornerRadius: 80.0,
+                    activeBgColors: [
+                      [Color(0xffe3fbed)],
+                      [Color(0xffFFD6D6)],
+                      [Color(0xfff2f2f2)]
+                    ],
+                    activeFgColor: Color(0xff222222),
+                    inactiveBgColor: Color(0xffFFFFFF),
+                    inactiveFgColor: Color(0xff222222),
+                    initialLabelIndex: getxController.sideMotorStatus[index],
+                    // sideStatus[index],
+                    // stream.topMotors[index],
+                    totalSwitches: 3,
+                    labels: ['열림', '정지', '닫힘'],
+                    radiusStyle: true,
+                    onToggle: (value) async {
+                      String _switch = '';
+
+                      if (value == 0) {
+                        _switch = 'open';
+                        getxController.sideMotorStatus[index] = value!;
+                        // sideStatus[index] = value;
+                        // stream.topMotors[index] = 0;
+                      }
+                      if (value == 1) {
+                        _switch = 'stop';
+                        getxController.sideMotorStatus[index] = value!;
+                        // stream.topMotors[index] = 1;
+                      }
+                      if (value == 2) {
+                        _switch = 'close';
+                        getxController.sideMotorStatus[index] = value!;
+                        // stream.topMotors[index] = 2;
+                      }
+                      print(
+                          '### Motor name index 뽑기 : ${getxController.sideMotors[0]['motor_name']}');
+                      // MQTT 통신
+                      _connectMqtt.setControl(
+                          'did',
+                          "${getxController.sideMotorId[index]}",
+                          'dact',
+                          _switch,
+                          '/sf/$siteId/req/motor',
+                          '/sf/$siteId/req/motor');
+                      // DB 업데이트
+                      _updateMotorData(
+                          "${getxController.sideMotorName[index]}",
+                          "side",
+                          "$value",
+                          "side",
+                          "${getxController.sideMotorId[index]}"); // update를 하면 이름도 전부 update 됨 -> 해결 필요
+                    },
+                  ),
+                )
+              ],
+            ),
+            decoration: _decorations(),
+          );
+        });
+  }
+}
+
+class TopMotor extends StatefulWidget {
+  const TopMotor({Key? key}) : super(key: key);
+
+  @override
+  _TopMotorState createState() => _TopMotorState();
+}
+
+class _TopMotorState extends State<TopMotor> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _fromLTRBPadding(
+      child: Container(
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: IgnorePointer(
+            ignoring: stream.topMotors.length == 0 ? true : false,
+            child: ExpansionTile(
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: _edgeLeftPadding(
+                15,
+                child: Text('천창 개폐기 제어',
+                    style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+              ),
+              children: <Widget>[
+                _topBottomPadding(
+                  15,
+                  15,
+                  child: Column(
+                    children: [
+                      _allTopToggleSwitch('천창(전체)', 'top', 'test', 'sid'),
+                      _topControlSwitch()
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        decoration: _decoration(Color(0xff2E8953)),
+      ),
+    );
+  }
+
+  //천장 개폐기 제어 전체
+  Widget _allTopToggleSwitch(
+      String text, var positions, var userIds, var siteIds) {
+    return _marginContainer(
+      height: Get.height * 0.09,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _edgeLeftPadding(20,
+              child: Text(text,
+                  style: _textStyle(Color(0xff222222), FontWeight.normal, 15))),
+          _edgeRightPadding(
+            10,
+            child: ToggleSwitch(
+              fontSize: 12,
+              minWidth: 65.0,
+              cornerRadius: 80.0,
+              activeBgColors: [
+                [Color(0xffe3fbed)],
+                [Color(0xffFFD6D6)],
+                [Color(0xfff2f2f2)]
+              ],
+              activeFgColor: Color(0xff222222),
+              inactiveBgColor: Color(0xffFFFFFF),
+              inactiveFgColor: Color(0xff222222),
+              initialLabelIndex: getTopToggleStatus, // 상태 반영 안돼서 확인 필요함
+              totalSwitches: 3,
+              labels: ['전체열림', '전체정지', '전체닫힘'],
+              radiusStyle: true,
+              onToggle: (value) async {
+                getTopToggleStatus = value;
+                String _switch = '';
+
+                if (value == 0) {
+                  setState(() {
+                    for (int i = 0; i < topStatus.length; i++,) {
+                      topStatus[i] = 0;
+                    }
+                  });
+                  _switch = 'open';
+                }
+                if (value == 1) {
+                  _switch = 'stop';
+                  setState(() {
+                    for (int i = 0; i < topStatus.length; i++,) {
+                      topStatus[i] = value;
+                    }
+                  });
+                }
+                if (value == 2) {
+                  _switch = 'close';
+                  setState(() {
+                    for (int i = 0; i < topStatus.length; i++,) {
+                      topStatus[i] = value;
+                    }
+                  });
+                }
+                print('toggle value는 : $value');
+                print('toggle type은 : ${value.runtimeType}');
+                print('value는 : $_switch');
+                // mqtt
+                _connectMqtt.setAll(
+                    'did',
+                    topMotors.length,
+                    'dact',
+                    _switch,
+                    '/sf/$siteId/req/motor',
+                    '/sf/$siteId/req/motor',
+                    stream.topMotorId);
+                // DB 변동
+                _updateAllMotorData(value, "top");
+                // shared preferencs
+                toggle.saveAllTopToggle(value);
+              },
+            ),
+          )
+        ],
+      ),
+      decoration: _decorations(),
+    );
+  }
+
+  // 천창 개폐기 제어
+  Widget _topControlSwitch() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        primary: false,
+        shrinkWrap: true,
+        itemCount: topMotors.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _marginContainer(
+            height: Get.height * 0.09,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _edgeLeftPadding(20,
+                    child: SizedBox(
+                      width: textSizedBox,
+                      child: ExpandableText(
+                        "${motorName[index]}", //${stream.sideMotors[0]['motor_name']
+                        style: _textStyle(
+                            Color(0xff222222), FontWeight.normal, 15),
+                        maxLines: 2,
+                        // expanded: true,
+                        expandText: ' ',
+                        // overflow: TextOverflow.fade,
+                        // softWrap: true,
+                      ),
+                    )),
+                _edgeRightPadding(
+                  10,
+                  child: ToggleSwitch(
+                    fontSize: 12,
+                    minWidth: 60.0,
+                    cornerRadius: 80.0,
+                    activeBgColors: [
+                      [Color(0xffe3fbed)],
+                      [Color(0xffFFD6D6)],
+                      [Color(0xfff2f2f2)]
+                    ],
+                    activeFgColor: Color(0xff222222),
+                    inactiveBgColor: Color(0xffFFFFFF),
+                    inactiveFgColor: Color(0xff222222),
+                    initialLabelIndex: stream.topMotorStatus[index],
+                    // stream.topMotors[index],
+                    totalSwitches: 3,
+                    labels: ['열림', '정지', '닫힘'],
+                    radiusStyle: true,
+                    onToggle: (value) async {
+                      String _switch = '';
+
+                      if (value == 0) {
+                        _switch = 'open';
+                        stream.topMotors[index] = value;
+                      }
+                      if (value == 1) {
+                        _switch = 'stop';
+                        stream.topMotors[index] = value;
+                      }
+                      if (value == 2) {
+                        _switch = 'close';
+                        stream.topMotors[index] = value;
+                      }
+                      print(
+                          '### Motor${index + 1} stream index는 : ${stream.topMotors[index]}');
+                      // mqtt 업데이트
+                      _connectMqtt.setControl(
+                          'did',
+                          "${stream.topMotorId[index]}",
+                          'dact',
+                          _switch,
+                          '/sf/$siteId/req/motor',
+                          '/sf/$siteId/req/motor');
+                      // DB 업데이트
+                      _updateMotorData("${stream.top_motor_name[index]}", "top",
+                          "$value", "top", "${stream.top_motor_id[index]}");
+                    },
+                  ),
+                )
+              ],
+            ),
+            decoration: _decorations(),
+          );
+        });
+  }
+}
+
+class EtcMotor extends StatefulWidget {
+  const EtcMotor({Key? key}) : super(key: key);
+
+  @override
+  _EtcMotorState createState() => _EtcMotorState();
+}
+
+class _EtcMotorState extends State<EtcMotor> {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _fromLTRBPadding(
+      child: Container(
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: IgnorePointer(
+            ignoring: stream.etcMotors.length == 0 ? true : false,
+            child: ExpansionTile(
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              title: _edgeLeftPadding(
+                15,
+                child: Text('기타제어',
+                    style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+              ),
+              children: <Widget>[
+                _topBottomPadding(
+                  15,
+                  15,
+                  child: Column(
+                    children: [
+                      _etcSwitch(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        decoration: _decoration(Color(0xff2E8953)),
+      ),
+    );
+  }
+}
+
 TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
   return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
 }
@@ -843,26 +920,80 @@ BoxDecoration _decoration(dynamic color) {
   );
 }
 
-// 측창 개폐기 제어
-// class SideControlWidget extends StatefulWidget {
-//   const SideControlWidget({Key? key}) : super(key: key);
-//
-//   @override
-//   _EnvironmentState createState() => _EnvironmentState();
-// }
-//
-// class _EnvironmentState extends State<EnvironmentPage> {
-
-// 천창 개폐기 제어
-// 기타 제어
-
-
 // decoration(without box shadow)
 BoxDecoration _decorations() {
   return BoxDecoration(
     color: Color(0xffFFFFFF),
     borderRadius: BorderRadius.circular(20),
   );
+}
+
+// ##### 기타제어
+Widget _etcSwitch() {
+  return ListView.builder(
+      scrollDirection: Axis.vertical,
+      primary: false,
+      shrinkWrap: true,
+      itemCount: stream.etcMotors.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _marginContainer(
+          height: Get.height * 0.09,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _edgeLeftPadding(20,
+                  child: Text("${stream.etc_motor_name[index]}",
+                      style: _textStyle(
+                          Color(0xff222222), FontWeight.normal, 15))),
+              _edgeRightPadding(
+                10,
+                child: ToggleSwitch(
+                  fontSize: 12,
+                  minWidth: 60.0,
+                  cornerRadius: 80.0,
+                  activeBgColors: [
+                    [Color(0xffe3fbed)],
+                    [Color(0xfff2f2f2)]
+                  ],
+                  activeFgColor: Color(0xff222222),
+                  inactiveBgColor: Color(0xffFFFFFF),
+                  inactiveFgColor: Color(0xff222222),
+                  initialLabelIndex: stream.etcMotorStatus[index],
+                  // statusIndex == 0 ? 1 : 0,
+                  totalSwitches: 2,
+                  labels: ['ON', 'OFF'],
+                  radiusStyle: true,
+                  onToggle: (value) async {
+                    String _switch = '';
+
+                    if (value == 0) {
+                      _switch = 'open';
+                    }
+                    if (value == 1) {
+                      _switch = 'stop';
+                    }
+                    print('toggle value는 : $value');
+                    print('toggle type은 : ${value.runtimeType}');
+                    print('value는 : $_switch');
+                    // MQTT 통신
+                    _connectMqtt.setControl(
+                        'did',
+                        "${stream.etcMotorId[index]}",
+                        'dact',
+                        _switch,
+                        '/sf/$siteId/req/motor',
+                        '/sf/$siteId/req/motor');
+                    //DB 업데이트
+                    _updateEtcMotorData(
+                        "$value", "${stream.etcMotorId[index]}");
+                  },
+                ),
+              )
+            ],
+          ),
+          decoration: _decorations(),
+        );
+      });
 }
 
 // padding widget
