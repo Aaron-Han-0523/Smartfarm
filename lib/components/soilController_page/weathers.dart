@@ -1,6 +1,11 @@
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+//necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+//GetX
+import 'package:edgeworks/utils/getX_controller/controller.dart';
+
+//globals
 import '../../globals/stream.dart' as stream;
 
 /*

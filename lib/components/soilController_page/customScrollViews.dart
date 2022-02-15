@@ -1,10 +1,24 @@
-import 'package:edgeworks/components/soilController_page/pumpsControlls.dart';
-import 'package:edgeworks/components/soilController_page/valvesControlls.dart';
+//necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+//GetX
+import 'package:edgeworks/components/soilController_page/pumpsControlls.dart';
+import 'package:edgeworks/components/soilController_page/valvesControlls.dart';
+
+//weather
 import 'weathers.dart';
+
+//globals
 import '../../globals/stream.dart' as stream;
+
+/*
+* name : Soil CustomScrollViews class
+* description : Soil CustomScrollViews class
+* writer : Walter
+* create date : 2022-02-15
+* last update : 2022-02-15
+* */
 
 var siteDropdown =
     stream.sitesDropdownValue == '' ? 'test' : stream.sitesDropdownValue;
