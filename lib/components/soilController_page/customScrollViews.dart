@@ -1,9 +1,9 @@
-import 'package:edgeworks/components/soil_con/pumpsControl.dart';
-import 'package:edgeworks/components/soil_con/valvesControl.dart';
+import 'package:edgeworks/components/soilController_page/pumpsControlls.dart';
+import 'package:edgeworks/components/soilController_page/valvesControlls.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'weather.dart';
+import 'weathers.dart';
 import '../../globals/stream.dart' as stream;
 
 var siteDropdown =
@@ -26,7 +26,7 @@ class CustomScrollViews extends StatelessWidget {
                 _alignWidget('Farm in test', Color(0xff2E8953), 22),
                 _alignWidget(siteDropdown, Colors.black, 17),
                 SizedBox(height: Get.height * 0.02),
-                Weather(),
+                Weathers(),
               ]),
         ),
         SliverList(
@@ -37,8 +37,8 @@ class CustomScrollViews extends StatelessWidget {
                   color: Color(0xffF5F9FC),
                   child: Column(
                     children: [
-                      PumpsControll(),
-                      ValvesControll(),
+                      PumpsControlls(),
+                      ValvesControlls(),
                     ],
                   ));
             },

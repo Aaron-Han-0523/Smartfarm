@@ -1,4 +1,4 @@
-import 'package:edgeworks/components/soil_con/switchToggle.dart';
+import 'package:edgeworks/components/soilController_page/switchToggles.dart';
 import 'package:edgeworks/utils/getX_controller/soilController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,8 +12,8 @@ var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 final controller = Get.put(SoilController());
 
-class PumpsControll extends StatelessWidget {
-  const PumpsControll({Key? key}) : super(key: key);
+class PumpsControlls extends StatelessWidget {
+  const PumpsControlls({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
