@@ -47,9 +47,8 @@ var options = BaseOptions(
 Dio dio = Dio(options);
 
 // siteDropdown button global variable
-String sitesDropdownValue = stream.sitesDropdownValue == ''
-    ? '${stream.siteNames[0]}'
-    : stream.sitesDropdownValue;
+String sitesDropdownValue =
+    stream.sitesDropdownValue == '' ? 'test' : stream.sitesDropdownValue;
 
 // siteDropdown button global variable
 var siteDropdown =
