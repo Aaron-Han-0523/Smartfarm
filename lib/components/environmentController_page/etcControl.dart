@@ -1,19 +1,34 @@
+// ** ETC MOTOR CONTROL PAGE **
+
 // Necessary to build app
-import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
-import 'package:edgeworks/utils/getX_controller/motorController.dart';
-import 'package:edgeworks/utils/mqtt/mqtt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
+// Dio
+import 'package:dio/dio.dart';
+import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
+
 // GetX  controller
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+import 'package:edgeworks/utils/getX_controller/motorController.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+
+// Mqtt
+import 'package:edgeworks/utils/mqtt/mqtt.dart';
 
 // Global
 import '../../globals/stream.dart' as stream;
 import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
+
+
+/*
+* name : Etc motor control page
+* description : Etc motor control page
+* writer : mark
+* create date : 2021-12-28
+* last update : 2022-02-16
+* */
+
 
 //Api's
 var api = dotenv.env['PHONE_IP'];
@@ -32,7 +47,6 @@ var dio = Dio();
 
 // GetX
 final getxController = Get.put(MotorController());
-
 
 
 class EtcMotorWidget extends StatefulWidget {
@@ -70,7 +84,7 @@ class _EtcMotorWidgetState extends State<EtcMotorWidget> {
                   15,
                   child: Column(
                     children: [
-                      _etcSwitch(),
+                      EtcSwitchWidget(),
                     ],
                   ),
                 )
@@ -82,9 +96,19 @@ class _EtcMotorWidgetState extends State<EtcMotorWidget> {
       ),
     );
   }
+}
 
-  // 기타제어
-  Widget _etcSwitch() {
+
+// Etc switch class
+class EtcSwitchWidget extends StatefulWidget {
+
+  @override
+  _EtcSwitchWidgetState createState() => _EtcSwitchWidgetState();
+}
+
+class _EtcSwitchWidgetState extends State<EtcSwitchWidget> {
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
         scrollDirection: Axis.vertical,
         primary: false,
@@ -123,9 +147,11 @@ class _EtcMotorWidgetState extends State<EtcMotorWidget> {
 
                       if (value == 0) {
                         _switch = 'open';
+                        getxController.etcMotorStatus[index] = 0;
                       }
                       if (value == 1) {
                         _switch = 'stop';
+                        getxController.etcMotorStatus[index] = 1;
                       }
                       // MQTT 통신
                       _connectMqtt.setControl(
@@ -146,35 +172,36 @@ class _EtcMotorWidgetState extends State<EtcMotorWidget> {
             decoration: _decorations(),
           );
         });
+
   }
 
-  // Text style widget
-  TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
-    return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
-  }
+}
+// Text style widget
+TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
+  return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
+}
 
-  // Decoration (with box shadow)
-  BoxDecoration _decoration(dynamic color) {
-    return BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          blurRadius: 2,
-          offset: Offset(3, 5), // changes position of shadow
-        ),
-      ],
-    );
-  }
+// Decoration (with box shadow)
+BoxDecoration _decoration(dynamic color) {
+  return BoxDecoration(
+    color: color,
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 2,
+        offset: Offset(3, 5), // changes position of shadow
+      ),
+    ],
+  );
+}
 
-  // Decoration widget (without box shadow)
-  BoxDecoration _decorations() {
-    return BoxDecoration(
-      color: Color(0xffFFFFFF),
-      borderRadius: BorderRadius.circular(20),
-    );
-  }
+// Decoration widget (without box shadow)
+BoxDecoration _decorations() {
+  return BoxDecoration(
+    color: Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(20),
+  );
 }
 
 // Padding widget

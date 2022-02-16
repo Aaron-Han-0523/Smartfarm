@@ -20,8 +20,10 @@ import '../../globals/stream.dart' as stream;
 * last update : 2022-02-15
 * */
 
-var siteDropdown =
-    stream.sitesDropdownValue == '' ? 'test' : stream.sitesDropdownValue;
+// site dropdown value
+var siteDropdown = stream.sitesDropdownValue == ''
+    ? '${stream.siteNames[0]}'
+    : stream.sitesDropdownValue;
 
 class CustomScrollViews extends StatelessWidget {
   const CustomScrollViews({Key? key}) : super(key: key);

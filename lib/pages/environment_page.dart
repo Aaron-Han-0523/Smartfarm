@@ -1,6 +1,6 @@
 
 // necessary to build app
-import 'package:edgeworks/components/environ_con/customScrollView.dart';
+import 'package:edgeworks/components/environmentController_page/customScrollView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

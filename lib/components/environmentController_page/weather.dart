@@ -1,3 +1,5 @@
+// ** WEATHER WIDGET PAGE **
+
 // Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,9 +10,17 @@ import 'package:edgeworks/utils/getX_controller/controller.dart';
 // Global
 import '../../globals/stream.dart' as stream;
 
-// 날씨 위젯
-class Weather extends StatelessWidget {
-  const Weather({Key? key}) : super(key: key);
+/*
+* name : Weather Page
+* description : Weather Widget Page
+* writer : mark
+* create date : 2021-12-28
+* last update : 2022-02-09
+* */
+
+
+class WeatherWidget extends StatelessWidget {
+  const WeatherWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -127,15 +137,15 @@ class Weather extends StatelessWidget {
         decoration: _decoration(Color(0xffFFFFFF)));
   }
 
+  // Text Style Widget
   TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
     return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
   }
 
-  // decoration (with box shadow)
+  // Decoration (with box shadow) Widget
   BoxDecoration _decoration(dynamic color) {
     return BoxDecoration(
       color: color,
-      // color: Color(0xffFFFFFF),
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
         BoxShadow(

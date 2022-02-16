@@ -50,15 +50,6 @@ int? allTopToggleInit;
 // GetX
 // final getxController = Get.put(MotorController());
 
-Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
-  var params = {
-    'motor_action': motorAction,
-  };
-  var response = await dio.put(
-      '$url/$userId/site/$siteId/controls/$updateMotorType/motors',
-      data: params);
-  print('### [environment page] 사이드 전체 모터 타입 변경 완료 : $response');
-}
 
 
 class TopMotorWidget extends StatefulWidget {
@@ -192,7 +183,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                     '/sf/$siteId/req/motor',
                     getxController.topMotorId);
                 // DB 변동
-                _updateAllMotorData(value, "top");
+                _updateMotorData.updateAllMotorData(value, "top");
                 // shared preferencs
                 toggle.saveAllTopToggle(value);
               },

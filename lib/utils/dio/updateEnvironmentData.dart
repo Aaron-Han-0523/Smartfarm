@@ -41,7 +41,6 @@ class UpdateSideTopEtcToggleData {
     print('[environment page] 사이드 전체 모터 타입 변경 완료 : $response');
   }
 
-  // [Function] Update DB - Side/Top 개별 데이터
   Future<void> updateSideTopMotorData(
       var motorName,
       var motorType,

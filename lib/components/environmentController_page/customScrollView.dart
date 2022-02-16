@@ -1,12 +1,14 @@
-// necessary to build app
+// ** ENVIRONMENT CUSTOM SCROLL VIEW PAGE **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // GetX controller
-import 'package:edgeworks/components/environ_con/etcControl.dart';
-import 'package:edgeworks/components/environ_con/sideControl.dart';
-import 'package:edgeworks/components/environ_con/topControl.dart';
-import 'package:edgeworks/components/environ_con/weather.dart';
+import 'package:edgeworks/components/environmentController_page/etcControl.dart';
+import 'package:edgeworks/components/environmentController_page/sideControl.dart';
+import 'package:edgeworks/components/environmentController_page/topControl.dart';
+import 'package:edgeworks/components/environmentController_page/weather.dart';
 
 // global
 import '../../globals/stream.dart' as stream;
@@ -66,7 +68,7 @@ class _EnvironCustomScrollViewState extends State<EnvironCustomScrollView> {
                       TextStyle(color: Colors.black, fontSize: 17)),
                 ),
                 SizedBox(height: Get.height * 0.02),
-                Weather(),
+                WeatherWidget(),
               ]),
         ),
         SliverList(

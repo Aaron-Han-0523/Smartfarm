@@ -1,3 +1,5 @@
+// ** SIDE/TOP/ETC MOTOR CONTROLLER PAGE **
+
 // necessary to build app
 import 'package:get/get.dart';
 
@@ -10,6 +12,16 @@ import 'package:dio/dio.dart';
 // global
 import 'package:edgeworks/globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+
+
+/*
+* name : Motor Controller Page
+* description : Motor Controller Page (get motor data from DB)
+* writer : mark
+* create date : 2021-12-28
+* last update : 2022-02-16
+* */
+
 
 // mqtt
 int clientPort = 1883;
@@ -116,7 +128,7 @@ class MotorController extends GetxController {
     // DB로 보낼 ID 추출
     topMotorId2.value =
         topMotors.map((e) => e["motor_id"].toString()).toList();
-    print('[lib/components/environ_con/motorController] top motor id 가져오기: $topMotorId2');
+    print('[lib/components/environmentController_page/motorController] top motor id 가져오기: $topMotorId2');
 
     // mqtt로 보낼 id 값 파싱
     topMotorId.clear();
@@ -152,7 +164,7 @@ class MotorController extends GetxController {
     // DB로 보낼 ID 추출
     etcMotorId2.value =
         etcMotors.map((e) => e["motor_id"].toString()).toList();
-    print('[lib/components/environ_con/motorController] top motor id 가져오기: $etcMotorId2');
+    print('[lib/components/environmentController_page/motorController] top motor id 가져오기: $etcMotorId2');
 
     // mqtt로 보낼 id 값 파싱
     etcMotorId.clear();

@@ -1,6 +1,8 @@
 // fullscreen 작업 진행 중 -------------------------------->
 
 // necessary to build app
+import 'package:edgeworks/components/cctvController_page/cctvListViewBuilder.dart';
+import 'package:edgeworks/utils/getX_controller/cctvController.dart';
 import 'package:edgeworks/utils/getX_controller/controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +43,7 @@ var url = '$api/farm';
 var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
-// dio APIs
+// Dio
 var options = BaseOptions(
   baseUrl: '$url',
   connectTimeout: 5000,
@@ -96,17 +98,21 @@ class _CCTVPageState extends State<CCTVPage> {
       ? '${stream.siteNames[0]}'
       : stream.sitesDropdownValue;
 
+  // getx controller
+  CctvController _cctvController = CctvController();
+
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(milliseconds: 500), () async {
+       _cctvController.getCctvData();
+      // _cctvController.getData();
+    });
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
 
     setState(() {
-      _getData();
+      // _getData();
 
       controllers = <VlcPlayerController>[];
       for (var i = 0; i < urls.length; i++) {
@@ -205,7 +211,10 @@ class _CCTVPageState extends State<CCTVPage> {
                             color: Color(0xffF5F9FC),
                           ),
                           alignment: Alignment.center,
-                          child: _cctvBuilder()),
+                          child:
+                          // _cctvBuilder()
+                          CctvListViewWidget(controllers: controllers,)
+                      ),
                     );
                   },
                   childCount: 1,
@@ -230,8 +239,6 @@ class _CCTVPageState extends State<CCTVPage> {
       ),
     );
   }
-
-  bool isFullScreen = false;
 
   Widget _cctvBuilder() {
     return ListView.builder(

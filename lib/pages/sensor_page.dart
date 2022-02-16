@@ -41,10 +41,10 @@ class SensorPage extends StatefulWidget {
 }
 
 class _SensorPageState extends State<SensorPage> {
-  // siteDropdown button global variable
+  // site dropdown value
   var siteDropdown = stream.sitesDropdownValue == ''
-      ? 'test'
-      : stream.sitesDropdownValue; //${stream.siteNames[0]}
+      ? '${stream.siteNames[0]}'
+      : stream.sitesDropdownValue;
 
   @override
   void initState() {

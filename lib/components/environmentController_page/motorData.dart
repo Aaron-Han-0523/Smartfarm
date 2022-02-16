@@ -1,4 +1,4 @@
-// necessary to build app
+// Necessary to build app
 import 'package:edgeworks/data/get_data.dart';
 
 // dio
@@ -20,6 +20,7 @@ import 'package:edgeworks/globals/siteConfig.dart' as sites;
 * create date : 2022-02-15
 * last update : 2022-02-15
 * */
+
 
 // APIs
 var api = dotenv.env['PHONE_IP'];

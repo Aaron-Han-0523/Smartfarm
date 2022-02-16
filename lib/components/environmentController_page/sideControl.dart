@@ -1,23 +1,36 @@
+// ** SIDE MOTOR CONTROL VIEW WIDGET **
+
 // Necessary to build app
-import 'package:dio/dio.dart';
-import 'package:edgeworks/components/environ_con/motorData.dart';
-import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
-import 'package:edgeworks/utils/getX_controller/motorController.dart';
+import 'package:flutter/material.dart';
 import 'package:edgeworks/utils/mqtt/mqtt.dart';
 import 'package:expandable_text/expandable_text.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 // GetX  controller
+import 'package:edgeworks/utils/getX_controller/motorController.dart';
+import 'package:edgeworks/components/environmentController_page/motorData.dart';
 import 'package:edgeworks/utils/getX_controller/controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+
+// Dio
+import 'package:dio/dio.dart';
+import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
 
 // Global
 import '../../globals/stream.dart' as stream;
 import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 import 'package:edgeworks/globals/toggle.dart' as toggle;
+
+/*
+* name : SideControl View Page
+* description : SideControl View Page
+* writer : mark
+* create date : 2022-02-15
+* last update : 2022-02-16
+* */
 
 //Api's
 var api = dotenv.env['PHONE_IP'];
@@ -47,7 +60,6 @@ int? allTopToggleInit;
 
 // GetX
 final getxController = Get.put(MotorController());
-
 
 
 class SideMotorWidget extends StatefulWidget {
