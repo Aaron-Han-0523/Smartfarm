@@ -1,13 +1,15 @@
+//necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+//use library
 import 'package:toggle_switch/toggle_switch.dart';
 
-// global
-import '../../globals/stream.dart' as stream;
-import '../../globals/siteConfig.dart' as siteConfig;
-import "../../globals/checkUser.dart" as edgeworks;
-import '../../globals/toggle.dart' as toggle;
+//GetX
+import 'package:edgeworks/utils/getX_controller/settingController.dart';
+
+//controller
+final controller = Get.put(SettingController());
 
 class SwitchWidgets extends StatefulWidget {
   final names;
@@ -20,13 +22,13 @@ class SwitchWidgets extends StatefulWidget {
 class _SwitchWidgetsState extends State<SwitchWidgets> {
   List<String> labelName = ['ON', 'OFF'];
   var selectedLabel = '';
-  int initialIndex = siteConfig.status_alarm == true ? 0 : 1;
-  int? toggleValue;
+  int initialIndex = controller.status_alarm.value == true ? 0 : 1;
 
 //global key
   bool status = false;
-  var _setTimer = siteConfig.set_timer;
-  bool _alarmStatus = siteConfig.status_alarm;
+  // var _setTimer = controller.set_timer.value;
+  // bool _alarmStatus = controller.status_alarm.value;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,24 +61,22 @@ class _SwitchWidgetsState extends State<SwitchWidgets> {
               activeFgColor: Color(0xff222222),
               inactiveBgColor: Color(0xffFFFFFF),
               inactiveFgColor: Color(0xff222222),
-              initialLabelIndex: alarmToggleValue,
-              // stream.alarm_en == true ? 0 : 1,
+              initialLabelIndex: controller.status_alarm.value == true ? 0 : 1,
               // stream.pumpStatus[index] == 0 ? 1 : 0,
               totalSwitches: 2,
               labels: labelName,
               radiusStyle: true,
               onToggle: (value) async {
                 setState(() {
-                  alarmToggleValue = value;
                   if (value == 0) {
                     status = true;
                   } else if (value == 1) {
                     status = false;
                   }
                   // toggleValue = value;
-                  _alarmStatus = status;
+                  controller.status_alarm.value = status;
                   // shared preferences toggle
-                  toggle.saveAlarmToggle(value);
+                  // toggle.saveAlarmToggle(value);
                 });
               },
             ),
@@ -84,17 +84,5 @@ class _SwitchWidgetsState extends State<SwitchWidgets> {
         ],
       ),
     );
-  }
-
-  // [Function] get alarm toggle value
-  int? alarmToggleValue;
-  getAlarmToggle() async {
-    final prefs = await SharedPreferences.getInstance();
-    alarmToggleValue = prefs.getInt('alarmToggleValue') ?? 0;
-    print('[global/toggle page] get all side value : $alarmToggleValue');
-    setState(() {
-      alarmToggleValue;
-    });
-    return alarmToggleValue;
   }
 }
