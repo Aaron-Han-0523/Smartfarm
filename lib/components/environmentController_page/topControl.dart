@@ -9,7 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 // GetX  controller
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -50,8 +50,6 @@ int? allTopToggleInit;
 // GetX
 // final getxController = Get.put(MotorController());
 
-
-
 class TopMotorWidget extends StatefulWidget {
   const TopMotorWidget({Key? key}) : super(key: key);
 
@@ -60,7 +58,6 @@ class TopMotorWidget extends StatefulWidget {
 }
 
 class _TopMotorWidgetState extends State<TopMotorWidget> {
-
   //shared preferences top toggle status
   Future<Null> getTopSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -93,7 +90,8 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                 title: _edgeLeftPadding(
                   15,
                   child: Text('천창 개폐기 제어',
-                      style: _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                      style:
+                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
                 ),
                 children: <Widget>[
                   _topBottomPadding(
@@ -151,7 +149,9 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
 
                 if (value == 0) {
                   setState(() {
-                    for (int i = 0; i < getxController.topMotorStatus.length; i++,) {
+                    for (int i = 0;
+                        i < getxController.topMotorStatus.length;
+                        i++,) {
                       getxController.topMotorStatus[i] = 0;
                     }
                   });
@@ -160,7 +160,9 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                 if (value == 1) {
                   _switch = 'stop';
                   setState(() {
-                    for (int i = 0; i < getxController.topMotorStatus.length; i++,) {
+                    for (int i = 0;
+                        i < getxController.topMotorStatus.length;
+                        i++,) {
                       getxController.topMotorStatus[i] = 1;
                     }
                   });
@@ -168,7 +170,9 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                 if (value == 2) {
                   _switch = 'close';
                   setState(() {
-                    for (int i = 0; i < getxController.topMotorStatus.length; i++,) {
+                    for (int i = 0;
+                        i < getxController.topMotorStatus.length;
+                        i++,) {
                       getxController.topMotorStatus[i] = 2;
                     }
                   });
@@ -272,7 +276,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                           "top",
                           "$value",
                           "top",
-                      "${getxController.topMotorId2[index]}");
+                          "${getxController.topMotorId2[index]}");
                       // _updateToggleData("${getxController.topMotorName[index]}", "top",
                       //     "$value", "top", "${getxController.topMotorId2[index]}");
                     },
@@ -314,7 +318,6 @@ BoxDecoration _decorations() {
     borderRadius: BorderRadius.circular(20),
   );
 }
-
 
 // padding widget
 Padding _fromLTRBPadding({child}) {

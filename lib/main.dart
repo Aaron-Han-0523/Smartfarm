@@ -18,7 +18,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:edgeworks/pages/home.dart';
 import 'package:edgeworks/pages/setting_page.dart';
 import 'package:edgeworks/pages/changepw_page.dart';
-import 'pages/sensor.dart';
+import 'pages/tabbar.dart';
 
 // dio
 import 'pages/login_pages.dart';

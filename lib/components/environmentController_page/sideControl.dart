@@ -8,11 +8,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 // GetX  controller
 import 'package:edgeworks/utils/getX_controller/motorController.dart';
 import 'package:edgeworks/components/environmentController_page/motorData.dart';
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 // Dio
@@ -61,7 +60,6 @@ int? allTopToggleInit;
 // GetX
 final getxController = Get.put(MotorController());
 
-
 class SideMotorWidget extends StatefulWidget {
   const SideMotorWidget({Key? key}) : super(key: key);
 
@@ -70,7 +68,6 @@ class SideMotorWidget extends StatefulWidget {
 }
 
 class _SideMotorWidgetState extends State<SideMotorWidget> {
-
   //shared preferences all side toggle status
   Future<Null> getSideSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -81,13 +78,11 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
     });
   }
 
-
   void initState() {
     super.initState();
     _motorController.getMotorsData();
     getSideSharedPrefs();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +94,11 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
             child: Container(
               decoration: _decoration(Color(0xff2E8953)),
               child: Theme(
-                data:
-                Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
                 child: IgnorePointer(
-                  ignoring: getxController.sideMotorStatus.length == 0 ? true : false,
+                  ignoring:
+                      getxController.sideMotorStatus.length == 0 ? true : false,
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     iconColor: Colors.white,
@@ -119,8 +115,8 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                     title: _edgeLeftPadding(
                       15,
                       child: Text('측창 개폐기 제어',
-                          style:
-                          _textStyle(Color(0xffFFFFFF), FontWeight.w500, 20)),
+                          style: _textStyle(
+                              Color(0xffFFFFFF), FontWeight.w500, 20)),
                     ),
                     children: <Widget>[
                       _topBottomPadding(
@@ -128,7 +124,8 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                         15,
                         child: Column(
                           children: [
-                            _allSideToggleSwitch('측창(전체)', 'side', 'test', 'sid'),
+                            _allSideToggleSwitch(
+                                '측창(전체)', 'side', 'test', 'sid'),
                             _sideControlSwitch()
                           ],
                         ),
@@ -158,7 +155,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                 width: textSizedBox,
                 child: Text(text,
                     style:
-                    _textStyle(Color(0xff222222), FontWeight.normal, 15)),
+                        _textStyle(Color(0xff222222), FontWeight.normal, 15)),
               )),
           _edgeRightPadding(
             10,
@@ -185,7 +182,9 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                 if (value == 0) {
                   _switch = 'open';
                   setState(() {
-                    for (int i = 0; i < getxController.sideMotorStatus.length; i++,) {
+                    for (int i = 0;
+                        i < getxController.sideMotorStatus.length;
+                        i++,) {
                       getxController.sideMotorStatus[i] = 0;
                     }
                   });
@@ -193,7 +192,9 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                 if (value == 1) {
                   _switch = 'stop';
                   setState(() {
-                    for (int i = 0; i < getxController.sideMotorStatus.length; i++,) {
+                    for (int i = 0;
+                        i < getxController.sideMotorStatus.length;
+                        i++,) {
                       getxController.sideMotorStatus[i] = 1;
                     }
                   });
@@ -201,7 +202,9 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                 if (value == 2) {
                   _switch = 'close';
                   setState(() {
-                    for (int i = 0; i < getxController.sideMotorStatus.length; i++,) {
+                    for (int i = 0;
+                        i < getxController.sideMotorStatus.length;
+                        i++,) {
                       getxController.sideMotorStatus[i] = 2;
                     }
                   });
@@ -331,35 +334,34 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
   }
 }
 
-  // text style widget
-  TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
-    return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
-  }
+// text style widget
+TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
+  return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
+}
 
-  // decoration (with box shadow)
-  BoxDecoration _decoration(dynamic color) {
-    return BoxDecoration(
-      color: color,
-      // color: Color(0xffFFFFFF),
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          blurRadius: 2,
-          offset: Offset(3, 5), // changes position of shadow
-        ),
-      ],
-    );
-  }
+// decoration (with box shadow)
+BoxDecoration _decoration(dynamic color) {
+  return BoxDecoration(
+    color: color,
+    // color: Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        blurRadius: 2,
+        offset: Offset(3, 5), // changes position of shadow
+      ),
+    ],
+  );
+}
 
-  // decoration(without box shadow)
-  BoxDecoration _decorations() {
-    return BoxDecoration(
-      color: Color(0xffFFFFFF),
-      borderRadius: BorderRadius.circular(20),
-    );
-  }
-
+// decoration(without box shadow)
+BoxDecoration _decorations() {
+  return BoxDecoration(
+    color: Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(20),
+  );
+}
 
 // padding widget
 Padding _fromLTRBPadding({child}) {

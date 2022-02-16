@@ -3,7 +3,7 @@
 // necessary to build app
 import 'package:edgeworks/components/cctvController_page/cctvListViewBuilder.dart';
 import 'package:edgeworks/utils/getX_controller/cctvController.dart';
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,8 +74,8 @@ class CCTVPage extends StatefulWidget {
 }
 
 class _CCTVPageState extends State<CCTVPage> {
-  late  List<VlcPlayerController> controllers;
-  late  List<VlcPlayerController> controllers2;
+  late List<VlcPlayerController> controllers;
+  late List<VlcPlayerController> controllers2;
 
   // late VlcPlayerController vlcPlayerController;
   List<String> urls = [
@@ -90,8 +90,7 @@ class _CCTVPageState extends State<CCTVPage> {
   var controller;
   var controller2;
 
-  final getXcontroller = Get.put(CounterController());
-
+  final getXcontroller = Get.put(SensorController());
 
   //회사명 가져오기
   var siteDropdown = stream.sitesDropdownValue == ''
@@ -101,15 +100,13 @@ class _CCTVPageState extends State<CCTVPage> {
   // getx controller
   CctvController _cctvController = CctvController();
 
-
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 500), () async {
-       _cctvController.getCctvData();
+      _cctvController.getCctvData();
       // _cctvController.getData();
     });
-
 
     setState(() {
       // _getData();
@@ -147,28 +144,28 @@ class _CCTVPageState extends State<CCTVPage> {
 
   // refresh function
   _refresh(dynamic value) => setState(() {
-    controllers.remove(value);
-    controllers = <VlcPlayerController>[];
-    for (var i = 0; i < urls.length; i++) {
-      controller = VlcPlayerController.network(
-        urls[i],
-        // hwAcc: HwAcc.FULL,
-        autoPlay: true,
-        options: VlcPlayerOptions(),
-      );
-      controllers.add(controller);
-    }
-    controllers.remove(value);
-    controllers2 = <VlcPlayerController>[];
-    for (var i = 0; i < urls.length; i++) {
-      controller2 = VlcPlayerController.network(
-        urls[i],
-        autoPlay: true,
-        options: VlcPlayerOptions(),
-      );
-      controllers2.add(controller2);
-    }
-  });
+        controllers.remove(value);
+        controllers = <VlcPlayerController>[];
+        for (var i = 0; i < urls.length; i++) {
+          controller = VlcPlayerController.network(
+            urls[i],
+            // hwAcc: HwAcc.FULL,
+            autoPlay: true,
+            options: VlcPlayerOptions(),
+          );
+          controllers.add(controller);
+        }
+        controllers.remove(value);
+        controllers2 = <VlcPlayerController>[];
+        for (var i = 0; i < urls.length; i++) {
+          controller2 = VlcPlayerController.network(
+            urls[i],
+            autoPlay: true,
+            options: VlcPlayerOptions(),
+          );
+          controllers2.add(controller2);
+        }
+      });
 
   double _ratio = 16 / 9;
   @override
@@ -190,21 +187,21 @@ class _CCTVPageState extends State<CCTVPage> {
                         child: Text(
                           'Farm in Earth',
                           style:
-                          TextStyle(color: Color(0xff2E8953), fontSize: 22),
+                              TextStyle(color: Color(0xff2E8953), fontSize: 22),
                         ),
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(siteDropdown,
                             style:
-                            TextStyle(color: Colors.black, fontSize: 17)),
+                                TextStyle(color: Colors.black, fontSize: 17)),
                       ),
                       SizedBox(height: Get.height * 0.01),
                     ]),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                     return SingleChildScrollView(
                       child: Container(
                           decoration: BoxDecoration(
@@ -212,9 +209,10 @@ class _CCTVPageState extends State<CCTVPage> {
                           ),
                           alignment: Alignment.center,
                           child:
-                          // _cctvBuilder()
-                          CctvListViewWidget(controllers: controllers,)
-                      ),
+                              // _cctvBuilder()
+                              CctvListViewWidget(
+                            controllers: controllers,
+                          )),
                     );
                   },
                   childCount: 1,
@@ -265,14 +263,17 @@ class _CCTVPageState extends State<CCTVPage> {
                                   DeviceOrientation.landscapeLeft,
                                   DeviceOrientation.landscapeRight,
                                 ]);
-                                await Navigator.of(context, rootNavigator: true).push(
-                                  CupertinoPageRoute<bool>(
-                                    fullscreenDialog: true,
-                                    builder: (BuildContext context) => PageTransition(
-                                      controllers: controllers2[index],
-                                    ),
-                                  ),
-                                ).then(_refresh);
+                                await Navigator.of(context, rootNavigator: true)
+                                    .push(
+                                      CupertinoPageRoute<bool>(
+                                        fullscreenDialog: true,
+                                        builder: (BuildContext context) =>
+                                            PageTransition(
+                                          controllers: controllers2[index],
+                                        ),
+                                      ),
+                                    )
+                                    .then(_refresh);
 
                                 SystemChrome.setPreferredOrientations([
                                   DeviceOrientation.portraitUp,

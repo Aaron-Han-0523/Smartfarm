@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 //GetX
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 
 //globals
 import '../../globals/stream.dart' as stream;
@@ -22,7 +22,7 @@ class Weathers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CounterController());
+    final controller = Get.put(SensorController());
     return Obx(
       () => Container(
         child:
@@ -75,7 +75,7 @@ class Weathers extends StatelessWidget {
 
 // 모니터링
 Widget _mainMonitoring(String weather, String temperNumber, String soilNumber) {
-  final controller = Get.put(CounterController());
+  final controller = Get.put(SensorController());
   return Container(
     height: Get.height * 0.07,
     width: Get.width * 0.9,

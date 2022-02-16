@@ -18,7 +18,7 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 int clientPort = 1883;
 var setTopic = '/sf/$siteId/data';
 
-class CounterController extends GetxController {
+class SensorController extends GetxController {
   String statusText = "Status Text";
   bool isConnected = false;
   final MqttServerClient client = MqttServerClient('14.46.231.48', '');

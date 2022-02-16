@@ -1,4 +1,3 @@
-
 // necessary to build app
 import 'package:edgeworks/components/environmentController_page/customScrollView.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ import 'package:dio/dio.dart';
 import 'package:edgeworks/utils/mqtt/mqtt.dart';
 
 // getX controller
-import '../utils/getX_controller/controller.dart';
+import '../utils/getX_controller/sensorController.dart';
 
 // global
 import 'package:edgeworks/globals/toggle.dart' as toggle;
@@ -26,7 +25,6 @@ import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 import '../utils/getX_controller/motorController.dart';
-
 
 /*
 * name : Environment Page
@@ -81,7 +79,6 @@ var temp = int.parse(extTemp);
 
 var textSizedBox = Get.width * 1 / 5;
 
-
 // [function] update DB - motor data
 Future<void> _updateMotorData(var motorName, var motorType, var motorAction,
     var updateMotorType, var motorId) async {
@@ -120,7 +117,6 @@ Future<void> _updateAllMotorData(var motorAction, var updateMotorType) async {
   print('### [environment page] 사이드 전체 모터 타입 변경 완료 : $response');
 }
 
-
 class EnvironmentPage extends StatefulWidget {
   const EnvironmentPage({Key? key}) : super(key: key);
 
@@ -149,12 +145,12 @@ class _EnvironmentState extends State<EnvironmentPage> {
     });
   }
 
-
   void initState() {
     super.initState();
 
     Future.delayed(const Duration(milliseconds: 500), () async {
-      getxController.getMotorsData();});
+      getxController.getMotorsData();
+    });
     getSideSharedPrefs();
     getTopSharedPrefs();
   }

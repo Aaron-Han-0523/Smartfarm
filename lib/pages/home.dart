@@ -80,11 +80,11 @@ class _HomeState extends State<Home> {
     stream.valveStatus = [];
     stream.mqttTopMotorStatus = [];
     stream.mqttSideMotorStatus = [];
-
+    getData();
     Future.delayed(const Duration(milliseconds: 500), () async {
       _getAllData.getSiteData(userId);
       _getAllData.putFcmData(userId);
-      await Get.offAllNamed('/sensor');
+      // await Get.offAllNamed('/sensor');
       // getData();
     });
 
@@ -239,132 +239,8 @@ class _HomeState extends State<Home> {
       stream.etcMotorId =
           stream.etcMotors.map((e) => e["motor_id"].toString()).toList();
       print('## [homepage] etc motor id 가져오기: ${stream.etcMotorId}');
-
-      // for (var i = 0; i < stream.etcMotors.length; i++) {
-      //   // stream.sideMotorId.clear();
-      //   var etcMotor = (stream.etcMotors[i]['motor_id']).toString();
-      //   var etcMotorId = etcMotor.substring(6);
-      //   stream.etcMotorId.add(etcMotorId);
-      //   stream.etcMotorId.clear();
-      //
-      //   print('## [homepage] etc motor id 가져오기: ${stream.etcMotorId}');
-      // }
-
-      //----------pumps----------------------------------------------
-      // final getPumps =
-      // await dio.get('$url/$userId/site/$siteId/controls/pumps');
-      // stream.pumps = getPumps.data;
-      // print('##### [homePage] GET Pumps LIST: ${stream.pumps}');
-      // print('##### [homePage] Pumps LIST length: ${stream.pumps.length}');
-
-      // // DB에서 pump 상태 가져오기
-      // stream.pumpStatus = stream.pumps
-      //     .map((e) => int.parse(e["pump_action"].toString()))
-      //     .toList();
-      // print('## [homepage] pump status 가져오기: ${stream.pumpStatus}');
-
-      // // DB에서 pump name 가져오기
-      // stream.pump_name =
-      //     stream.pumps.map((e) => e["pump_name"].toString()).toList();
-      // print('## [homepage] pump name 가져오기: ${stream.pump_name}');
-
-      // // get pump1, pump2 = sensorId
-      // final getSensorId = await dio.get('$url/$userId/site/$siteId/sensors');
-      // stream.sensors = getSensorId.data;
-      // print('##### [homePage] GET Sensors LIST: ${stream.sensors}');
-      // print('##### [homePage] Sensors LIST length: ${stream.sensors.length}');
-      // stream.sensor_id = [];
-      // for (var i = 0; i < stream.sensors.length; i++) {
-      //   String sensorId = stream.sensors[i]['sensor_id'];
-      //   if (sensorId.contains('pump') == true) {
-      //     stream.sensor_id.add(sensorId);
-      //     print('$i) 이 sensorId($sensorId)는 pump가 맞습니다.');
-      //   } else {
-      //     print('$i) 이 sensorId($sensorId)는 pump가 아닙니다.');
-      //   }
-      //   print('##### [homePage] sensorId LIST: ${stream.sensor_id}');
-      // }
-
-      // //----------valves----------------------------------------------
-      // final getValves =
-      // await dio.get('$url/$userId/site/$siteId/controls/valves');
-      // stream.valves = getValves.data;
-      // print('##### [homePage] GET Valves LIST: ${stream.valves}');
-      // print('##### [homePage] GET Valves LIST length: ${stream.valves.length}');
-
-      // // DB에서 valve 상태 가져오기
-      // stream.valveStatus = stream.valves
-      //     .map((e) => int.parse(e["valve_action"].toString()))
-      //     .toList();
-      // print('## [homepage] valve status 가져오기: ${stream.pumpStatus}');
-
-      // // DB에서 valve name 가져오기
-      // stream.valve_name =
-      //     stream.valves.map((e) => e["valve_name"].toString()).toList();
-      // print('## [homepage] valve name 가져오기: ${stream.valve_name}');
-
-      connect();
     }
-
-    return true;
-  }
-
-  String statusText = "Status Text";
-  bool isConnected = false;
-  final MqttServerClient client = MqttServerClient('14.46.231.48', '');
-
-  connect() async {
-    isConnected = await mqttConnect('test');
-  }
-
-  _disconnect() {
-    client.disconnect();
-  }
-
-  Future<bool> mqttConnect(String uniqueId) async {
-    client.logging(on: true);
-    client.port = clientPort;
-    client.secure = false;
-    // client.onConnected = onConnected;
-    // client.onDisconnected = onDisconnected;
-    // client.pongCallback = pong;
-
-    final MqttConnectMessage connMess =
-        MqttConnectMessage().withClientIdentifier(uniqueId).startClean();
-    client.connectionMessage = connMess;
-    await client.connect();
-    if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print("Connected to Successfully!");
-    } else {
-      return false;
-    }
-    var topic = setSubTopic;
-    client.subscribe(topic, MqttQos.atMostOnce);
-    var pubTopic = setPubTopic;
-    final builder = MqttClientPayloadBuilder();
-    builder.addString('{"rt" : "get"}');
-    // builder.addString('open');
-    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
-
-    client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-      final mqttReceivedMessages = c;
-      final recMess = mqttReceivedMessages[0].payload as MqttPublishMessage;
-
-      var streamData =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      var streamDatas = jsonDecode(streamData);
-      print('[homepage] streamDatas = ${streamDatas}');
-      sites.status_alarm = streamDatas['alarm_en'] as bool;
-      sites.low_temp = streamDatas['alarm_low_temp'].toString();
-      sites.high_temp = streamDatas['alarm_high_temp'].toString();
-      sites.set_timer = streamDatas['watering_timer'].toString();
-      sites.site_name = streamDatas['sname'].toString();
-
-      _disconnect();
-      Get.offAllNamed('/sensor');
-      // 카카오 채널 drawer 뒤로가기 제어를 위해 offAllNamed라고 설정해야함
-    });
-
+    // await Get.offAllNamed('/sensor');
     return true;
   }
 

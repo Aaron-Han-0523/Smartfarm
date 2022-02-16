@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // getX controller
-import '../utils/getX_controller/controller.dart';
+import '../utils/getX_controller/sensorController.dart';
 
 // pages
 import 'package:edgeworks/pages/cctv_page.dart';
@@ -27,7 +27,6 @@ import '../pages/environment_page.dart';
 
 // 카카오 채널 url
 var kakaoChannelUrl = 'http://pf.kakao.com/_xledxfb';
-
 
 class Sensor extends StatelessWidget {
   const Sensor({Key? key}) : super(key: key);
@@ -53,7 +52,7 @@ class SensorStatefulWidget extends StatefulWidget {
 
 class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
   int _selectedIndex = 0;
-  final controller = Get.put(CounterController());
+  final controller = Get.put(SensorController());
   @override
   void initState() {
     controller.connect();
@@ -65,6 +64,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     ]);
     super.initState();
   }
+
   // TextEditingController
   TextEditingController idTextController = TextEditingController();
 
@@ -79,7 +79,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
 
   // siteDropdown button global variable
   var siteDropdown =
-  stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
 
   PageController? _pageController;
 
@@ -115,56 +115,55 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         return true;
       },
       child: Scaffold(
-        // 카카오 채널 연결 drawer
-        key: _key,
-        drawer: Drawer(
-          backgroundColor: Color(0xffF5F9FC),
-          child: ListView(
-            children: [
-              Container(
-                height: Get.height * 0.08,
-                child: DrawerHeader(
-                  child: Text(
-                    "더보기",
-                    style: TextStyle(color: Color(0xff318A55), fontSize: 20),
+          // 카카오 채널 연결 drawer
+          key: _key,
+          drawer: Drawer(
+            backgroundColor: Color(0xffF5F9FC),
+            child: ListView(
+              children: [
+                Container(
+                  height: Get.height * 0.08,
+                  child: DrawerHeader(
+                    child: Text(
+                      "더보기",
+                      style: TextStyle(color: Color(0xff318A55), fontSize: 20),
+                    ),
+                    decoration: BoxDecoration(color: Color(0xffF5F9FC)),
                   ),
-                  decoration: BoxDecoration(color: Color(0xffF5F9FC)),
+                ),
+                ListTile(
+                    leading: Image.asset('assets/images/kakao_channel.png',
+                        scale: 3),
+                    title: Text('카카오 채널 연결'),
+                    onTap: _launchKakaoURL),
+              ],
+            ),
+          ),
+          backgroundColor: Color(0xff2E6645),
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Color(0xff222222)),
+            elevation: 0.0,
+            backgroundColor: Color(0xffF5F9FC),
+            // 타이틀
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: InkWell(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child:
+                        Image.asset('assets/images/icon_setting.png', scale: 3),
+                    foregroundColor: Colors.teal,
+                  ),
+                  onTap: () {
+                    Get.toNamed('/setting');
+                  },
                 ),
               ),
-              ListTile(
-                  leading:
-                      Image.asset('assets/images/kakao_channel.png', scale: 3),
-                  title: Text('카카오 채널 연결'),
-                  onTap: _launchKakaoURL),
             ],
           ),
-        ),
-        backgroundColor: Color(0xff2E6645),
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Color(0xff222222)),
-          elevation: 0.0,
-          backgroundColor: Color(0xffF5F9FC),
-          // 타이틀
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: InkWell(
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child:
-                      Image.asset('assets/images/icon_setting.png', scale: 3),
-                  foregroundColor: Colors.teal,
-                ),
-                onTap: () {
-                  Get.toNamed('/setting');
-                },
-              ),
-            ),
-          ],
-        ),
-        body: bodySteam(),
-        bottomNavigationBar: bottomBar(_selectedIndex)
-      ),
+          body: bodySteam(),
+          bottomNavigationBar: bottomBar(_selectedIndex)),
     );
   }
 
@@ -185,44 +184,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             );
           else {
             return Center(
-              // child: PageView(
-              //   controller: _pageController,
-              //   children: _widgetOptions
-              // ),
               child: _widgetOptions.elementAt(_selectedIndex),
-             // child : IndexedStack(
-             //    index: _selectedIndex,
-             //    children: <Widget>[
-             //      Navigator(
-             //        key: _page1,
-             //        onGenerateRoute: (route) => MaterialPageRoute(
-             //          settings: route,
-             //          builder: (context) => SensorPage(),
-             //        ),
-             //      ),
-             //      Navigator(
-             //        key: _page2,
-             //        onGenerateRoute: (route) => MaterialPageRoute(
-             //          settings: route,
-             //          builder: (context) => EnvironmentPage(),
-             //        ),
-             //      ),
-             //      Navigator(
-             //        key: _page3,
-             //        onGenerateRoute: (route) => MaterialPageRoute(
-             //          settings: route,
-             //          builder: (context) => SoilControlPage(),
-             //        ),
-             //      ),
-             //      Navigator(
-             //        key: _page4,
-             //        onGenerateRoute: (route) => MaterialPageRoute(
-             //          settings: route,
-             //          builder: (context) => CCTVPage(),
-             //        ),
-             //      ),
-             //    ],
-             //  ),
             );
           }
         },
@@ -240,8 +202,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         TabItem(
           icon: Image.asset(
             "assets/images/icon_sensor.png",
-            color:
-            index == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
+            color: index == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
           // title: '센서',
@@ -249,8 +210,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         TabItem(
           icon: Image.asset(
             "assets/images/icon_env.png",
-            color:
-            index == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
+            color: index == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
           // title: '환경제어',
@@ -258,8 +218,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         TabItem(
           icon: Image.asset(
             "assets/images/icon_soil.png",
-            color:
-            index == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
+            color: index == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
           // title: '토양제어',
@@ -267,8 +226,7 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
         TabItem(
           icon: Image.asset(
             "assets/images/icon_cctv.png",
-            color:
-            index == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
+            color: index == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
           // title: '',

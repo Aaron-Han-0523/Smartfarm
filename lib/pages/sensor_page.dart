@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 // getX controller
-import '../utils/getX_controller/controller.dart';
+import '../utils/getX_controller/sensorController.dart';
 // global
 import '../globals/stream.dart' as stream;
 
@@ -24,7 +24,7 @@ var soilTemp = stream.soiltemp_1; // 토양온도
 var innerHumid = stream.humid_1; // 내부습도
 var extHumid = stream.humid_1; // 외부습도
 var soilHumid = stream.soilhumid_1; // 토양습도
-final controller = Get.put(CounterController());
+final controller = Get.put(SensorController());
 List innerData = ['내부 온도', '내부 습도', '토양 온도', '토양 습도'];
 List innerCon = [
   controller.innerTemp,
@@ -261,7 +261,6 @@ class _SensorPageState extends State<SensorPage> {
 
   // 그래프 위젯
   GetAllData _getAllData = GetAllData();
-  @override
   Widget _myGraph() {
     return Column(
       children: <Widget>[
