@@ -1,10 +1,23 @@
-import 'package:edgeworks/components/soil_con/switchToggle.dart';
-import 'package:edgeworks/utils/getX_controller/soilController.dart';
+//necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+
+//GetX
+import 'package:edgeworks/components/soilController_page/switchToggles.dart';
+import 'package:edgeworks/utils/getX_controller/soilController.dart';
+
+//globals
 import '../../globals/stream.dart' as stream;
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import "../../globals/checkUser.dart" as edgeworks;
+
+/*
+* name : Soil pumps class
+* description : Soil pumps class
+* writer : Walter
+* create date : 2022-02-15
+* last update : 2022-02-15
+* */
 
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
@@ -12,8 +25,8 @@ var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 final controller = Get.put(SoilController());
 
-class PumpsControll extends StatelessWidget {
-  const PumpsControll({Key? key}) : super(key: key);
+class PumpsControlls extends StatelessWidget {
+  const PumpsControlls({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

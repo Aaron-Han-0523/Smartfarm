@@ -1,6 +1,11 @@
-import 'package:edgeworks/utils/getX_controller/controller.dart';
+//necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+//GetX
+import 'package:edgeworks/utils/getX_controller/controller.dart';
+
+//globals
 import '../../globals/stream.dart' as stream;
 
 /*
@@ -12,8 +17,8 @@ import '../../globals/stream.dart' as stream;
 * */
 
 // 날씨 위젯
-class Weather extends StatelessWidget {
-  const Weather({Key? key}) : super(key: key);
+class Weathers extends StatelessWidget {
+  const Weathers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

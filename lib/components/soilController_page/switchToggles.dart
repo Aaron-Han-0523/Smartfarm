@@ -1,18 +1,31 @@
-import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/mqtt/mqtt.dart';
+//necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+
+// HTTP/MQTT, Toggle
+import 'package:dio/dio.dart';
+import 'package:edgeworks/utils/mqtt/mqtt.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+
+//globals
 import '../../globals/stream.dart' as stream;
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import "../../globals/checkUser.dart" as edgeworks;
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
+
+/*
+* name : Soil toggle button
+* description : Soil toggle button
+* writer : Walter
+* create date : 2022-02-15
+* last update : 2022-02-15
+* */
 
 // dio APIs
 var options = BaseOptions(
