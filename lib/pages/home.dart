@@ -82,10 +82,10 @@ class _HomeState extends State<Home> {
     stream.mqttSideMotorStatus = [];
 
     Future.delayed(const Duration(milliseconds: 500), () async {
-      // _getAllData.getSiteData(userId);
-      // _getAllData.putFcmData(userId);
-      // await Get.offAllNamed('/sensor');
-      getData();
+      _getAllData.getSiteData(userId);
+      _getAllData.putFcmData(userId);
+      await Get.offAllNamed('/sensor');
+      // getData();
     });
 
     super.initState();

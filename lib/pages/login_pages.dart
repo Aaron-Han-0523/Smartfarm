@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // dio
-import 'package:edgeworks/utils/dio/login_dio.dart';
+import 'package:edgeworks/utils/dio/loginDio.dart';
 
 // global
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;

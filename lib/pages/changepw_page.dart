@@ -8,7 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // dio
 import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/dio/login_dio.dart';
+import 'package:edgeworks/utils/dio/loginDio.dart';
 
 // check login validate page
 import 'package:edgeworks/utils/registrations/validate.dart';

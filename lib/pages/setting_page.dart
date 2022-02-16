@@ -7,7 +7,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 // dio
 import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/dio/logout_dio.dart';
+import 'package:edgeworks/utils/dio/logoutDio.dart';
 
 // env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
