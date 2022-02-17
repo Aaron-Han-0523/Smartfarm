@@ -1,4 +1,6 @@
 import 'package:edgeworks/components/sensor_page/extSensor.dart';
+import 'package:edgeworks/components/sensor_page/innerSensor.dart';
+import 'package:edgeworks/components/sensor_page/innserTempChart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,8 +50,8 @@ class SensorScrollViews extends StatelessWidget {
                 child: Column(
                   children: [
                     ExtSensor(),
-                    // _myAccordian2(),
-                    // _myGraph(),
+                    InnerSensor(),
+                    InnserTempChart(),
                   ],
                 ),
               );

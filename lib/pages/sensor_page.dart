@@ -51,14 +51,7 @@ class _SensorPageState extends State<SensorPage> {
   void initState() {
     super.initState();
     // _getAllData.getTrendsTempData();
-    setState(() {
-      _getAllData.getTrendsTempData();
-      // print('[sensor page] stream.chartData: ${stream.chartData.length}');
-      // for (var i = 0; i < stream.chartData.length; i++) {
-      //   data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
-      //       double.parse(stream.chartData[i]['value'])));
-      // }
-    });
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -88,132 +81,132 @@ class _SensorPageState extends State<SensorPage> {
   }
 
   // 외부 환경 위젯
-  Widget _myAccordian() {
-    return Obx(
-      () => Column(
-        children: <Widget>[
-          _fromLTRBPadding(
-            child: Container(
-              decoration: _decorations(),
-              child: Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
-                child: ExpansionTile(
-                  initiallyExpanded: true,
-                  iconColor: Colors.white,
-                  collapsedIconColor: Colors.white,
-                  title: Row(
-                    children: [
-                      _leftRightPadding(
-                        child: Image.asset(
-                          'assets/images/icon_exevn.png',
-                          scale: 3,
-                        ),
-                      ),
-                      Text(
-                        '외부 환경',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  children: <Widget>[
-                    SizedBox(height: Get.height * 0.01),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _cards('외부 온도', controller.extTemp.value, true,
-                              'assets/images/icon_temp.png'),
-                          _cards('외부 습도', controller.extHumid.value, true,
-                              'assets/images/icon_humid.png')
-                        ]),
-                    SizedBox(height: Get.height * 0.01),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _cards('강우', '12.5', true,
-                              'assets/images/icon_rainy.png'),
-                          _cards(
-                              '풍향', '12.5', true, 'assets/images/icon_wind.png')
-                        ]),
-                    SizedBox(height: Get.height * 0.01),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _cards('풍속', '12.5', true,
-                              'assets/images/icon_windsp.png'),
-                          _cards('일사량', '12.5', true,
-                              'assets/images/icon_shiny.png')
-                        ]),
-                    SizedBox(height: Get.height * 0.01),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _myAccordian() {
+  //   return Obx(
+  //     () => Column(
+  //       children: <Widget>[
+  //         _fromLTRBPadding(
+  //           child: Container(
+  //             decoration: _decorations(),
+  //             child: Theme(
+  //               data: Theme.of(context)
+  //                   .copyWith(dividerColor: Colors.transparent),
+  //               child: ExpansionTile(
+  //                 initiallyExpanded: true,
+  //                 iconColor: Colors.white,
+  //                 collapsedIconColor: Colors.white,
+  //                 title: Row(
+  //                   children: [
+  //                     _leftRightPadding(
+  //                       child: Image.asset(
+  //                         'assets/images/icon_exevn.png',
+  //                         scale: 3,
+  //                       ),
+  //                     ),
+  //                     Text(
+  //                       '외부 환경',
+  //                       style: TextStyle(
+  //                           color: Colors.white,
+  //                           fontSize: 20,
+  //                           fontWeight: FontWeight.w500),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 children: <Widget>[
+  //                   SizedBox(height: Get.height * 0.01),
+  //                   Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                       children: [
+  //                         _cards('외부 온도', controller.extTemp.value, true,
+  //                             'assets/images/icon_temp.png'),
+  //                         _cards('외부 습도', controller.extHumid.value, true,
+  //                             'assets/images/icon_humid.png')
+  //                       ]),
+  //                   SizedBox(height: Get.height * 0.01),
+  //                   Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                       children: [
+  //                         _cards('강우', '12.5', true,
+  //                             'assets/images/icon_rainy.png'),
+  //                         _cards(
+  //                             '풍향', '12.5', true, 'assets/images/icon_wind.png')
+  //                       ]),
+  //                   SizedBox(height: Get.height * 0.01),
+  //                   Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                       children: [
+  //                         _cards('풍속', '12.5', true,
+  //                             'assets/images/icon_windsp.png'),
+  //                         _cards('일사량', '12.5', true,
+  //                             'assets/images/icon_shiny.png')
+  //                       ]),
+  //                   SizedBox(height: Get.height * 0.01),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // 내부 환경 위젯
-  Widget _myAccordian2() {
-    return Obx(
-      () => Column(
-        children: <Widget>[
-          _fromLTRBPadding(
-            child: Container(
-              decoration: _decorations(),
-              child: Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
-                child: ExpansionTile(
-                  iconColor: Colors.white,
-                  collapsedIconColor: Colors.white,
-                  title: Row(
-                    children: [
-                      _leftRightPadding(
-                        child: Image.asset(
-                          'assets/images/icon_inevn.png',
-                          scale: 3,
-                        ),
-                      ),
-                      Text(
-                        '내부 환경',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  children: <Widget>[
-                    SizedBox(
-                      width: Get.width,
-                      height:
-                          (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
-                      child: GridView.count(
-                        primary: false,
-                        childAspectRatio:
-                            (Get.width * 0.4) / (Get.height * 1 / 9),
-                        crossAxisCount: 2,
-                        children: List.generate(innerData.length, (index) {
-                          return _cards(innerData[index], innerCon[index].value,
-                              true, 'assets/images/icon_temp.png');
-                        }),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _myAccordian2() {
+  //   return Obx(
+  //     () => Column(
+  //       children: <Widget>[
+  //         _fromLTRBPadding(
+  //           child: Container(
+  //             decoration: _decorations(),
+  //             child: Theme(
+  //               data: Theme.of(context)
+  //                   .copyWith(dividerColor: Colors.transparent),
+  //               child: ExpansionTile(
+  //                 iconColor: Colors.white,
+  //                 collapsedIconColor: Colors.white,
+  //                 title: Row(
+  //                   children: [
+  //                     _leftRightPadding(
+  //                       child: Image.asset(
+  //                         'assets/images/icon_inevn.png',
+  //                         scale: 3,
+  //                       ),
+  //                     ),
+  //                     Text(
+  //                       '내부 환경',
+  //                       style: TextStyle(
+  //                           color: Colors.white,
+  //                           fontSize: 20,
+  //                           fontWeight: FontWeight.w500),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 children: <Widget>[
+  //                   SizedBox(
+  //                     width: Get.width,
+  //                     height:
+  //                         (Get.height * 1 / 9) * (innerData.length ~/ 2 + 0.4),
+  //                     child: GridView.count(
+  //                       primary: false,
+  //                       childAspectRatio:
+  //                           (Get.width * 0.4) / (Get.height * 1 / 9),
+  //                       crossAxisCount: 2,
+  //                       children: List.generate(innerData.length, (index) {
+  //                         return _cards(innerData[index], innerCon[index].value,
+  //                             true, 'assets/images/icon_temp.png');
+  //                       }),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // 그래프 위젯
   GetAllData _getAllData = GetAllData();
