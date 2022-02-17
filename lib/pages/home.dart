@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
     stream.valveStatus = [];
     stream.mqttTopMotorStatus = [];
     stream.mqttSideMotorStatus = [];
-    getData();
+    // getData();
     Future.delayed(const Duration(milliseconds: 500), () async {
       _getAllData.getSiteData(userId);
       _getAllData.putFcmData(userId);

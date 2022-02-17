@@ -25,8 +25,10 @@ var options = BaseOptions(
 Dio dio = Dio(options);
 
 // siteDropdown button global variable
-String sitesDropdownValue =
-    stream.sitesDropdownValue == '' ? 'test' : stream.sitesDropdownValue;
+
+String sitesDropdownValue = stream.sitesDropdownValue == ''
+    ? '${stream.siteNames[0]}'
+    : stream.sitesDropdownValue;
 
 class SitesDropDownButtons extends StatefulWidget {
   final String name;
