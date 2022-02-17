@@ -1,11 +1,8 @@
 // ** CCTV LIST VIEW WIDGET PAGE **
 
 // necessary to build app
-import 'package:edgeworks/pages/fullScreenCctv_page.dart';
 import 'package:edgeworks/utils/getX_controller/cctvController.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:get/get.dart';
 
@@ -14,29 +11,24 @@ import 'package:get/get.dart';
 * description : CCTV List view builder widget
 * writer : mark
 * create date : 2021-12-28
-* last update : 2022-02-16
+* last update : 2022-02-17
 * */
 
 
-// getx controller
-CctvController _cctvController = CctvController();
+// GetX controller
+final _cctvController = Get.put(CctvController());
 
-// Vlc Player Controller
-// late  List<VlcPlayerController> controllers;
-// late  List<VlcPlayerController> controllers2;
+// Ration
+double _ratio = 16 / 9;
 
-// controller variable
-// var controller;
-// var controller2;
+// vlc controller
+late List<VlcPlayerController> vlcControllers;
+late List<VlcPlayerController> controllers2;
+var vlcController;
 
-// visibiliby
-List<bool> _visibility = [true, true, true];
 
 
 class CctvListViewWidget extends StatefulWidget {
-  // var controllers;
-  // var countVideo;
-  // var refreshFunction;
   CctvListViewWidget({Key? key}) : super(key: key);
 
   @override
@@ -44,22 +36,8 @@ class CctvListViewWidget extends StatefulWidget {
 }
 
 class _CctvListViewWidgetState extends State<CctvListViewWidget> {
-  late List<VlcPlayerController> vlcControllers;
-  late List<VlcPlayerController> controllers2;
-  var vlcController;
-
-  var controllers;
-  var countVideo;
-
-  // getx controller
-  final _cctvController = Get.put(CctvController());
-
-  // _CctvListViewWidgetState(controllers, countVideo);
 
   void initState() {
-
-    print(_cctvController.cctvUrls.length);
-    // _cctvController.getCctvData();
     vlcControllers = <VlcPlayerController>[];
     for (var i = 0; i < _cctvController.cctvUrls.length; i++) {
       vlcController = VlcPlayerController.network(
@@ -72,8 +50,6 @@ class _CctvListViewWidgetState extends State<CctvListViewWidget> {
     }
     super.initState();
   }
-
-  double _ratio = 16 / 9;
 
   @override
   Widget build(BuildContext context) {

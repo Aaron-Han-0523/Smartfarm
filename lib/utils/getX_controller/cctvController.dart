@@ -50,6 +50,7 @@ class CctvController extends GetxController {
     print('[cctvPage] GET CCTV List from stream: $cctvs');
     print('[cctvPage] GET CCTV List length: ${cctvs.length}');
 
+    cctvUrls.clear();
     for (var i = 0; i < cctvs.length; i++) {
       cctvUrlVariable.value = cctvs[i]['cctv_url'];
       cctvUrls.add(cctvUrlVariable);
