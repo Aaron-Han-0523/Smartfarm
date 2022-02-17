@@ -1,3 +1,4 @@
+import 'package:edgeworks/components/common_page/alignWidget.dart';
 import 'package:edgeworks/components/sensor_page/extSensor.dart';
 import 'package:edgeworks/components/sensor_page/innerSensor.dart';
 import 'package:edgeworks/components/sensor_page/innserTempChart.dart';
@@ -26,18 +27,12 @@ class SensorScrollViews extends StatelessWidget {
           title: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Farm in Earth',
-                    style: TextStyle(color: Color(0xff2E8953), fontSize: 22),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(siteDropdown,
-                      style: TextStyle(color: Colors.black, fontSize: 17)),
-                ),
+                AlignWidget(
+                    titles: 'Farm in Earth',
+                    colors: Color(0xff2E8953),
+                    fontSizes: 22),
+                AlignWidget(
+                    titles: siteDropdown, colors: Colors.black, fontSizes: 17),
                 SizedBox(height: Get.height * 0.01),
               ]),
         ),

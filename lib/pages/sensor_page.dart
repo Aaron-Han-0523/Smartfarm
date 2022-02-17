@@ -1,5 +1,5 @@
 // necessary to build app
-import 'package:edgeworks/components/sensor_page/customScrollView.dart';
+import 'package:edgeworks/components/sensor_page/sensorCustomScrollView.dart';
 import 'package:edgeworks/data/get_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

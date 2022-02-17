@@ -1,4 +1,5 @@
 //necessary to build app
+import 'package:edgeworks/components/common_page/alignWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,8 +40,12 @@ class CustomScrollViews extends StatelessWidget {
           title: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _alignWidget('Farm in test', Color(0xff2E8953), 22),
-                _alignWidget(siteDropdown, Colors.black, 17),
+                AlignWidget(
+                    titles: 'Farm in Earth',
+                    colors: Color(0xff2E8953),
+                    fontSizes: 22),
+                AlignWidget(
+                    titles: siteDropdown, colors: Colors.black, fontSizes: 17),
                 SizedBox(height: Get.height * 0.02),
                 Weathers(),
               ]),
@@ -64,14 +69,4 @@ class CustomScrollViews extends StatelessWidget {
       ],
     );
   }
-}
-
-Widget _alignWidget(String titles, Color colors, double fontSizes) {
-  return Align(
-    alignment: Alignment.topLeft,
-    child: Text(
-      titles,
-      style: TextStyle(color: colors, fontSize: fontSizes),
-    ),
-  );
 }
