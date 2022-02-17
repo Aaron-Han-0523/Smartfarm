@@ -43,7 +43,7 @@ class CctvController extends GetxController {
   var cctvUrls = [].obs;
   var cctvUrlVariable = ''.obs;
 
-  void getCctvData() async {
+   Future<dynamic> getCctvData() async {
     // cctvs
     final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
     cctvs.value = getCctvs.data;
@@ -54,6 +54,8 @@ class CctvController extends GetxController {
       cctvUrlVariable.value = cctvs[i]['cctv_url'];
       cctvUrls.add(cctvUrlVariable);
     }
+    print('[cctvPage] GET CCTV Url 개수: ${cctvUrls.length}');
     print('[cctvPage] GET CCTV Url List: $cctvUrls');
-  }
+    update();
+   }
 }

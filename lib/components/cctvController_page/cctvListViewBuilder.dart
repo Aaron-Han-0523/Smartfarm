@@ -34,23 +34,42 @@ List<bool> _visibility = [true, true, true];
 
 
 class CctvListViewWidget extends StatefulWidget {
-  var controllers;
-  var countVideo;
+  // var controllers;
+  // var countVideo;
   // var refreshFunction;
-  CctvListViewWidget({Key? key, @required this.controllers, @required this.countVideo}) : super(key: key);
+  CctvListViewWidget({Key? key}) : super(key: key);
 
   @override
-  _CctvListViewWidgetState createState() => _CctvListViewWidgetState(controllers, countVideo);
+  _CctvListViewWidgetState createState() => _CctvListViewWidgetState();
 }
 
 class _CctvListViewWidgetState extends State<CctvListViewWidget> {
+  late List<VlcPlayerController> vlcControllers;
+  late List<VlcPlayerController> controllers2;
+  var vlcController;
+
   var controllers;
   var countVideo;
-  _CctvListViewWidgetState(controllers, countVideo);
 
+  // getx controller
+  final _cctvController = Get.put(CctvController());
 
-  @override
-  void inisState() {
+  // _CctvListViewWidgetState(controllers, countVideo);
+
+  void initState() {
+
+    print(_cctvController.cctvUrls.length);
+    // _cctvController.getCctvData();
+    vlcControllers = <VlcPlayerController>[];
+    for (var i = 0; i < _cctvController.cctvUrls.length; i++) {
+      vlcController = VlcPlayerController.network(
+        _cctvController.cctvUrls[i].value,
+        // hwAcc: HwAcc.FULL,
+        autoPlay: true,
+        options: VlcPlayerOptions(),
+      );
+      vlcControllers.add(vlcController);
+    }
     super.initState();
   }
 
@@ -70,54 +89,52 @@ class _CctvListViewWidgetState extends State<CctvListViewWidget> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    Visibility(
-                      visible: _visibility[index],
-                      child: Column(children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("CCTV #" + "${index + 1}"),
-                            IconButton(
-                                onPressed: () async {
-                                  // full screen mode
-                                  // SystemChrome.setPreferredOrientations([
-                                  //   DeviceOrientation.landscapeLeft,
-                                  //   DeviceOrientation.landscapeRight,
-                                  // ]);
-                                  // await Navigator.of(context, rootNavigator: true).push(
-                                  //   CupertinoPageRoute<bool>(
-                                  //     fullscreenDialog: true,
-                                  //     builder: (BuildContext context) => PageTransition(
-                                  //       controllers: controllers2[index],
-                                  //     ),
-                                  //   ),
-                                  // ).then(_refresh);
-                                  //
-                                  // SystemChrome.setPreferredOrientations([
-                                  //   DeviceOrientation.portraitUp,
-                                  // ]);
-                                },
-                                icon: Icon(Icons.control_camera)),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Container(
-                                // height: Get.height * 0.3,
-                                width: MediaQuery.of(context).size.width,
-                                child: VlcPlayer(
-                                  controller: controllers[index],
-                                  // controllers[index],
-                                  aspectRatio: _ratio,
-                                ),
+                    Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("CCTV #" + "${index + 1}"),
+                          IconButton(
+                              onPressed: () async {
+
+                                // full screen mode
+                                // SystemChrome.setPreferredOrientations([
+                                //   DeviceOrientation.landscapeLeft,
+                                //   DeviceOrientation.landscapeRight,
+                                // ]);
+                                // await Navigator.of(context, rootNavigator: true).push(
+                                //   CupertinoPageRoute<bool>(
+                                //     fullscreenDialog: true,
+                                //     builder: (BuildContext context) => PageTransition(
+                                //       controllers: controllers2[index],
+                                //     ),
+                                //   ),
+                                // ).then(_refresh);
+                                //
+                                // SystemChrome.setPreferredOrientations([
+                                //   DeviceOrientation.portraitUp,
+                                // ]);
+                              },
+                              icon: Icon(Icons.control_camera)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              // height: Get.height * 0.3,
+                              width: MediaQuery.of(context).size.width,
+                              child: VlcPlayer(
+                                controller: vlcControllers[index],
+                                // controllers[index],
+                                aspectRatio: _ratio,
                               ),
                             ),
-                          ],
-                        ),
-                      ]),
-                    ),
+                          ),
+                        ],
+                      ),
+                    ]),
                   ],
                 ),
               ),
