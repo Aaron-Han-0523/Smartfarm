@@ -20,7 +20,7 @@ import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 
 // Global
 import '../globals/stream.dart' as stream;
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 /*
 * name : Setting Page

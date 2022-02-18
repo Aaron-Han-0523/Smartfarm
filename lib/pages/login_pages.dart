@@ -14,7 +14,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:edgeworks/utils/dio/loginDio.dart';
 
 // Global
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 /*
 * name : LoginPage

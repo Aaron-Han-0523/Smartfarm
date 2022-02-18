@@ -14,7 +14,7 @@ import 'package:edgeworks/utils/getX_controller/settingController.dart';
 
 //global
 import '../../globals/stream.dart' as stream;
-import "../../globals/checkUser.dart" as edgeworks;
+import '../../utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 // Api's
 var api = dotenv.env['PHONE_IP'];

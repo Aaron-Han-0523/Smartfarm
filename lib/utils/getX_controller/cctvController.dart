@@ -11,7 +11,7 @@ import 'package:dio/dio.dart';
 
 // global
 import 'package:edgeworks/globals/stream.dart' as stream;
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 
 /*

@@ -11,7 +11,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 //globals
 import '../../globals/stream.dart' as stream;
-import "../../globals/checkUser.dart" as edgeworks;
+import '../../utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 // APIs
 var api = dotenv.env['PHONE_IP'];

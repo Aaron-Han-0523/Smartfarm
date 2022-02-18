@@ -9,7 +9,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 // Global
 import 'package:edgeworks/globals/stream.dart' as stream;
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 /*
 * name : MQTT class

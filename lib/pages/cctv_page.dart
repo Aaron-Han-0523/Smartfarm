@@ -19,7 +19,7 @@ import 'package:edgeworks/components/cctvController_page/cctvListViewBuilder.dar
 
 // Global
 import 'package:edgeworks/globals/stream.dart' as stream;
-import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
+import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 
 /*

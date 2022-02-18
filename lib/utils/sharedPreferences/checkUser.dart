@@ -34,16 +34,16 @@ deleteUserInfo() async {
   print('##### [checkUser Page] 저장된 user id/pw 삭제 완료');
 }
 
-// 저장된 id 값 가져오기
-getUserId() async {
-  final prefs = await SharedPreferences.getInstance();
-  var userId = prefs.getString('userId') ?? '';
-  return userId;
-}
+// // 저장된 id 값 가져오기
+// getUserId() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   var userId = prefs.getString('userId') ?? '';
+//   return userId;
+// }
 
-// 저장된 pw 가져오기
-getUserPw() async {
-  final prefs = await SharedPreferences.getInstance();
-  var userPw = prefs.getString('userPw') ?? '';
-  return userPw;
-}
+// // 저장된 pw 가져오기
+// getUserPw() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   var userPw = prefs.getString('userPw') ?? '';
+//   return userPw;
+// }

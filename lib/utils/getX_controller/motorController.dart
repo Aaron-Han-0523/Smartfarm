@@ -11,7 +11,7 @@ import 'package:dio/dio.dart';
 
 // global
 import 'package:edgeworks/globals/stream.dart' as stream;
-import "package:edgeworks/globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 
 /*
@@ -153,7 +153,7 @@ class MotorController extends GetxController {
     etcMotorStatus.value = etcMotors
         .map((e) => int.parse(e["actuator_action"].toString()))
         .toList();
-    print('## [homepage] etc motor status 가져오기: ${stream.etcMotorStatus}');
+    print('## [homepage] etc motor status 가져오기: $etcMotorStatus');
 
     // DB에서 etc motor id 가져오기
     etcMotorId.value =

@@ -9,7 +9,7 @@ import 'package:edgeworks/utils/getX_controller/soilController.dart';
 
 //globals
 import '../../globals/stream.dart' as stream;
-import "../../globals/checkUser.dart" as edgeworks;
+import '../../utils/sharedPreferences/checkUser.dart' as edgeworks;
 
 /*
 * name : Soil pumps class
