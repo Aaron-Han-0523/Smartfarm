@@ -46,8 +46,6 @@ int? getTopToggleStatus;
 int? allSideToggleInit;
 int? allTopToggleInit;
 
-// Define global variable
-bool isLoading = _motorController.isLoading.value;
 
 // Define Text Size Box
 var textSizedBox = Get.width * 1 / 5;
@@ -81,26 +79,30 @@ class _EnvironmentState extends State<EnvironmentPage> {
     });
   }
 
-  void initState() {
-    super.initState();
-    if (isLoading == false) {
+  void initState()  {
+    if (_motorController.isLoading.value == false) {
       _motorController.getSideMotorsData();
       _motorController.getTopMotorsData();
       _motorController.getEtcMotorData();
       _motorController.isLoading.value = true;
+      Future.delayed(Duration(microseconds: 3000), () {
+        _motorController.isFuture.value = true;
+      });
     }
     getSideSharedPrefs();
     getTopSharedPrefs();
+    super.initState();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _motorController.getEtcMotorData(),
-      builder: (ctx, snapshot) {
-        if (isLoading == true) {
-          return Scaffold(
-            body: Stack(
+    return Scaffold(
+      body: FutureBuilder(
+        future: _motorController.getEtcMotorData(),
+        builder: (ctx, snapshot) {
+          if (_motorController.isFuture.value == true) {
+            return Stack(
               children: [
                 EnvironCustomScrollView(),
                 Positioned(
@@ -115,11 +117,9 @@ class _EnvironmentState extends State<EnvironmentPage> {
                   ),
                 ),
               ],
-            ),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          return Scaffold(
-            body: Stack(
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return Stack(
               children: [
                 EnvironCustomScrollView(),
                 Positioned(
@@ -134,12 +134,12 @@ class _EnvironmentState extends State<EnvironmentPage> {
                   ),
                 ),
               ],
-            ),
-          );
-        } else {
-          return CircularProgressIndicator();
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
         }
-      }
+      ),
     );
   }
 }

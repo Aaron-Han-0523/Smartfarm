@@ -101,6 +101,7 @@ class MotorController extends GetxController {
       sideMotorId.add(sideMotorIdVariable);
       print('## [homepage] side motor id 가져오기: $sideMotorId');
     }
+    update();
   }
 
   Future<dynamic> getTopMotorsData() async {
@@ -138,6 +139,7 @@ class MotorController extends GetxController {
       topMotorId.add(topMotorIdVariable);
       print('## [homepage] side motor id 가져오기: $topMotorId');
     }
+    update();
   }
 
   Future<dynamic> getEtcMotorData() async {
@@ -174,5 +176,6 @@ class MotorController extends GetxController {
       etcMotorId.add(etcMotorIdVariable);
       print('## [homepage] etc motor id 가져오기: $etcMotorId');
     }
+    update();
   }
 }

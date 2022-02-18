@@ -37,6 +37,8 @@ class CctvController extends GetxController {
   var cctvs = [].obs;
   var cctvUrls = [].obs;
   var cctvUrlVariable = ''.obs;
+  var isLoading = false.obs;
+  var isFuture = false.obs;
 
    Future<dynamic> getCctvData() async {
     // cctvs

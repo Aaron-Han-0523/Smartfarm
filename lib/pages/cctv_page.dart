@@ -59,6 +59,13 @@ class CCTVPage extends StatefulWidget {
 class _CCTVPageState extends State<CCTVPage> {
   @override
   void initState() {
+    if (_cctvController.isLoading.value == false) {
+      _cctvController.getCctvData();
+      _cctvController.isLoading.value = true;
+      Future.delayed(Duration(microseconds: 3000), () {
+        _cctvController.isFuture.value = true;
+      });
+    }
     _cctvController.getCctvData();
     super.initState();
   }
@@ -111,10 +118,13 @@ class _CCTVPageState extends State<CCTVPage> {
                             color: Color(0xffF5F9FC),
                           ),
                           alignment: Alignment.center,
-                          child: StreamBuilder(
-                              stream: _cctvController.cctvUrls.stream,
+                          child: FutureBuilder(
+                              future : _cctvController.getCctvData(),
                               builder: (ctx, snapshot) {
-                                if (snapshot.hasData) {
+                                if (_cctvController.isFuture.value == true) {
+                                  return CctvListViewWidget();
+                                }
+                                if (snapshot.connectionState == ConnectionState.done) {
                                   return CctvListViewWidget();
                                 } else {
                                   return CircularProgressIndicator();
