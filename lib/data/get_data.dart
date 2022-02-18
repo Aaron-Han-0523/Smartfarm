@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
@@ -14,12 +15,7 @@ var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
-var options = BaseOptions(
-  baseUrl: '$url',
-  connectTimeout: 60 * 1000,
-  receiveTimeout: 60 * 1000,
-);
-Dio dio = Dio(options);
+Dio dio = Dio();
 
 class _InnerTempData {
   _InnerTempData(this.dateTime, this.tempValue);
@@ -31,12 +27,9 @@ class _InnerTempData {
 // 그래프 데이터 관련
 List<_InnerTempData> data = [];
 
-
 class GetAllData {
-
   // get site id function
   Future<dynamic> getSiteData(var userId) async {
-
     // Site Id 전체 가져와서 담기
     final getSiteIds = await dio.get('$url/$userId/sites');
     stream.siteInfo = getSiteIds.data;
@@ -46,29 +39,26 @@ class GetAllData {
     stream.siteNames =
         stream.siteInfo.map((e) => e["site_name"].toString()).toList();
     print('## [homepage] Site Ids는 가져오기: ${stream.siteNames}');
-
   }
 
   // put fcm token function
   Future<dynamic> putFcmData(var userId) async {
     var fcmtoken = stream.fcmtoken;
     var data = {'uid': userId, 'fcmtoken': fcmtoken};
-    final postToken =
-    await dio.put('$api/farm/$userId/pushAlarm', data: data);
+    final postToken = await dio.put('$api/farm/$userId/pushAlarm', data: data);
     print('##### [homepage] postToken: $postToken');
+    Get.offAllNamed('/sensor');
   }
 
-
   // get trends temp data function
-  Future<dynamic> getTrendsTempData() async { //var userId, var siteId
-
+  Future<dynamic> getTrendsTempData() async {
+    //var userId, var siteId
     await Future.delayed(const Duration(milliseconds: 500), () async {
       final getInnerTemp =
-      await dio.get('$url/$userId/site/$siteId/innerTemps');
+          await dio.get('$url/$userId/site/$siteId/innerTemps');
       stream.chartData = getInnerTemp.data['data'];
 
       if (stream.chartData.length != 0) {
-
         print('##### [homepage] getInnerTemp: ${getInnerTemp.data['data']}');
         print(
             '##### [homepage] getInnerTemp 최근 내부온도 시간: ${getInnerTemp.data['data'][0]['time_stamp']}');
@@ -84,7 +74,6 @@ class GetAllData {
         print(
             '##### [homepage] getInnerTemp 최근 내부온도 온도: ${getInnerTemp.data['data'][0]['value']}');
 
-
         int innerTempLength = getInnerTemp.data['data'].length;
         print('[homepage] innerTempLength: $innerTempLength');
         print('[차트 데이터 확인] : ${stream.chartData}');
@@ -93,13 +82,15 @@ class GetAllData {
           data.add(_InnerTempData(stream.chartData[i]['time_stamp'],
               double.parse(stream.chartData[i]['value'])));
         }
+        print('[차트 데이터 확인2] : ${data}');
       }
     });
   }
 
   // cctv
   // get trends temp data function
-  Future<dynamic> getCctvData() async { //var userId, var siteId
+  Future<dynamic> getCctvData() async {
+    //var userId, var siteId
     final getCctvs = await dio.get('$url/$userId/site/$siteId/cctvs');
     stream.cctvs = getCctvs.data;
     print('##### [homepage] GET CCTV List from stream: ${stream.cctvs}');
@@ -112,18 +103,17 @@ class GetAllData {
     print('##### [homepage] GET CCTV Url List: ${stream.cctv_url}');
   }
 
-  Future<dynamic> getSideMotorData(var motorTypeVariable,
+  Future<dynamic> getSideMotorData(
+      var motorTypeVariable,
       var streamMotorType,
       var streamMotorName,
       var streamMotorStatus,
       var streamMotorId,
       var motorNameVariable,
-      var motorIdVariable
-      ) async {
-
+      var motorIdVariable) async {
     await Future.delayed(const Duration(milliseconds: 500), () async {
       motorTypeVariable =
-      await dio.get('$url/$userId/site/$siteId/controls/side/motors');
+          await dio.get('$url/$userId/site/$siteId/controls/side/motors');
       streamMotorType = motorTypeVariable.data['data'];
       print('##### [homePage] GET sideMotors list : $streamMotorType');
 
@@ -151,7 +141,7 @@ class GetAllData {
         motorIdVariable = motorNameVariable.substring(6);
         streamMotorId.add(motorIdVariable);
         print('## [homepage] side motor id 가져오기: $streamMotorId');
-      }}
-    );
+      }
+    });
   }
-  }
+}
