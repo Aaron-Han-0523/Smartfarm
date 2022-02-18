@@ -1,16 +1,23 @@
-// necessary to build app
+// ** SETTING CONTROLLER **
+
+// Necessary to build app
 import 'dart:async';
 import 'dart:convert';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+
+// Env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Dio
+import 'package:dio/dio.dart';
+
+// Mqtt
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-// global
-import '/globals/stream.dart' as stream;
-import "/globals/checkUser.dart" as edgeworks;
+// Global
+import 'package:edgeworks/globals/stream.dart' as stream;
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 
 //Api's
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
@@ -19,13 +26,16 @@ var userId = '${edgeworks.checkUserId}';
 // APIs
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
+var mqttIP = dotenv.env['MQTT_IP'];
 
-var options = BaseOptions(
-  baseUrl: '$url',
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
+// Dio
+Dio dio = Dio();
+
+// mqtt
+int clientPort = 1883;
+var setSubTopic = '/sf/$siteId/res/cfg';
+var setPubTopic = '/sf/$siteId/req/cfg';
+
 
 class SettingController extends GetxController {
   RxBool status_alarm = false.obs;
@@ -36,7 +46,7 @@ class SettingController extends GetxController {
 
   String statusText = "Status Text";
   bool isConnected = false;
-  final MqttServerClient client = MqttServerClient('14.46.231.48', '');
+  final MqttServerClient client = MqttServerClient('$mqttIP', '');
 
   connect() async {
     isConnected = await mqttConnect('test');
@@ -48,10 +58,7 @@ class SettingController extends GetxController {
 
   Future<bool> mqttConnect(String uniqueId) async {
     print('setting mqtt');
-    // mqtt
-    int clientPort = 1883;
-    var setSubTopic = '/sf/$siteId/res/cfg';
-    var setPubTopic = '/sf/$siteId/req/cfg';
+
     client.logging(on: true);
     client.port = clientPort;
     client.secure = false;

@@ -1,15 +1,17 @@
-// necessary to build app
+// ** LOGIN DIO **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
-// dio
+// Dio
 import 'package:dio/dio.dart';
 
-// env
+// Env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// global
+// Global
 import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 import 'package:edgeworks/globals/stream.dart' as stream;
 
@@ -18,7 +20,7 @@ import 'package:edgeworks/globals/stream.dart' as stream;
 * description : login api
 * writer : mark
 * create date : 2022-01-03
-* last update : 2022-02-03
+* last update : 2022-02-18
 * */
 
 class LoginTest {

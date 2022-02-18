@@ -1,14 +1,20 @@
-//necessary to build app
+// ** SITE DROP DOWN BUTTONS WIDGET **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//api
+// Env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Dio
 import 'package:dio/dio.dart';
 
 // global
-import '../../globals/stream.dart' as stream;
-import "../../globals/checkUser.dart" as edgeworks;
+import 'package:edgeworks/globals/stream.dart' as stream;
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
+
+
 
 // Api's
 var api = dotenv.env['PHONE_IP'];
@@ -17,18 +23,19 @@ var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
-var options = BaseOptions(
-  baseUrl: '$url',
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
+// var options = BaseOptions(
+//   baseUrl: '$url',
+//   connectTimeout: 5000,
+//   receiveTimeout: 3000,
+// );
+// Dio dio = Dio(options);
+Dio dio = Dio();
 
 // siteDropdown button global variable
-
 String sitesDropdownValue = stream.sitesDropdownValue == ''
     ? '${stream.siteNames[0]}'
     : stream.sitesDropdownValue;
+
 
 class SitesDropDownButtons extends StatefulWidget {
   final String name;

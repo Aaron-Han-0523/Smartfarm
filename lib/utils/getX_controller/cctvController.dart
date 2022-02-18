@@ -1,4 +1,4 @@
-// ** CCTV CONTROLLER PAGE **
+// ** CCTV CONTROLLER **
 
 // necessary to build app
 import 'package:get/get.dart';
@@ -19,13 +19,8 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : CCTV Controller Page (Get CCTV Data from DB)
 * writer : mark
 * create date : 2021-12-28
-* last update : 2022-02-16
+* last update : 2022-02-18
 * */
-
-
-// mqtt
-int clientPort = 1883;
-var setTopic = '/sf/$siteId/data';
 
 // APIs
 var api = dotenv.env['PHONE_IP'];

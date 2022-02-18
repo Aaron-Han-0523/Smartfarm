@@ -1,12 +1,18 @@
+// ** SENSOR PAGE CUSTOM SCROLL VIEW WIDGET PAGE **
+
+// Necessary to build app
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+// Get Widget pages
 import 'package:edgeworks/components/common_page/alignWidget.dart';
 import 'package:edgeworks/components/sensor_page/extSensor.dart';
 import 'package:edgeworks/components/sensor_page/innerSensor.dart';
 import 'package:edgeworks/components/sensor_page/innserTempChart.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-// global
-import '../../globals/stream.dart' as stream;
+// Global
+import 'package:edgeworks/globals/stream.dart' as stream;
+
 
 // site dropdown value
 var siteDropdown = stream.sitesDropdownValue == ''

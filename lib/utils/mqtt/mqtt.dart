@@ -1,11 +1,13 @@
-// env
+// ** MQTT **
+
+// Env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// mqtt
+// Mqtt
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-// global
+// Global
 import 'package:edgeworks/globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
@@ -14,19 +16,20 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : MQTT class
 * writer : mark
 * create date : 2021-01-07
-* last update : 2021-02-03
+* last update : 2021-02-18
 * */
 
 //Api's
 var api = dotenv.env['PHONE_IP'];
-// var clientPort = dotenv.env['CLIENT_PORT'];
 var url = '$api/farm';
 var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
+var mqttIP = dotenv.env['MQTT_IP'];
 
 // mqtt
 int clientPort = 1883;
-final MqttServerClient client = MqttServerClient('14.46.231.48', '');
+final MqttServerClient client = MqttServerClient('$mqttIP', '');
+
 
 class ConnectMqtt {
   // MQTT

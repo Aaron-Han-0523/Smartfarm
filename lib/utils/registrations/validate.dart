@@ -1,12 +1,15 @@
-// necessary to build app
+// ** LOGIN CHECK VALIDATION **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
+
 
 /*
 * name : CheckValidate Page
 * description : Validate page
 * writer : walter/mark
 * create date : 2021-09-30
-* last update : 2022-02-03
+* last update : 2022-02-18
 * */
 
 class CheckValidate {

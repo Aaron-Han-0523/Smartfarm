@@ -1,32 +1,60 @@
-// necessary to build app
+// ** TAB BAR WIDGET PAGE **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// getX controller
-import '../utils/getX_controller/sensorController.dart';
+// GetX
+import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 
-// pages
+// Pages
 import 'package:edgeworks/pages/cctv_page.dart';
 import 'package:edgeworks/pages/sensor_page.dart';
 import 'package:edgeworks/pages/soilControl_page.dart';
+import 'package:edgeworks/pages/environment_page.dart';
 
-// global
-import '../globals/stream.dart' as stream;
-import '../pages/environment_page.dart';
+// Global
+import 'package:edgeworks/globals/stream.dart' as stream;
+
 
 /*
 * name : Home
 * description : home page
 * writer : walter
 * create date : 2021-12-28
-* last update : 2022-02-14
+* last update : 2022-02-18
 * */
 
-// 카카오 채널 url
+// SiteDropdown button global variable
+var siteDropdown =
+stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
+
+// GetX Controller
+final controller = Get.put(SensorController());
+
+// Define Global Variable
+int _selectedIndex = 0;
+
+// TextEditingController
+TextEditingController idTextController = TextEditingController();
+
+// Drawer close global key
+GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+
+// TabBar List
+List<Widget> _widgetOptions = <Widget>[
+  SensorPage(),
+  EnvironmentPage(),
+  SoilControlPage(),
+  CCTVPage(),
+];
+
+// KakaoChannel Url
 var kakaoChannelUrl = 'http://pf.kakao.com/_xledxfb';
+
 
 class Sensor extends StatelessWidget {
   const Sensor({Key? key}) : super(key: key);
@@ -51,13 +79,12 @@ class SensorStatefulWidget extends StatefulWidget {
 }
 
 class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
-  int _selectedIndex = 0;
-  final controller = Get.put(SensorController());
+
+
   @override
   void initState() {
     controller.connect();
     _widgetOptions;
-    _pageController = PageController(initialPage: _selectedIndex);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -65,41 +92,14 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
     super.initState();
   }
 
-  // TextEditingController
-  TextEditingController idTextController = TextEditingController();
-
-  // drawer close global key
-  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
-
-  final _page1 = GlobalKey<NavigatorState>();
-  final _page2 = GlobalKey<NavigatorState>();
-  final _page3 = GlobalKey<NavigatorState>();
-  final _page4 = GlobalKey<NavigatorState>();
-  final _page5 = GlobalKey<NavigatorState>();
-
-  // siteDropdown button global variable
-  var siteDropdown =
-      stream.sitesDropdownValue == '' ? 'EdgeWorks' : stream.sitesDropdownValue;
-
-  PageController? _pageController;
-
-  List<Widget> _widgetOptions = <Widget>[
-    SensorPage(),
-    EnvironmentPage(),
-    SoilControlPage(),
-    CCTVPage(),
-  ];
-
   @override
   void dispose() {
-    _pageController!.dispose();
     super.dispose();
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      // _pageController!.jumpToPage(_selectedIndex);
     });
   }
 
@@ -205,7 +205,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             color: index == 0 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
-          // title: '센서',
         ),
         TabItem(
           icon: Image.asset(
@@ -213,7 +212,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             color: index == 1 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
-          // title: '환경제어',
         ),
         TabItem(
           icon: Image.asset(
@@ -221,7 +219,6 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             color: index == 2 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
-          // title: '토양제어',
         ),
         TabItem(
           icon: Image.asset(
@@ -229,20 +226,17 @@ class _SensorStatefulWidgetState extends State<SensorStatefulWidget> {
             color: index == 3 ? Color(0xff222222) : Color(0xffFFFFFF),
             scale: 3,
           ),
-          // title: '',
         ),
       ],
-      // selectedItemColor: Colors.black,
-      // unselectedItemColor: Colors.white,
+
       backgroundColor: Color(0xff2E6645),
       onTap: _onItemTapped,
       top: 0,
       color: Color(0xffFFFFFF),
-      // activeColor: Color(0xff222222),
     );
   }
 
-  //카카오 채널 url launcher
+  // KakaoChannel Url Launcher
   _launchKakaoURL() async {
     if (await canLaunch(kakaoChannelUrl)) {
       await launch(kakaoChannelUrl);

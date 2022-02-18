@@ -1,10 +1,20 @@
-import 'package:edgeworks/components/sensor_page/card.dart';
-import 'package:edgeworks/utils/getX_controller/sensorController.dart';
+// ** INNER SENSOR WIDGET PAGE **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// Page
+import 'package:edgeworks/components/sensor_page/card.dart';
+
+// GetX controller
+import 'package:edgeworks/utils/getX_controller/sensorController.dart';
+
+
+// GetX controller
 final controller = Get.put(SensorController());
 
+// Define Inner Data List
 List innerData = ['내부 온도', '내부 습도', '토양 온도', '토양 습도'];
 List innerCon = [
   controller.innerTemp,
@@ -77,7 +87,7 @@ class InnerSensor extends StatelessWidget {
   }
 }
 
-// BoxDecoration 위젯 (shadow 적용)
+// BoxDecoration Widget
 BoxDecoration _decorations() {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(20),
@@ -92,7 +102,7 @@ BoxDecoration _decorations() {
   );
 }
 
-// padding 위젯
+// Padding Widget
 Padding _fromLTRBPadding({child}) {
   return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
 }

@@ -1,9 +1,16 @@
+// ** INNER TEMP CHART WIDGET PAGE **
+
+// Necessary to build app
 import 'package:edgeworks/data/get_data.dart';
-import 'package:edgeworks/models/sensor_page/innerTempData.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-GetAllData _getAllData = GetAllData();
+// Pages
+import 'package:edgeworks/models/sensor_page/innerTempData.dart';
+
+// GetChardData Class
+GetAllInnerTempData _allInnerTempData = GetAllInnerTempData();
+
 
 class InnserTempChart extends StatefulWidget {
   InnserTempChart({Key? key}) : super(key: key);
@@ -16,7 +23,7 @@ class _InnserTempChartState extends State<InnserTempChart> {
   @override
   void initState() {
     setState(() {
-      _getAllData.getTrendsTempData();
+      _allInnerTempData.getTrendsTempData();
     });
     super.initState();
   }
@@ -53,7 +60,7 @@ class _InnserTempChartState extends State<InnserTempChart> {
                 ),
                 children: [
                   FutureBuilder(
-                      future: _getAllData.getTrendsTempData(),
+                      future: _allInnerTempData.getTrendsTempData(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

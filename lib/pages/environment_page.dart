@@ -1,3 +1,5 @@
+// ** ENVIRONMENT PAGE **
+
 // Necessary to build app
 import 'package:edgeworks/components/environmentController_page/customScrollView.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,11 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * last update : 2021-02-18
 * */
 
+//Api's
+var api = dotenv.env['PHONE_IP'];
+var url = '$api/farm';
+var userId = '${edgeworks.checkUserId}';
+var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // Dio
 var dio = Dio();
@@ -33,20 +40,16 @@ var dio = Dio();
 // GetX
 final _motorController = Get.put(MotorController());
 
-//Api's
-var api = dotenv.env['PHONE_IP'];
-var url = '$api/farm';
-var userId = '${edgeworks.checkUserId}';
-var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
-
-
-// define toggle variable
+// Define shared toggle variable
 int? getToggleStatus;
 int? getTopToggleStatus;
 int? allSideToggleInit;
 int? allTopToggleInit;
 
+// Define global variable
+bool isLoading = _motorController.isLoading.value;
 
+// Define Text Size Box
 var textSizedBox = Get.width * 1 / 5;
 
 
@@ -77,10 +80,6 @@ class _EnvironmentState extends State<EnvironmentPage> {
       allTopToggleInit = getTopToggleStatus;
     });
   }
-
-  bool isLoading = _motorController.isLoading.value;
-  bool isFuture = _motorController.isFuture.value;
-
 
   void initState() {
     super.initState();

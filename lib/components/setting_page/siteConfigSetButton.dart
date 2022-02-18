@@ -1,4 +1,6 @@
-//necessary to build app
+// ** SITE CONFIG BUTTON WIDGET **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,9 +16,6 @@ import 'package:edgeworks/utils/getX_controller/settingController.dart';
 import '../../globals/stream.dart' as stream;
 import "../../globals/checkUser.dart" as edgeworks;
 
-//controller
-final controller = Get.put(SettingController());
-
 // Api's
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
@@ -24,14 +23,19 @@ var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // dio APIs
-var options = BaseOptions(
-  baseUrl: '$url',
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
+// var options = BaseOptions(
+//   baseUrl: '$url',
+//   connectTimeout: 5000,
+//   receiveTimeout: 3000,
+// );
+// Dio dio = Dio(options);
+Dio dio = Dio();
 
-//mqtt
+
+// GetX Controller
+final controller = Get.put(SettingController());
+
+// Mqtt
 ConnectMqtt _connectMqtt = ConnectMqtt();
 
 class SiteConfigSetButton extends StatelessWidget {

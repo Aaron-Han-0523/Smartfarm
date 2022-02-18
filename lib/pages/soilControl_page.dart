@@ -1,18 +1,28 @@
-// necessary to build app
-import 'package:edgeworks/components/soilController_page/soilCustomScrollViews.dart';
-import 'package:edgeworks/utils/getX_controller/soilController.dart';
+// ** SOIL CONTROL PAGE **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
+// GetX
+import 'package:edgeworks/utils/getX_controller/soilController.dart';
+
+// Get Widget Pages
+import 'package:edgeworks/components/soilController_page/soilCustomScrollViews.dart';
+
 
 /*
 * name : Soil Control Page
 * description : Soil Control Page
 * writer : sherry
 * create date : 2021-12-24    
-* last update : 2022-02-03
+* last update : 2022-02-18
 * */
+
+// GetX Controller
 final controller = Get.put(SoilController());
+
 
 class SoilControlPage extends StatefulWidget {
   SoilControlPage({Key? key}) : super(key: key);

@@ -1,13 +1,19 @@
-// necessary to build app
+// ** SOIL CONTROLLER **
+
+// Necessary to build app
 import 'dart:async';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
-// global
-import '/globals/stream.dart' as stream;
-import "/globals/checkUser.dart" as edgeworks;
+// Env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Dio
+import 'package:dio/dio.dart';
+
+// Global
+import 'package:edgeworks/globals/stream.dart' as stream;
+import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
+
 
 //Api's
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
@@ -17,6 +23,7 @@ var userId = '${edgeworks.checkUserId}';
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 
+// Dio
 Dio dio = Dio();
 
 class SoilController extends GetxController {
@@ -66,7 +73,6 @@ class SoilController extends GetxController {
   }
 
   Future<void> valvesHttp() async {
-    //----------valves----------------------------------------------
     final getValves =
         await dio.get('$url/$userId/site/$siteId/controls/valves');
     valves.value = getValves.data;

@@ -1,4 +1,6 @@
-// necessary to build app
+// ** START APP (MAIN) **
+
+// Necessary to build app
 import 'dart:io';
 import 'package:edgeworks/pages/cctv_page.dart';
 import 'package:flutter/material.dart';
@@ -6,26 +8,26 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// env
+// Env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// firebase
+// Firebase
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-// pages
+// Pages
 import 'package:edgeworks/pages/home.dart';
 import 'package:edgeworks/pages/setting_page.dart';
 import 'package:edgeworks/pages/changepw_page.dart';
 import 'pages/tabbar.dart';
 
-// dio
+// Dio
 import 'pages/login_pages.dart';
 import 'package:dio/dio.dart';
 
-// global
-import '../globals/stream.dart' as stream;
+// Global
+import 'package:edgeworks/globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
@@ -33,8 +35,9 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : This is a start page. code for fcm push notification.
 * writer : Sherry
 * create date : 2022-01-10
-* last update : 2022-02-03
+* last update : 2022-02-18
 * */
+
 
 // APIs
 var api = dotenv.env['PHONE_IP'];
@@ -44,12 +47,7 @@ var siteId = '${stream.siteId}';
 bool firstFCM = true;
 
 // dio APIs
-var options = BaseOptions(
-  baseUrl: '$url',
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
+Dio dio = Dio();
 
 // 안드로이드 푸시알림 메세지 구성 설정
 class PushNotification {
@@ -301,17 +299,14 @@ class _MyAppState extends State<MyApp> {
                 GetPage(
                     name: '/setting',
                     page: () => SettingPage(),
-                    // transition: Transition.upToDown,
                     opaque: false),
                 GetPage(
                   // opaque: false,
-                  // getdata cctv, soilpage, etc
                   name: '/home',
                   page: () => Home(),
                 ),
                 GetPage(
                   opaque: false,
-                  // getdata cctv, soilpage, etc
                   name: '/cctv',
                   page: () => CCTVPage(),
                 ),

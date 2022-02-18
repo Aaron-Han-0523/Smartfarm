@@ -8,14 +8,15 @@ import 'package:get/get.dart';
 import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 
 // Global
-import '../../globals/stream.dart' as stream;
+import 'package:edgeworks/globals/stream.dart' as stream;
+
 
 /*
 * name : Weather Page
 * description : Weather Widget Page
 * writer : mark
 * create date : 2021-12-28
-* last update : 2022-02-09
+* last update : 2022-02-18
 * */
 
 class WeatherWidget extends StatelessWidget {

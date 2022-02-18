@@ -1,13 +1,19 @@
-//necessary to build app
+// ** LOW TEMP FORM WIDGET **
+
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//GetX
+// GetX
 import 'package:edgeworks/utils/getX_controller/settingController.dart';
 
-//Controller
+// GetX Controller
 final controller = Get.put(SettingController());
+
+// TextEditing Controller
 final _nullTextEditingController = TextEditingController(text: ' ');
+
 
 class LowTempForm extends StatefulWidget {
   final String title;

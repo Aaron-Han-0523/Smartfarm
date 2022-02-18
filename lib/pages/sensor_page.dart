@@ -209,7 +209,7 @@ class _SensorPageState extends State<SensorPage> {
   // }
 
   // 그래프 위젯
-  GetAllData _getAllData = GetAllData();
+  GetAllInnerTempData _getAllData = GetAllInnerTempData();
   Widget _myGraph() {
     return Column(
       children: <Widget>[

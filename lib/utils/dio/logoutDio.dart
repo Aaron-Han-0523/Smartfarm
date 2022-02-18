@@ -1,3 +1,5 @@
+// ** LOGOUT DIO **
+
 // necessary to build app
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
@@ -18,12 +20,16 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : logout Api page
 * writer : mark
 * create date : 2022-01-06
-* last update : 2022-02-03
+* last update : 2022-02-18
 * */
 
+// Api's
+var api = dotenv.env['PHONE_IP'];
+
+// Dio
+Dio dio = new Dio();
+
 class Logout {
-  var api = dotenv.env['PHONE_IP'];
-  Dio dio = new Dio();
 
   Future<dynamic> logout() async {
     var options = Options(

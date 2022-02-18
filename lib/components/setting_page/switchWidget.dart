@@ -1,4 +1,6 @@
-//necessary to build app
+// ** SWITCH WIDGET **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,8 +10,9 @@ import 'package:toggle_switch/toggle_switch.dart';
 //GetX
 import 'package:edgeworks/utils/getX_controller/settingController.dart';
 
-//controller
+// GetX Controller
 final controller = Get.put(SettingController());
+
 
 class SwitchWidgets extends StatefulWidget {
   final names;
@@ -20,14 +23,13 @@ class SwitchWidgets extends StatefulWidget {
 }
 
 class _SwitchWidgetsState extends State<SwitchWidgets> {
+
   List<String> labelName = ['ON', 'OFF'];
   var selectedLabel = '';
   int initialIndex = controller.status_alarm.value == true ? 0 : 1;
 
-//global key
+  //global key
   bool status = false;
-  // var _setTimer = controller.set_timer.value;
-  // bool _alarmStatus = controller.status_alarm.value;
 
   @override
   Widget build(BuildContext context) {

@@ -27,7 +27,7 @@ class _InnerTempData {
 // 그래프 데이터 관련
 List<_InnerTempData> data = [];
 
-class GetAllData {
+class GetAllInnerTempData {
   // get site id function
   Future<dynamic> getSiteData(var userId) async {
     // Site Id 전체 가져와서 담기

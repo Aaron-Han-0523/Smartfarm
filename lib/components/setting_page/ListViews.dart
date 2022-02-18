@@ -1,11 +1,13 @@
-//necessary to build app
+// ** SETTING PAGE LIST VIEW WIDGET **
+
+//Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 //GetX
 import 'package:edgeworks/utils/getX_controller/settingController.dart';
 
-// use class
+// Get Widget Pages
 import 'package:edgeworks/components/setting_page/highTempForm.dart';
 import 'package:edgeworks/components/setting_page/lowTempForm.dart';
 import 'package:edgeworks/components/setting_page/siteConfigSetButton.dart';
@@ -13,11 +15,13 @@ import 'package:edgeworks/components/setting_page/sitesDropDownButtons.dart';
 import 'package:edgeworks/components/setting_page/switchWidget.dart';
 import 'package:edgeworks/components/setting_page/timerDropDownButtons.dart';
 
-//global
-import '../../globals/stream.dart' as stream;
+// Global
+import 'package:edgeworks/globals/stream.dart' as stream;
 
-//controller
+// GetX controller
 final controller = Get.put(SettingController());
+
+// TextEditing Controller
 final _highTextEditController = TextEditingController(
     text: controller.high_temp.value == '' ? null : controller.high_temp.value);
 final _lowTextEditController = TextEditingController(
@@ -26,6 +30,7 @@ final _lowTextEditController = TextEditingController(
 // siteDropdown button global variable
 String sitesDropdownValue =
     stream.sitesDropdownValue == '' ? 'test' : stream.sitesDropdownValue;
+
 
 class BodyListViews extends StatelessWidget {
   const BodyListViews({Key? key}) : super(key: key);

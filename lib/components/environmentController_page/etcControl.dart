@@ -17,7 +17,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:edgeworks/utils/mqtt/mqtt.dart';
 
 // Global
-import '../../globals/stream.dart' as stream;
+import 'package:edgeworks/globals/stream.dart' as stream;
 import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 
 
@@ -26,7 +26,7 @@ import 'package:edgeworks/globals/checkUser.dart' as edgeworks;
 * description : Etc motor control page
 * writer : mark
 * create date : 2021-12-28
-* last update : 2022-02-16
+* last update : 2022-02-18
 * */
 
 
@@ -36,17 +36,18 @@ var url = '$api/farm';
 var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
+// Dio
+var dio = Dio();
+
+// GetX Controller
+final _motorController = Get.put(MotorController());
+
 // MQTT class
 ConnectMqtt _connectMqtt = ConnectMqtt();
 
 // Update toggle data
 UpdateSideTopEtcToggleData _updatetoggleData = UpdateSideTopEtcToggleData();
 
-// Dio
-var dio = Dio();
-
-// GetX
-final getxController = Get.put(MotorController());
 
 
 class EtcMotorWidget extends StatefulWidget {
@@ -57,8 +58,9 @@ class EtcMotorWidget extends StatefulWidget {
 }
 
 class _EtcMotorWidgetState extends State<EtcMotorWidget> {
+
   void initState() {
-    getxController.getEtcMotorData();
+    _motorController.getEtcMotorData();
     super.initState();
   }
 
@@ -69,7 +71,7 @@ class _EtcMotorWidgetState extends State<EtcMotorWidget> {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: IgnorePointer(
-            ignoring: getxController.etcMotors.length == 0 ? true : false,
+            ignoring: _motorController.etcMotors.length == 0 ? true : false,
             child: ExpansionTile(
               iconColor: Colors.white,
               collapsedIconColor: Colors.white,
@@ -113,7 +115,7 @@ class _EtcSwitchWidgetState extends State<EtcSwitchWidget> {
         scrollDirection: Axis.vertical,
         primary: false,
         shrinkWrap: true,
-        itemCount: getxController.etcMotors.length,
+        itemCount: _motorController.etcMotors.length,
         itemBuilder: (BuildContext context, int index) {
           return _marginContainer(
             height: Get.height * 0.09,
@@ -121,7 +123,7 @@ class _EtcSwitchWidgetState extends State<EtcSwitchWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _edgeLeftPadding(20,
-                    child: Text("${getxController.etcMotorName[index]}",
+                    child: Text("${_motorController.etcMotorName[index]}",
                         style: _textStyle(
                             Color(0xff222222), FontWeight.normal, 15))),
                 _edgeRightPadding(
@@ -137,7 +139,7 @@ class _EtcSwitchWidgetState extends State<EtcSwitchWidget> {
                     activeFgColor: Color(0xff222222),
                     inactiveBgColor: Color(0xffFFFFFF),
                     inactiveFgColor: Color(0xff222222),
-                    initialLabelIndex: getxController.etcMotorStatus[index],
+                    initialLabelIndex: _motorController.etcMotorStatus[index],
                     // statusIndex == 0 ? 1 : 0,
                     totalSwitches: 2,
                     labels: ['ON', 'OFF'],
@@ -147,23 +149,23 @@ class _EtcSwitchWidgetState extends State<EtcSwitchWidget> {
 
                       if (value == 0) {
                         _switch = 'open';
-                        getxController.etcMotorStatus[index] = 0;
+                        _motorController.etcMotorStatus[index] = 0;
                       }
                       if (value == 1) {
                         _switch = 'stop';
-                        getxController.etcMotorStatus[index] = 1;
+                        _motorController.etcMotorStatus[index] = 1;
                       }
                       // MQTT 통신
                       _connectMqtt.setControl(
                           'did',
-                          "${getxController.etcMotorId[index]}",
+                          "${_motorController.etcMotorId[index]}",
                           'dact',
                           _switch,
                           '/sf/$siteId/req/motor',
                           '/sf/$siteId/req/motor');
                       //DB 업데이트
                       _updatetoggleData.updateEtcMotorData(
-                          "$value", "${getxController.etcMotorId2[index]}");
+                          "$value", "${_motorController.etcMotorId2[index]}");
                     },
                   ),
                 )

@@ -1,12 +1,17 @@
-//necessary to build app
+// ** TIMER DROPDOWN BUTTONS WIDGET **
+
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//GetX
+// GetX
 import 'package:edgeworks/utils/getX_controller/settingController.dart';
 
-//conterller
+
+// GetX Conterller
 final controller = Get.put(SettingController());
+
 
 class TimerDropDownButtons extends StatefulWidget {
   final String name;

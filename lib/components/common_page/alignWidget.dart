@@ -1,3 +1,5 @@
+// ** ALIGN WIDGET PAGE **
+
 import 'package:flutter/material.dart';
 
 class AlignWidget extends StatelessWidget {

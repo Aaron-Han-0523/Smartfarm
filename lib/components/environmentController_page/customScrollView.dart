@@ -9,9 +9,8 @@ import 'package:edgeworks/components/environmentController_page/etcControl.dart'
 import 'package:edgeworks/components/environmentController_page/sideControl.dart';
 import 'package:edgeworks/components/environmentController_page/topControl.dart';
 import 'package:edgeworks/components/environmentController_page/weather.dart';
-import 'package:edgeworks/utils/getX_controller/motorController.dart';
 
-// global
+// Global
 import '../../globals/stream.dart' as stream;
 
 
@@ -31,9 +30,6 @@ var siteDropdown = stream.sitesDropdownValue == ''
 
 
 var textSizedBox = Get.width * 1 / 5;
-
-// GetX controller
-final _motorController = Get.put(MotorController());
 
 
 class EnvironCustomScrollView extends StatefulWidget {

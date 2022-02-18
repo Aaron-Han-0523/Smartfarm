@@ -1,27 +1,32 @@
-// necessary to build app
+// ** SENSOR CONTROLLER **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 
-// mqtt
+// Mqtt
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-// global
+// Global
 import '/globals/stream.dart' as stream;
 
 //Api's
+var mqttIP = dotenv.env['MQTT_IP'];
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
-// mqtt
+// Mqtt
 int clientPort = 1883;
 var setTopic = '/sf/$siteId/data';
+
 
 class SensorController extends GetxController {
   String statusText = "Status Text";
   bool isConnected = false;
-  final MqttServerClient client = MqttServerClient('14.46.231.48', '');
+  final MqttServerClient client = MqttServerClient('$mqttIP', '');
+
   var innerTemp = ''.obs;
   var extTemp = ''.obs;
   var soilTemp = ''.obs;
@@ -117,16 +122,5 @@ class SensorController extends GetxController {
     });
     return true;
   }
-
-  // 날씨 데이터에 따라 이미지 변화
-  // getWearther() {
-  //   var temp = int.parse(stream.exttemp_1);
-  //
-  //   temp > 20
-  //       ? Image.asset('assets/images/icon_shiny.png',
-  //       color: Color(0xff222222), scale: 3)
-  //       : Image.asset('assets/images/icon_windy.png',
-  //       color: Color(0xff222222), scale: 3);
-  // }
 
 }

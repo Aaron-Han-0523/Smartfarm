@@ -26,7 +26,7 @@ import 'package:edgeworks/globals/toggle.dart' as toggle;
 * description : SideControl View Page
 * writer : mark
 * create date : 2022-02-15
-* last update : 2022-02-16
+* last update : 2022-02-18
 * */
 
 //Api's
@@ -38,11 +38,8 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 // MQTT class
 ConnectMqtt _connectMqtt = ConnectMqtt();
 
-// GetX
-final getxController = Get.put(MotorController());
-
-// getx controller
-final _motorController = Get.put(MotorController());
+// GetX controller
+final motorController = Get.put(MotorController());
 
 // Update toggle data
 UpdateSideTopEtcToggleData _updateMotorData = UpdateSideTopEtcToggleData();
@@ -50,11 +47,13 @@ UpdateSideTopEtcToggleData _updateMotorData = UpdateSideTopEtcToggleData();
 // Dio
 var dio = Dio();
 
-// define toggle variable
+// Define toggle variable
 int? getToggleStatus;
-int? getTopToggleStatus;
 int? allSideToggleInit;
-int? allTopToggleInit;
+
+// Define Text Size
+var textSizedBox = Get.width * 1 / 5;
+
 
 
 class SideMotorWidget extends StatefulWidget {
@@ -65,6 +64,7 @@ class SideMotorWidget extends StatefulWidget {
 }
 
 class _SideMotorWidgetState extends State<SideMotorWidget> {
+
   //shared preferences all side toggle status
   Future<Null> getSideSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -77,7 +77,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
 
   void initState() {
     super.initState();
-    _motorController.getSideMotorsData();
+    motorController.getSideMotorsData();
     getSideSharedPrefs();
   }
 
@@ -93,7 +93,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                     .copyWith(dividerColor: Colors.transparent),
                 child: IgnorePointer(
                   ignoring:
-                  getxController.sideMotorStatus.length == 0 ? true : false,
+                  motorController.sideMotorStatus.length == 0 ? true : false,
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     iconColor: Colors.white,
@@ -135,8 +135,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
       );
   }
 
-  var textSizedBox = Get.width * 1 / 5;
-
+  // [전체 측창 제어]
   Widget _allSideToggleSwitch(
       String text, var positions, var userIds, var siteIds) {
     return _marginContainer(
@@ -177,9 +176,9 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                   _switch = 'open';
                   setState(() {
                     for (int i = 0;
-                        i < getxController.sideMotorStatus.length;
+                        i < motorController.sideMotorStatus.length;
                         i++,) {
-                      getxController.sideMotorStatus[i] = 0;
+                      motorController.sideMotorStatus[i] = 0;
                     }
                   });
                 }
@@ -187,9 +186,9 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                   _switch = 'stop';
                   setState(() {
                     for (int i = 0;
-                        i < getxController.sideMotorStatus.length;
+                        i < motorController.sideMotorStatus.length;
                         i++,) {
-                      getxController.sideMotorStatus[i] = 1;
+                      motorController.sideMotorStatus[i] = 1;
                     }
                   });
                 }
@@ -197,25 +196,24 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                   _switch = 'close';
                   setState(() {
                     for (int i = 0;
-                        i < getxController.sideMotorStatus.length;
+                        i < motorController.sideMotorStatus.length;
                         i++,) {
-                      getxController.sideMotorStatus[i] = 2;
+                      motorController.sideMotorStatus[i] = 2;
                     }
                   });
                 }
-                print('motor id는 : ${getxController.sideMotorId}');
+                print('motor id는 : ${motorController.sideMotorId}');
                 // mqtt
                 _connectMqtt.setAll(
                     'did',
-                    getxController.sideMotorId.length,
+                    motorController.sideMotorId.length,
                     'dact',
                     _switch,
                     '/sf/$siteId/req/motor',
                     '/sf/$siteId/req/motor',
-                    getxController.sideMotorId);
+                    motorController.sideMotorId);
                 // DB 변동
                 _updateMotorData.updateAllMotorData(value, "side");
-                // _updateAllMotorData(value, "side");
                 // shared preferences
                 toggle.saveAllSideToggle(value);
               },
@@ -233,7 +231,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
         scrollDirection: Axis.vertical,
         primary: false,
         shrinkWrap: true,
-        itemCount: getxController.sideMotors.length,
+        itemCount: motorController.sideMotors.length,
         itemBuilder: (BuildContext context, int index) {
           return _marginContainer(
             height: Get.height * 0.09,
@@ -244,7 +242,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                     child: SizedBox(
                       width: textSizedBox,
                       child: ExpandableText(
-                        "${getxController.sideMotorName[index]}", //${stream.sideMotors[0]['motor_name']
+                        "${motorController.sideMotorName[index]}", //${stream.sideMotors[0]['motor_name']
                         style: _textStyle(
                             Color(0xff222222), FontWeight.normal, 15),
                         maxLines: 2,
@@ -268,8 +266,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                     activeFgColor: Color(0xff222222),
                     inactiveBgColor: Color(0xffFFFFFF),
                     inactiveFgColor: Color(0xff222222),
-                    initialLabelIndex: getxController.sideMotorStatus[index],
-                    // sideStatus[index],
+                    initialLabelIndex: motorController.sideMotorStatus[index],
                     // stream.topMotors[index],
                     totalSwitches: 3,
                     labels: ['열림', '정지', '닫힘'],
@@ -280,42 +277,38 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                       if (value == 0) {
                         _switch = 'open';
                         setState(() {
-                          getxController.sideMotorStatus[index] = 0;
+                          motorController.sideMotorStatus[index] = 0;
                         });
-                        // sideStatus[index] = value;
-                        // stream.topMotors[index] = 0;
                       }
                       if (value == 1) {
                         _switch = 'stop';
                         setState(() {
-                          getxController.sideMotorStatus[index] = 1;
+                          motorController.sideMotorStatus[index] = 1;
                         });
-                        // stream.topMotors[index] = 1;
                       }
                       if (value == 2) {
                         _switch = 'close';
                         setState(() {
-                          getxController.sideMotorStatus[index] = 2;
+                          motorController.sideMotorStatus[index] = 2;
                         });
-                        // stream.topMotors[index] = 2;
                       }
                       print(
-                          '### Motor name index 뽑기 : ${getxController.sideMotors[0]['motor_name']}');
+                          '### Motor name index 뽑기 : ${motorController.sideMotors[0]['motor_name']}');
                       // MQTT 통신
                       _connectMqtt.setControl(
                           'did',
-                          "${getxController.sideMotorId[index]}",
+                          "${motorController.sideMotorId[index]}",
                           'dact',
                           _switch,
                           '/sf/$siteId/req/motor',
                           '/sf/$siteId/req/motor');
                       // DB 업데이트
                       _updateMotorData.updateSideTopMotorData(
-                          "${getxController.sideMotorName[index]}",
+                          "${motorController.sideMotorName[index]}",
                           "side",
                           "$value",
                           "side",
-                          "${getxController.sideMotorId2[index]}");
+                          "${motorController.sideMotorId2[index]}");
                       // update를 하면 이름도 전부 update 됨 -> 해결 필요
                     },
                   ),
@@ -328,16 +321,15 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
   }
 }
 
-// text style widget
+// Text Style Widget
 TextStyle _textStyle(dynamic _color, dynamic _weight, double _size) {
   return TextStyle(color: _color, fontWeight: _weight, fontSize: _size);
 }
 
-// decoration (with box shadow)
+// Decoration (with box shadow)
 BoxDecoration _decoration(dynamic color) {
   return BoxDecoration(
     color: color,
-    // color: Color(0xffFFFFFF),
     borderRadius: BorderRadius.circular(20),
     boxShadow: [
       BoxShadow(
@@ -349,7 +341,7 @@ BoxDecoration _decoration(dynamic color) {
   );
 }
 
-// decoration(without box shadow)
+// Decoration(without box shadow)
 BoxDecoration _decorations() {
   return BoxDecoration(
     color: Color(0xffFFFFFF),
@@ -357,7 +349,7 @@ BoxDecoration _decorations() {
   );
 }
 
-// padding widget
+// Padding Widget
 Padding _fromLTRBPadding({child}) {
   return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
 }

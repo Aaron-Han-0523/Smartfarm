@@ -1,17 +1,19 @@
-// necessary to build app
+// ** LOGIN PAGE **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// env
+// Env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// dio
+// Dio
 import 'package:edgeworks/utils/dio/loginDio.dart';
 
-// global
+// Global
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
 /*
@@ -19,18 +21,23 @@ import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 * description : login page
 * writer : mark
 * create date : 2021-12-28
-* last update : 2021-02-03
+* last update : 2021-02-18
 * */
 
 // Api's
-LoginTest _loginTest = LoginTest();
-late double headerTopZone;
 var api = dotenv.env['PHONE_IP'];
 var kakaoChannelUrl = 'http://pf.kakao.com/_xledxfb';
 
-// global
+// Get Login Class
+LoginTest _loginTest = LoginTest();
+
+// Define Global Variable
+late double headerTopZone;
+
+// Define User Global Variable
 String userId = '';
 String userPw = '';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -147,8 +154,6 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         Container(
-          // decoration: _decorations(),
-          // height: Get.height * 0.075,
           width: Get.width * 0.8,
           child: Row(children: [
             Expanded(
@@ -172,13 +177,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ]),
         ),
-        // SizedBox(
-        //   height: Get.height * 0.03,
-        // ),
         Container(
           padding: EdgeInsets.only(top: 25),
-          // height: Get.height * 1 / 30,
-          // height: Get.height * 0.075,
           width: Get.width * 0.8,
           child: Row(children: [
             Expanded(
@@ -195,7 +195,6 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(25)),
                     hintText: '비밀번호',
                     hintStyle: TextStyle(color: Colors.black38, fontSize: 15)
-                    // labelText: AppLocalizations.of(context)!.loginPW,
                     ),
                 onChanged: (text) {
                   setState(() {});

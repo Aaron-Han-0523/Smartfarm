@@ -1,3 +1,5 @@
+// ** EXTERNAL SENSOR WIDGET PAGE **
+
 import 'package:edgeworks/components/sensor_page/card.dart';
 import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 import 'package:flutter/material.dart';
@@ -97,15 +99,8 @@ class ExtSensor extends StatelessWidget {
     );
   }
 
-  // BoxDecoration 위젯 (shadow 미적용)
-  BoxDecoration _decoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-    );
-  }
 
-// BoxDecoration 위젯 (shadow 적용)
+// BoxDecoration Widget
   BoxDecoration _decorations() {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(20),
@@ -120,7 +115,7 @@ class ExtSensor extends StatelessWidget {
     );
   }
 
-// padding 위젯
+// Padding Widget
   Padding _fromLTRBPadding({child}) {
     return Padding(
         padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);

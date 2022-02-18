@@ -1,6 +1,6 @@
 // ** CCTV LIST VIEW WIDGET PAGE **
 
-// necessary to build app
+// Necessary to build app
 import 'package:edgeworks/utils/getX_controller/cctvController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 * description : CCTV List view builder widget
 * writer : mark
 * create date : 2021-12-28
-* last update : 2022-02-17
+* last update : 2022-02-18
 * */
 
 

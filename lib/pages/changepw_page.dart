@@ -1,16 +1,18 @@
-// necessary to build app
+// ** CHANGE PASSWORD PAGE **
+
+// Necessary to build app
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-// env
+// Env
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// dio
+// Dio
 import 'package:dio/dio.dart';
 import 'package:edgeworks/utils/dio/loginDio.dart';
 
-// check login validate page
+// Check login validate page
 import 'package:edgeworks/utils/registrations/validate.dart';
 
 /*
@@ -18,16 +20,18 @@ import 'package:edgeworks/utils/registrations/validate.dart';
 * description : change password
 * writer : mark
 * create date : 2021-01-03
-* last update : 2021-02-03
+* last update : 2021-02-18
 * */
 
 // Api's
-// var api = dotenv.env['PHONE_IP'];
-LoginTest _loginTest = LoginTest();
 var api = dotenv.env['PHONE_IP'];
 
 // Dio
 Dio dio = new Dio();
+
+// Get login Data class
+LoginTest _loginTest = LoginTest();
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -372,7 +376,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // TextForm Decoration widget
+  // TextForm Decoration Widget
   InputDecoration _textFormDecoration() {
     return new InputDecoration(
       contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),

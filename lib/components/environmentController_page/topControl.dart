@@ -1,3 +1,5 @@
+// ** TOP MOTOR CONTROL PAGE **
+
 // Necessary to build app
 import 'package:dio/dio.dart';
 import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
@@ -9,7 +11,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 // GetX  controller
-import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -34,21 +35,15 @@ UpdateSideTopEtcToggleData _updateMotorData = UpdateSideTopEtcToggleData();
 var dio = Dio();
 
 // GetX
-final getxController = Get.put(MotorController());
+final motorController = Get.put(MotorController());
 
 var textSizedBox = Get.width * 1 / 5;
 
-// stream
-List motorName = stream.top_motor_name;
 
 // define toggle variable
-int? getToggleStatus;
 int? getTopToggleStatus;
-int? allSideToggleInit;
 int? allTopToggleInit;
 
-// GetX
-// final getxController = Get.put(MotorController());
 
 class TopMotorWidget extends StatefulWidget {
   const TopMotorWidget({Key? key}) : super(key: key);
@@ -70,7 +65,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
 
   @override
   void initState() {
-    getxController.getTopMotorsData();
+    motorController.getTopMotorsData();
     getTopSharedPrefs();
     super.initState();
   }
@@ -83,7 +78,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: IgnorePointer(
-              ignoring: getxController.topMotors.length == 0 ? true : false,
+              ignoring: motorController.topMotors.length == 0 ? true : false,
               child: ExpansionTile(
                 iconColor: Colors.white,
                 collapsedIconColor: Colors.white,
@@ -150,9 +145,9 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                 if (value == 0) {
                   setState(() {
                     for (int i = 0;
-                        i < getxController.topMotorStatus.length;
+                        i < motorController.topMotorStatus.length;
                         i++,) {
-                      getxController.topMotorStatus[i] = 0;
+                      motorController.topMotorStatus[i] = 0;
                     }
                   });
                   _switch = 'open';
@@ -161,9 +156,9 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                   _switch = 'stop';
                   setState(() {
                     for (int i = 0;
-                        i < getxController.topMotorStatus.length;
+                        i < motorController.topMotorStatus.length;
                         i++,) {
-                      getxController.topMotorStatus[i] = 1;
+                      motorController.topMotorStatus[i] = 1;
                     }
                   });
                 }
@@ -171,21 +166,21 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                   _switch = 'close';
                   setState(() {
                     for (int i = 0;
-                        i < getxController.topMotorStatus.length;
+                        i < motorController.topMotorStatus.length;
                         i++,) {
-                      getxController.topMotorStatus[i] = 2;
+                      motorController.topMotorStatus[i] = 2;
                     }
                   });
                 }
                 // mqtt
                 _connectMqtt.setAll(
                     'did',
-                    getxController.topMotorStatus.length,
+                    motorController.topMotorStatus.length,
                     'dact',
                     _switch,
                     '/sf/$siteId/req/motor',
                     '/sf/$siteId/req/motor',
-                    getxController.topMotorId);
+                    motorController.topMotorId);
                 // DB 변동
                 _updateMotorData.updateAllMotorData(value, "top");
                 // shared preferencs
@@ -205,7 +200,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
         scrollDirection: Axis.vertical,
         primary: false,
         shrinkWrap: true,
-        itemCount: getxController.topMotorStatus.length,
+        itemCount: motorController.topMotorStatus.length,
         itemBuilder: (BuildContext context, int index) {
           return _marginContainer(
             height: Get.height * 0.09,
@@ -216,7 +211,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                     child: SizedBox(
                       width: textSizedBox,
                       child: ExpandableText(
-                        "${getxController.topMotorName[index]}", //${stream.sideMotors[0]['motor_name']
+                        "${motorController.topMotorName[index]}", //${stream.sideMotors[0]['motor_name']
                         style: _textStyle(
                             Color(0xff222222), FontWeight.normal, 15),
                         maxLines: 2,
@@ -240,7 +235,7 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
                     activeFgColor: Color(0xff222222),
                     inactiveBgColor: Color(0xffFFFFFF),
                     inactiveFgColor: Color(0xff222222),
-                    initialLabelIndex: getxController.topMotorStatus[index],
+                    initialLabelIndex: motorController.topMotorStatus[index],
                     // stream.topMotors[index],
                     totalSwitches: 3,
                     labels: ['열림', '정지', '닫힘'],
@@ -250,35 +245,33 @@ class _TopMotorWidgetState extends State<TopMotorWidget> {
 
                       if (value == 0) {
                         _switch = 'open';
-                        getxController.topMotorStatus[index] = 0;
+                        motorController.topMotorStatus[index] = 0;
                       }
                       if (value == 1) {
                         _switch = 'stop';
-                        getxController.topMotorStatus[index] = 1;
+                        motorController.topMotorStatus[index] = 1;
                       }
                       if (value == 2) {
                         _switch = 'close';
-                        getxController.topMotorStatus[index] = 2;
+                        motorController.topMotorStatus[index] = 2;
                       }
                       print(
-                          '### Motor${index + 1} stream index는 : ${getxController.topMotorStatus[index]}');
+                          '### Motor${index + 1} stream index는 : ${motorController.topMotorStatus[index]}');
                       // mqtt 업데이트
                       _connectMqtt.setControl(
                           'did',
-                          "${getxController.topMotorId[index]}",
+                          "${motorController.topMotorId[index]}",
                           'dact',
                           _switch,
                           '/sf/$siteId/req/motor',
                           '/sf/$siteId/req/motor');
                       // DB 업데이트
                       _updateMotorData.updateSideTopMotorData(
-                          "${getxController.topMotorName[index]}",
+                          "${motorController.topMotorName[index]}",
                           "top",
                           "$value",
                           "top",
-                          "${getxController.topMotorId2[index]}");
-                      // _updateToggleData("${getxController.topMotorName[index]}", "top",
-                      //     "$value", "top", "${getxController.topMotorId2[index]}");
+                          "${motorController.topMotorId2[index]}");
                     },
                   ),
                 )
