@@ -49,15 +49,6 @@ class _EnvironCustomScrollViewState extends State<EnvironCustomScrollView> {
   bool isLoading = true;
 
   void initState() {
-    bool isLoading = true;
-    _motorController.getSideMotorsData();
-    _motorController.getTopMotorsData();
-    _motorController.getEtcMotorData()
-    .then((value) =>
-      {
-        isLoading = false
-      }
-    );
     super.initState();
   }
 
@@ -95,29 +86,13 @@ class _EnvironCustomScrollViewState extends State<EnvironCustomScrollView> {
                 (BuildContext context, int index) {
               return Container(
                 color: Color(0xffF5F9FC),
-                child: StreamBuilder(
-                  stream: _motorController.etcMotorId.stream,
-                  builder: (ctx, snapshot) {
-                    if(snapshot.hasData) {
-                      return Column(
-                        children: [
-                          SideMotorWidget(),
-                          TopMotorWidget(),
-                          EtcMotorWidget(),
-                        ],
-                      );
-                    } else {
-                      return CircularProgressIndicator();
-                    }
-                  }
-                  // child: Column(
-                  //   children: [
-                  //     SideMotorWidget(),
-                  //     TopMotorWidget(),
-                  //     EtcMotorWidget(),
-                  //   ],
-                  // ),
-                ),
+                child: Column(
+                  children: [
+                    SideMotorWidget(),
+                    TopMotorWidget(),
+                    EtcMotorWidget(),
+                  ],
+                )
               );
             },
             childCount: 1,

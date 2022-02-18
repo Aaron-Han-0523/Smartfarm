@@ -304,7 +304,7 @@ class _MyAppState extends State<MyApp> {
                     // transition: Transition.upToDown,
                     opaque: false),
                 GetPage(
-                  opaque: false,
+                  // opaque: false,
                   // getdata cctv, soilpage, etc
                   name: '/home',
                   page: () => Home(),

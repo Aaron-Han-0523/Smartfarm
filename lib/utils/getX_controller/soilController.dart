@@ -17,12 +17,7 @@ var userId = '${edgeworks.checkUserId}';
 var api = dotenv.env['PHONE_IP'];
 var url = '$api/farm';
 
-var options = BaseOptions(
-  baseUrl: '$url',
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
-);
-Dio dio = Dio(options);
+Dio dio = Dio();
 
 class SoilController extends GetxController {
   var pumps = [].obs;
@@ -33,6 +28,8 @@ class SoilController extends GetxController {
   var valves = [].obs;
   var valve_name = [].obs;
   var valveStatus = [].obs; // DB에 저장된 valve status 가져오기
+  var isInits = false.obs;
+  var isFutures = false.obs;
 
   Future<void> pumpsHttp() async {
     final getPumps = await dio.get('$url/$userId/site/$siteId/controls/pumps');

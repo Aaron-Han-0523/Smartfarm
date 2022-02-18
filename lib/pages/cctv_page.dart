@@ -16,7 +16,6 @@ import 'package:dio/dio.dart';
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
 
-
 /*
 * name : CCTV Page
 * description : CCTV Page
@@ -52,7 +51,6 @@ var siteDropdown = stream.sitesDropdownValue == ''
 // GetX controller
 final _cctvController = Get.put(CctvController());
 
-
 class CCTVPage extends StatefulWidget {
   CCTVPage({Key? key}) : super(key: key);
 
@@ -61,8 +59,6 @@ class CCTVPage extends StatefulWidget {
 }
 
 class _CCTVPageState extends State<CCTVPage> {
-
-
   @override
   void initState() {
     _cctvController.getCctvData();
@@ -117,18 +113,15 @@ class _CCTVPageState extends State<CCTVPage> {
                             color: Color(0xffF5F9FC),
                           ),
                           alignment: Alignment.center,
-                          child:
-                              // _cctvBuilder()
-                              StreamBuilder(
-                                  stream: _cctvController.cctvUrls.stream,
-                                  builder: (ctx, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return CctvListViewWidget();
-                                    } else {
-                                      return CircularProgressIndicator();
-                                    }
-                                  }
-                                  )),
+                          child: StreamBuilder(
+                              stream: _cctvController.cctvUrls.stream,
+                              builder: (ctx, snapshot) {
+                                if (snapshot.hasData) {
+                                  return CctvListViewWidget();
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              })),
                     );
                   },
                   childCount: 1,

@@ -38,6 +38,10 @@ var dio = Dio();
 
 class MotorController extends GetxController {
 
+  // init
+  var isLoading = false.obs;
+  var isFuture = false.obs;
+
   // side motor
   var sideMotors = [].obs;
   var sideMotorName = [].obs;
