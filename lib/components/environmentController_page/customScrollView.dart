@@ -9,6 +9,7 @@ import 'package:edgeworks/components/environmentController_page/etcControl.dart'
 import 'package:edgeworks/components/environmentController_page/sideControl.dart';
 import 'package:edgeworks/components/environmentController_page/topControl.dart';
 import 'package:edgeworks/components/environmentController_page/weather.dart';
+import 'package:edgeworks/utils/getX_controller/motorController.dart';
 
 // global
 import '../../globals/stream.dart' as stream;
@@ -19,7 +20,7 @@ import '../../globals/stream.dart' as stream;
 * description : Environment custom scroll view
 * writer : mark
 * create date : 2021-12-24
-* last update : 2021-02-16
+* last update : 2021-02-18
 * */
 
 
@@ -31,6 +32,9 @@ var siteDropdown = stream.sitesDropdownValue == ''
 
 var textSizedBox = Get.width * 1 / 5;
 
+// GetX controller
+final _motorController = Get.put(MotorController());
+
 
 class EnvironCustomScrollView extends StatefulWidget {
   const EnvironCustomScrollView({Key? key}) : super(key: key);
@@ -41,6 +45,21 @@ class EnvironCustomScrollView extends StatefulWidget {
 
 class _EnvironCustomScrollViewState extends State<EnvironCustomScrollView> {
 
+
+  bool isLoading = true;
+
+  void initState() {
+    bool isLoading = true;
+    _motorController.getSideMotorsData();
+    _motorController.getTopMotorsData();
+    _motorController.getEtcMotorData()
+    .then((value) =>
+      {
+        isLoading = false
+      }
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,12 +95,28 @@ class _EnvironCustomScrollViewState extends State<EnvironCustomScrollView> {
                 (BuildContext context, int index) {
               return Container(
                 color: Color(0xffF5F9FC),
-                child: Column(
-                  children: [
-                    SideMotorWidget(),
-                    TopMotorWidget(),
-                    EtcMotorWidget(),
-                  ],
+                child: StreamBuilder(
+                  stream: _motorController.etcMotorId.stream,
+                  builder: (ctx, snapshot) {
+                    if(snapshot.hasData) {
+                      return Column(
+                        children: [
+                          SideMotorWidget(),
+                          TopMotorWidget(),
+                          EtcMotorWidget(),
+                        ],
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }
+                  // child: Column(
+                  //   children: [
+                  //     SideMotorWidget(),
+                  //     TopMotorWidget(),
+                  //     EtcMotorWidget(),
+                  //   ],
+                  // ),
                 ),
               );
             },

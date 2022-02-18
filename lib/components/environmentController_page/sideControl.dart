@@ -10,8 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // GetX  controller
 import 'package:edgeworks/utils/getX_controller/motorController.dart';
-import 'package:edgeworks/components/environmentController_page/motorData.dart';
-import 'package:edgeworks/utils/getX_controller/sensorController.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 // Dio
@@ -40,13 +38,14 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 // MQTT class
 ConnectMqtt _connectMqtt = ConnectMqtt();
 
-// getx controller
-MotorController _motorController = MotorController();
+// GetX
+final getxController = Get.put(MotorController());
 
-// Get Data page
+// getx controller
+final _motorController = Get.put(MotorController());
+
 // Update toggle data
 UpdateSideTopEtcToggleData _updateMotorData = UpdateSideTopEtcToggleData();
-GetMotorData _getMotorData = GetMotorData();
 
 // Dio
 var dio = Dio();
@@ -57,8 +56,6 @@ int? getTopToggleStatus;
 int? allSideToggleInit;
 int? allTopToggleInit;
 
-// GetX
-final getxController = Get.put(MotorController());
 
 class SideMotorWidget extends StatefulWidget {
   const SideMotorWidget({Key? key}) : super(key: key);
@@ -80,14 +77,12 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
 
   void initState() {
     super.initState();
-    _motorController.getMotorsData();
+    _motorController.getSideMotorsData();
     getSideSharedPrefs();
   }
 
   @override
   Widget build(BuildContext context) {
-    Get.put(MotorController());
-    return Obx(() {
       return Column(
         children: [
           _fromLTRBPadding(
@@ -98,7 +93,7 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
                     .copyWith(dividerColor: Colors.transparent),
                 child: IgnorePointer(
                   ignoring:
-                      getxController.sideMotorStatus.length == 0 ? true : false,
+                  getxController.sideMotorStatus.length == 0 ? true : false,
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     iconColor: Colors.white,
@@ -138,7 +133,6 @@ class _SideMotorWidgetState extends State<SideMotorWidget> {
           ),
         ],
       );
-    });
   }
 
   var textSizedBox = Get.width * 1 / 5;

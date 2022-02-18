@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../globals/stream.dart' as stream;
 import "package:edgeworks/globals/checkUser.dart" as edgeworks;
@@ -56,6 +57,7 @@ class GetAllData {
     final postToken =
     await dio.put('$api/farm/$userId/pushAlarm', data: data);
     print('##### [homepage] postToken: $postToken');
+    await Get.offAllNamed('/sensor');
   }
 
 

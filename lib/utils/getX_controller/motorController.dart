@@ -66,7 +66,7 @@ class MotorController extends GetxController {
   var etcMotorIdVariable = '';
 
 
-  Future<dynamic> getMotorsData() async {
+  Future<dynamic> getSideMotorsData() async {
     final getSideMotors =
     await dio.get('$url/$userId/site/$siteId/controls/side/motors');
     sideMotors.value = getSideMotors.data['data'];
