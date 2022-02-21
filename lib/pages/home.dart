@@ -1,7 +1,7 @@
 // ** GET DATA PAGE **
 
 // Necessary to build app
-import 'package:edgeworks/data/get_data.dart';
+import 'package:edgeworks/utils/dio/getSiteIdFcmData.dart';
 import 'package:flutter/material.dart';
 
 // Dio
@@ -30,7 +30,7 @@ var userId = '${edgeworks.checkUserId}';
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // get all data
-GetAllInnerTempData _allInnerTempData = GetAllInnerTempData();
+GetSiteFcmData _getSiteFcmData = GetSiteFcmData();
 
 // mqtt
 int clientPort = 1883;
@@ -54,17 +54,20 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  // getData -----------------------------> 작업 진행 중
   Future<dynamic> getData() async {
     if (mounted) {
-      _allInnerTempData.getSiteData(userId);
-      _allInnerTempData.putFcmData(userId);
+      _getSiteFcmData.getSiteData(userId);
+      _getSiteFcmData.putFcmData(userId);
     }
- // await Get.offAllNamed('/sensor');
     return true;
   }
 
   Widget build(BuildContext context) {
-    return CircularProgressIndicator();
+    return Scaffold(
+      backgroundColor: Color(0xffF5F9FC),
+      body: Center(
+          child: CircularProgressIndicator()),
+    );
+    // return CircularProgressIndicator();
   }
 }
