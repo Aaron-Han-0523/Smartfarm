@@ -50,10 +50,12 @@ class InnerTempChartController extends GetxController {
                 '${getInnerTemp.data['data'][0]['value']}');
 
         int innerTempLength = getInnerTemp.data['data'].length;
-        print('[innerTempController] innerTempLength: $innerTempLength');
+        print('[innerTempController] innerTempLength: $innerTempLength'); //120
 
         for (var i = 0; i < getChartData.length; i++) {
           var date = getChartData[i]['time_stamp'];
+          print('시간 모음 : $date');
+          print('value 모음 : ${getChartData[i]['value']}');
           var timeStamp = date.toString().substring(11,16); // 시:분
           chartData.add(InnerTempData(timeStamp,
               double.parse(getChartData[i]['value'])));

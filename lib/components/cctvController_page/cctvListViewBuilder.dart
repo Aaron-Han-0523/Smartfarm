@@ -48,6 +48,7 @@ class _CctvListViewWidgetState extends State<CctvListViewWidget> {
       );
       vlcControllers.add(vlcController);
     }
+
     super.initState();
   }
 
@@ -102,6 +103,9 @@ class _CctvListViewWidgetState extends State<CctvListViewWidget> {
                               // height: Get.height * 0.3,
                               width: MediaQuery.of(context).size.width,
                               child: VlcPlayer(
+                                placeholder: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                                 controller: vlcControllers[index],
                                 // controllers[index],
                                 aspectRatio: _ratio,
@@ -118,6 +122,7 @@ class _CctvListViewWidgetState extends State<CctvListViewWidget> {
           });
     });
     }
+
 
   }
 

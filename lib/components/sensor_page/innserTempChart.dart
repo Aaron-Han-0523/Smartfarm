@@ -104,7 +104,12 @@ class _InnserTempChartState extends State<InnserTempChart> {
   Widget _lineChart() {
     return SfCartesianChart(
         backgroundColor: Colors.white,
-        primaryXAxis: CategoryAxis(),
+        primaryXAxis: CategoryAxis(
+          edgeLabelPlacement: EdgeLabelPlacement.shift,
+        ),
+        primaryYAxis: NumericAxis(
+          interval: 20,
+        ),
         // primaryXAxis: DateTimeAxis(
         //   majorGridLines: const MajorGridLines(width: 0),
         //   dateFormat: DateFormat.Hms(),

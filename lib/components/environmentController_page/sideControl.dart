@@ -14,7 +14,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 // Dio
 import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
+import 'package:edgeworks/utils/dio/updateMotorData.dart';
 
 // Global
 import '../../globals/stream.dart' as stream;

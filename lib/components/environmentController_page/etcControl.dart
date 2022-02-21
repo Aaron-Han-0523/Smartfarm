@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 // Dio
 import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
+import 'package:edgeworks/utils/dio/updateMotorData.dart';
 
 // GetX  controller
 import 'package:edgeworks/utils/getX_controller/motorController.dart';

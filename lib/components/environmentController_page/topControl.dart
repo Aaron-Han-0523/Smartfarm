@@ -2,7 +2,7 @@
 
 // Necessary to build app
 import 'package:dio/dio.dart';
-import 'package:edgeworks/utils/dio/updateEnvironmentData.dart';
+import 'package:edgeworks/utils/dio/updateMotorData.dart';
 import 'package:edgeworks/utils/getX_controller/motorController.dart';
 import 'package:edgeworks/utils/mqtt/mqtt.dart';
 import 'package:expandable_text/expandable_text.dart';
