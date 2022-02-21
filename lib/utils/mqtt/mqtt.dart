@@ -27,9 +27,9 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 var mqttIP = dotenv.env['MQTT_IP'];
 
 // mqtt
-int clientPort = 1883;
+// int clientPort = 1883;
+int clientPort = int.parse('${dotenv.env['MQTT_PORT']}');
 final MqttServerClient client = MqttServerClient('$mqttIP', '');
-
 
 class ConnectMqtt {
   // MQTT

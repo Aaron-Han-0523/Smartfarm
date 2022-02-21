@@ -18,9 +18,9 @@ var mqttIP = dotenv.env['MQTT_IP'];
 var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 
 // Mqtt
-int clientPort = 1883;
+// int clientPort = 1883;
+int clientPort = int.parse('${dotenv.env['MQTT_PORT']}');
 var setTopic = '/sf/$siteId/data';
-
 
 class SensorController extends GetxController {
   String statusText = "Status Text";
@@ -122,5 +122,4 @@ class SensorController extends GetxController {
     });
     return true;
   }
-
 }

@@ -14,7 +14,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:edgeworks/globals/stream.dart' as stream;
 import 'package:edgeworks/utils/sharedPreferences/checkUser.dart' as edgeworks;
 
-
 /*
 * name : Home (get Data page)
 * description : get Data
@@ -33,7 +32,8 @@ var siteId = stream.siteId == '' ? 'e0000001' : '${stream.siteId}';
 GetSiteFcmData _getSiteFcmData = GetSiteFcmData();
 
 // mqtt
-int clientPort = 1883;
+// int clientPort = 1883;
+int clientPort = int.parse('${dotenv.env['MQTT_PORT']}');
 var setSubTopic = '/sf/$siteId/res/cfg';
 var setPubTopic = '/sf/$siteId/req/cfg';
 
@@ -65,8 +65,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF5F9FC),
-      body: Center(
-          child: CircularProgressIndicator()),
+      body: Center(child: CircularProgressIndicator()),
     );
     // return CircularProgressIndicator();
   }

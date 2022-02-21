@@ -32,10 +32,10 @@ var mqttIP = dotenv.env['MQTT_IP'];
 Dio dio = Dio();
 
 // mqtt
-int clientPort = 1883;
+// int clientPort = 1883;
+int clientPort = int.parse('${dotenv.env['MQTT_PORT']}');
 var setSubTopic = '/sf/$siteId/res/cfg';
 var setPubTopic = '/sf/$siteId/req/cfg';
-
 
 class SettingController extends GetxController {
   RxBool status_alarm = false.obs;
