@@ -1,6 +1,7 @@
 // necessary to build app
 import 'package:edgeworks/components/sensor_page/sensorCustomScrollView.dart';
-import 'package:edgeworks/data/get_data.dart';
+import 'package:edgeworks/utils/dio/getSiteIdFcmData.dart';
+import 'package:edgeworks/utils/getX_controller/innerTempChartController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -209,7 +210,8 @@ class _SensorPageState extends State<SensorPage> {
   // }
 
   // 그래프 위젯
-  GetAllInnerTempData _getAllData = GetAllInnerTempData();
+  InnerTempChartController _getAllData = InnerTempChartController();
+
   Widget _myGraph() {
     return Column(
       children: <Widget>[

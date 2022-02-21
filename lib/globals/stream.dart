@@ -38,8 +38,6 @@ var alarm_high_temp = '';
 var alarm_low_temp = '';
 var watering_timer = '';
 
-// char data
-List chartData = [];
 
 // setting page dropdownButton
 String sitesDropdownValue = '';

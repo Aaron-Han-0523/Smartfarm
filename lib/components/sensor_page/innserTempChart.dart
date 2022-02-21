@@ -1,16 +1,23 @@
 // ** INNER TEMP CHART WIDGET PAGE **
 
 // Necessary to build app
-import 'package:edgeworks/data/get_data.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-// Pages
+// GetX
+import 'package:get/get.dart';
+import 'package:edgeworks/utils/getX_controller/innerTempChartController.dart';
+
+// Import Chart Data Class
 import 'package:edgeworks/models/sensor_page/innerTempData.dart';
 
-// GetChardData Class
-GetAllInnerTempData _allInnerTempData = GetAllInnerTempData();
 
+// GetX controller
+final _innerTempController = Get.put(InnerTempChartController());
+
+// Chart
+Timer? _timer;
 
 class InnserTempChart extends StatefulWidget {
   InnserTempChart({Key? key}) : super(key: key);
@@ -20,10 +27,18 @@ class InnserTempChart extends StatefulWidget {
 }
 
 class _InnserTempChartState extends State<InnserTempChart> {
+
   @override
   void initState() {
+
     setState(() {
-      _allInnerTempData.getTrendsTempData();
+      _innerTempController.getTrendsTempData();
+      _innerTempController.chartData;
+    });
+    _timer = Timer(const Duration(seconds: 2), () {
+      setState(() {
+        _innerTempController.getTrendsTempData();
+      });
     });
     super.initState();
   }
@@ -60,7 +75,7 @@ class _InnserTempChartState extends State<InnserTempChart> {
                 ),
                 children: [
                   FutureBuilder(
-                      future: _allInnerTempData.getTrendsTempData(),
+                      future: _innerTempController.getTrendsTempData(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -85,33 +100,31 @@ class _InnserTempChartState extends State<InnserTempChart> {
     );
   }
 
-  // 그래프 데이터 관련
-  List<InnerTempData> data = [];
-
+  // Chart Data Widget
   Widget _lineChart() {
     return SfCartesianChart(
         backgroundColor: Colors.white,
         primaryXAxis: CategoryAxis(),
+        // primaryXAxis: DateTimeAxis(
+        //   majorGridLines: const MajorGridLines(width: 0),
+        //   dateFormat: DateFormat.Hms(),
+        //   intervalType: DateTimeIntervalType.seconds,
+        //   autoScrollingDelta: 10,
+        //   autoScrollingDeltaType: DateTimeIntervalType.seconds
+        // ),
         series: <ChartSeries<InnerTempData, String>>[
           LineSeries<InnerTempData, String>(
-              dataSource: data,
+              dataSource: _innerTempController.chartData,
               xValueMapper: (InnerTempData sales, _) => sales.dateTime,
               yValueMapper: (InnerTempData sales, _) => sales.tempValue,
               name: 'InnerTemp',
               // Enable data label
               dataLabelSettings: DataLabelSettings(isVisible: false)),
-          // LineSeries<_SalesData, String>(
-          //     dataSource: subData,
-          //     xValueMapper: (_SalesData sales, _) => sales.year,
-          //     yValueMapper: (_SalesData sales, _) => sales.sales,
-          //     name: 'Sales',
-          //     // Enable data label
-          //     dataLabelSettings: DataLabelSettings(isVisible: false))
         ]);
   }
 }
 
-// BoxDecoration 위젯 (shadow 적용)
+// BoxDecoration Widget
 BoxDecoration _decorations() {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(20),
@@ -126,7 +139,7 @@ BoxDecoration _decorations() {
   );
 }
 
-// padding 위젯
+// Padding Widget
 Padding _fromLTRBPadding({child}) {
   return Padding(padding: new EdgeInsets.fromLTRB(15, 10, 15, 5), child: child);
 }
